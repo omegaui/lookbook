@@ -1,10 +1,10 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $DesktopCard: Adw.Bin {
+template $ShowcaseCard: Adw.Bin {
   styles [
     "card",
-    "desktop-card",
+    "showcase-card",
   ]
 
   overflow: hidden;
@@ -12,8 +12,8 @@ template $DesktopCard: Adw.Bin {
   child: Box {
     orientation: vertical;
 
-    // A real screenshot, loaded live. A small drawing of the desktop (its
-    // color, a window and its default bars) shows until it arrives.
+    // A real screenshot, loaded live. A small drawing of a desktop in the
+    // item's color shows until it arrives.
     Stack art_stack {
       transition-type: crossfade;
       height-request: 150;
@@ -67,7 +67,7 @@ template $DesktopCard: Adw.Bin {
             }
           }
 
-          Label wayland_label {
+          Label subtitle_label {
             styles [
               "caption",
               "dim-label",
@@ -100,13 +100,12 @@ template $DesktopCard: Adw.Bin {
         spacing: 6;
         margin-top: 2;
 
-        Image {
-          icon-name: "application-x-addon-symbolic";
+        Image footer_icon {
           pixel-size: 14;
           accessible-role: presentation;
         }
 
-        Label extend_label {
+        Label footer_label {
           styles [
             "caption",
           ]

@@ -85,8 +85,22 @@ template $SpotlightCard: Box {
     }
   }
 
-  // A drawn isometric desktop, laid out the way the featured item arranges windows.
-  $IsoScene scene {
+  // A drawn isometric desktop, laid out the way the featured item arranges
+  // windows, until the item's real screenshot arrives on the same floor.
+  Stack art_stack {
+    transition-type: crossfade;
     hexpand: true;
+
+    StackPage {
+      name: "drawing";
+
+      child: $IsoScene scene {};
+    }
+
+    StackPage {
+      name: "screenshot";
+
+      child: $IsoPicture picture {};
+    }
   }
 }

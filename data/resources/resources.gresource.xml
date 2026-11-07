@@ -13,7 +13,7 @@
     <file preprocess="xml-stripblanks">ui/pages/wallpapers_page.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/catalog_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/collection_card.ui</file>
-    <file preprocess="xml-stripblanks">ui/widgets/desktop_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/showcase_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/idea_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/protocol_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/run_check_dialog.ui</file>

@@ -13,8 +13,8 @@ use crate::http::shared_session;
 use crate::system::SystemInfo;
 use crate::wallpapers::fetch_texture;
 use crate::widgets::{
-    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, DesktopCard,
-    IsoPicture, IsoScene, LogoTile, TileContent,
+    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, IsoPicture,
+    IsoScene, LogoTile, ShowcaseCard, ShowcaseContent, TileContent,
 };
 
 const FEATURED_DESKTOP: &str = "gnome";
@@ -168,7 +168,7 @@ impl DesktopsPage {
         for desktop in &catalog.desktops {
             self.imp()
                 .desktops_flowbox
-                .append(&DesktopCard::new(desktop, system));
+                .append(&ShowcaseCard::new(&ShowcaseContent::for_desktop(desktop, system)));
         }
     }
 
@@ -184,7 +184,7 @@ impl DesktopsPage {
             }
             child
                 .child()
-                .and_downcast::<DesktopCard>()
+                .and_downcast::<ShowcaseCard>()
                 .and_then(|card| card.toolkit_id())
                 .is_some_and(|toolkit| toolkit == chosen)
         });

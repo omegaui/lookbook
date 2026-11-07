@@ -44,6 +44,27 @@ impl Catalog {
             .collect()
     }
 
+    /// The real screenshot of an item, if the catalog has one.
+    pub fn hosted_screenshot(&self, kind: ItemKind, id: &str) -> Option<&HostedScreenshot> {
+        match kind {
+            ItemKind::Distro => self.find_distro(id)?.screenshot.as_ref(),
+            ItemKind::Desktop => self.find_desktop(id)?.screenshot.as_ref(),
+            ItemKind::Compositor => self.find_compositor(id)?.screenshot.as_ref(),
+        }
+    }
+
+    /// The real screenshot and name of a Hall of fame subject, for example "hyprland".
+    /// Subjects are desktop or compositor ids.
+    pub fn subject_screenshot(&self, subject: &str) -> Option<(&str, &HostedScreenshot)> {
+        let desktop = self
+            .find_desktop(subject)
+            .and_then(|desktop| Some((desktop.name.as_str(), desktop.screenshot.as_ref()?)));
+        desktop.or_else(|| {
+            let compositor = self.find_compositor(subject)?;
+            Some((compositor.name.as_str(), compositor.screenshot.as_ref()?))
+        })
+    }
+
     pub fn summary(&self, kind: ItemKind, id: &str) -> Option<ItemSummary<'_>> {
         match kind {
             ItemKind::Distro => self.find_distro(id).map(|item| ItemSummary {

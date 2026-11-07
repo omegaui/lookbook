@@ -331,6 +331,8 @@ pub struct Distro {
     pub repology_repos: Vec<RepologyRepo>,
     /// What NVIDIA users should know, for example where to get the driver.
     pub nvidia_note: Option<String>,
+    /// A real screenshot, loaded live from where it is hosted.
+    pub screenshot: Option<HostedScreenshot>,
 }
 
 /// One of a distro's package repositories as Repology names it.
@@ -377,7 +379,7 @@ pub struct Desktop {
 }
 
 /// A screenshot the app shows from its host, never bundled, with its credit.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct HostedScreenshot {
     /// The image itself, for example a 960px Wikimedia Commons thumbnail.
     pub url: String,
@@ -478,6 +480,8 @@ pub struct Compositor {
     pub repology: Option<String>,
     /// What NVIDIA users should know before trying it.
     pub nvidia_note: Option<String>,
+    /// A real screenshot, loaded live from where it is hosted.
+    pub screenshot: Option<HostedScreenshot>,
 }
 
 impl Compositor {

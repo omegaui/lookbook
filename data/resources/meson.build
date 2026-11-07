@@ -9,7 +9,7 @@ blueprints = custom_target(
     'ui/pages/system_page.blp',
     'ui/pages/wallpapers_page.blp',
     'ui/widgets/catalog_card.blp',
-    'ui/widgets/desktop_card.blp',
+    'ui/widgets/showcase_card.blp',
     'ui/widgets/collection_card.blp',
     'ui/widgets/idea_card.blp',
     'ui/widgets/protocol_card.blp',

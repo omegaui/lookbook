@@ -1,7 +1,7 @@
 mod catalog_card;
 mod collection_card;
 mod content;
-mod desktop_card;
+mod cover_picture;
 mod extension_card;
 mod idea_card;
 mod iso;
@@ -17,6 +17,7 @@ mod mini_desktop;
 mod natural_width_cap;
 mod screenshot_card;
 mod screenshot_mock;
+mod showcase_card;
 mod spotlight_card;
 mod wall;
 mod wallpaper_card;
@@ -27,9 +28,9 @@ pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
 pub use content::{
     scene_for_desktop, CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck,
-    ProtocolSummary, SpotlightContent,
+    ProtocolSummary, ShowcaseContent, SpotlightContent,
 };
-pub use desktop_card::{screenshot_credit, DesktopCard};
+pub use cover_picture::CoverPicture;
 pub use extension_card::extension_card;
 pub use idea_card::IdeaCard;
 pub use iso_picture::IsoPicture;
@@ -44,8 +45,9 @@ pub use mini_desktop::MiniDesktop;
 pub use natural_width_cap::NaturalWidthCap;
 pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;
+pub use showcase_card::{screenshot_credit, ShowcaseCard};
 pub use spotlight_card::SpotlightCard;
-pub use wall::fill_wall_grid;
+pub use wall::{fill_wall_grid, fill_with_cards};
 pub use wallpaper_card::WallpaperCard;
 pub use wallpaper_dialog::{WallpaperDialog, WallpaperDialogContext};
 pub use wallpaper_spotlight::WallpaperSpotlight;
@@ -139,7 +141,7 @@ fn card_item(card: &gtk::Widget) -> Option<crate::catalog::ItemRef> {
     if let Some(card) = card.downcast_ref::<CatalogCard>() {
         return card.item();
     }
-    card.downcast_ref::<DesktopCard>().and_then(DesktopCard::item)
+    card.downcast_ref::<ShowcaseCard>().and_then(ShowcaseCard::item)
 }
 
 /// Opens the details page of the card the user activates in `flowbox`.

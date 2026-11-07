@@ -179,7 +179,13 @@
           "install": "sudo dnf install {package}"
         }
       ],
-      "nvidia_note": "Install the NVIDIA driver from RPM Fusion; GNOME Software offers it once third-party repositories are on."
+      "nvidia_note": "Install the NVIDIA driver from RPM Fusion; GNOME Software offers it once third-party repositories are on.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Fedora_42_Workstation_Desktop_English.png/960px-Fedora_42_Workstation_Desktop_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Fedora_42_Workstation_Desktop_English.png",
+        "credit": "The Fedora Project",
+        "license": "GPL"
+      }
     },
     {
       "id": "arch",
@@ -205,7 +211,13 @@
           "install": "paru -S {package}"
         }
       ],
-      "nvidia_note": "Install nvidia-open (or nvidia for older cards) and enable kernel mode setting."
+      "nvidia_note": "Install nvidia-open (or nvidia for older cards) and enable kernel mode setting.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Arch_Linux_with_KDE.png/960px-Arch_Linux_with_KDE.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Arch_Linux_with_KDE.png",
+        "credit": "Chrislongros",
+        "license": "CC BY-SA 4.0"
+      }
     },
     {
       "id": "debian",
@@ -231,7 +243,13 @@
           "install": "sudo apt install -t {codename}-backports {package}"
         }
       ],
-      "nvidia_note": "Install nvidia-driver from the non-free repository."
+      "nvidia_note": "Install nvidia-driver from the non-free repository.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Debian_13.0.0_GNOME_default_desktop_-_English.png/960px-Debian_13.0.0_GNOME_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_default_desktop_-_English.png",
+        "credit": "The Debian Project",
+        "license": "GPL"
+      }
     },
     {
       "id": "ubuntu",
@@ -252,7 +270,13 @@
           "install": "sudo apt install {package}"
         }
       ],
-      "nvidia_note": "Additional Drivers installs the NVIDIA driver in a few clicks."
+      "nvidia_note": "Additional Drivers installs the NVIDIA driver in a few clicks.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Ubuntu_26.04_LTS_default_desktop_-_English.png/960px-Ubuntu_26.04_LTS_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.04_LTS_default_desktop_-_English.png",
+        "credit": "Canonical Limited",
+        "license": "GPL"
+      }
     },
     {
       "id": "linuxmint",
@@ -273,7 +297,13 @@
           "install": "sudo apt install {package}"
         }
       ],
-      "nvidia_note": "Driver Manager installs the NVIDIA driver in a few clicks."
+      "nvidia_note": "Driver Manager installs the NVIDIA driver in a few clicks.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Linux_Mint_Cinnamon_22.3.png/960px-Linux_Mint_Cinnamon_22.3.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Linux_Mint_Cinnamon_22.3.png",
+        "credit": "Breno Martins de Oliveira Vasconcelos",
+        "license": "GPL-3.0"
+      }
     },
     {
       "id": "opensuse-tumbleweed",
@@ -294,7 +324,13 @@
           "install": "sudo zypper install {package}"
         }
       ],
-      "nvidia_note": "Add NVIDIA's repository, then install the driver with zypper."
+      "nvidia_note": "Add NVIDIA's repository, then install the driver with zypper.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/KDE_Plasma_6_screenshot_%28openSUSE_dark_mode%29.png/960px-KDE_Plasma_6_screenshot_%28openSUSE_dark_mode%29.png",
+        "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_6_screenshot_(openSUSE_dark_mode).png",
+        "credit": "VulcanSphere",
+        "license": "GPL"
+      }
     },
     {
       "id": "nixos",
@@ -320,7 +356,13 @@
           "install": "Add pkgs.{package} from nixpkgs-unstable"
         }
       ],
-      "nvidia_note": "Enable hardware.nvidia in your configuration."
+      "nvidia_note": "Enable hardware.nvidia in your configuration.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/NixOS_21.11_GNOME_default_desktop_-_English.png/960px-NixOS_21.11_GNOME_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:NixOS_21.11_GNOME_default_desktop_-_English.png",
+        "credit": "NixOS contributors",
+        "license": "GPL"
+      }
     },
     {
       "id": "cachyos",
@@ -346,7 +388,13 @@
           "install": "paru -S {package}"
         }
       ],
-      "nvidia_note": "The installer sets up the NVIDIA driver for you."
+      "nvidia_note": "The installer sets up the NVIDIA driver for you.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/CachyOS_2025.08.25_KDE_default_desktop_-_English.png/960px-CachyOS_2025.08.25_KDE_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2025.08.25_KDE_default_desktop_-_English.png",
+        "credit": "Peter Jung and the CachyOS team",
+        "license": "GPL"
+      }
     },
     {
       "id": "bazzite",
@@ -367,7 +415,13 @@
           "install": "rpm-ostree install {package}"
         }
       ],
-      "nvidia_note": "Pick the NVIDIA image when you download; it ships with the driver installed."
+      "nvidia_note": "Pick the NVIDIA image when you download; it ships with the driver installed.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Bazzite_42_KDE_default_desktop_-_English.png/960px-Bazzite_42_KDE_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Bazzite_42_KDE_default_desktop_-_English.png",
+        "credit": "The Bazzite Team",
+        "license": "GPL"
+      }
     },
     {
       "id": "fedora-silverblue",
@@ -389,7 +443,13 @@
           "install": "rpm-ostree install {package}"
         }
       ],
-      "nvidia_note": "Add the NVIDIA driver from RPM Fusion as a layered package."
+      "nvidia_note": "Add the NVIDIA driver from RPM Fusion as a layered package.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Fedora_SilverBlue_41_desktop.png/960px-Fedora_SilverBlue_41_desktop.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Fedora_SilverBlue_41_desktop.png",
+        "credit": "Paowee",
+        "license": "GPL"
+      }
     },
     {
       "id": "pop",
@@ -410,7 +470,13 @@
           "install": "sudo apt install {package}"
         }
       ],
-      "nvidia_note": "Download the NVIDIA ISO; it ships with the driver installed."
+      "nvidia_note": "Download the NVIDIA ISO; it ships with the driver installed.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Pop%21_OS_24.04_LTS_default_desktop_-_English.png/960px-Pop%21_OS_24.04_LTS_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
+        "credit": "System76",
+        "license": "GPL-3.0"
+      }
     },
     {
       "id": "elementary",
@@ -430,7 +496,13 @@
           "repo": "ubuntu_24_04",
           "install": "sudo apt install {package}"
         }
-      ]
+      ],
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Elementary_OS_8.0_default_desktop_-_English.png/960px-Elementary_OS_8.0_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_default_desktop_-_English.png",
+        "credit": "elementary, Inc.",
+        "license": "GPL-3.0"
+      }
     },
     {
       "id": "endeavouros",
@@ -456,7 +528,13 @@
           "install": "paru -S {package}"
         }
       ],
-      "nvidia_note": "The installer can set up the NVIDIA driver for you."
+      "nvidia_note": "The installer can set up the NVIDIA driver for you.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png/960px-EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png",
+        "credit": "endeavouros-team",
+        "license": "GPL"
+      }
     },
     {
       "id": "void",
@@ -476,7 +554,13 @@
           "repo": "void_x86_64",
           "install": "sudo xbps-install {package}"
         }
-      ]
+      ],
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Void_Linux_20230628_default_desktop_-_English.png/960px-Void_Linux_20230628_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Void_Linux_20230628_default_desktop_-_English.png",
+        "credit": "The Void Linux Community",
+        "license": "GPL"
+      }
     },
     {
       "id": "alpine",
@@ -501,7 +585,13 @@
           "label": "edge",
           "install": "doas apk add {package}"
         }
-      ]
+      ],
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Alpine_Linux_3.18_KDE_-_English.png/960px-Alpine_Linux_3.18_KDE_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Alpine_Linux_3.18_KDE_-_English.png",
+        "credit": "Alpine Linux development team",
+        "license": "GPL"
+      }
     },
     {
       "id": "gentoo",
@@ -521,7 +611,13 @@
           "repo": "gentoo",
           "install": "sudo emerge --ask {package}"
         }
-      ]
+      ],
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Gentoo-sway-window-manager.png/960px-Gentoo-sway-window-manager.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Gentoo-sway-window-manager.png",
+        "credit": "Vitaly Zdanevich",
+        "license": "CC BY-SA 4.0"
+      }
     }
   ],
   "desktops": [
@@ -883,7 +979,13 @@
         "ScreenCast"
       ],
       "repology": "hyprland",
-      "nvidia_note": "Works on NVIDIA with a recent driver; the Hyprland wiki's NVIDIA page lists the settings."
+      "nvidia_note": "Works on NVIDIA with a recent driver; the Hyprland wiki's NVIDIA page lists the settings.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Hyprland_screen.png/960px-Hyprland_screen.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Hyprland_screen.png",
+        "credit": "Worthymelight",
+        "license": "CC BY 4.0"
+      }
     },
     {
       "id": "niri",
@@ -956,7 +1058,13 @@
       "portals": [
         "ScreenCast"
       ],
-      "repology": "niri"
+      "repology": "niri",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Screenshot_LXQt-Niri_2025-06-11.png/960px-Screenshot_LXQt-Niri_2025-06-11.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Screenshot_LXQt-Niri_2025-06-11.png",
+        "credit": "Stefan Draxlbauer",
+        "license": "CC0"
+      }
     },
     {
       "id": "sway",
@@ -1037,7 +1145,13 @@
         "ScreenCast"
       ],
       "repology": "sway",
-      "nvidia_note": "On the NVIDIA driver, start sway with --unsupported-gpu."
+      "nvidia_note": "On the NVIDIA driver, start sway with --unsupported-gpu.",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Sway_1.4_Window_Manager.png/960px-Sway_1.4_Window_Manager.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Sway_1.4_Window_Manager.png",
+        "credit": "Tomskyhaha",
+        "license": "CC BY-SA 4.0"
+      }
     },
     {
       "id": "kwin",
@@ -1133,7 +1247,13 @@
         "ScreenCast",
         "Wallpaper"
       ],
-      "repology": "kwin"
+      "repology": "kwin",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kde_Plasma_6.png/960px-Kde_Plasma_6.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Kde_Plasma_6.png",
+        "credit": "Axo1otl",
+        "license": "GPL"
+      }
     },
     {
       "id": "river",
@@ -1304,7 +1424,13 @@
         "Screenshot",
         "ScreenCast"
       ],
-      "repology": "cosmic-comp"
+      "repology": "cosmic-comp",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Pop%21_OS_24.04_LTS_default_desktop_-_English.png/960px-Pop%21_OS_24.04_LTS_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
+        "credit": "System76",
+        "license": "GPL-3.0"
+      }
     },
     {
       "id": "mutter",
@@ -1376,7 +1502,13 @@
         "ScreenCast",
         "Wallpaper"
       ],
-      "repology": "mutter"
+      "repology": "mutter",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/GNOME_Shell.png/960px-GNOME_Shell.png",
+        "page": "https://commons.wikimedia.org/wiki/File:GNOME_Shell.png",
+        "credit": "Guilieb",
+        "license": "CC BY-SA 4.0"
+      }
     },
     {
       "id": "wayfire",

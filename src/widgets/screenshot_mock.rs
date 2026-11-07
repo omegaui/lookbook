@@ -1,7 +1,7 @@
 //! Draws a stand-in desktop screenshot from a few colors, with real app icons
 //! from the icon theme. It is replaced by real screenshots once the catalog has them.
 
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
@@ -102,6 +102,8 @@ mod imp {
     #[derive(Debug, Default)]
     pub struct ScreenshotMock {
         pub(super) palette: Cell<Option<Palette>>,
+        /// A real screenshot. Once set, it is drawn instead of the mock.
+        pub(super) texture: RefCell<Option<gdk::Texture>>,
     }
 
     #[glib::object_subclass]
@@ -134,10 +136,15 @@ mod imp {
         }
 
         fn snapshot(&self, snapshot: &gtk::Snapshot) {
+            let widget = self.obj();
+            if let Some(texture) = self.texture.borrow().as_ref() {
+                draw_real_screenshot(snapshot, texture, widget.width() as f32, widget.height() as f32);
+                return;
+            }
             let Some(palette) = self.palette.get() else {
+                draw_placeholder(snapshot, widget.width() as f32, widget.height() as f32);
                 return;
             };
-            let widget = self.obj();
             let canvas = Canvas {
                 snapshot,
                 palette,
@@ -180,6 +187,45 @@ impl ScreenshotMock {
         self.imp().palette.set(Some(Palette::from_look(look)));
         self.queue_draw();
     }
+
+    /// Shows a real screenshot in place of the drawn one, at the same size.
+    pub fn set_texture(&self, texture: &gdk::Texture) {
+        self.imp().texture.replace(Some(texture.clone()));
+        self.queue_draw();
+    }
+}
+
+/// Scales the screenshot to cover the whole card, cropping what spills over.
+fn draw_real_screenshot(snapshot: &gtk::Snapshot, texture: &gdk::Texture, width: f32, height: f32) {
+    let bounds = graphene::Rect::new(0.0, 0.0, width, height);
+    let image_width = texture.width() as f32;
+    let image_height = texture.height() as f32;
+    if image_width <= 0.0 || image_height <= 0.0 {
+        return;
+    }
+
+    let scale = (width / image_width).max(height / image_height);
+    let drawn_width = image_width * scale;
+    let drawn_height = image_height * scale;
+    let area = graphene::Rect::new(
+        (width - drawn_width) / 2.0,
+        (height - drawn_height) / 2.0,
+        drawn_width,
+        drawn_height,
+    );
+
+    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(bounds, CORNER_RADIUS));
+    snapshot.append_texture(texture, &area);
+    snapshot.pop();
+}
+
+/// A plain rounded card while a screenshot with no drawn look loads.
+fn draw_placeholder(snapshot: &gtk::Snapshot, width: f32, height: f32) {
+    let bounds = graphene::Rect::new(0.0, 0.0, width, height);
+    let color = gdk::RGBA::new(0.5, 0.5, 0.55, 0.15);
+    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(bounds, CORNER_RADIUS));
+    snapshot.append_color(&color, &bounds);
+    snapshot.pop();
 }
 
 /// A large soft circle in the top right corner of the wallpaper.

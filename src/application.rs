@@ -126,11 +126,11 @@ impl LinuxAndYouApplication {
         );
 
         dialog.add_legal_section(
-            &gettext("Desktop screenshots"),
+            &gettext("Screenshots"),
             None,
             gtk::License::Custom,
             Some(&gettext(
-                "Desktop screenshots load live from <a href=\"https://commons.wikimedia.org\">Wikimedia Commons</a>; none are bundled. Each card's tooltip names the author and license, and each image's Commons page holds the full details.\n\nPackage data in Can I Run It? comes from <a href=\"https://repology.org\">Repology</a>.",
+                "Distro, desktop and compositor screenshots load live from <a href=\"https://commons.wikimedia.org\">Wikimedia Commons</a>; none are bundled. Tooltips name each image's author and license, and its Commons page holds the full details.\n\nPackage data in Can I Run It? comes from <a href=\"https://repology.org\">Repology</a>.",
             )),
         );
 

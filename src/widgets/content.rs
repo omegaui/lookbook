@@ -2,11 +2,81 @@
 
 use gettextrs::gettext;
 
+use gtk::glib;
+
 use super::{SceneLayout, TileContent};
 use crate::catalog::{
-    key_features, Accent, Catalog, Collection, Compositor, CompositorKind, Desktop, DesktopLayout,
-    Distro, FeatureSupport, ItemKind, ItemRef, ItemSummary, Spotlight,
+    key_features, Accent, Catalog, Collection, Compositor, CompositorKind, Desktop, DesktopBar,
+    DesktopLayout, Distro, FeatureSupport, HostedScreenshot, ItemKind, ItemRef, ItemSummary,
+    Spotlight,
 };
+use crate::system::SystemInfo;
+
+const EXTEND_ICON: &str = "application-x-addon-symbolic";
+const DESKTOP_ICON: &str = "video-display-symbolic";
+/// The bars drawn for a distro whose default desktop is not in the catalog.
+const PLAIN_BARS: [DesktopBar; 2] = [DesktopBar::Top, DesktopBar::Dock];
+
+/// A gallery card with art on top, for the Distros and Desktops pages.
+#[derive(Debug, Clone)]
+pub struct ShowcaseContent {
+    pub card: CardContent,
+    /// A short line under the name, for example "Wayland only" or "Arch-based".
+    pub subtitle: String,
+    pub footer_icon: &'static str,
+    /// Pango markup, for example "Extend with <b>Shell extensions (GJS)</b>".
+    pub footer_markup: String,
+    /// The drawn placeholder's color and bars.
+    pub color: String,
+    pub bars: Vec<DesktopBar>,
+    pub screenshot: Option<HostedScreenshot>,
+    /// What the Desktops page's toolkit filter compares, for example "gtk".
+    pub toolkit_id: Option<&'static str>,
+}
+
+impl ShowcaseContent {
+    pub fn for_desktop(desktop: &Desktop, system: &SystemInfo) -> Self {
+        Self {
+            card: CardContent::for_desktop(desktop, system),
+            subtitle: desktop.wayland.clone(),
+            footer_icon: EXTEND_ICON,
+            footer_markup: with_bold_value(&gettext("Extend with {}"), &desktop.extend_with),
+            color: desktop.color.clone(),
+            bars: desktop.bars.clone(),
+            screenshot: desktop.screenshot.clone(),
+            toolkit_id: Some(desktop.toolkit_family.id()),
+        }
+    }
+
+    pub fn for_distro(distro: &Distro, catalog: &Catalog, system: &SystemInfo) -> Self {
+        Self {
+            card: CardContent::for_distro(distro, system),
+            subtitle: distro.family.label(),
+            footer_icon: DESKTOP_ICON,
+            footer_markup: with_bold_value(&gettext("Desktop: {}"), &distro.default_desktop),
+            color: distro.color.clone(),
+            bars: default_desktop_bars(distro, catalog),
+            screenshot: distro.screenshot.clone(),
+            toolkit_id: None,
+        }
+    }
+}
+
+/// Fills `{}` in `template` with `value` in bold, escaped for Pango markup.
+fn with_bold_value(template: &str, value: &str) -> String {
+    let escaped_template = glib::markup_escape_text(template);
+    let bold = format!("<b>{}</b>", glib::markup_escape_text(value));
+    escaped_template.replace("{}", &bold)
+}
+
+/// The bars of the distro's default desktop, so the drawing looks like it.
+fn default_desktop_bars(distro: &Distro, catalog: &Catalog) -> Vec<DesktopBar> {
+    catalog
+        .desktops
+        .iter()
+        .find(|desktop| desktop.name == distro.default_desktop)
+        .map_or_else(|| PLAIN_BARS.to_vec(), |desktop| desktop.bars.clone())
+}
 
 /// Whether a compositor has one key feature, for example "Layer shell".
 #[derive(Debug, Clone)]
@@ -48,7 +118,6 @@ pub struct ProtocolSummary {
     pub checked_on: String,
     pub globals: Vec<String>,
 }
-use crate::system::SystemInfo;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CardBadge {
@@ -334,6 +403,7 @@ pub struct SpotlightContent {
     pub scene: SceneLayout,
     /// The item "View Details" and "Can I Run It?" are about.
     pub item: ItemRef,
+    pub screenshot: Option<HostedScreenshot>,
 }
 
 /// Compositors show their own window layout; desktops and distros float windows.
@@ -370,6 +440,7 @@ impl SpotlightContent {
             accent: spotlight.accent,
             scene: SceneLayout::Floating,
             item: ItemRef::new(ItemKind::Distro, &distro.id),
+            screenshot: distro.screenshot.clone(),
         }
     }
 
@@ -383,6 +454,7 @@ impl SpotlightContent {
             accent: spotlight.accent,
             scene: scene_for_desktop(desktop.layout),
             item: ItemRef::new(ItemKind::Desktop, &desktop.id),
+            screenshot: desktop.screenshot.clone(),
         }
     }
 
@@ -400,6 +472,7 @@ impl SpotlightContent {
             accent: spotlight.accent,
             scene: scene_for_compositor(compositor.kind),
             item: ItemRef::new(ItemKind::Compositor, &compositor.id),
+            screenshot: compositor.screenshot.clone(),
         }
     }
 }

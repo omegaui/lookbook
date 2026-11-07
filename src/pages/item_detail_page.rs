@@ -8,16 +8,18 @@ use gettextrs::gettext;
 use gtk::glib::clone;
 use gtk::{gio, glib};
 
-use crate::catalog::{Catalog, ItemKind, ItemRef};
+use crate::catalog::{Catalog, HostedScreenshot, ItemKind, ItemRef};
 use crate::details::{compare, setup_for, similar_items, Comparison};
 use crate::extensions::fetch_popular;
 use crate::ideas::evaluate;
 use crate::system::SystemInfo;
-use crate::wallpapers::new_session;
+use crate::http::shared_session;
+use crate::wallpapers::{fetch_texture, new_session};
 use crate::widgets::{
     chip_label, extension_card, fact_tile, feature_check, fill_protocol_lists, fill_wall_grid,
-    open_details_on_activate, CardBadge, CardContent, CatalogCard, DetailContent, IdeaCard,
-    IsoScene, LogoTile, ProtocolSummary,
+    fill_with_cards, open_details_on_activate, screenshot_credit, CardBadge, CardContent,
+    CatalogCard, DetailContent, IdeaCard, IsoPicture, IsoScene, LogoTile, ProtocolSummary,
+    ScreenshotCard,
 };
 
 const TILE_SIZE: i32 = 96;
@@ -37,6 +39,10 @@ mod imp {
         pub name_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub run_button: gtk::TemplateChild<gtk::Button>,
+        #[template_child]
+        pub banner_art: gtk::TemplateChild<gtk::Stack>,
+        #[template_child]
+        pub banner_picture: gtk::TemplateChild<IsoPicture>,
         #[template_child]
         pub badge_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
@@ -101,6 +107,7 @@ mod imp {
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
             IsoScene::ensure_type();
+            IsoPicture::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -143,6 +150,7 @@ impl ItemDetailPage {
 
         page.show_header(content);
         page.show_screenshots(content, catalog);
+        page.load_banner_screenshot(catalog.hosted_screenshot(content.item.kind, &content.item.id));
         page.show_facts(content);
         page.show_extensions(content);
         page.show_ideas(content, catalog);
@@ -179,12 +187,44 @@ impl ItemDetailPage {
         label.set_visible(true);
     }
 
-    /// The Hall of fame section stays hidden when there are no screenshots yet.
+    /// The Hall of fame: the catalog's entries for this item, or else its real
+    /// screenshot on its own. Hidden when there is neither.
     fn show_screenshots(&self, content: &DetailContent, catalog: &Catalog) {
         let imp = self.imp();
         let screenshots = catalog.screenshots_of(&content.item.id);
-        fill_wall_grid(&imp.wall_grid, &screenshots);
-        imp.wall_section.set_visible(!screenshots.is_empty());
+        let hosted = catalog.hosted_screenshot(content.item.kind, &content.item.id);
+
+        if !screenshots.is_empty() {
+            fill_wall_grid(&imp.wall_grid, &screenshots, catalog);
+        } else if let Some(hosted) = hosted {
+            let card = ScreenshotCard::with_hosted(None, &content.title, hosted, &content.website);
+            fill_with_cards(&imp.wall_grid, &[card]);
+        }
+        imp.wall_section
+            .set_visible(!screenshots.is_empty() || hosted.is_some());
+    }
+
+    /// Swaps the banner's drawn scene for the item's real screenshot, laid on
+    /// the same floor, once it loads.
+    fn load_banner_screenshot(&self, hosted: Option<&HostedScreenshot>) {
+        let Some(hosted) = hosted.cloned() else {
+            return;
+        };
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = page)]
+            self,
+            async move {
+                match fetch_texture(&shared_session(), &hosted.url).await {
+                    Ok(texture) => {
+                        let imp = page.imp();
+                        imp.banner_picture.set_texture(Some(&texture));
+                        imp.banner_picture.set_tooltip_text(Some(&screenshot_credit(&hosted)));
+                        imp.banner_art.set_visible_child_name("screenshot");
+                    }
+                    Err(error) => tracing::warn!("Could not load the banner screenshot: {error:#}"),
+                }
+            }
+        ));
     }
 
     fn show_facts(&self, content: &DetailContent) {

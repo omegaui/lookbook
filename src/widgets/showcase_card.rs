@@ -1,7 +1,8 @@
-//! A card in the Desktops gallery: a small drawing of the desktop on top, then
-//! its name, how far along its Wayland session is, its parts and how to extend it.
+//! A gallery card with art on top, for the Distros and Desktops pages: a real
+//! screenshot, loaded live, with a small drawn desktop until it arrives. Below
+//! it come the name, a short line, the tagline, chips and one closing line.
 
-use std::cell::{Cell, RefCell};
+use std::cell::RefCell;
 
 use adw::subclass::prelude::*;
 use gettextrs::gettext;
@@ -9,23 +10,22 @@ use gtk::glib;
 use gtk::glib::clone;
 use gtk::prelude::*;
 
-use super::{chip_label, CardContent, LogoTile, MiniDesktop, NaturalWidthCap};
-use crate::catalog::{Desktop, HostedScreenshot, ItemRef, ToolkitFamily};
+use super::{chip_label, CardBadge, CoverPicture, LogoTile, MiniDesktop, ShowcaseContent};
+use crate::catalog::{HostedScreenshot, ItemRef};
 use crate::http::shared_session;
-use crate::system::SystemInfo;
 use crate::wallpapers::fetch_texture;
 
 const TILE_SIZE: i32 = 44;
-/// The width a card asks for, so three share a row on a wide window.
-const SCREENSHOT_NATURAL_WIDTH: i32 = 300;
+/// Matches the drawn placeholder, so the card keeps its height when the image arrives.
+const ART_HEIGHT: i32 = 150;
 const SCREENSHOT_PAGE: &str = "screenshot";
 
 mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/widgets/desktop_card.ui")]
-    pub struct DesktopCard {
+    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/widgets/showcase_card.ui")]
+    pub struct ShowcaseCard {
         #[template_child]
         pub art_stack: gtk::TemplateChild<gtk::Stack>,
         #[template_child]
@@ -37,23 +37,25 @@ mod imp {
         #[template_child]
         pub badge_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
-        pub wayland_label: gtk::TemplateChild<gtk::Label>,
+        pub subtitle_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub tagline_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub chips_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
-        pub extend_label: gtk::TemplateChild<gtk::Label>,
+        pub footer_icon: gtk::TemplateChild<gtk::Image>,
+        #[template_child]
+        pub footer_label: gtk::TemplateChild<gtk::Label>,
         pub item: RefCell<Option<ItemRef>>,
-        pub toolkit_family: Cell<Option<ToolkitFamily>>,
+        pub toolkit_id: RefCell<Option<&'static str>>,
+        /// Taken out when it starts loading, so it loads only once.
         pub screenshot: RefCell<Option<HostedScreenshot>>,
-        pub screenshot_requested: Cell<bool>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for DesktopCard {
-        const NAME: &'static str = "DesktopCard";
-        type Type = super::DesktopCard;
+    impl ObjectSubclass for ShowcaseCard {
+        const NAME: &'static str = "ShowcaseCard";
+        type Type = super::ShowcaseCard;
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
@@ -67,28 +69,29 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for DesktopCard {}
+    impl ObjectImpl for ShowcaseCard {}
 
-    impl WidgetImpl for DesktopCard {
+    impl WidgetImpl for ShowcaseCard {
         /// The screenshot loads the first time the card is on screen.
         fn map(&self) {
             self.parent_map();
             self.obj().load_screenshot();
         }
     }
-    impl BinImpl for DesktopCard {}
+
+    impl BinImpl for ShowcaseCard {}
 }
 
 glib::wrapper! {
-    pub struct DesktopCard(ObjectSubclass<imp::DesktopCard>)
+    pub struct ShowcaseCard(ObjectSubclass<imp::ShowcaseCard>)
         @extends gtk::Widget, adw::Bin,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl DesktopCard {
-    pub fn new(desktop: &Desktop, system: &SystemInfo) -> Self {
+impl ShowcaseCard {
+    pub fn new(content: &ShowcaseContent) -> Self {
         let card: Self = glib::Object::new();
-        card.show_desktop(desktop, system);
+        card.show_content(content);
         card
     }
 
@@ -97,35 +100,32 @@ impl DesktopCard {
         self.imp().item.borrow().clone()
     }
 
-    /// The toolkit filter compares against this, for example "gtk".
+    /// The Desktops page's toolkit filter compares against this, for example "gtk".
     pub fn toolkit_id(&self) -> Option<&'static str> {
-        self.imp().toolkit_family.get().map(ToolkitFamily::id)
+        *self.imp().toolkit_id.borrow()
     }
 
-    fn show_desktop(&self, desktop: &Desktop, system: &SystemInfo) {
+    fn show_content(&self, content: &ShowcaseContent) {
         let imp = self.imp();
-        let content = CardContent::for_desktop(desktop, system);
+        let card = &content.card;
 
-        imp.item.replace(Some(content.item.clone()));
-        imp.toolkit_family.set(Some(desktop.toolkit_family));
-        imp.art.set_desktop(&desktop.color, &desktop.bars);
+        imp.item.replace(Some(card.item.clone()));
+        imp.toolkit_id.replace(content.toolkit_id);
+        imp.screenshot.replace(content.screenshot.clone());
+        imp.art.set_desktop(&content.color, &content.bars);
         imp.tile.set_tile_size(TILE_SIZE);
-        imp.tile.set_content(&content.tile);
-        imp.name_label.set_label(&content.name);
-        imp.wayland_label.set_label(&desktop.wayland);
-        imp.tagline_label.set_label(&content.description);
-        self.show_badge(&content);
-        self.show_chips(&content.chips);
-        self.show_extend_with(&desktop.extend_with);
-        imp.screenshot.replace(desktop.screenshot.clone());
+        imp.tile.set_content(&card.tile);
+        imp.name_label.set_label(&card.name);
+        imp.subtitle_label.set_label(&content.subtitle);
+        imp.tagline_label.set_label(&card.description);
+        imp.footer_icon.set_icon_name(Some(content.footer_icon));
+        imp.footer_label.set_markup(&content.footer_markup);
+        self.show_badge(card.badge);
+        self.show_chips(&card.chips);
     }
 
     fn load_screenshot(&self) {
-        let imp = self.imp();
-        if imp.screenshot_requested.replace(true) {
-            return;
-        }
-        let Some(screenshot) = imp.screenshot.borrow().clone() else {
+        let Some(screenshot) = self.imp().screenshot.take() else {
             return;
         };
 
@@ -135,7 +135,7 @@ impl DesktopCard {
             async move {
                 match fetch_texture(&shared_session(), &screenshot.url).await {
                     Ok(texture) => card.show_screenshot(&texture, &screenshot),
-                    Err(error) => tracing::warn!("Could not load a desktop screenshot: {error:#}"),
+                    Err(error) => tracing::warn!("Could not load a screenshot: {error:#}"),
                 }
             }
         ));
@@ -143,24 +143,20 @@ impl DesktopCard {
 
     /// Swaps the drawing for the real screenshot, credited in its tooltip.
     fn show_screenshot(&self, texture: &gtk::gdk::Texture, screenshot: &HostedScreenshot) {
-        let picture = gtk::Picture::builder()
-            .paintable(texture)
-            .content_fit(gtk::ContentFit::Cover)
-            .can_shrink(true)
-            .tooltip_text(screenshot_credit(screenshot))
-            .build();
+        let picture = CoverPicture::new(texture, ART_HEIGHT);
+        picture.set_tooltip_text(Some(&screenshot_credit(screenshot)));
         picture.update_property(&[gtk::accessible::Property::Label(&gettext("Screenshot"))]);
 
         let stack = &self.imp().art_stack;
-        stack.add_named(&NaturalWidthCap::new(&picture, SCREENSHOT_NATURAL_WIDTH), Some(SCREENSHOT_PAGE));
+        stack.add_named(&picture, Some(SCREENSHOT_PAGE));
         stack.set_visible_child_name(SCREENSHOT_PAGE);
     }
 
-    fn show_badge(&self, content: &CardContent) {
-        let label = &self.imp().badge_label;
-        let Some(badge) = content.badge else {
+    fn show_badge(&self, badge: Option<CardBadge>) {
+        let Some(badge) = badge else {
             return;
         };
+        let label = &self.imp().badge_label;
         label.set_label(&badge.label());
         label.add_css_class(badge.css_class());
         label.set_visible(true);
@@ -170,13 +166,6 @@ impl DesktopCard {
         for chip in chips {
             self.imp().chips_box.append(&chip_label(chip));
         }
-    }
-
-    /// "Extend with **Shell extensions (GJS)**", with the way in bold.
-    fn show_extend_with(&self, extend_with: &str) {
-        let bold = format!("<b>{}</b>", glib::markup_escape_text(extend_with));
-        let markup = gettext("Extend with {way}").replace("{way}", &bold);
-        self.imp().extend_label.set_markup(&markup);
     }
 }
 

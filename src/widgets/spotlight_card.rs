@@ -1,8 +1,14 @@
+use std::cell::RefCell;
+
+use gtk::glib;
+use gtk::glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::glib;
 
-use super::{chip_label, IsoScene, LogoTile, SpotlightContent};
+use super::{chip_label, screenshot_credit, IsoPicture, IsoScene, LogoTile, SpotlightContent};
+use crate::catalog::HostedScreenshot;
+use crate::http::shared_session;
+use crate::wallpapers::fetch_texture;
 
 mod imp {
     use super::*;
@@ -25,7 +31,13 @@ mod imp {
         #[template_child]
         pub run_button: gtk::TemplateChild<gtk::Button>,
         #[template_child]
+        pub art_stack: gtk::TemplateChild<gtk::Stack>,
+        #[template_child]
         pub scene: gtk::TemplateChild<IsoScene>,
+        #[template_child]
+        pub picture: gtk::TemplateChild<IsoPicture>,
+        /// Taken out when it starts loading, so it loads only once.
+        pub screenshot: RefCell<Option<HostedScreenshot>>,
     }
 
     #[glib::object_subclass]
@@ -37,6 +49,7 @@ mod imp {
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
             IsoScene::ensure_type();
+            IsoPicture::ensure_type();
             klass.bind_template();
         }
 
@@ -46,7 +59,14 @@ mod imp {
     }
 
     impl ObjectImpl for SpotlightCard {}
-    impl WidgetImpl for SpotlightCard {}
+
+    impl WidgetImpl for SpotlightCard {
+        /// The screenshot loads the first time the spotlight is on screen.
+        fn map(&self) {
+            self.parent_map();
+            self.obj().load_screenshot();
+        }
+    }
     impl BoxImpl for SpotlightCard {}
 }
 
@@ -75,9 +95,31 @@ impl SpotlightCard {
         imp.details_button.set_action_target_value(Some(&target));
         imp.run_button.set_action_target_value(Some(&target));
         imp.scene.set_scene(content.scene, content.accent);
+        imp.screenshot.replace(content.screenshot.clone());
 
         for chip in &content.chips {
             imp.chips_box.append(&chip_label(chip));
         }
+    }
+
+    fn load_screenshot(&self) {
+        let Some(screenshot) = self.imp().screenshot.take() else {
+            return;
+        };
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = card)]
+            self,
+            async move {
+                match fetch_texture(&shared_session(), &screenshot.url).await {
+                    Ok(texture) => {
+                        let imp = card.imp();
+                        imp.picture.set_texture(Some(&texture));
+                        imp.picture.set_tooltip_text(Some(&screenshot_credit(&screenshot)));
+                        imp.art_stack.set_visible_child_name("screenshot");
+                    }
+                    Err(error) => tracing::warn!("Could not load a spotlight screenshot: {error:#}"),
+                }
+            }
+        ));
     }
 }

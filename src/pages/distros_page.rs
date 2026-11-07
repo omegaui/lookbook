@@ -10,7 +10,7 @@ use gtk::glib::clone;
 
 use crate::catalog::{Catalog, Distro, DistroFamily, ReleaseModel};
 use crate::system::SystemInfo;
-use crate::widgets::{open_details_on_activate, CardContent, CatalogCard};
+use crate::widgets::{open_details_on_activate, ShowcaseCard, ShowcaseContent};
 
 /// The toggle name that turns a filter off.
 const SHOW_ALL: &str = "all";
@@ -98,8 +98,8 @@ impl DistrosPage {
         let imp = self.imp();
 
         for distro in &catalog.distros {
-            let content = CardContent::for_distro(distro, system);
-            imp.distros_flowbox.append(&CatalogCard::new(&content));
+            let content = ShowcaseContent::for_distro(distro, catalog, system);
+            imp.distros_flowbox.append(&ShowcaseCard::new(&content));
         }
 
         let entries = catalog.distros.iter().map(FilterEntry::new).collect();

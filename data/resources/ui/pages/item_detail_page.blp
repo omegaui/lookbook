@@ -107,8 +107,22 @@ template $ItemDetailPage: Adw.NavigationPage {
               }
             }
 
-            $IsoScene scene {
+            // The drawn scene shows until the item's real screenshot arrives.
+            Stack banner_art {
+              transition-type: crossfade;
               hexpand: true;
+
+              StackPage {
+                name: "drawing";
+
+                child: $IsoScene scene {};
+              }
+
+              StackPage {
+                name: "screenshot";
+
+                child: $IsoPicture banner_picture {};
+              }
             }
           }
 

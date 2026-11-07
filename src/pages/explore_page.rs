@@ -220,7 +220,7 @@ impl ExplorePage {
 
     fn show_wall_of_fame(&self, catalog: &Catalog) {
         let screenshots: Vec<_> = catalog.screenshots.iter().collect();
-        fill_wall_grid(&self.imp().wall_grid, &screenshots);
+        fill_wall_grid(&self.imp().wall_grid, &screenshots, catalog);
     }
 
     fn show_distros(&self, catalog: &Catalog, system: &SystemInfo) {
