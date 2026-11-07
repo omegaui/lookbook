@@ -17,107 +17,126 @@ template $SystemPage: Adw.Bin {
         margin-start: 16;
         margin-end: 16;
         // Hero: what you run, how many ideas are ready, and the stack it is built from.
-        Box {
-          styles [
-            "system-hero",
-          ]
+        // The question mark explains how distros, desktops and compositors fit together.
+        Overlay {
+          [overlay]
+          Button help_button {
+            styles [
+              "circular",
+              "osd",
+            ]
 
-          overflow: hidden;
+            icon-name: "dialog-question-symbolic";
+            tooltip-text: _("What are distros, desktops and compositors?");
+            halign: end;
+            valign: start;
+            margin-top: 16;
+            margin-end: 16;
+            clicked => $on_help_clicked() swapped;
+          }
 
-          Box {
-            orientation: vertical;
-            spacing: 14;
-            valign: center;
-            margin-top: 40;
-            margin-bottom: 40;
-            margin-start: 40;
-            margin-end: 8;
+          child: Box {
+            styles [
+              "system-hero",
+            ]
 
-            Label {
-              styles [
-                "kicker",
-              ]
-
-              label: _("Your system");
-              xalign: 0;
-            }
-
-            Label title_label {
-              styles [
-                "hero-title",
-              ]
-
-              xalign: 0;
-              wrap: true;
-            }
-
-            Label session_label {
-              styles [
-                "hero-subtitle",
-              ]
-
-              xalign: 0;
-              wrap: true;
-              max-width-chars: 44;
-            }
+            overflow: hidden;
 
             Box {
               orientation: vertical;
-              spacing: 8;
-              margin-top: 8;
+              spacing: 14;
+              valign: center;
+              margin-top: 40;
+              margin-bottom: 40;
+              margin-start: 40;
+              margin-end: 8;
+
+              Label {
+                styles [
+                  "kicker",
+                ]
+
+                label: _("Your system");
+                xalign: 0;
+              }
+
+              Label title_label {
+                styles [
+                  "hero-title",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+
+              Label session_label {
+                styles [
+                  "hero-subtitle",
+                ]
+
+                xalign: 0;
+                wrap: true;
+                max-width-chars: 44;
+              }
 
               Box {
-                Label {
-                  styles [
-                    "heading",
-                  ]
+                orientation: vertical;
+                spacing: 8;
+                margin-top: 8;
 
-                  label: _("Ideas you have or can build");
-                  xalign: 0;
-                  hexpand: true;
+                Box {
+                  Label {
+                    styles [
+                      "heading",
+                    ]
+
+                    label: _("Ideas you have or can build");
+                    xalign: 0;
+                    hexpand: true;
+                  }
+
+                  Label ready_label {
+                    styles [
+                      "heading",
+                    ]
+                  }
                 }
 
-                Label ready_label {
-                  styles [
-                    "heading",
-                  ]
+                LevelBar ready_bar {
+                  max-value: 1;
                 }
               }
 
-              LevelBar ready_bar {
-                max-value: 1;
+              Box {
+                spacing: 10;
+                margin-top: 8;
+
+                Button {
+                  styles [
+                    "pill",
+                    "suggested-action",
+                  ]
+
+                  label: _("Scan Again");
+                  clicked => $on_scan_clicked() swapped;
+                }
+
+                Button copy_button {
+                  styles [
+                    "pill",
+                    "hero-button",
+                  ]
+
+                  label: _("Copy Report");
+                  clicked => $on_copy_clicked() swapped;
+                }
               }
             }
 
-            Box {
-              spacing: 10;
-              margin-top: 8;
-
-              Button {
-                styles [
-                  "pill",
-                  "suggested-action",
-                ]
-
-                label: _("Scan Again");
-                clicked => $on_scan_clicked() swapped;
-              }
-
-              Button copy_button {
-                styles [
-                  "pill",
-                  "hero-button",
-                ]
-
-                label: _("Copy Report");
-                clicked => $on_copy_clicked() swapped;
-              }
+            $LayerStack stack {
+              hexpand: true;
             }
-          }
-
-          $LayerStack stack {
-            hexpand: true;
-          }
+          };
         }
 
         FlowBox facts_flowbox {

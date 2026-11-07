@@ -3,6 +3,7 @@ mod collection_card;
 mod content;
 mod cover_picture;
 mod extension_card;
+mod fits_together_dialog;
 mod idea_card;
 mod edge;
 mod edge_picture;
@@ -34,6 +35,7 @@ pub use content::{
 };
 pub use cover_picture::CoverPicture;
 pub use extension_card::extension_card;
+pub use fits_together_dialog::FitsTogetherDialog;
 pub use idea_card::IdeaCard;
 pub use edge_picture::EdgePicture;
 pub use desktop_scene::{DesktopScene, SceneLayout};

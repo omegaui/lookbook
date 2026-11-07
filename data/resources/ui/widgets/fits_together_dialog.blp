@@ -1,0 +1,158 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $FitsTogetherDialog: Adw.Dialog {
+  title: _("How Linux Fits Together");
+  content-width: 800;
+  content-height: 560;
+  // Narrow windows put the explanation under the layers.
+  Adw.Breakpoint {
+    condition ("max-width: 640sp")
+
+    setters {
+      body_box.orientation: vertical;
+    }
+  }
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: ScrolledWindow {
+      hscrollbar-policy: never;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 20;
+        margin-top: 6;
+        margin-bottom: 24;
+        margin-start: 24;
+        margin-end: 24;
+
+        Label {
+          styles [
+            "dim-label",
+          ]
+
+          label: _("A Linux system is built in layers. Pick one to see what it does.");
+          xalign: 0;
+          wrap: true;
+        }
+
+        Adw.ToggleGroup scene_toggles {
+          styles [
+            "round",
+          ]
+
+          halign: start;
+          active-name: "yours";
+
+          Adw.Toggle {
+            name: "yours";
+            label: _("Your Setup");
+          }
+
+          Adw.Toggle {
+            name: "desktop";
+            label: _("A Full Desktop");
+          }
+
+          Adw.Toggle {
+            name: "compositor";
+            label: _("A Compositor Alone");
+          }
+        }
+
+        Box body_box {
+          spacing: 28;
+          // One drawing of layers per setup; the toggles switch between them.
+          Stack scene_stack {
+            transition-type: crossfade;
+            transition-duration: 250;
+            vhomogeneous: false;
+            width-request: 320;
+            valign: start;
+          }
+
+          Box {
+            styles [
+              "fit-details",
+            ]
+
+            orientation: vertical;
+            spacing: 12;
+            hexpand: true;
+            valign: start;
+
+            Label kind_label {
+              styles [
+                "kicker",
+              ]
+
+              xalign: 0;
+            }
+
+            Label name_label {
+              styles [
+                "title-2",
+              ]
+
+              xalign: 0;
+              wrap: true;
+            }
+
+            Label what_label {
+              xalign: 0;
+              wrap: true;
+              max-width-chars: 44;
+            }
+
+            Box {
+              spacing: 10;
+
+              Image {
+                styles [
+                  "dim-label",
+                ]
+
+                icon-name: "view-refresh-symbolic";
+                valign: start;
+                margin-top: 2;
+              }
+
+              Label change_label {
+                styles [
+                  "dim-label",
+                ]
+
+                xalign: 0;
+                wrap: true;
+                hexpand: true;
+                max-width-chars: 44;
+              }
+            }
+
+            Label examples_title {
+              styles [
+                "heading",
+              ]
+
+              label: _("For Example");
+              xalign: 0;
+              margin-top: 8;
+            }
+
+            FlowBox examples_flowbox {
+              selection-mode: none;
+              homogeneous: true;
+              min-children-per-line: 2;
+              max-children-per-line: 2;
+              column-spacing: 8;
+              row-spacing: 8;
+            }
+          }
+        }
+      };
+    };
+  };
+}

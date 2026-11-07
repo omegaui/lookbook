@@ -18,6 +18,7 @@
     <file preprocess="xml-stripblanks">ui/widgets/protocol_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/rice_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/run_check_dialog.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/fits_together_dialog.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/screenshot_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/screenshot_gallery.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/spotlight_card.ui</file>

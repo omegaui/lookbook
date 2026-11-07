@@ -8,7 +8,7 @@ mod wayland;
 
 use gettextrs::gettext;
 
-pub use hardware::Hardware;
+pub use hardware::{kernel_label, Hardware};
 pub use os_release::OsRelease;
 pub use session::Session;
 

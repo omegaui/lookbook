@@ -86,7 +86,12 @@ impl LookbookApplication {
                 .parameter_type(Some(glib::VariantTy::INT32))
                 .activate(|app: &Self, _, parameter| app.forward_to_window("show-spotlight", parameter))
                 .build();
-            self.add_action_entries([scroll_to, show_spotlight]);
+            // Opens "How Linux Fits Together" on a setup and layer, for example "desktop:2".
+            let explain_layers = gio::ActionEntry::builder("explain-layers")
+                .parameter_type(Some(glib::VariantTy::STRING))
+                .activate(|app: &Self, _, parameter| app.forward_to_window("explain-layers", parameter))
+                .build();
+            self.add_action_entries([scroll_to, show_spotlight, explain_layers]);
         }
     }
 

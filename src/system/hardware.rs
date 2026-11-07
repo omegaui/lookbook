@@ -2,6 +2,8 @@
 
 use std::fs;
 
+use gettextrs::gettext;
+
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Hardware {
     /// For example "6.17.2-arch1-1".
@@ -62,9 +64,25 @@ fn parse_memory_bytes(meminfo: &str) -> u64 {
     kilobytes * 1024
 }
 
+/// "7.3.1-1-cachyos" becomes "Linux 7.3".
+pub fn kernel_label(kernel: &str) -> String {
+    let version: Vec<&str> = kernel.split(['.', '-']).take(2).collect();
+    if version.len() < 2 {
+        return gettext("Linux");
+    }
+    format!("Linux {}.{}", version[0], version[1])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn kernel_labels_keep_major_and_minor() {
+        assert_eq!(kernel_label("7.3.1-1-cachyos"), "Linux 7.3");
+        assert_eq!(kernel_label("6.17-arch1"), "Linux 6.17");
+        assert_eq!(kernel_label(""), "Linux");
+    }
 
     const CPUINFO: &str = "processor\t: 0\nmodel name\t: AMD Ryzen 7 7840U\n\nprocessor\t: 1\nmodel name\t: AMD Ryzen 7 7840U\n";
 

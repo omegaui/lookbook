@@ -4,6 +4,7 @@ mod catalog;
 mod config;
 mod details;
 mod extensions;
+mod fits_together;
 mod http;
 mod ideas;
 mod news;

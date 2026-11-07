@@ -35,6 +35,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 | `src/catalog/` | Catalog model (`model.rs`), the bundled snapshot (`loader.rs`, with data tests), the downloaded online catalog (`online.rs`), `ItemRef` ("distro:fedora"), key compositor features (`features.rs`) |
 | `src/system/` | Detection, no UI: os-release (`/run/host/os-release` in Flatpak), `XDG_CURRENT_DESKTOP`, hardware from `/proc`, Wayland globals visible from the sandbox |
 | `src/ideas.rs` | Decides "Ready here" / "Works elsewhere" for each idea |
+| `src/fits_together.rs` | The layers and plain-language explanations for "How Linux Fits Together". No UI code |
 | `src/details.rs` | What a details page compares (Versus your system), which ideas an item supports, and similar items. No UI code |
 | `src/extensions.rs` | Popular GNOME Shell extensions, read live from the extensions.gnome.org API |
 | `src/run_check.rs`, `src/repology.rs` | "Can I Run It?": hardware checks, ideas gained or given up, ways to try, and the Repology package lookup (HTTP/1.1, at most one request a second) |
@@ -70,6 +71,7 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
 | Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |
 | Turn the Explore spotlight carousel (development builds only) | `.agentic-coding/scripts/show-spotlight.sh 3` (counts from 0) | |
+| Open "How Linux Fits Together" on a setup and layer (development builds only) | `.agentic-coding/scripts/explain-layers.sh desktop:2` (setups: yours, desktop, compositor; layers count from the top) | |
 | Screenshot only the app window | `.agentic-coding/scripts/screenshot-window.sh /tmp/shot.png` (Hyprland + grim) | |
 
 A full build must pass "Ok: 4, Fail: 0" (cargo tests, desktop file, GSettings schema, metainfo). Keep the build free of compiler warnings.
@@ -104,7 +106,8 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `b293a62` | Linux & You renamed to Lookbook: app ID `io.github.omegaui.Lookbook`, repository `omegaui/lookbook`, catalog at `omegaui.github.io/lookbook`, new metainfo summary and description, README, landing page (`catalog/index.html`); GitHub description and homepage updated, repository renamed |
 | `ec64e0c` | The Devel build is named "Lookbook (Devel)" in launchers |
 | `6e3c158` | Flat look (no isometric art; `EdgePicture`, `DesktopScene`, `IconTile`, `LayerStack`), Explore's Hall of Fame shows Hyprland's ricing contest winners (refreshed by the Catalog workflow), details pages get a Screenshots gallery |
-| (next) | 165 gallery screenshots for all 34 items, gathered by three agents from Commons, official project media and rice READMEs; the pipeline recognises images served without a Content-Type (hypr.land) |
+| `f099785` | 165 gallery screenshots for all 34 items, gathered by three agents from Commons, official project media and rice READMEs; the pipeline recognises images served without a Content-Type (hypr.land) |
+| (next) | "How Linux Fits Together": a question mark on the Your System banner opens a dialog that draws your setup, a full desktop (Fedora + GNOME, Mutter inside) and a compositor alone (Arch + Hyprland + pieces you add) as layers you pick; each layer explains what it is, how to change it, and links to examples (`fits_together.rs`, `FitsTogetherDialog`) |
 
 Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
@@ -114,7 +117,9 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - Can I Run It?: copy button, Get Boxes / Get Impression / Website links.
 - View Wallpaper on the wallpaper spotlight.
 - Rices: filter toggles, Get It, and Play on the clip previews (Caelestia, KooL's).
-- What's New and Hall of Fame cards opening the browser.
+- What's New and Hall of Fame cards opening the browser, and Hall of Fame "See All".
+- Screenshots gallery: arrows, swiping, the Source link.
+- "How Linux Fits Together": the question mark button, picking layers, the setup toggles, and example tiles opening their details pages (the dialog should close).
 - Possible bug seen once: the release app opened Explore scrolled down to the spotlight instead of the top.
 
 ## Open work, in priority order
@@ -122,7 +127,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 1. ~~App icon~~ done: a penguin with headphones coding at a cosy desk, with a terminal mug, on a lavender rounded tile. The user made the artwork with ChatGPT (`.agentic-coding/design/icon/source/penguin-at-desk.png`) and chose it over our drafts (the first-commit placeholder looked like existing marks; the isometric room was too detailed; then a flat penguin in a night badge). `make_icon.py` crops the tile, replaces its soft background-removal edge with a crisp rounded one, places it on GNOME's grid (112 of 128 px) and writes 8-bit PNGs at 16 to 512 px into `data/icons/hicolor/`, plus a Devel version with hazard stripes across the desk. The symbolic icon is a penguin head with headphones. Because the icon is raster artwork, `data/icons/meson.build` installs PNG sizes instead of a scalable SVG.
 2. **Check the gallery licenses marked "Not stated"** in `catalog.json` (Linux Mint and Cinnamon's linuxmint.com image, Silverblue's fedoraproject.org and Fedora Magazine images, the Agama installer, two niri release-note images, the Wayfire wiki and Wayfire-Lavender images). The KDE images are recorded as CC BY 4.0 from the kde.org website repository's README, not the pages themselves. Replace any the user is not comfortable with.
 3. **Review findings** (`review.md`). Done: 1.4 (app ID matches the repository), 1.6 (no "Linux" in the name), 1.10 (summary), 1.11 (description), 1.16 (README), 1.18 (GSettings description). Next, in the review's order: the three Flathub blockers (1.1 to 1.3), then 2.1, 2.5, 2.4 and 2.6.
-4. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Drawn art is also still the fallback for river, labwc and Wayfire, which have no Commons screenshot.
+4. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Every item now has real screenshots, so the drawn art only shows while they load.
 5. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`; the local release manifest downloads crates during the build), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) before Flathub.
 6. **App CI**: a workflow that builds the Flatpak and runs the tests on each push (only the catalog is automated today).
 7. Maybe: cache the release feeds for a few hours (the GitHub Atom feeds add up to about 3 MB per launch); more rices for river, labwc and Wayfire.

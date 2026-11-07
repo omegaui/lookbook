@@ -13,8 +13,10 @@ use gtk::{gdk, glib};
 
 use crate::catalog::Catalog;
 use crate::ideas::{evaluate, CurrentSetup, IdeaStatus};
-use crate::system::SystemInfo;
-use crate::widgets::{fact_tile, fill_protocol_lists, Fact, IdeaCard, LayerStack, StackLayer};
+use crate::system::{kernel_label, SystemInfo};
+use crate::widgets::{
+    fact_tile, fill_protocol_lists, Fact, FitsTogetherDialog, IdeaCard, LayerStack, StackLayer,
+};
 
 const SHOW_ALL: &str = "all";
 const SHOW_READY: &str = "ready";
@@ -60,6 +62,8 @@ mod imp {
         #[template_child]
         pub more_protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
         pub catalog: RefCell<Option<Rc<Catalog>>>,
+        /// What the last scan found, for the "How Linux Fits Together" dialog.
+        pub system: RefCell<Option<SystemInfo>>,
         /// Whether each card in `ideas_flowbox` is ready, in the same order.
         pub ready_flags: RefCell<Vec<bool>>,
         /// The text Copy Report puts on the clipboard.
@@ -106,6 +110,11 @@ mod imp {
         fn on_copy_clicked(&self, _button: &gtk::Button) {
             self.obj().copy_report();
         }
+
+        #[template_callback]
+        fn on_help_clicked(&self, _button: &gtk::Button) {
+            self.obj().explain_layers();
+        }
     }
 }
 
@@ -118,6 +127,7 @@ glib::wrapper! {
 impl SystemPage {
     pub fn show_system(&self, catalog: Rc<Catalog>, system: &SystemInfo) {
         self.imp().catalog.replace(Some(catalog.clone()));
+        self.imp().system.replace(Some(system.clone()));
         let setup = CurrentSetup::detect(&catalog, system);
         let statuses: Vec<IdeaStatus> = catalog
             .ideas
@@ -135,6 +145,16 @@ impl SystemPage {
     }
 
     /// Detects everything again and redraws the page.
+    /// Opens "How Linux Fits Together", starting from the user's own setup.
+    pub fn explain_layers(&self) -> Option<FitsTogetherDialog> {
+        let imp = self.imp();
+        let catalog = imp.catalog.borrow().clone()?;
+        let system = imp.system.borrow().clone()?;
+        let dialog = FitsTogetherDialog::new(&catalog, &system);
+        dialog.present(Some(self));
+        Some(dialog)
+    }
+
     fn scan_again(&self) {
         let catalog = self.imp().catalog.borrow().clone();
         if let Some(catalog) = catalog {
@@ -387,14 +407,6 @@ fn parse_color(color: &str) -> gdk::RGBA {
 }
 
 /// "7.3.1-1-cachyos" becomes "Linux 7.3".
-fn kernel_label(kernel: &str) -> String {
-    let version: Vec<&str> = kernel.split(['.', '-']).take(2).collect();
-    if version.len() < 2 {
-        return gettext("Linux");
-    }
-    format!("Linux {}.{}", version[0], version[1])
-}
-
 fn non_empty<'a>(value: &'a str, fallback: &'a str) -> &'a str {
     if value.is_empty() { fallback } else { value }
 }
@@ -417,16 +429,4 @@ fn session_text(session_type: &str) -> String {
     };
     gettext("{session}. Lookbook read your os-release file, your session variables and the protocols your compositor offers.")
         .replace("{session}", &session)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn kernel_labels_keep_major_and_minor() {
-        assert_eq!(kernel_label("7.3.1-1-cachyos"), "Linux 7.3");
-        assert_eq!(kernel_label("6.17-arch1"), "Linux 6.17");
-        assert_eq!(kernel_label(""), "Linux");
-    }
 }

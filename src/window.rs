@@ -7,6 +7,7 @@ use gtk::{gio, glib};
 
 use crate::application::LookbookApplication;
 use crate::catalog::{Catalog, ItemRef};
+use crate::fits_together::SceneKind;
 use crate::config::{APP_ID, PROFILE};
 use crate::pages::{
     CompositorsPage, DesktopsPage, DistrosPage, ExplorePage, ItemDetailPage, SystemPage,
@@ -228,7 +229,27 @@ impl LookbookWindow {
                 }
             })
             .build();
-        self.add_action_entries([scroll_to, show_spotlight]);
+        // Opens "How Linux Fits Together" on a setup and layer, for example "desktop:2".
+        let explain_layers = gio::ActionEntry::builder("explain-layers")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .activate(|window: &Self, _, parameter| {
+                if let Some(target) = parameter.and_then(|value| value.get::<String>()) {
+                    window.explain_layers(&target);
+                }
+            })
+            .build();
+        self.add_action_entries([scroll_to, show_spotlight, explain_layers]);
+    }
+
+    fn explain_layers(&self, target: &str) {
+        let (scene, layer) = target.split_once(':').unwrap_or((target, "0"));
+        let (Some(scene), Ok(layer)) = (SceneKind::from_id(scene), layer.parse::<usize>()) else {
+            return;
+        };
+        self.show_page("system");
+        if let Some(dialog) = self.imp().system_page.explain_layers() {
+            dialog.show_layer(scene, layer);
+        }
     }
 
     fn scroll_to(&self, fraction: f64) {
