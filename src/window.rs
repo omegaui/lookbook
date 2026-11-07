@@ -1,12 +1,18 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
 use crate::application::LinuxAndYouApplication;
-use crate::catalog::Catalog;
+use crate::catalog::{Catalog, ItemRef};
 use crate::config::{APP_ID, PROFILE};
-use crate::pages::ExplorePage;
+use crate::pages::{ExplorePage, ItemDetailPage};
 use crate::system::SystemInfo;
+use crate::widgets::DetailContent;
+
+const MAIN_PAGE_TAG: &str = "main";
 
 mod imp {
     use super::*;
@@ -15,18 +21,25 @@ mod imp {
     #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/window.ui")]
     pub struct LinuxAndYouWindow {
         #[template_child]
+        pub navigation_view: gtk::TemplateChild<adw::NavigationView>,
+        #[template_child]
         pub view_stack: gtk::TemplateChild<adw::ViewStack>,
         #[template_child]
         pub explore_page: gtk::TemplateChild<ExplorePage>,
         pub settings: gio::Settings,
+        pub catalog: RefCell<Option<Rc<Catalog>>>,
+        pub system: RefCell<Option<Rc<SystemInfo>>>,
     }
 
     impl Default for LinuxAndYouWindow {
         fn default() -> Self {
             Self {
+                navigation_view: gtk::TemplateChild::default(),
                 view_stack: gtk::TemplateChild::default(),
                 explore_page: gtk::TemplateChild::default(),
                 settings: gio::Settings::new(APP_ID),
+                catalog: RefCell::default(),
+                system: RefCell::default(),
             }
         }
     }
@@ -56,7 +69,7 @@ mod imp {
             window.load_window_state();
             window.setup_actions();
             window.remember_last_page();
-            window.show_catalog();
+            window.load_catalog();
         }
     }
 
@@ -94,18 +107,53 @@ impl LinuxAndYouWindow {
         }
     }
 
-    /// Adds `win.show-page`, which switches to a page by name, for example "system".
+    /// `win.show-page` switches to a page by name, for example "system".
+    /// `win.show-item` opens the details of an item, for example "distro:fedora".
     fn setup_actions(&self) {
         let show_page = gio::ActionEntry::builder("show-page")
             .parameter_type(Some(glib::VariantTy::STRING))
             .activate(|window: &Self, _, parameter| {
                 if let Some(page_name) = parameter.and_then(|value| value.get::<String>()) {
-                    window.imp().view_stack.set_visible_child_name(&page_name);
+                    window.show_page(&page_name);
                 }
             })
             .build();
 
-        self.add_action_entries([show_page]);
+        let show_item = gio::ActionEntry::builder("show-item")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .activate(|window: &Self, _, parameter| {
+                let target = parameter.and_then(|value| value.get::<String>());
+                if let Some(item) = target.as_deref().and_then(ItemRef::parse) {
+                    window.show_item(&item);
+                }
+            })
+            .build();
+
+        self.add_action_entries([show_page, show_item]);
+    }
+
+    fn show_page(&self, page_name: &str) {
+        let imp = self.imp();
+        imp.navigation_view.pop_to_tag(MAIN_PAGE_TAG);
+        imp.view_stack.set_visible_child_name(page_name);
+    }
+
+    fn show_item(&self, item: &ItemRef) {
+        let imp = self.imp();
+        let catalog = imp.catalog.borrow().clone();
+        let system = imp.system.borrow().clone();
+        let (Some(catalog), Some(system)) = (catalog, system) else {
+            return;
+        };
+
+        let Some(content) = DetailContent::from_catalog(item, &catalog, &system) else {
+            tracing::warn!("The catalog has no {}", item.to_action_target());
+            return;
+        };
+
+        let screenshots = catalog.screenshots_of(&item.id);
+        imp.navigation_view
+            .push(&ItemDetailPage::new(&content, &screenshots));
     }
 
     fn remember_last_page(&self) {
@@ -115,13 +163,22 @@ impl LinuxAndYouWindow {
             .build();
     }
 
-    fn show_catalog(&self) {
-        let system = SystemInfo::detect();
+    fn load_catalog(&self) {
+        let imp = self.imp();
+        let system = Rc::new(SystemInfo::detect());
 
-        match Catalog::load_bundled() {
-            Ok(catalog) => self.imp().explore_page.show_catalog(&catalog, &system),
-            Err(error) => tracing::error!("Could not load the bundled catalog: {error:#}"),
-        }
+        let catalog = match Catalog::load_bundled() {
+            Ok(catalog) => Rc::new(catalog),
+            Err(error) => {
+                tracing::error!("Could not load the bundled catalog: {error:#}");
+                return;
+            }
+        };
+
+        imp.explore_page.show_catalog(&catalog, &system);
+
+        imp.catalog.replace(Some(catalog));
+        imp.system.replace(Some(system));
     }
 
     fn load_window_state(&self) {

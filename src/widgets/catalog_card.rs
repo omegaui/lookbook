@@ -1,8 +1,11 @@
+use std::cell::RefCell;
+
 use adw::subclass::prelude::*;
 use gtk::prelude::*;
 use gtk::glib;
 
 use super::{chip_label, CardBadge, CardContent, LogoTile};
+use crate::catalog::ItemRef;
 
 mod imp {
     use super::*;
@@ -20,6 +23,7 @@ mod imp {
         pub description_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub chips_box: gtk::TemplateChild<gtk::Box>,
+        pub item: RefCell<Option<ItemRef>>,
     }
 
     #[glib::object_subclass]
@@ -57,8 +61,14 @@ impl CatalogCard {
         card
     }
 
+    /// The catalog item this card opens.
+    pub fn item(&self) -> Option<ItemRef> {
+        self.imp().item.borrow().clone()
+    }
+
     fn show_content(&self, content: &CardContent) {
         let imp = self.imp();
+        imp.item.replace(Some(content.item.clone()));
         imp.tile.set_content(&content.tile);
         imp.name_label.set_label(&content.name);
         imp.description_label.set_label(&content.description);

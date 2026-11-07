@@ -21,6 +21,25 @@ pub enum ItemKind {
     Compositor,
 }
 
+impl ItemKind {
+    pub fn id(self) -> &'static str {
+        match self {
+            Self::Distro => "distro",
+            Self::Desktop => "desktop",
+            Self::Compositor => "compositor",
+        }
+    }
+
+    pub fn from_id(id: &str) -> Option<Self> {
+        match id {
+            "distro" => Some(Self::Distro),
+            "desktop" => Some(Self::Desktop),
+            "compositor" => Some(Self::Compositor),
+            _ => None,
+        }
+    }
+}
+
 /// Colors from the GNOME palette, used for collections and spotlights.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -107,13 +126,22 @@ pub enum DistroFamily {
 }
 
 impl DistroFamily {
-    /// Matches the toggle names in the Explore page's family filter.
+    /// Matches the toggle names in the family filters.
     pub fn id(self) -> &'static str {
         match self {
             Self::Independent => "independent",
             Self::Arch => "arch",
             Self::Debian => "debian",
             Self::Fedora => "fedora",
+        }
+    }
+
+    pub fn label(self) -> String {
+        match self {
+            Self::Independent => gettext("Independent"),
+            Self::Arch => gettext("Arch-based"),
+            Self::Debian => gettext("Debian-based"),
+            Self::Fedora => gettext("Fedora-based"),
         }
     }
 }
@@ -127,6 +155,15 @@ pub enum ReleaseModel {
 }
 
 impl ReleaseModel {
+    /// Matches the toggle names in the Distros page's release filter.
+    pub fn id(self) -> &'static str {
+        match self {
+            Self::Rolling => "rolling",
+            Self::Fixed => "fixed",
+            Self::Atomic => "atomic",
+        }
+    }
+
     pub fn label(self) -> String {
         match self {
             Self::Rolling => gettext("Rolling"),
@@ -146,6 +183,7 @@ pub struct Distro {
     pub family: DistroFamily,
     pub release: ReleaseModel,
     pub package_manager: String,
+    pub website: String,
     /// A bundled logo id, for example "fedora". Items without one show `short`.
     pub logo: Option<String>,
     /// The `ID` field of this distro's os-release file.
@@ -163,6 +201,7 @@ pub struct Desktop {
     pub tagline: String,
     pub compositor: String,
     pub toolkit: String,
+    pub website: String,
     pub logo: Option<String>,
     /// Values of `XDG_CURRENT_DESKTOP` that mean this desktop is running.
     pub session_names: Vec<String>,
@@ -196,6 +235,7 @@ pub struct Compositor {
     pub kind: CompositorKind,
     pub base: String,
     pub config: String,
+    pub website: String,
     pub logo: Option<String>,
     /// Values of `XDG_CURRENT_DESKTOP` that mean this compositor is running.
     pub session_names: Vec<String>,

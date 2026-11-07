@@ -10,15 +10,13 @@ use gtk::glib::clone;
 use crate::catalog::{Catalog, DistroFamily};
 use crate::system::SystemInfo;
 use crate::widgets::{
-    CardContent, CatalogCard, CollectionCard, CollectionContent, ScreenshotCard, SpotlightCard,
-    SpotlightContent,
+    fill_wall_grid, open_details_on_activate, CardContent, CatalogCard, CollectionCard,
+    CollectionContent, SpotlightCard, SpotlightContent,
 };
 
 /// How many desktops and compositors the home page shows. "See all" opens the rest.
 const HOME_DESKTOP_COUNT: usize = 4;
 const HOME_COMPOSITOR_COUNT: usize = 4;
-/// The Wall of fame grid is four columns wide.
-const WALL_COLUMNS: i32 = 4;
 const ALL_FAMILIES: &str = "all";
 
 mod imp {
@@ -66,7 +64,12 @@ mod imp {
     impl ObjectImpl for ExplorePage {
         fn constructed(&self) {
             self.parent_constructed();
-            self.obj().setup_distro_filter();
+            let page = self.obj();
+
+            page.setup_distro_filter();
+            open_details_on_activate(&self.distros_flowbox);
+            open_details_on_activate(&self.desktops_flowbox);
+            open_details_on_activate(&self.compositors_flowbox);
         }
     }
 
@@ -120,13 +123,8 @@ impl ExplorePage {
     }
 
     fn show_wall_of_fame(&self, catalog: &Catalog) {
-        for (index, screenshot) in catalog.screenshots.iter().enumerate() {
-            let cell = wall_cell(index);
-            let card = ScreenshotCard::new(screenshot);
-            self.imp()
-                .wall_grid
-                .attach(&card, cell.column, cell.row, cell.width, cell.height);
-        }
+        let screenshots: Vec<_> = catalog.screenshots.iter().collect();
+        fill_wall_grid(&self.imp().wall_grid, &screenshots);
     }
 
     fn show_distros(&self, catalog: &Catalog, system: &SystemInfo) {
@@ -209,36 +207,5 @@ impl ExplorePage {
         let current = carousel.position().round() as i32;
         let next = (current + step).rem_euclid(count);
         carousel.scroll_to(&carousel.nth_page(next as u32), true);
-    }
-}
-
-/// Where a screenshot sits in the Wall of fame grid.
-struct WallCell {
-    column: i32,
-    row: i32,
-    width: i32,
-    height: i32,
-}
-
-/// The first screenshot is large: two columns wide and two rows tall.
-/// The next four fill the cells beside it, and the rest continue in rows below.
-fn wall_cell(index: usize) -> WallCell {
-    let index = index as i32;
-
-    if index == 0 {
-        return WallCell { column: 0, row: 0, width: 2, height: 2 };
-    }
-
-    let small_index = index - 1;
-    if small_index < 4 {
-        return WallCell { column: 2 + small_index % 2, row: small_index / 2, width: 1, height: 1 };
-    }
-
-    let below_index = small_index - 4;
-    WallCell {
-        column: below_index % WALL_COLUMNS,
-        row: 2 + below_index / WALL_COLUMNS,
-        width: 1,
-        height: 1,
     }
 }

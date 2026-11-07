@@ -135,6 +135,14 @@
   padding: 16px;
 }
 
+flowboxchild:hover .catalog-card {
+  background-color: color-mix(in srgb, currentColor 4%, var(--card-bg-color));
+}
+
+.fact-tile {
+  padding: 14px 16px;
+}
+
 /* Your system banner */
 
 .system-teaser {

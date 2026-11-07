@@ -1,0 +1,133 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ItemDetailPage: Adw.NavigationPage {
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: ScrolledWindow {
+      hscrollbar-policy: never;
+
+      child: Adw.Clamp {
+        maximum-size: 1180;
+        tightening-threshold: 900;
+
+        child: Box {
+          orientation: vertical;
+          spacing: 36;
+          margin-top: 12;
+          margin-bottom: 40;
+          margin-start: 16;
+          margin-end: 16;
+          // Header: logo, name, tagline and website.
+          Box {
+            spacing: 20;
+
+            $LogoTile tile {
+              valign: center;
+            }
+
+            Box {
+              orientation: vertical;
+              spacing: 6;
+              valign: center;
+              hexpand: true;
+
+              Box {
+                spacing: 10;
+
+                Label name_label {
+                  styles [
+                    "title-1",
+                  ]
+
+                  xalign: 0;
+                  wrap: true;
+                }
+
+                Label badge_label {
+                  styles [
+                    "badge",
+                  ]
+
+                  visible: false;
+                  valign: center;
+                }
+              }
+
+              Label tagline_label {
+                styles [
+                  "dim-label",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Button {
+              styles [
+                "pill",
+                "suggested-action",
+              ]
+
+              valign: center;
+              clicked => $on_website_clicked();
+
+              child: Adw.ButtonContent {
+                label: _("Website");
+                icon-name: "adw-external-link-symbolic";
+              };
+            }
+          }
+
+          // Screenshots first: looks are what people notice before features.
+          Box wall_section {
+            orientation: vertical;
+            spacing: 16;
+            visible: false;
+
+            Label {
+              styles [
+                "title-2",
+              ]
+
+              label: _("Wall of Fame");
+              xalign: 0;
+            }
+
+            Grid wall_grid {
+              column-spacing: 12;
+              row-spacing: 12;
+              column-homogeneous: true;
+            }
+          }
+
+          Box {
+            orientation: vertical;
+            spacing: 16;
+
+            Label {
+              styles [
+                "title-2",
+              ]
+
+              label: _("At a Glance");
+              xalign: 0;
+            }
+
+            FlowBox facts_flowbox {
+              selection-mode: none;
+              homogeneous: true;
+              min-children-per-line: 1;
+              max-children-per-line: 4;
+              column-spacing: 12;
+              row-spacing: 12;
+            }
+          }
+        };
+      };
+    };
+  };
+}

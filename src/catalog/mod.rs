@@ -3,9 +3,11 @@
 //! Today it is loaded from a snapshot bundled in the app's resources. Later it
 //! is downloaded from the published catalog, with the snapshot as a fallback.
 
+mod item_ref;
 mod loader;
 mod model;
 
+pub use item_ref::ItemRef;
 pub use model::*;
 
 /// The few fields every catalog item has, used for small tiles and lists.
@@ -28,6 +30,14 @@ impl Catalog {
 
     pub fn find_compositor(&self, id: &str) -> Option<&Compositor> {
         self.compositors.iter().find(|compositor| compositor.id == id)
+    }
+
+    /// The Wall of fame entries that show `subject`, for example "gnome".
+    pub fn screenshots_of(&self, subject: &str) -> Vec<&Screenshot> {
+        self.screenshots
+            .iter()
+            .filter(|screenshot| screenshot.subject == subject)
+            .collect()
     }
 
     pub fn summary(&self, kind: ItemKind, id: &str) -> Option<ItemSummary<'_>> {

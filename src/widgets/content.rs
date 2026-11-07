@@ -4,7 +4,8 @@ use gettextrs::gettext;
 
 use super::TileContent;
 use crate::catalog::{
-    Accent, Catalog, Collection, Compositor, Desktop, Distro, ItemKind, ItemSummary, Spotlight,
+    Accent, Catalog, Collection, Compositor, Desktop, Distro, ItemKind, ItemRef, ItemSummary,
+    Spotlight,
 };
 use crate::system::SystemInfo;
 
@@ -40,6 +41,8 @@ fn tile_content(short: &str, color: &str, logo: Option<&str>) -> TileContent {
 
 #[derive(Debug, Clone)]
 pub struct CardContent {
+    /// The item the card opens.
+    pub item: ItemRef,
     pub tile: TileContent,
     pub name: String,
     pub description: String,
@@ -50,6 +53,7 @@ pub struct CardContent {
 impl CardContent {
     pub fn for_distro(distro: &Distro, system: &SystemInfo) -> Self {
         Self {
+            item: ItemRef::new(ItemKind::Distro, &distro.id),
             tile: tile_content(&distro.short, &distro.color, distro.logo.as_deref()),
             name: distro.name.clone(),
             description: distro.tagline.clone(),
@@ -62,6 +66,7 @@ impl CardContent {
 
     pub fn for_desktop(desktop: &Desktop, system: &SystemInfo) -> Self {
         Self {
+            item: ItemRef::new(ItemKind::Desktop, &desktop.id),
             tile: tile_content(&desktop.short, &desktop.color, desktop.logo.as_deref()),
             name: desktop.name.clone(),
             description: desktop.tagline.clone(),
@@ -74,6 +79,7 @@ impl CardContent {
 
     pub fn for_compositor(compositor: &Compositor, system: &SystemInfo) -> Self {
         Self {
+            item: ItemRef::new(ItemKind::Compositor, &compositor.id),
             tile: tile_content(&compositor.short, &compositor.color, compositor.logo.as_deref()),
             name: compositor.name.clone(),
             description: compositor.tagline.clone(),
@@ -81,6 +87,97 @@ impl CardContent {
             badge: system
                 .is_running(&compositor.session_names)
                 .then_some(CardBadge::RunningNow),
+        }
+    }
+}
+
+/// One labelled value on a details page, for example "Packages: dnf".
+#[derive(Debug, Clone)]
+pub struct Fact {
+    pub label: String,
+    pub value: String,
+}
+
+fn fact(label: String, value: &str) -> Fact {
+    Fact {
+        label,
+        value: value.to_owned(),
+    }
+}
+
+/// Everything the details page shows about one item.
+#[derive(Debug, Clone)]
+pub struct DetailContent {
+    pub title: String,
+    pub tile: TileContent,
+    pub tagline: String,
+    pub badge: Option<CardBadge>,
+    pub facts: Vec<Fact>,
+    pub website: String,
+}
+
+impl DetailContent {
+    pub fn from_catalog(item: &ItemRef, catalog: &Catalog, system: &SystemInfo) -> Option<Self> {
+        match item.kind {
+            ItemKind::Distro => catalog
+                .find_distro(&item.id)
+                .map(|distro| Self::for_distro(distro, system)),
+            ItemKind::Desktop => catalog
+                .find_desktop(&item.id)
+                .map(|desktop| Self::for_desktop(desktop, system)),
+            ItemKind::Compositor => catalog
+                .find_compositor(&item.id)
+                .map(|compositor| Self::for_compositor(compositor, system)),
+        }
+    }
+
+    fn for_distro(distro: &Distro, system: &SystemInfo) -> Self {
+        Self {
+            title: distro.name.clone(),
+            tile: tile_content(&distro.short, &distro.color, distro.logo.as_deref()),
+            tagline: distro.tagline.clone(),
+            badge: system
+                .is_current_distro(distro)
+                .then_some(CardBadge::YouAreHere),
+            facts: vec![
+                fact(gettext("Based on"), &distro.family.label()),
+                fact(gettext("Releases"), &distro.release.label()),
+                fact(gettext("Packages"), &distro.package_manager),
+            ],
+            website: distro.website.clone(),
+        }
+    }
+
+    fn for_desktop(desktop: &Desktop, system: &SystemInfo) -> Self {
+        Self {
+            title: desktop.name.clone(),
+            tile: tile_content(&desktop.short, &desktop.color, desktop.logo.as_deref()),
+            tagline: desktop.tagline.clone(),
+            badge: system
+                .is_running(&desktop.session_names)
+                .then_some(CardBadge::RunningNow),
+            facts: vec![
+                fact(gettext("Compositor"), &desktop.compositor),
+                fact(gettext("Toolkit"), &desktop.toolkit),
+            ],
+            website: desktop.website.clone(),
+        }
+    }
+
+    fn for_compositor(compositor: &Compositor, system: &SystemInfo) -> Self {
+        Self {
+            title: compositor.name.clone(),
+            tile: tile_content(&compositor.short, &compositor.color, compositor.logo.as_deref()),
+            tagline: compositor.tagline.clone(),
+            badge: system
+                .is_running(&compositor.session_names)
+                .then_some(CardBadge::RunningNow),
+            facts: vec![
+                fact(gettext("Layout"), &compositor.kind.label()),
+                fact(gettext("Built on"), &compositor.base),
+                fact(gettext("Config"), &compositor.config),
+            ],
+            website: compositor.website.clone(),
         }
     }
 }
