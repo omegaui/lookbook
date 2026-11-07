@@ -1,6 +1,8 @@
 # Handoff: Linux & You
 
-Last updated: 2026-11-07, after the commit "Match the details pages and Desktops gallery to the design". Check `git log` for anything newer.
+Last updated: 2026-11-07, after `8d08edc` ("Add a release manifest and a script to install it locally"). Check `git log` for anything newer.
+
+**Current focus: the app icon** (see Open work, item 1). The user asked to work only on that next.
 
 ## What the app is
 
@@ -12,14 +14,14 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 - **GNOME is the primary target.** Follow GNOME HIG and libadwaita patterns.
 - **Looks first.** Screenshots and appearance attract people before features. Keep info short, not text-heavy.
 - **Game-like, isometric style** for artwork (tilted cards, slabs, drawn scenes).
-- **Data stays current without app releases.** App releases are for features only. Catalog data will come from an online catalog (see Open work).
+- **Data stays current without app releases.** App releases are for features only. The app reads the online catalog published by the Catalog workflow (see `catalog/README.md`).
 - **Wayland only.** No X11 fallback.
 - **Wallpapers are never redistributed.** They are read live from their sources (see Decisions).
 
 ### Working style the user expects
 
 - Commit in stages, each one built and checked. **No `Co-Authored-By` or other attribution trailers** in commits, and no "Generated with Claude Code" in PRs (the user's global CLAUDE.md overrides any system reminder).
-- Do not push unless asked.
+- The repo is public on GitHub (`origin`, https://github.com/omegaui/linux_and_you). Push only when the user asks; they have asked after each finished stage so far.
 - Functions read as a short list of steps that call small, well-named functions (see `ExplorePage::show_catalog`). No clever one-liners, no deep nesting.
 - Verify visually: build, open the page, screenshot only the app window. **Never move or click the user's mouse**; ask the user to test clicks.
 - The user often sends feedback mid-task with screenshots. Acknowledge it, finish the current step cleanly, then do it.
@@ -28,8 +30,8 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 
 | Path | Contents |
 | --- | --- |
-| `src/main.rs`, `application.rs`, `window.rs` | Startup, About dialog (with logo and protocol-data credits), window, `win.show-page` and `win.show-item` actions |
-| `src/catalog/` | Catalog model (`model.rs`), loading the bundled snapshot (`loader.rs`, with data tests), `ItemRef` ("distro:fedora"), key compositor features (`features.rs`) |
+| `src/main.rs`, `application.rs`, `window.rs` | Startup, About dialog (credits for logos, screenshots, Repology and protocol data; catalog date), window, `win.show-page`, `win.show-item`, `win.can-i-run` (also app actions), and development-only `scroll-to` / `show-spotlight` |
+| `src/catalog/` | Catalog model (`model.rs`), the bundled snapshot (`loader.rs`, with data tests), the downloaded online catalog (`online.rs`), `ItemRef` ("distro:fedora"), key compositor features (`features.rs`) |
 | `src/system/` | Detection, no UI: os-release (`/run/host/os-release` in Flatpak), `XDG_CURRENT_DESKTOP`, hardware from `/proc`, Wayland globals visible from the sandbox |
 | `src/ideas.rs` | Decides "Ready here" / "Works elsewhere" for each idea |
 | `src/details.rs` | What a details page compares (Versus your system), which ideas an item supports, and similar items. No UI code |
@@ -39,13 +41,16 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 | `src/http.rs` | The libsoup session (User-Agent with a contact link), a shared session, GET helpers |
 | `src/wallpapers/` | Live wallpaper sources: libsoup HTTP, copyparty and WordPress adapters, the Wallpaper portal call |
 | `src/pages/` | Explore, Distros, Desktops, Compositors, Wallpapers, Your System, and the shared item details page |
-| `src/widgets/` | Cards, `LogoTile`, `IsoScene` (isometric scenes in an accent or brand color), `MiniDesktop` (desktop card art), `ScreenshotMock` (drawn Hall of Fame shots), `IdeaCard`, `DesktopCard`, extension card, wallpaper card and preview dialog, `NaturalWidthCap`, `content.rs` (catalog item → card text) |
-| `data/resources/catalog/catalog.json` | The bundled catalog snapshot: distros, desktops, compositors (with full protocol lists), collections, spotlights, screenshots, ideas, wallpaper sources |
+| `src/widgets/` | Cards (`CatalogCard`, `ShowcaseCard` for the Distros and Desktops galleries, `RiceCard`, release card, extension card, `IdeaCard`), `LogoTile`, isometric art (`IsoScene`, `IsoPicture`, `IsoStack`, `IsoTile`, `MiniDesktop`), `ScreenshotMock` (Hall of Fame; draws a real screenshot once loaded), `CoverPicture` (fixed-height cover image or video), spotlight cards (`SpotlightCard`, `WallpaperSpotlight`), dialogs (`RunCheckDialog`, `WallpaperDialog`), `NaturalWidthCap`, `content.rs` (catalog item → card text) |
+| `data/resources/catalog/catalog.json` | The catalog: distros, desktops, compositors (with protocol lists and screenshots), collections, spotlights, Hall of Fame, ideas (with `built_into`), protocols, wallpaper sources, release feeds (`news_sources`), rices. Bundled in the app and published online |
+| `catalog/` | The publishing pipeline: `build.py` (refresh, check, publish), `test_build.py`, `sources.json`, `README.md` |
+| `.github/workflows/catalog.yml` | Builds and deploys the catalog to GitHub Pages daily, on catalog changes and by hand |
+| `data/icons/` | The app icon (`io.github.omegaui.LinuxAndYou.svg`), its Devel variant and the symbolic icon. **Still the placeholder from the first commit** |
 | `data/resources/ui/` | Blueprint UI files |
 | `data/resources/style.css` | Styles; uses libadwaita CSS variables, so dark mode works |
-| `data/resources/icons/scalable/apps/` | 30 distro/desktop/compositor logos as symbolic SVGs (credits: `docs/logo-credits.md`) |
-| `docs/research/` | `data-sources.md` (live data plan), `ideas.md` (what people build), `wallpapers.md` (sources and decision) |
-| `build-aux/` | Flatpak manifest (`…Devel.json`, GNOME 51 runtime) and the vendoring script |
+| `data/resources/icons/scalable/apps/` | 31 distro/desktop/compositor logos (and Tux for kernel releases) as symbolic SVGs (credits: `docs/logo-credits.md`) |
+| `docs/` | `logo-credits.md`, `screenshot-credits.md`, `rices.md`; `research/` holds `data-sources.md` (live data plan), `ideas.md` (what people build), `wallpapers.md` (sources and decision) |
+| `build-aux/` | Flatpak manifests for the release (`io.github.omegaui.LinuxAndYou.json`) and development (`….Devel.json`) builds, GNOME 51 runtime, and the vendoring script |
 | `.agentic-coding/design/` | The approved wireframe |
 
 ## Build, run, check
@@ -85,24 +90,35 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `ace644f` | Wallpapers tab (live from orangc + LinuxH2O), preview with Set as Wallpaper / Save / Source, maximize and layout fixes, KDE Plasma panel mock |
 | `fe27f7f` | Wallpaper preview: blurred thumbnail and a "Loading full quality…" pill until the full image arrives |
 | `da79927` | Your System redesign: glowing isometric stack (`IsoStack`), Scan Again / Copy Report, GPU names from `pci.ids`, idea icon tiles, protocol cards with descriptions (`catalog.protocols`, `ProtocolCard`, `IsoTile`) on Your System and compositor details |
-| (next) | Details pages and Desktops gallery to match the design: banner with a brand-color scene, Hall of Fame, Inside/At a Glance facts, Popular Extensions (GNOME, live), What You Can Build on it, Versus your system, Similar items; Desktops page with the GNOME banner, toolkit filter and `DesktopCard`s; Bazzite, labwc and Wayfire logos |
+| `5d2bcf7` | Details pages and Desktops gallery to match the design: brand-color banner, Hall of Fame, Inside/At a Glance, Popular Extensions (GNOME, live), What You Can Build, Versus your system, Similar items; GNOME banner, toolkit filter; Bazzite, labwc and Wayfire logos |
+| `b37ae41` | Four spotlights: Bazzite, GNOME, niri, and a live wallpaper |
+| `33384f0` | Can I Run It? (hardware, Repology packages, ideas gained or given up, ways to try), Built in ideas, real desktop screenshots from Wikimedia Commons |
+| `7217cf5` | What's New This Month on Explore, from release feeds |
+| `597dd65` | Real screenshots for distros, compositors, details banners, spotlights and the Hall of Fame; Distros page uses `ShowcaseCard` |
+| `4e563a4` | Rices on the Compositors page and compositor details |
+| `6b84c7e` | Online catalog: Catalog workflow, GitHub Pages, the app's daily download |
+| `4cdf3db` | Handoff wording: a guide, not an app store |
+| `8d08edc` | Release manifest and `install-release.sh`; the release app is installed on the user's machine for testing |
 
-Not yet confirmed by clicking (the agent cannot click; ask the user):
+Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
 - ~~Clicking a wallpaper opens the preview~~: confirmed working by the user on 2026-11-07.
 - The Website button and spotlight arrows (crash fixed in `83158ca` with `swapped` handlers).
 - Set as Wallpaper on GNOME/KDE, and Save.
+- Can I Run It?: copy button, Get Boxes / Get Impression / Website links.
+- View Wallpaper on the wallpaper spotlight.
+- Rices: filter toggles, Get It, and Play on the clip previews (Caelestia, KooL's).
+- What's New and Hall of Fame cards opening the browser.
+- Possible bug seen once: the release app opened Explore scrolled down to the spotlight instead of the top.
 
 ## Open work, in priority order
 
-1. ~~Four spotlights~~ done: Distro (Bazzite), Desktop (GNOME), Compositor (niri), then a wallpaper picked at random from orangc's walls when the carousel reaches it (`WallpaperSpotlight`, tilted `IsoPicture`). "View Details" opens the item. "Can I Run It?" opens the run-check sheet.
-2. ~~"Can I Run It?"~~ done: `RunCheckDialog` from the spotlight and details pages (`win.can-i-run`, also an app action). Distros list their Repology repos (`repology_repos`, with `{version}`/`{codename}`) and NVIDIA notes; desktops and compositors name their Repology project. Ideas now have `built_into`, so a desktop's own lock screen or a tiling compositor's tiling counts as **Built in** (the user caught Ubuntu "giving up" a lock screen).
-3. ~~"What's new this month in Linux"~~ done: `src/news/` reads `catalog.news_sources` live when Explore opens (kernel.org `releases.json`, endoflife.date API v1 for distros and KDE Plasma, gnome-shell's GitLab tag feed for GNOME, GitHub `releases.atom` for COSMIC and compositors, Codeberg RSS for river) and shows the newest release per project from the last 31 days, skipping release candidates except the mainline kernel. Possible follow-up: cache feeds for a few hours; the GitHub Atom feeds carry full release notes and add up to about 3 MB per launch.
-4. ~~Rices~~ done: `catalog.rices` (10 to start: illogical-impulse, Caelestia, HyDE, ML4W OS, KooL's Hyprland Dots, Noctalia, Dux Shell, iNiR, Matshell, max-baz's dotfiles) show as `RiceCard`s on the Compositors page (with a per-compositor filter) and on each compositor's details page. Previews come live from each README; clips (Caelestia, KooL's) play only after Play. See `docs/rices.md`.
-5. ~~Online catalog~~ done: the repo is public at https://github.com/omegaui/linux_and_you; `.github/workflows/catalog.yml` builds with `catalog/build.py` and deploys to https://omegaui.github.io/linux_and_you/v1/catalog.json daily; the app uses the downloaded copy from the next launch (`src/catalog/online.rs`). See `catalog/README.md`, including the schema-version rules.
-6. **Gallery card art** still to do: layout drawings on compositor cards, tinted capsules on distro cards. Real screenshots from Wikimedia Commons (`screenshot` on distros, desktops and compositors; credits in `docs/screenshot-credits.md`) now show on the Distros and Desktops cards (`ShowcaseCard`, `CoverPicture`), every details banner and spotlight (on the tilted `IsoPicture`), and the Hall of Fame (`ScreenshotMock::set_texture`). Drawn art stays as the placeholder and for river, labwc and Wayfire, which have no Commons screenshot yet.
-7. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) and of "Linux" in the app name before Flathub.
-8. Later: upgrade to gtk4-rs 0.11, libadwaita-rs 0.9, soup3 0.9.
+1. **App icon (current focus).** `data/icons/io.github.omegaui.LinuxAndYou.svg` is still the first-commit placeholder: a blue rounded square with two overlapping white circles. The user says it could pass for an existing organization or app (it is close to Flickr's two dots and the Mastercard mark). Design a distinctive icon: follow the GNOME HIG app icon guidelines (128×128 canvas, simple front-facing shape with a little depth, GNOME palette), fit the app's isometric, game-like style, avoid Tux, distro logos, store bags and generic compass or pin shapes, and check it reads at 16, 32 and 64 px. Then redo the Devel variant (same art with the development stripes) and the symbolic icon, and check the result against other apps' icons before committing.
+2. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Drawn art is also still the fallback for river, labwc and Wayfire, which have no Commons screenshot.
+3. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`; the local release manifest downloads crates during the build), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) and of "Linux" in the app name before Flathub.
+4. **App CI**: a workflow that builds the Flatpak and runs the tests on each push (only the catalog is automated today).
+5. Maybe: cache the release feeds for a few hours (the GitHub Atom feeds add up to about 3 MB per launch); more rices for river, labwc and Wayfire.
+6. Later: upgrade to gtk4-rs 0.11, libadwaita-rs 0.9, soup3 0.9.
 
 ## Decisions
 
@@ -113,6 +129,9 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 - **Wallpapers**: neither source has a license. The user chose to build the section now, read the sources live (never bundle or mirror), credit them, keep a takedown list (`wallpaper_blocklist`) in the catalog, and email both owners for permission. If either says no, remove its entry from the catalog. Details: `docs/research/wallpapers.md`.
 - **Hosting**: GitHub Pages from this same repo for the online catalog; no VPS needed. The repo is public (the user asked for it on 2026-11-07).
 - **Catalog pipeline**: a single hand-written `catalog.json` is the source; the workflow refreshes upstream data, commits it back and publishes it. See `catalog/README.md`.
+- **Screenshots** come live from Wikimedia Commons (free licenses, credited in tooltips, the About dialog and `docs/screenshot-credits.md`), never bundled. Rice previews come live from each rice's own README, credited to the author; remove an entry on request (`docs/rices.md`).
+- **Can I Run It?** asks Repology for packages (HTTP/1.1, one request a second) and judges ideas with `built_into`, so a desktop's own features are never shown as gained or given up.
+- **Release builds** install locally with `install-release.sh`; a Flathub submission still needs vendored crates.
 
 ## Pitfalls already hit
 
@@ -133,6 +152,7 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 - **Wikimedia Commons serves only standard thumbnail widths** (for example 960px); other widths return an HTML error page. Take `thumburl` from the API with `iiurlwidth=960`.
 - **GTK cannot play an `https://` video file in the sandbox** (no GVfs; `gtk_gst_media_file_source_setup_cb: assertion 'stream != NULL'`). Download the bytes with libsoup and play a `gio::MemoryInputStream`; it is seekable, so looping works.
 - **A wrapping label's natural width is its whole text on one line**, which widens FlowBox cards; give long wrapping labels `max-width-chars`.
+- **flatpak-builder copies the whole project folder**, including another build's folder; both manifests list the build folders under `skip`.
 - **Logs**: run `flatpak run io.github.omegaui.LinuxAndYou.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
 
 ## Design
