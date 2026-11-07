@@ -1,0 +1,149 @@
+/* Linux & You styles. GTK loads this file from the resource base path. */
+
+/* Shared text styles */
+
+.kicker {
+  font-size: 0.85em;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.chip {
+  font-size: 0.8em;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.badge {
+  font-size: 0.8em;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.badge.here {
+  color: var(--accent-color);
+  background-color: color-mix(in srgb, var(--accent-bg-color) 15%, transparent);
+}
+
+.badge.running {
+  color: var(--success-color);
+  background-color: color-mix(in srgb, var(--success-bg-color) 15%, transparent);
+}
+
+/* Isometric look: content laid on a tilted floor */
+
+/* Turning around the left end keeps the first cards in view; the rest rise to the right. */
+.iso-plane {
+  transform-origin: 0 50%;
+  transform: rotateX(50deg) rotateZ(-28deg);
+}
+
+/* Hero */
+
+.hero {
+  border-radius: 24px;
+  background-color: color-mix(in srgb, var(--accent-bg-color) 12%, var(--window-bg-color));
+}
+
+.hero-title {
+  font-size: 2.6em;
+  font-weight: 800;
+}
+
+.hero-subtitle {
+  font-size: 1.15em;
+}
+
+/* Collection cards in the hero */
+
+.collection-card {
+  padding: 20px;
+  border-radius: 24px;
+  box-shadow: 14px 20px 0 rgba(0, 0, 6, 0.12);
+  color: rgba(0, 0, 6, 0.85);
+}
+
+.collection-tag {
+  font-size: 0.8em;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  color: rgba(0, 0, 6, 0.85);
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+.collection-title {
+  font-size: 1.7em;
+  font-weight: 800;
+}
+
+.collection-names {
+  font-weight: 600;
+}
+
+.collection-card.accent-blue { background-color: var(--blue-3); color: white; }
+.collection-card.accent-green { background-color: var(--green-2); }
+.collection-card.accent-yellow { background-color: var(--yellow-2); }
+.collection-card.accent-orange { background-color: var(--orange-2); }
+.collection-card.accent-red { background-color: var(--red-3); color: white; }
+.collection-card.accent-purple { background-color: var(--purple-3); color: white; }
+.collection-card.accent-brown { background-color: var(--brown-2); }
+.collection-card.accent-dark { background-color: var(--dark-3); color: white; }
+
+/* Spotlight carousel */
+
+.spotlight {
+  border-radius: 24px;
+}
+
+.spotlight.accent-blue { background-color: color-mix(in srgb, var(--blue-3) 16%, var(--window-bg-color)); }
+.spotlight.accent-green { background-color: color-mix(in srgb, var(--green-3) 16%, var(--window-bg-color)); }
+.spotlight.accent-yellow { background-color: color-mix(in srgb, var(--yellow-3) 18%, var(--window-bg-color)); }
+.spotlight.accent-orange { background-color: color-mix(in srgb, var(--orange-3) 18%, var(--window-bg-color)); }
+.spotlight.accent-red { background-color: color-mix(in srgb, var(--red-3) 16%, var(--window-bg-color)); }
+.spotlight.accent-purple { background-color: color-mix(in srgb, var(--purple-3) 16%, var(--window-bg-color)); }
+.spotlight.accent-brown { background-color: color-mix(in srgb, var(--brown-3) 16%, var(--window-bg-color)); }
+.spotlight.accent-dark { background-color: color-mix(in srgb, var(--dark-3) 16%, var(--window-bg-color)); }
+
+/* On a dark window, a strong tint turns muddy, so use a lighter touch. */
+@media (prefers-color-scheme: dark) {
+  .spotlight.accent-blue { background-color: color-mix(in srgb, var(--blue-3) 10%, var(--window-bg-color)); }
+  .spotlight.accent-green { background-color: color-mix(in srgb, var(--green-3) 10%, var(--window-bg-color)); }
+  .spotlight.accent-yellow { background-color: color-mix(in srgb, var(--yellow-3) 8%, var(--window-bg-color)); }
+  .spotlight.accent-orange { background-color: color-mix(in srgb, var(--orange-3) 9%, var(--window-bg-color)); }
+  .spotlight.accent-red { background-color: color-mix(in srgb, var(--red-3) 10%, var(--window-bg-color)); }
+  .spotlight.accent-purple { background-color: color-mix(in srgb, var(--purple-3) 10%, var(--window-bg-color)); }
+  .spotlight.accent-brown { background-color: color-mix(in srgb, var(--brown-3) 10%, var(--window-bg-color)); }
+}
+
+.mini-window {
+  border-radius: 14px;
+  background-color: white;
+  box-shadow: 12px 16px 0 rgba(0, 0, 6, 0.1);
+}
+
+.mini-window.focused {
+  box-shadow: 12px 16px 0 rgba(0, 0, 6, 0.1), 0 0 0 4px var(--orange-4);
+}
+
+/* Catalog cards */
+
+.catalog-card {
+  padding: 16px;
+}
+
+/* Your system banner */
+
+.system-teaser {
+  padding: 32px 36px;
+  border-radius: 24px;
+  color: white;
+  background-color: var(--dark-4);
+}
+
+.system-teaser .kicker {
+  color: var(--light-4);
+}

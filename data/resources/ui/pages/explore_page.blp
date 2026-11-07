@@ -1,0 +1,458 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ExplorePage: Adw.Bin {
+  child: ScrolledWindow {
+    hscrollbar-policy: never;
+
+    child: Adw.Clamp {
+      maximum-size: 1180;
+      tightening-threshold: 900;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 40;
+        margin-top: 12;
+        margin-bottom: 40;
+        margin-start: 16;
+        margin-end: 16;
+
+        // Hero: a short pitch next to a tilted strip of collection cards.
+        Box {
+          styles [
+            "hero",
+          ]
+
+          homogeneous: true;
+          overflow: hidden;
+
+          Box {
+            orientation: vertical;
+            spacing: 16;
+            valign: center;
+            margin-top: 48;
+            margin-bottom: 48;
+            margin-start: 40;
+            margin-end: 16;
+
+            Label {
+              styles [
+                "kicker",
+              ]
+
+              label: _("Linux & You");
+              xalign: 0;
+            }
+
+            Label {
+              styles [
+                "hero-title",
+              ]
+
+              label: _("Find your corner of Linux");
+              xalign: 0;
+              wrap: true;
+            }
+
+            Label {
+              styles [
+                "dim-label",
+                "hero-subtitle",
+              ]
+
+              label: _("Browse distros, desktops and compositors, then see what your own system can do.");
+              xalign: 0;
+              wrap: true;
+              max-width-chars: 40;
+            }
+
+            Box {
+              spacing: 10;
+              margin-top: 8;
+
+              Button {
+                styles [
+                  "pill",
+                  "suggested-action",
+                ]
+
+                label: _("Check My System");
+                action-name: "win.show-page";
+                action-target: "'system'";
+              }
+
+              Button {
+                styles [
+                  "pill",
+                ]
+
+                label: _("Browse Distros");
+                action-name: "win.show-page";
+                action-target: "'distros'";
+              }
+            }
+          }
+
+          // Decorative: it does not take input, so scrolling goes to the page.
+          ScrolledWindow {
+            hscrollbar-policy: external;
+            vscrollbar-policy: never;
+            can-target: false;
+
+            child: Box collections_box {
+              styles [
+                "iso-plane",
+              ]
+
+              spacing: 28;
+              halign: start;
+              valign: center;
+              margin-top: 150;
+              margin-bottom: 10;
+              margin-start: 70;
+            };
+          }
+        }
+
+        // Spotlight carousel.
+        Box {
+          orientation: vertical;
+          spacing: 10;
+
+          Overlay {
+            child: Adw.Carousel spotlight_carousel {
+              allow-scroll-wheel: false;
+              spacing: 16;
+            };
+
+            [overlay]
+            Button {
+              styles [
+                "circular",
+                "osd",
+              ]
+
+              icon-name: "go-previous-symbolic";
+              tooltip-text: _("Previous");
+              halign: start;
+              valign: center;
+              margin-start: 12;
+              clicked => $on_previous_spotlight();
+            }
+
+            [overlay]
+            Button {
+              styles [
+                "circular",
+                "osd",
+              ]
+
+              icon-name: "go-next-symbolic";
+              tooltip-text: _("Next");
+              halign: end;
+              valign: center;
+              margin-end: 12;
+              clicked => $on_next_spotlight();
+            }
+          }
+
+          Adw.CarouselIndicatorDots {
+            carousel: spotlight_carousel;
+          }
+        }
+
+        // Wall of fame.
+        Box {
+          orientation: vertical;
+          spacing: 16;
+
+          Box {
+            orientation: vertical;
+            spacing: 4;
+
+            Label {
+              styles [
+                "title-2",
+              ]
+
+              label: _("Wall of Fame");
+              xalign: 0;
+            }
+
+            Label {
+              styles [
+                "dim-label",
+              ]
+
+              label: _("Setups people are proud of.");
+              xalign: 0;
+              wrap: true;
+            }
+          }
+
+          Grid wall_grid {
+            column-spacing: 12;
+            row-spacing: 12;
+            column-homogeneous: true;
+          }
+        }
+
+        // Distros.
+        Box {
+          orientation: vertical;
+          spacing: 16;
+
+          Box {
+            spacing: 12;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Distros");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Start from a family you like.");
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Button {
+              styles [
+                "flat",
+              ]
+
+              label: _("See All");
+              valign: end;
+              action-name: "win.show-page";
+              action-target: "'distros'";
+            }
+          }
+
+          ScrolledWindow {
+            hscrollbar-policy: external;
+            vscrollbar-policy: never;
+            propagate-natural-width: true;
+            halign: start;
+
+            child: Adw.ToggleGroup family_toggles {
+              styles [
+                "round",
+              ]
+
+              active-name: "all";
+
+              Adw.Toggle {
+                name: "all";
+                label: _("All");
+              }
+
+              Adw.Toggle {
+                name: "independent";
+                label: _("Independent");
+              }
+
+              Adw.Toggle {
+                name: "arch";
+                label: _("Arch-based");
+              }
+
+              Adw.Toggle {
+                name: "debian";
+                label: _("Debian-based");
+              }
+
+              Adw.Toggle {
+                name: "fedora";
+                label: _("Fedora-based");
+              }
+            };
+          }
+
+          FlowBox distros_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 4;
+            column-spacing: 12;
+            row-spacing: 12;
+          }
+        }
+
+        // Desktops.
+        Box {
+          orientation: vertical;
+          spacing: 16;
+
+          Box {
+            spacing: 12;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Desktops");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("A full desktop: compositor, shell, settings and apps together.");
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Button {
+              styles [
+                "flat",
+              ]
+
+              label: _("See All");
+              valign: end;
+              action-name: "win.show-page";
+              action-target: "'desktops'";
+            }
+          }
+
+          FlowBox desktops_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 4;
+            column-spacing: 12;
+            row-spacing: 12;
+          }
+        }
+
+        // Compositors.
+        Box {
+          orientation: vertical;
+          spacing: 16;
+
+          Box {
+            spacing: 12;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Compositors");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Tiling, scrolling or stacking. Pick how your windows behave.");
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Button {
+              styles [
+                "flat",
+              ]
+
+              label: _("See All");
+              valign: end;
+              action-name: "win.show-page";
+              action-target: "'compositors'";
+            }
+          }
+
+          FlowBox compositors_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 4;
+            column-spacing: 12;
+            row-spacing: 12;
+          }
+        }
+
+        // Your system.
+        Box {
+          styles [
+            "system-teaser",
+          ]
+
+          spacing: 24;
+
+          Box {
+            orientation: vertical;
+            spacing: 8;
+            hexpand: true;
+            valign: center;
+
+            Label {
+              styles [
+                "kicker",
+              ]
+
+              label: _("Your system");
+              xalign: 0;
+            }
+
+            Label system_title_label {
+              styles [
+                "title-1",
+              ]
+
+              xalign: 0;
+              wrap: true;
+            }
+
+            Label {
+              label: _("See which ideas are ready on your system, and how to build the rest.");
+              xalign: 0;
+              wrap: true;
+            }
+          }
+
+          Button {
+            styles [
+              "pill",
+            ]
+
+            label: _("Open Your System");
+            valign: center;
+            action-name: "win.show-page";
+            action-target: "'system'";
+          }
+        }
+      };
+    };
+  };
+}

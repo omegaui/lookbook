@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@app-id@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Linux &amp; You</name>
+  <summary>Explore distros, compositors and your system</summary>
+  <description>
+    <p>Linux &amp; You is a friendly guide to the Linux desktop. Browse Linux distributions and Wayland compositors, and see what your own system runs and what it can do.</p>
+    <ul>
+      <li>Browse a gallery of Linux distributions</li>
+      <li>Compare Wayland compositors and the protocols they support</li>
+      <li>See your distribution, session, compositor and hardware</li>
+      <li>Find out which tools you can build on your compositor</li>
+    </ul>
+  </description>
+
+  <developer id="io.github.omegaui">
+    <name translate="no">omegaui</name>
+  </developer>
+
+  <url type="homepage">https://github.com/omegaui/linux_and_you</url>
+  <url type="bugtracker">https://github.com/omegaui/linux_and_you/issues</url>
+  <url type="vcs-browser">https://github.com/omegaui/linux_and_you</url>
+
+  <launchable type="desktop-id">@app-id@.desktop</launchable>
+  <translation type="gettext">@gettext-package@</translation>
+  <content_rating type="oars-1.1" />
+
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </supports>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#a8c8f0</color>
+    <color type="primary" scheme_preference="dark">#1c3554</color>
+  </branding>
+
+  <releases>
+    <release version="0.1.0" date="2026-11-07">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

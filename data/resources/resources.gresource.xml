@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/io/github/omegaui/LinuxAndYou/">
+    <file>style.css</file>
+    <file compressed="true">catalog/catalog.json</file>
+    <file preprocess="xml-stripblanks">ui/window.ui</file>
+    <file preprocess="xml-stripblanks">ui/pages/explore_page.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/catalog_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/collection_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/screenshot_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/spotlight_card.ui</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-explore-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-distros-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-desktops-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-compositors-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-system-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-alpinelinux-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-archlinux-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-budgie-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-cachyos-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-cinnamon-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-debian-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-elementary-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-endeavouros-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-fedora-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-gentoo-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-gnome-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-hyprland-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-kde-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-kdeplasma-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-linuxmint-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-lxqt-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-mate-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-niri-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-nixos-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-opensuse-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-pantheon-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-popos-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-river-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-sway-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-ubuntu-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-voidlinux-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-xfce-symbolic.svg</file>
+  </gresource>
+</gresources>

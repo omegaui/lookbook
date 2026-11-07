@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-07T00:00:00Z",
+  "collections": [
+    { "title": "Rolling releases", "kind": "distro", "members": ["arch", "opensuse-tumbleweed", "void"], "accent": "orange" },
+    { "title": "Tiling compositors", "kind": "compositor", "members": ["hyprland", "sway", "niri"], "accent": "green" },
+    { "title": "Built for games", "kind": "distro", "members": ["bazzite", "cachyos"], "accent": "purple" },
+    { "title": "Hard to break", "kind": "distro", "members": ["fedora-silverblue", "nixos"], "accent": "blue" },
+    { "title": "First steps", "kind": "distro", "members": ["linuxmint", "ubuntu", "elementary"], "accent": "yellow" }
+  ],
+  "spotlights": [
+    {
+      "kind": "compositor",
+      "id": "niri",
+      "tagline": "Scrollable tiling. Windows open in columns on an endless strip, so a new window never squeezes the ones you already have.",
+      "accent": "orange"
+    },
+    {
+      "kind": "desktop",
+      "id": "gnome",
+      "tagline": "A calm, focused desktop built around search and the Activities overview. Make it your own with Shell extensions.",
+      "accent": "blue"
+    }
+  ],
+  "screenshots": [
+    {
+      "title": "Hyprland + Catppuccin",
+      "author": "Sample",
+      "subject": "hyprland",
+      "mock": { "layout": "tiled", "wallpaper": "#1e1e2e", "glow": "#cba6f7", "bar": "#11111b", "window": "#313244", "title_bar": "#45475a", "accent": "#f5c2e7", "text": "#a6adc8" }
+    },
+    {
+      "title": "GNOME default",
+      "author": "Official",
+      "subject": "gnome",
+      "mock": { "layout": "floating", "wallpaper": "#3584e4", "glow": "#62a0ea", "bar": "#000000", "window": "#fafafb", "title_bar": "#ebebed", "accent": "#3584e4", "text": "#deddda" }
+    },
+    {
+      "title": "niri + Nord",
+      "author": "Sample",
+      "subject": "niri",
+      "mock": { "layout": "tiled", "wallpaper": "#2e3440", "glow": "#5e81ac", "bar": "#3b4252", "window": "#3b4252", "title_bar": "#434c5e", "accent": "#88c0d0", "text": "#d8dee9" }
+    },
+    {
+      "title": "KDE Plasma",
+      "author": "Sample",
+      "subject": "kde-plasma",
+      "mock": { "layout": "floating", "wallpaper": "#1d99f3", "glow": "#7ec4f8", "bar": "#232629", "window": "#fcfcfc", "title_bar": "#dee0e2", "accent": "#1d99f3", "text": "#dee0e2" }
+    },
+    {
+      "title": "sway + Gruvbox",
+      "author": "Sample",
+      "subject": "sway",
+      "mock": { "layout": "tiled", "wallpaper": "#282828", "glow": "#d79921", "bar": "#3c3836", "window": "#3c3836", "title_bar": "#504945", "accent": "#fabd2f", "text": "#ebdbb2" }
+    }
+  ],
+  "distros": [
+    { "id": "fedora", "name": "Fedora Workstation", "short": "Fe", "color": "#3c6eb4", "tagline": "Polished GNOME desktop with fresh upstream software.", "family": "fedora", "release": "fixed", "package_manager": "dnf", "logo": "fedora", "os_release_id": "fedora", "os_release_variant": "workstation" },
+    { "id": "arch", "name": "Arch Linux", "short": "Ar", "color": "#1793d1", "tagline": "A simple base you build up yourself.", "family": "independent", "release": "rolling", "package_manager": "pacman", "logo": "archlinux", "os_release_id": "arch" },
+    { "id": "debian", "name": "Debian", "short": "De", "color": "#a80030", "tagline": "The universal operating system, known for stability.", "family": "independent", "release": "fixed", "package_manager": "apt", "logo": "debian", "os_release_id": "debian" },
+    { "id": "ubuntu", "name": "Ubuntu", "short": "Ub", "color": "#e95420", "tagline": "Popular desktop with long-term support releases.", "family": "debian", "release": "fixed", "package_manager": "apt", "logo": "ubuntu", "os_release_id": "ubuntu" },
+    { "id": "linuxmint", "name": "Linux Mint", "short": "Mi", "color": "#5b8f22", "tagline": "Familiar Cinnamon desktop for people new to Linux.", "family": "debian", "release": "fixed", "package_manager": "apt", "logo": "linuxmint", "os_release_id": "linuxmint" },
+    { "id": "opensuse-tumbleweed", "name": "openSUSE Tumbleweed", "short": "Tw", "color": "#4f8a14", "tagline": "Tested rolling release with Btrfs snapshots.", "family": "independent", "release": "rolling", "package_manager": "zypper", "logo": "opensuse", "os_release_id": "opensuse-tumbleweed" },
+    { "id": "nixos", "name": "NixOS", "short": "Nx", "color": "#5277c3", "tagline": "Describe your whole system in one config file.", "family": "independent", "release": "fixed", "package_manager": "nix", "logo": "nixos", "os_release_id": "nixos" },
+    { "id": "cachyos", "name": "CachyOS", "short": "Ca", "color": "#00896e", "tagline": "Arch with performance-tuned kernels and packages.", "family": "arch", "release": "rolling", "package_manager": "pacman", "logo": "cachyos", "os_release_id": "cachyos" },
+    { "id": "bazzite", "name": "Bazzite", "short": "Bz", "color": "#6c3fc5", "tagline": "Atomic Fedora image tuned for gaming.", "family": "fedora", "release": "atomic", "package_manager": "rpm-ostree", "os_release_id": "bazzite" },
+    { "id": "fedora-silverblue", "name": "Fedora Silverblue", "short": "Si", "color": "#294172", "tagline": "Atomic Fedora with GNOME and Flatpak apps.", "family": "fedora", "release": "atomic", "package_manager": "rpm-ostree", "logo": "fedora", "os_release_id": "fedora", "os_release_variant": "silverblue" },
+    { "id": "pop", "name": "Pop!_OS", "short": "Po", "color": "#2a7f8a", "tagline": "Ubuntu-based home of the COSMIC desktop.", "family": "debian", "release": "fixed", "package_manager": "apt", "logo": "popos", "os_release_id": "pop" },
+    { "id": "elementary", "name": "elementary OS", "short": "el", "color": "#2a6fc0", "tagline": "Pantheon desktop with a curated app store.", "family": "debian", "release": "fixed", "package_manager": "apt", "logo": "elementary", "os_release_id": "elementary" },
+    { "id": "endeavouros", "name": "EndeavourOS", "short": "En", "color": "#7f3fbf", "tagline": "Arch made easy, with a friendly installer.", "family": "arch", "release": "rolling", "package_manager": "pacman", "logo": "endeavouros", "os_release_id": "endeavouros" },
+    { "id": "void", "name": "Void Linux", "short": "Vo", "color": "#478061", "tagline": "Independent rolling distro with runit and xbps.", "family": "independent", "release": "rolling", "package_manager": "xbps", "logo": "voidlinux", "os_release_id": "void" },
+    { "id": "alpine", "name": "Alpine Linux", "short": "Al", "color": "#0d597f", "tagline": "Small, simple and secure, built on musl.", "family": "independent", "release": "fixed", "package_manager": "apk", "logo": "alpinelinux", "os_release_id": "alpine" },
+    { "id": "gentoo", "name": "Gentoo", "short": "Ge", "color": "#54487a", "tagline": "Build every package from source, your way.", "family": "independent", "release": "rolling", "package_manager": "portage", "logo": "gentoo", "os_release_id": "gentoo" }
+  ],
+  "desktops": [
+    { "id": "gnome", "name": "GNOME", "short": "GN", "color": "#1c71d8", "tagline": "Calm, focused desktop built around search and the Activities overview.", "compositor": "Mutter", "toolkit": "GTK 4", "logo": "gnome", "session_names": ["GNOME"] },
+    { "id": "kde-plasma", "name": "KDE Plasma", "short": "KP", "color": "#1d6fc4", "tagline": "Deeply customizable desktop with a widget for almost everything.", "compositor": "KWin", "toolkit": "Qt", "logo": "kdeplasma", "session_names": ["KDE"] },
+    { "id": "cosmic", "name": "COSMIC", "short": "Co", "color": "#2a7f8a", "tagline": "Rust desktop from System76 with built-in tiling.", "compositor": "cosmic-comp", "toolkit": "iced", "session_names": ["COSMIC"] },
+    { "id": "cinnamon", "name": "Cinnamon", "short": "Ci", "color": "#5b8f22", "tagline": "Traditional layout with a start menu and a taskbar.", "compositor": "Muffin", "toolkit": "GTK 3", "logo": "cinnamon", "session_names": ["X-Cinnamon", "Cinnamon"] },
+    { "id": "xfce", "name": "Xfce", "short": "Xf", "color": "#2a6fc0", "tagline": "Light, stable and modular. Runs well on older machines.", "compositor": "xfwm4", "toolkit": "GTK 3", "logo": "xfce", "session_names": ["XFCE"] },
+    { "id": "budgie", "name": "Budgie", "short": "Bu", "color": "#3d3846", "tagline": "Simple, elegant desktop with the Raven side panel.", "compositor": "labwc", "toolkit": "GTK 3", "logo": "budgie", "session_names": ["Budgie"] },
+    { "id": "mate", "name": "MATE", "short": "Ma", "color": "#4c6a2a", "tagline": "Continuation of the classic GNOME 2 desktop.", "compositor": "Marco", "toolkit": "GTK 3", "logo": "mate", "session_names": ["MATE"] },
+    { "id": "lxqt", "name": "LXQt", "short": "LX", "color": "#0d597f", "tagline": "Lightweight Qt desktop that pairs with many compositors.", "compositor": "Your choice", "toolkit": "Qt", "logo": "lxqt", "session_names": ["LXQt"] },
+    { "id": "pantheon", "name": "Pantheon", "short": "Pa", "color": "#2a6fc0", "tagline": "Polished desktop from elementary OS with a dock and a top panel.", "compositor": "Gala", "toolkit": "GTK 4", "logo": "pantheon", "session_names": ["Pantheon"] }
+  ],
+  "compositors": [
+    { "id": "hyprland", "name": "Hyprland", "short": "Hy", "color": "#0086a8", "tagline": "Dynamic tiling with smooth animations and lots of eye candy.", "kind": "tiling", "base": "Aquamarine", "config": "hyprlang", "logo": "hyprland", "session_names": ["Hyprland"] },
+    { "id": "niri", "name": "niri", "short": "ni", "color": "#c64600", "tagline": "Windows open in columns on an endless strip that you scroll through.", "kind": "scrolling", "base": "Smithay", "config": "KDL", "logo": "niri", "session_names": ["niri"] },
+    { "id": "sway", "name": "sway", "short": "Sw", "color": "#4c6a2a", "tagline": "Drop-in Wayland replacement for the i3 window manager.", "kind": "tiling", "base": "wlroots", "config": "i3-style", "logo": "sway", "session_names": ["sway"] },
+    { "id": "kwin", "name": "KWin", "short": "KW", "color": "#1d6fc4", "tagline": "KDE Plasma's compositor, with effects and optional tiling.", "kind": "stacking", "base": "KDE Plasma", "config": "System Settings", "logo": "kde", "session_names": ["KDE"] },
+    { "id": "river", "name": "river", "short": "Ri", "color": "#1d5fa8", "tagline": "Small tiling compositor where your own program manages the windows.", "kind": "tiling", "base": "wlroots", "config": "init script", "logo": "river", "session_names": ["river"] },
+    { "id": "cosmic-comp", "name": "cosmic-comp", "short": "Co", "color": "#2a7f8a", "tagline": "The COSMIC compositor. Tile or float on each workspace.", "kind": "tiling", "base": "Smithay", "config": "COSMIC Settings", "session_names": ["COSMIC"] },
+    { "id": "mutter", "name": "Mutter", "short": "Mu", "color": "#3d3846", "tagline": "The compositor behind GNOME Shell.", "kind": "stacking", "base": "GNOME", "config": "Settings", "logo": "gnome", "session_names": ["GNOME"] },
+    { "id": "wayfire", "name": "Wayfire", "short": "Wf", "color": "#a33a00", "tagline": "Plugin-based compositor with 3D effects.", "kind": "stacking", "base": "wlroots", "config": "INI", "session_names": ["Wayfire"] },
+    { "id": "labwc", "name": "labwc", "short": "Lb", "color": "#5e5c64", "tagline": "Light stacking compositor inspired by Openbox.", "kind": "stacking", "base": "wlroots", "config": "XML", "session_names": ["labwc"] }
+  ]
+}

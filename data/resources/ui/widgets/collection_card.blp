@@ -1,0 +1,45 @@
+using Gtk 4.0;
+
+template $CollectionCard: Box {
+  styles [
+    "collection-card",
+  ]
+
+  orientation: vertical;
+  spacing: 12;
+  width-request: 210;
+  height-request: 290;
+
+  Label {
+    styles [
+      "collection-tag",
+    ]
+
+    label: _("Collection");
+    halign: start;
+  }
+
+  Box tiles_box {
+    spacing: 8;
+    vexpand: true;
+    valign: center;
+  }
+
+  Label title_label {
+    styles [
+      "collection-title",
+    ]
+
+    xalign: 0;
+    wrap: true;
+  }
+
+  Label names_label {
+    styles [
+      "collection-names",
+    ]
+
+    xalign: 0;
+    wrap: true;
+  }
+}

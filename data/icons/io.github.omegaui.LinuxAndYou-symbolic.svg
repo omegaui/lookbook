@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Placeholder symbolic icon. Replace with the final design. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <path fill="#2e3436" d="M 6 3 a 5 5 0 1 0 0 10 a 5 5 0 0 0 2 -0.42 a 5 5 0 1 0 0 -9.16 A 5 5 0 0 0 6 3 z m 2 2.1 a 3 3 0 0 1 0 5.8 a 5 5 0 0 0 0 -5.8 z"/>
+</svg>

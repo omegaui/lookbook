@@ -1,0 +1,107 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $LinuxAndYouWindow: Adw.ApplicationWindow {
+  title: _("Linux & You");
+  width-request: 360;
+  height-request: 294;
+
+  Adw.Breakpoint {
+    condition ("max-width: 720sp")
+
+    setters {
+      switcher_bar.reveal: true;
+      header_bar.title-widget: null;
+    }
+  }
+
+  content: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar header_bar {
+      title-widget: Adw.ViewSwitcher {
+        stack: view_stack;
+        policy: wide;
+      };
+
+      [end]
+      MenuButton {
+        primary: true;
+        icon-name: "open-menu-symbolic";
+        tooltip-text: _("Main Menu");
+        menu-model: primary_menu;
+      }
+    }
+
+    content: Adw.ViewStack view_stack {
+      Adw.ViewStackPage {
+        name: "explore";
+        title: _("Explore");
+        icon-name: "lay-explore-symbolic";
+
+        child: $ExplorePage explore_page {};
+      }
+
+      Adw.ViewStackPage {
+        name: "distros";
+        title: _("Distros");
+        icon-name: "lay-distros-symbolic";
+
+        child: Adw.StatusPage {
+          icon-name: "lay-distros-symbolic";
+          title: _("Distros");
+          description: _("The full distro gallery comes next.");
+        };
+      }
+
+      Adw.ViewStackPage {
+        name: "desktops";
+        title: _("Desktops");
+        icon-name: "lay-desktops-symbolic";
+
+        child: Adw.StatusPage {
+          icon-name: "lay-desktops-symbolic";
+          title: _("Desktops");
+          description: _("The desktop gallery comes next.");
+        };
+      }
+
+      Adw.ViewStackPage {
+        name: "compositors";
+        title: _("Compositors");
+        icon-name: "lay-compositors-symbolic";
+
+        child: Adw.StatusPage {
+          icon-name: "lay-compositors-symbolic";
+          title: _("Compositors");
+          description: _("The compositor gallery comes next.");
+        };
+      }
+
+      Adw.ViewStackPage {
+        name: "system";
+        title: _("Your System");
+        icon-name: "lay-system-symbolic";
+
+        child: Adw.StatusPage {
+          icon-name: "lay-system-symbolic";
+          title: _("Your System");
+          description: _("Your distro, desktop and the ideas you can build come next.");
+        };
+      }
+    };
+
+    [bottom]
+    Adw.ViewSwitcherBar switcher_bar {
+      stack: view_stack;
+    }
+  };
+}
+
+menu primary_menu {
+  section {
+    item {
+      label: _("_About Linux & You");
+      action: "app.about";
+    }
+  }
+}

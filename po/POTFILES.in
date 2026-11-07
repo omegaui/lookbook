@@ -1,0 +1,13 @@
+# Files with translatable strings.
+data/io.github.omegaui.LinuxAndYou.desktop.in.in
+data/io.github.omegaui.LinuxAndYou.gschema.xml.in
+data/io.github.omegaui.LinuxAndYou.metainfo.xml.in.in
+data/resources/ui/pages/explore_page.blp
+data/resources/ui/widgets/catalog_card.blp
+data/resources/ui/widgets/collection_card.blp
+data/resources/ui/widgets/screenshot_card.blp
+data/resources/ui/widgets/spotlight_card.blp
+data/resources/ui/window.blp
+src/catalog/model.rs
+src/system/mod.rs
+src/widgets/content.rs

@@ -1,0 +1,163 @@
+using Gtk 4.0;
+
+template $SpotlightCard: Box {
+  styles [
+    "spotlight",
+  ]
+
+  homogeneous: true;
+  overflow: hidden;
+  height-request: 340;
+  hexpand: true;
+
+  Box {
+    orientation: vertical;
+    spacing: 14;
+    valign: center;
+    margin-top: 40;
+    margin-bottom: 40;
+    margin-start: 72;
+    margin-end: 16;
+
+    Box {
+      spacing: 16;
+
+      $LogoTile tile {
+        valign: center;
+      }
+
+      Box {
+        orientation: vertical;
+        spacing: 2;
+        valign: center;
+
+        Label kicker_label {
+          styles [
+            "kicker",
+          ]
+
+          xalign: 0;
+        }
+
+        Label name_label {
+          styles [
+            "title-1",
+          ]
+
+          xalign: 0;
+          wrap: true;
+        }
+      }
+    }
+
+    Label tagline_label {
+      xalign: 0;
+      wrap: true;
+      max-width-chars: 44;
+    }
+
+    Box chips_box {
+      spacing: 6;
+    }
+
+    Box {
+      spacing: 10;
+      margin-top: 6;
+
+      Button details_button {
+        styles [
+          "pill",
+          "suggested-action",
+        ]
+
+        label: _("View Details");
+        action-name: "win.show-page";
+      }
+
+      Button {
+        styles [
+          "pill",
+        ]
+
+        label: _("Can I Run It?");
+        action-name: "win.show-page";
+        action-target: "'system'";
+      }
+    }
+  }
+
+  // Decorative: windows laid out on a tilted floor.
+  ScrolledWindow {
+    hscrollbar-policy: external;
+    vscrollbar-policy: never;
+    can-target: false;
+
+    child: Box {
+      styles [
+        "iso-plane",
+      ]
+
+      spacing: 18;
+      halign: start;
+      valign: center;
+      margin-top: 60;
+      margin-bottom: 60;
+      margin-start: 10;
+
+      Box {
+        styles [
+          "mini-window",
+        ]
+
+        width-request: 150;
+        height-request: 230;
+        valign: start;
+      }
+
+      Box {
+        styles [
+          "mini-window",
+          "focused",
+        ]
+
+        width-request: 230;
+        height-request: 230;
+        valign: start;
+      }
+
+      Box {
+        orientation: vertical;
+        spacing: 18;
+        valign: start;
+
+        Box {
+          styles [
+            "mini-window",
+          ]
+
+          width-request: 150;
+          height-request: 106;
+        }
+
+        Box {
+          styles [
+            "mini-window",
+          ]
+
+          width-request: 150;
+          height-request: 106;
+        }
+      }
+
+      Box {
+        styles [
+          "mini-window",
+        ]
+
+        width-request: 190;
+        height-request: 230;
+        valign: start;
+      }
+    };
+  }
+}
