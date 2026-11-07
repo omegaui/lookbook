@@ -52,6 +52,7 @@ template $ItemDetailPage: Adw.NavigationPage {
 
                   xalign: 0;
                   wrap: true;
+                  max-width-chars: 14;
                 }
 
                 Label badge_label {
@@ -71,7 +72,8 @@ template $ItemDetailPage: Adw.NavigationPage {
 
                 xalign: 0;
                 wrap: true;
-                max-width-chars: 40;
+                // Narrow enough to leave the screenshot room on a 949px tile.
+                max-width-chars: 30;
               }
 
               Box chips_box {

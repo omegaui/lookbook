@@ -262,7 +262,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:Fedora_42_Workstation_Desktop_English.png",
         "credit": "The Fedora Project",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Fedora_44_Workstation.png/1280px-Fedora_44_Workstation.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Fedora_44_Workstation.png",
+          "credit": "The Fedora Project",
+          "license": "GPL",
+          "caption": "Fedora 44 desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Fedora_42_Workstation_Desktop_English.png/1280px-Fedora_42_Workstation_Desktop_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Fedora_42_Workstation_Desktop_English.png",
+          "credit": "The Fedora Project",
+          "license": "GPL",
+          "caption": "Activities overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Fedora_Workstation_41_%E2%80%94_default_applications_%281%29.png/1280px-Fedora_Workstation_41_%E2%80%94_default_applications_%281%29.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Fedora_Workstation_41_%E2%80%94_default_applications_(1).png",
+          "credit": "The GNOME Project and The Fedora Project",
+          "license": "GPL",
+          "caption": "App grid"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Fedora_Workstation_42.png/1280px-Fedora_Workstation_42.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Fedora_Workstation_42.png",
+          "credit": "The Fedora Project",
+          "license": "GPL",
+          "caption": "Settings, about this system"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Anaconda_WebUI_Installer_-_Fedora_Workstation_42.png/1280px-Anaconda_WebUI_Installer_-_Fedora_Workstation_42.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Anaconda_WebUI_Installer_-_Fedora_Workstation_42.png",
+          "credit": "Anaconda Team",
+          "license": "GPL",
+          "caption": "Anaconda web installer"
+        }
+      ]
     },
     {
       "id": "arch",
@@ -290,11 +327,41 @@
       ],
       "nvidia_note": "Install nvidia-open (or nvidia for older cards) and enable kernel mode setting.",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Arch_Linux_with_KDE.png/960px-Arch_Linux_with_KDE.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Arch_Linux_with_KDE.png",
-        "credit": "Chrislongros",
-        "license": "CC BY-SA 4.0"
-      }
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Arch_Linux_screenshot%2C_12.06.2024.png/960px-Arch_Linux_screenshot%2C_12.06.2024.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Arch_Linux_screenshot,_12.06.2024.png",
+        "credit": "Arch Linux developers",
+        "license": "GPL"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Arch_Linux_screenshot%2C_12.06.2024.png/1280px-Arch_Linux_screenshot%2C_12.06.2024.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Arch_Linux_screenshot,_12.06.2024.png",
+          "credit": "Arch Linux developers",
+          "license": "GPL",
+          "caption": "KDE Plasma with fastfetch"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/KDE_Plasma_6.6.4.png/1280px-KDE_Plasma_6.6.4.png",
+          "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_6.6.4.png",
+          "credit": "Jonahplayz",
+          "license": "CC0",
+          "caption": "Apps on KDE Plasma"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/KDE_Plasma_6.3.4_on_Arch_Linux.png/1280px-KDE_Plasma_6.3.4_on_Arch_Linux.png",
+          "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_6.3.4_on_Arch_Linux.png",
+          "credit": "TSEPLNK",
+          "license": "CC BY-SA 4.0",
+          "caption": "Plasma 6 desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Break_Arcade_Games_Out_running_on_Arch_Linux_using_Proton.png/1280px-Break_Arcade_Games_Out_running_on_Arch_Linux_using_Proton.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Break_Arcade_Games_Out_running_on_Arch_Linux_using_Proton.png",
+          "credit": "Peter Placzek",
+          "license": "Public domain",
+          "caption": "Gaming with Proton"
+        }
+      ]
     },
     {
       "id": "debian",
@@ -326,7 +393,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_default_desktop_-_English.png",
         "credit": "The Debian Project",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Debian_13.0.0_GNOME_default_desktop_-_English.png/1280px-Debian_13.0.0_GNOME_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_default_desktop_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Default GNOME desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Debian_13.0.0_GNOME_Overview_-_English.png/1280px-Debian_13.0.0_GNOME_Overview_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_Overview_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Activities overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Debian_13.0.0_GNOME_Appearance_Dark_-_English.png/1280px-Debian_13.0.0_GNOME_Appearance_Dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_Appearance_Dark_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Dark appearance settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Debian_13.0.0_GNOME_Tour_1_-_English.png/1280px-Debian_13.0.0_GNOME_Tour_1_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_Tour_1_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Welcome tour"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Debian_13.0.0_KDE_Global_Theme_Debian_Breeze_-_English.png/1280px-Debian_13.0.0_KDE_Global_Theme_Debian_Breeze_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_KDE_Global_Theme_Debian_Breeze_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "KDE Plasma edition"
+        }
+      ]
     },
     {
       "id": "ubuntu",
@@ -353,7 +457,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.04_LTS_default_desktop_-_English.png",
         "credit": "Canonical Limited",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Ubuntu_26.04_LTS_default_desktop_-_English.png/1280px-Ubuntu_26.04_LTS_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.04_LTS_default_desktop_-_English.png",
+          "credit": "Canonical Limited",
+          "license": "GPL",
+          "caption": "Default desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Ubuntu_26.04_LTS_Workspace_Switcher_-_English.png/1280px-Ubuntu_26.04_LTS_Workspace_Switcher_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.04_LTS_Workspace_Switcher_-_English.png",
+          "credit": "Canonical Limited",
+          "license": "GPL",
+          "caption": "Workspace overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/Ubuntu_26.04_LTS_Appearance_dark_-_English.png/1280px-Ubuntu_26.04_LTS_Appearance_dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.04_LTS_Appearance_dark_-_English.png",
+          "credit": "Canonical Limited",
+          "license": "GPL",
+          "caption": "Dark appearance settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Ubuntu_24.04_LTS_Ubuntu_App_Center_-_English.png/1280px-Ubuntu_24.04_LTS_Ubuntu_App_Center_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_24.04_LTS_Ubuntu_App_Center_-_English.png",
+          "credit": "Canonical Inc",
+          "license": "GPL",
+          "caption": "App Center"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Ubuntu_25.10_installation_5_-_English.png/1280px-Ubuntu_25.10_installation_5_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_25.10_installation_5_-_English.png",
+          "credit": "Canonical Limited",
+          "license": "GPL",
+          "caption": "Installer"
+        }
+      ]
     },
     {
       "id": "linuxmint",
@@ -376,11 +517,34 @@
       ],
       "nvidia_note": "Driver Manager installs the NVIDIA driver in a few clicks.",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Linux_Mint_Cinnamon_22.3.png/960px-Linux_Mint_Cinnamon_22.3.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Linux_Mint_Cinnamon_22.3.png",
-        "credit": "Breno Martins de Oliveira Vasconcelos",
-        "license": "GPL-3.0"
-      }
+        "url": "https://www.linuxmint.com/pictures/screenshots/zena/cinnamon.png",
+        "page": "https://www.linuxmint.com/rel_zena_whatsnew.php",
+        "credit": "Linux Mint",
+        "license": "Not stated (official project media)"
+      },
+      "gallery": [
+        {
+          "url": "https://www.linuxmint.com/pictures/screenshots/zena/cinnamon.png",
+          "page": "https://www.linuxmint.com/rel_zena_whatsnew.php",
+          "credit": "Linux Mint",
+          "license": "Not stated (official project media)",
+          "caption": "Cinnamon desktop and menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Linux_mint_software_manager.png/1280px-Linux_mint_software_manager.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Linux_mint_software_manager.png",
+          "credit": "Linux Mint Design Team",
+          "license": "GPL",
+          "caption": "Software Manager"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/LinuxMint22-Wilma-English.png/1280px-LinuxMint22-Wilma-English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:LinuxMint22-Wilma-English.png",
+          "credit": "Mipinggrey",
+          "license": "GPL",
+          "caption": "System info and Firefox"
+        }
+      ]
     },
     {
       "id": "opensuse-tumbleweed",
@@ -407,7 +571,30 @@
         "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_6_screenshot_(openSUSE_dark_mode).png",
         "credit": "VulcanSphere",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/OpenSUSE_Tumbleweed_in_KDE_6.jpg/1280px-OpenSUSE_Tumbleweed_in_KDE_6.jpg",
+          "page": "https://commons.wikimedia.org/wiki/File:OpenSUSE_Tumbleweed_in_KDE_6.jpg",
+          "credit": "GatoVerde95",
+          "license": "CC BY 4.0",
+          "caption": "Tumbleweed on KDE Plasma"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/KDE_Plasma_6_screenshot_%28openSUSE_dark_mode%29.png/1280px-KDE_Plasma_6_screenshot_%28openSUSE_dark_mode%29.png",
+          "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_6_screenshot_(openSUSE_dark_mode).png",
+          "credit": "VulcanSphere (software: KDE and openSUSE)",
+          "license": "GPL",
+          "caption": "Application launcher"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/agama-project/agama-project.github.io/fc29f10da8cf3768763ac07acc3648ae7ff2b66d/static/img/user/overview.png",
+          "page": "https://github.com/agama-project/agama#readme",
+          "credit": "The Agama project (openSUSE)",
+          "license": "Not stated (official project media)",
+          "caption": "Agama installer"
+        }
+      ]
     },
     {
       "id": "nixos",
@@ -435,11 +622,34 @@
       ],
       "nvidia_note": "Enable hardware.nvidia in your configuration.",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/NixOS_21.11_GNOME_default_desktop_-_English.png/960px-NixOS_21.11_GNOME_default_desktop_-_English.png",
-        "page": "https://commons.wikimedia.org/wiki/File:NixOS_21.11_GNOME_default_desktop_-_English.png",
-        "credit": "NixOS contributors",
-        "license": "GPL"
-      }
+        "url": "https://raw.githubusercontent.com/anotherhadi/nixy/6af1df80420a664a26f96290a44c507999569343/.github/assets/screenshots/1.png",
+        "page": "https://github.com/anotherhadi/nixy#readme",
+        "credit": "anotherhadi (nixy)",
+        "license": "MIT"
+      },
+      "gallery": [
+        {
+          "url": "https://raw.githubusercontent.com/anotherhadi/nixy/6af1df80420a664a26f96290a44c507999569343/.github/assets/screenshots/1.png",
+          "page": "https://github.com/anotherhadi/nixy#readme",
+          "credit": "anotherhadi (nixy)",
+          "license": "MIT",
+          "caption": "Hyprland desktop with widgets"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/Frost-Phoenix/nixos-config/66cc581645bef74898bd3eb36d9f4138d1069d02/.github/assets/screenshots/3.png",
+          "page": "https://github.com/Frost-Phoenix/nixos-config#readme",
+          "credit": "Frost-Phoenix (nixos-config)",
+          "license": "MIT",
+          "caption": "Launcher and notifications"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/XNM1/linux-nixos-hyprland-config-dotfiles/f6374d9b51d8a63a045a2d6d68b0f63e2e773938/home/Pictures/Screenshots/screenshot-4.png",
+          "page": "https://github.com/XNM1/linux-nixos-hyprland-config-dotfiles#readme",
+          "credit": "XNM1 (linux-nixos-hyprland-config-dotfiles)",
+          "license": "MIT",
+          "caption": "Browser and system info"
+        }
+      ]
     },
     {
       "id": "cachyos",
@@ -471,7 +681,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2025.08.25_KDE_default_desktop_-_English.png",
         "credit": "Peter Jung and the CachyOS team",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/CachyOS_2025.08.25_KDE_default_desktop_-_English.png/1280px-CachyOS_2025.08.25_KDE_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2025.08.25_KDE_default_desktop_-_English.png",
+          "credit": "Peter Jung and the CachyOS Developer Team",
+          "license": "GPL",
+          "caption": "Default KDE desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/CachyOS_2025.08.25_KDE_welcome_-_English.png/1280px-CachyOS_2025.08.25_KDE_welcome_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2025.08.25_KDE_welcome_-_English.png",
+          "credit": "Peter Jung and the CachyOS Developer Team",
+          "license": "GPL",
+          "caption": "Welcome app"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/CachyOS_2025.08.25_KDE_Quick_Settings_Breeze_Dark_-_English.png/1280px-CachyOS_2025.08.25_KDE_Quick_Settings_Breeze_Dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2025.08.25_KDE_Quick_Settings_Breeze_Dark_-_English.png",
+          "credit": "Peter Jung and the CachyOS Developer Team",
+          "license": "GPL",
+          "caption": "Dark quick settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/CachyOS_2025.08.25_KDE_Dolphin_25.08.0_Breeze_-_English.png/1280px-CachyOS_2025.08.25_KDE_Dolphin_25.08.0_Breeze_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2025.08.25_KDE_Dolphin_25.08.0_Breeze_-_English.png",
+          "credit": "Peter Jung and the CachyOS Developer Team",
+          "license": "GPL",
+          "caption": "Dolphin file manager"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/CachyOS_2024.07.14_Handheld_Edition_default_desktop_-_English.png/1280px-CachyOS_2024.07.14_Handheld_Edition_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:CachyOS_2024.07.14_Handheld_Edition_default_desktop_-_English.png",
+          "credit": "CachyOS Team",
+          "license": "GPL",
+          "caption": "Handheld Edition desktop"
+        }
+      ]
     },
     {
       "id": "bazzite",
@@ -498,7 +745,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:Bazzite_42_KDE_default_desktop_-_English.png",
         "credit": "The Bazzite Team",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Bazzite_42_KDE_default_desktop_-_English.png/1280px-Bazzite_42_KDE_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Bazzite_42_KDE_default_desktop_-_English.png",
+          "credit": "The Bazzite Team",
+          "license": "GPL",
+          "caption": "Default KDE desktop"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ublue-os/bazzite/0e27400b2a8c1e34df2790761b9036d2b8763913/repo_content/gamemode.png",
+          "page": "https://github.com/ublue-os/bazzite#readme",
+          "credit": "Universal Blue (Bazzite)",
+          "license": "Apache-2.0 (repository license)",
+          "caption": "Steam Gaming Mode"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ublue-os/bazzite/0e27400b2a8c1e34df2790761b9036d2b8763913/repo_content/desktop1.png",
+          "page": "https://github.com/ublue-os/bazzite#readme",
+          "credit": "Universal Blue (Bazzite)",
+          "license": "Apache-2.0 (repository license)",
+          "caption": "Bazaar app store"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/Bazzite_42_GNOME_default_desktop_-_English.png/1280px-Bazzite_42_GNOME_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Bazzite_42_GNOME_default_desktop_-_English.png",
+          "credit": "The Bazzite Team",
+          "license": "GPL",
+          "caption": "GNOME edition desktop"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ublue-os/bazzite/0e27400b2a8c1e34df2790761b9036d2b8763913/repo_content/waydroid.png",
+          "page": "https://github.com/ublue-os/bazzite#readme",
+          "credit": "Universal Blue (Bazzite)",
+          "license": "Apache-2.0 (repository license)",
+          "caption": "Android apps with Waydroid"
+        }
+      ]
     },
     {
       "id": "fedora-silverblue",
@@ -526,7 +810,37 @@
         "page": "https://commons.wikimedia.org/wiki/File:Fedora_SilverBlue_41_desktop.png",
         "credit": "Paowee",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Fedora_SilverBlue_41_desktop.png/1280px-Fedora_SilverBlue_41_desktop.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Fedora_SilverBlue_41_desktop.png",
+          "credit": "Paowee (software: The GNOME Project and The Fedora Project)",
+          "license": "GPL",
+          "caption": "Desktop with rpm-ostree"
+        },
+        {
+          "url": "https://fedoraproject.org/assets/images/atomic-desktops/screenshot-silverblue.jpg",
+          "page": "https://fedoraproject.org/atomic-desktops/silverblue/",
+          "credit": "The Fedora Project",
+          "license": "Not stated (official project media)",
+          "caption": "Activities overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Fedora_SilverBlue_41%2C_default_applications.png/1280px-Fedora_SilverBlue_41%2C_default_applications.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Fedora_SilverBlue_41,_default_applications.png",
+          "credit": "Paowee (software: The GNOME Project and The Fedora Project)",
+          "license": "GPL",
+          "caption": "App grid"
+        },
+        {
+          "url": "https://fedoramagazine.org/wp-content/uploads/2026/10/Screenshot_20261030_112249.png",
+          "page": "https://fedoramagazine.org/how-to-rebase-to-fedora-linux-45-on-silverblue/",
+          "credit": "Fedora Magazine (The Fedora Project)",
+          "license": "Not stated (official project media)",
+          "caption": "Upgrade in Software"
+        }
+      ]
     },
     {
       "id": "pop",
@@ -553,7 +867,51 @@
         "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
         "credit": "System76",
         "license": "GPL-3.0"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Pop%21_OS_24.04_LTS_default_desktop_-_English.png/1280px-Pop%21_OS_24.04_LTS_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "COSMIC desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Pop%21_OS_24.04_LTS_Tiling_-_English.png/1280px-Pop%21_OS_24.04_LTS_Tiling_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Tiling_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Auto-tiling windows"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Pop%21_OS_24.04_LTS_Workspaces_-_English.png/1280px-Pop%21_OS_24.04_LTS_Workspaces_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Workspaces_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Workspaces overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Pop%21_OS_24.04_LTS_launcher_-_English.png/1280px-Pop%21_OS_24.04_LTS_launcher_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_launcher_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Launcher"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Pop%21_OS_24.04_LTS_Installation_1_-_English.png/1280px-Pop%21_OS_24.04_LTS_Installation_1_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Installation_1_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Installer"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Pop%21_OS_24.04_LTS_Settings_Desktop_Wallpaper_-_English.png/1280px-Pop%21_OS_24.04_LTS_Settings_Desktop_Wallpaper_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Settings_Desktop_Wallpaper_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Wallpaper settings"
+        }
+      ]
     },
     {
       "id": "elementary",
@@ -579,7 +937,51 @@
         "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_default_desktop_-_English.png",
         "credit": "elementary, Inc.",
         "license": "GPL-3.0"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Elementary_OS_8.0_default_desktop_-_English.png/1280px-Elementary_OS_8.0_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_default_desktop_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Default desktop"
+        },
+        {
+          "url": "https://elementary.io/images/screenshots/appcenter.png",
+          "page": "https://elementary.io/",
+          "credit": "elementary, Inc.",
+          "license": "MIT (elementary website repository)",
+          "caption": "AppCenter"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Elementary_OS_8.0_menu_1_-_English.png/1280px-Elementary_OS_8.0_menu_1_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_menu_1_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Applications menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Elementary_OS_8.0_Appearance_dark_-_English.png/1280px-Elementary_OS_8.0_Appearance_dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_Appearance_dark_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Dark appearance settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Elementary_OS_8.0_welcome_-_English.png/1280px-Elementary_OS_8.0_welcome_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_welcome_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Welcome app"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Elementary_OS_8.0_Files_dark_-_English.png/1280px-Elementary_OS_8.0_Files_dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_Files_dark_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Files, dark style"
+        }
+      ]
     },
     {
       "id": "endeavouros",
@@ -611,7 +1013,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png",
         "credit": "endeavouros-team",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png/1280px-EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_Ganymede.2025.11.24_KDE_default_desktop_-_English.png",
+          "credit": "endeavouros-team",
+          "license": "GPL",
+          "caption": "Ganymede desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/EndeavourOS_Titan_2026.03.06.png/1280px-EndeavourOS_Titan_2026.03.06.png",
+          "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_Titan_2026.03.06.png",
+          "credit": "EndeavourOS team (Bryan Poerwoatmodjo, Fernando Omiechuk Frozi, Johannes Kamprad, Manuel, et al)",
+          "license": "GPL",
+          "caption": "Menu and fastfetch"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/EndeavourOS_24.6_Neo.png/1280px-EndeavourOS_24.6_Neo.png",
+          "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_24.6_Neo.png",
+          "credit": "EndeavourOS developers",
+          "license": "GPL",
+          "caption": "Endeavour Neo desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/EndeavourOS_Ganymede.2025.11.24_KDE_about_-_English.png/1280px-EndeavourOS_Ganymede.2025.11.24_KDE_about_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_Ganymede.2025.11.24_KDE_about_-_English.png",
+          "credit": "endeavouros-team",
+          "license": "GPL",
+          "caption": "About this system"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/EndeavourOS_Ganymede.2025.11.24_KDE_Dolphin_25.08.3_Breeze_Dark_-_English.png/1280px-EndeavourOS_Ganymede.2025.11.24_KDE_Dolphin_25.08.3_Breeze_Dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:EndeavourOS_Ganymede.2025.11.24_KDE_Dolphin_25.08.3_Breeze_Dark_-_English.png",
+          "credit": "endeavouros-team",
+          "license": "GPL",
+          "caption": "Dolphin file manager"
+        }
+      ]
     },
     {
       "id": "void",
@@ -637,7 +1076,37 @@
         "page": "https://commons.wikimedia.org/wiki/File:Void_Linux_20230628_default_desktop_-_English.png",
         "credit": "The Void Linux Community",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Void_Linux_20230628_default_desktop_-_English.png/1280px-Void_Linux_20230628_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Void_Linux_20230628_default_desktop_-_English.png",
+          "credit": "The Void Linux Community",
+          "license": "GPL",
+          "caption": "Xfce desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Void_Linux_20230628_alternate_wallpaper_-_English.png/1280px-Void_Linux_20230628_alternate_wallpaper_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Void_Linux_20230628_alternate_wallpaper_-_English.png",
+          "credit": "The Void Linux Community",
+          "license": "GPL",
+          "caption": "Alternate wallpaper"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Void_Linux_20230628_alternate_wallpaper_xfce4-terminal_running_xbps_-_English.png/1280px-Void_Linux_20230628_alternate_wallpaper_xfce4-terminal_running_xbps_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Void_Linux_20230628_alternate_wallpaper_xfce4-terminal_running_xbps_-_English.png",
+          "credit": "The Void Linux Community",
+          "license": "GPL",
+          "caption": "Installing with xbps"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Void_Linux_20230628_Thunar_4.18.6_Adwaita-dark_-_English.png/1280px-Void_Linux_20230628_Thunar_4.18.6_Adwaita-dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Void_Linux_20230628_Thunar_4.18.6_Adwaita-dark_-_English.png",
+          "credit": "The Void Linux Community",
+          "license": "GPL",
+          "caption": "Thunar file manager"
+        }
+      ]
     },
     {
       "id": "alpine",
@@ -668,7 +1137,30 @@
         "page": "https://commons.wikimedia.org/wiki/File:Alpine_Linux_3.18_KDE_-_English.png",
         "credit": "Alpine Linux development team",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Alpine_Linux_3.18_KDE_-_English.png/1280px-Alpine_Linux_3.18_KDE_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Alpine_Linux_3.18_KDE_-_English.png",
+          "credit": "Alpine Linux development team",
+          "license": "GPL",
+          "caption": "KDE Plasma desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Alpine_Linux_GNOME_switcher_-_German.png/1280px-Alpine_Linux_GNOME_switcher_-_German.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Alpine_Linux_GNOME_switcher_-_German.png",
+          "credit": "Alpine Linux development team",
+          "license": "GPL",
+          "caption": "GNOME overview"
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Alpine-xfce.jpg",
+          "page": "https://commons.wikimedia.org/wiki/File:Alpine-xfce.jpg",
+          "credit": "NMaia",
+          "license": "GPL",
+          "caption": "Xfce desktop and menu"
+        }
+      ]
     },
     {
       "id": "gentoo",
@@ -690,11 +1182,41 @@
         }
       ],
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Gentoo-sway-window-manager.png/960px-Gentoo-sway-window-manager.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Gentoo-sway-window-manager.png",
-        "credit": "Vitaly Zdanevich",
-        "license": "CC BY-SA 4.0"
-      }
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Gentoo_Live_GUI_USB_running_KDE.png/960px-Gentoo_Live_GUI_USB_running_KDE.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Gentoo_Live_GUI_USB_running_KDE.png",
+        "credit": "Gentoo and KDE Developers",
+        "license": "CC BY-SA 3.0"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Gentoo_Live_GUI_USB_running_KDE.png/1280px-Gentoo_Live_GUI_USB_running_KDE.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Gentoo_Live_GUI_USB_running_KDE.png",
+          "credit": "Gentoo and KDE Developers",
+          "license": "CC BY-SA 3.0",
+          "caption": "LiveGUI KDE desktop"
+        },
+        {
+          "url": "https://wiki.gentoo.org/images/b/b8/Graphical_installer_start.png",
+          "page": "https://wiki.gentoo.org/wiki/File:Graphical_installer_start.png",
+          "credit": "StefanCristian (Gentoo Wiki)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Starting the installer"
+        },
+        {
+          "url": "https://wiki.gentoo.org/images/7/78/Graphical_installer_timezone_choice.png",
+          "page": "https://wiki.gentoo.org/wiki/File:Graphical_installer_timezone_choice.png",
+          "credit": "StefanCristian (Gentoo Wiki)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Graphical installer"
+        },
+        {
+          "url": "https://wiki.gentoo.org/images/d/d1/Graphical_installer_mediums_choice.png",
+          "page": "https://wiki.gentoo.org/wiki/File:Graphical_installer_mediums_choice.png",
+          "credit": "StefanCristian (Gentoo Wiki)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Choosing a stage3"
+        }
+      ]
     }
   ],
   "desktops": [
@@ -725,7 +1247,51 @@
         "page": "https://commons.wikimedia.org/wiki/File:GNOME_Shell.png",
         "credit": "Guilieb",
         "license": "CC BY-SA 4.0"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/GNOME_Shell.png/1280px-GNOME_Shell.png",
+          "page": "https://commons.wikimedia.org/wiki/File:GNOME_Shell.png",
+          "credit": "Guilieb (formerly Filorinwiki)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Activities overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/VirtualBox_GnomeOS4_15_11_2024_13_36_22.png/1280px-VirtualBox_GnomeOS4_15_11_2024_13_36_22.png",
+          "page": "https://commons.wikimedia.org/wiki/File:VirtualBox_GnomeOS4_15_11_2024_13_36_22.png",
+          "credit": "Wiktorpyk",
+          "license": "CC0",
+          "caption": "App grid"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/GNOME_48.0_on_GNOME_OS.png/1280px-GNOME_48.0_on_GNOME_OS.png",
+          "page": "https://commons.wikimedia.org/wiki/File:GNOME_48.0_on_GNOME_OS.png",
+          "credit": "Wiktorpyk",
+          "license": "CC BY-SA 4.0",
+          "caption": "Quick settings menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/GNOME_Settings_48.png/1280px-GNOME_Settings_48.png",
+          "page": "https://commons.wikimedia.org/wiki/File:GNOME_Settings_48.png",
+          "credit": "Nathan Hadley (Pigeon)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Appearance settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/GNOME_Software_47.png/1280px-GNOME_Software_47.png",
+          "page": "https://commons.wikimedia.org/wiki/File:GNOME_Software_47.png",
+          "credit": "Nathan Hadley (Pigeon)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Software center"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Debian_13.0.0_GNOME_Files_48.3_dark_-_English.png/1280px-Debian_13.0.0_GNOME_Files_48.3_dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_GNOME_Files_48.3_dark_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Files in dark style"
+        }
+      ]
     },
     {
       "id": "kde-plasma",
@@ -750,11 +1316,55 @@
       ],
       "repology": "plasma-workspace",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kde_Plasma_6.png/960px-Kde_Plasma_6.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Kde_Plasma_6.png",
-        "credit": "Axo1otl",
-        "license": "GPL"
-      }
+        "url": "https://kde.org/announcements/plasma/6/6.8.0/fullscreen_with_apps.png",
+        "page": "https://kde.org/announcements/plasma/6/6.8.0/",
+        "credit": "KDE",
+        "license": "CC BY 4.0"
+      },
+      "gallery": [
+        {
+          "url": "https://kde.org/announcements/plasma/6/6.8.0/fullscreen_with_apps.png",
+          "page": "https://kde.org/announcements/plasma/6/6.8.0/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Desktop with apps open"
+        },
+        {
+          "url": "https://kde.org/content/plasma-desktop/plasma-launcher.png",
+          "page": "https://kde.org/plasma-desktop/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Application launcher"
+        },
+        {
+          "url": "https://kde.org/content/plasma-desktop/discover.png",
+          "page": "https://kde.org/plasma-desktop/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Discover software center"
+        },
+        {
+          "url": "https://kde.org/content/plasma-desktop/plasma-widgets.png",
+          "page": "https://kde.org/plasma-desktop/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Desktop widgets"
+        },
+        {
+          "url": "https://kde.org/content/plasma-desktop/systemsettings.png",
+          "page": "https://kde.org/plasma-desktop/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "System settings"
+        },
+        {
+          "url": "https://kde.org/content/plasma-desktop/theme.png",
+          "page": "https://kde.org/plasma-desktop/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Breeze Dark theme"
+        }
+      ]
     },
     {
       "id": "cosmic",
@@ -779,11 +1389,55 @@
       ],
       "repology": "cosmic-session",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Pop%21_OS_24.04_LTS_default_desktop_-_English.png/960px-Pop%21_OS_24.04_LTS_default_desktop_-_English.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png/960px-Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Beta_six_applications_tiled_-_English.png",
         "credit": "System76",
-        "license": "GPL-3.0"
-      }
+        "license": "GPLv3"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png/1280px-Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Beta_six_applications_tiled_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Tiled windows"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Pop%21_OS_24.04_LTS_Workspaces_-_English.png/1280px-Pop%21_OS_24.04_LTS_Workspaces_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Workspaces_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Workspaces overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Pop%21_OS_24.04_LTS_Library_Home_menu_-_English.png/1280px-Pop%21_OS_24.04_LTS_Library_Home_menu_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Library_Home_menu_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "App library"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Pop%21_OS_24.04_LTS_launcher_-_English.png/1280px-Pop%21_OS_24.04_LTS_launcher_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_launcher_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Launcher search"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Pop%21_OS_24.04_LTS_Settings_Appearance_dark_-_English.png/1280px-Pop%21_OS_24.04_LTS_Settings_Appearance_dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Settings_Appearance_dark_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Appearance settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Pop%21_OS_24.04_LTS_COSMIC_Files_0.1.0_light_-_English.png/1280px-Pop%21_OS_24.04_LTS_COSMIC_Files_0.1.0_light_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_COSMIC_Files_0.1.0_light_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Files in light theme"
+        }
+      ]
     },
     {
       "id": "cinnamon",
@@ -809,11 +1463,48 @@
       ],
       "repology": "cinnamon",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Linux_Mint_Cinnamon_22.3.png/960px-Linux_Mint_Cinnamon_22.3.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Linux_Mint_Cinnamon_22.3.png",
-        "credit": "Breno Martins de Oliveira Vasconcelos",
-        "license": "GPL-3.0"
-      }
+        "url": "https://www.linuxmint.com/pictures/screenshots/zena/cinnamon.png",
+        "page": "https://www.linuxmint.com/rel_zena_cinnamon.php",
+        "credit": "Linux Mint",
+        "license": "Not stated (official project media)"
+      },
+      "gallery": [
+        {
+          "url": "https://www.linuxmint.com/pictures/screenshots/zena/cinnamon.png",
+          "page": "https://www.linuxmint.com/rel_zena_cinnamon.php",
+          "credit": "Linux Mint",
+          "license": "Not stated (official project media)",
+          "caption": "Desktop and app menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/LinuxMint22-Wilma-English.png/1280px-LinuxMint22-Wilma-English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:LinuxMint22-Wilma-English.png",
+          "credit": "Mipinggrey",
+          "license": "GPL",
+          "caption": "System info and Firefox"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Linux_mint_software_manager.png/1280px-Linux_mint_software_manager.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Linux_mint_software_manager.png",
+          "credit": "Linux Mint Design Team",
+          "license": "GPL",
+          "caption": "Software manager"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Debian_13.0.0_Cinnamon_Nemo_6.4.5_BlackMATE_-_English.png/1280px-Debian_13.0.0_Cinnamon_Nemo_6.4.5_BlackMATE_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_Cinnamon_Nemo_6.4.5_BlackMATE_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Nemo in dark theme"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Debian_13.0.0_Cinnamon_Themes_Adwaita_-_English.png/1280px-Debian_13.0.0_Cinnamon_Themes_Adwaita_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_Cinnamon_Themes_Adwaita_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Themes settings"
+        }
+      ]
     },
     {
       "id": "xfce",
@@ -843,7 +1534,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:XFCE_4.20.png",
         "credit": "Unknown author",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/XFCE_4.20.png/1280px-XFCE_4.20.png",
+          "page": "https://commons.wikimedia.org/wiki/File:XFCE_4.20.png",
+          "credit": "Xfce Development Team (xfce.org)",
+          "license": "GPL",
+          "caption": "Thunar and task manager"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Xubuntu_26.04_LTS_default_desktop_-_English.png/1280px-Xubuntu_26.04_LTS_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Xubuntu_26.04_LTS_default_desktop_-_English.png",
+          "credit": "The Xubuntu Team",
+          "license": "GPL",
+          "caption": "Xubuntu default desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Debian_13.0.0_Xfce_menu_-_English.png/1280px-Debian_13.0.0_Xfce_menu_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_Xfce_menu_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Applications menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Debian_13.0.0_Xfce_Thunar_4.20.2_Adwaita-dark_-_English.png/1280px-Debian_13.0.0_Xfce_Thunar_4.20.2_Adwaita-dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_Xfce_Thunar_4.20.2_Adwaita-dark_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Thunar in dark theme"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Xubuntu-25-04-xfce-upgrades.png/1280px-Xubuntu-25-04-xfce-upgrades.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Xubuntu-25-04-xfce-upgrades.png",
+          "credit": "AngelMoran13",
+          "license": "CC BY 4.0",
+          "caption": "Desktop and appearance settings"
+        }
+      ]
     },
     {
       "id": "budgie",
@@ -868,11 +1596,55 @@
       ],
       "repology": "budgie-desktop",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BudgieDesktop-v10.7.jpg/960px-BudgieDesktop-v10.7.jpg",
-        "page": "https://commons.wikimedia.org/wiki/File:BudgieDesktop-v10.7.jpg",
-        "credit": "Joshua Strobl",
-        "license": "Apache-2.0"
-      }
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Ubuntu_Budgie_26.04_LTS_default_desktop_-_English.png/960px-Ubuntu_Budgie_26.04_LTS_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Budgie_26.04_LTS_default_desktop_-_English.png",
+        "credit": "Ubuntu Budgie Team",
+        "license": "GPL"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Ubuntu_Budgie_26.04_LTS_default_desktop_-_English.png/1280px-Ubuntu_Budgie_26.04_LTS_default_desktop_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Budgie_26.04_LTS_default_desktop_-_English.png",
+          "credit": "Ubuntu Budgie Team",
+          "license": "GPL",
+          "caption": "Ubuntu Budgie desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Ubuntu_Budgie_26.04_LTS_Menu_tiles_-_English.png/1280px-Ubuntu_Budgie_26.04_LTS_Menu_tiles_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Budgie_26.04_LTS_Menu_tiles_-_English.png",
+          "credit": "Ubuntu Budgie Team",
+          "license": "GPL",
+          "caption": "App menu grid"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Ubuntu_Budgie_26.04_LTS_Budgie_Desktop_Settings_Widgets_-_English.png/1280px-Ubuntu_Budgie_26.04_LTS_Budgie_Desktop_Settings_Widgets_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Budgie_26.04_LTS_Budgie_Desktop_Settings_Widgets_-_English.png",
+          "credit": "Ubuntu Budgie Team",
+          "license": "GPL",
+          "caption": "Budgie desktop settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ubuntu_Budgie_26.04_LTS_Nemo_6.4.5_Pocillo-dark_-_English.png/1280px-Ubuntu_Budgie_26.04_LTS_Nemo_6.4.5_Pocillo-dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Budgie_26.04_LTS_Nemo_6.4.5_Pocillo-dark_-_English.png",
+          "credit": "Ubuntu Budgie Team",
+          "license": "GPL",
+          "caption": "Files in dark theme"
+        },
+        {
+          "url": "https://buddiesofbudgie.org/images/Raven-WidgetView.jpg",
+          "page": "https://buddiesofbudgie.org/",
+          "credit": "Buddies of Budgie",
+          "license": "Apache License 2.0",
+          "caption": "Raven widgets sidebar"
+        },
+        {
+          "url": "https://buddiesofbudgie.org/images/blog/2026/03/budgie-desktop-10-10-2-touchpad-settings.jpg",
+          "page": "https://buddiesofbudgie.org/blog/budgie-10-10-2-released",
+          "credit": "Buddies of Budgie",
+          "license": "Apache License 2.0",
+          "caption": "Budgie Control Center"
+        }
+      ]
     },
     {
       "id": "mate",
@@ -898,11 +1670,41 @@
       ],
       "repology": "mate-session-manager",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Mate-desktop-1.26.en.png/960px-Mate-desktop-1.26.en.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Mate-desktop-1.26.en.png",
-        "credit": "the MATE developers",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Debian_13.0.0_MATE_Applications_menu_-_English.png/960px-Debian_13.0.0_MATE_Applications_menu_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_MATE_Applications_menu_-_English.png",
+        "credit": "The Debian Project",
         "license": "GPL"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Debian_13.0.0_MATE_Applications_menu_-_English.png/1280px-Debian_13.0.0_MATE_Applications_menu_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_MATE_Applications_menu_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Classic panel menus"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Ubuntu_MATE_25.04_Caja_1.26.3_Yaru-MATE-Dark_-_English.png/1280px-Ubuntu_MATE_25.04_Caja_1.26.3_Yaru-MATE-Dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_MATE_25.04_Caja_1.26.3_Yaru-MATE-Dark_-_English.png",
+          "credit": "The Ubuntu MATE Team",
+          "license": "GPL",
+          "caption": "Caja in dark theme"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Ubuntu_MATE_25.10_menu_all_-_English.png/1280px-Ubuntu_MATE_25.10_menu_all_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_MATE_25.10_menu_all_-_English.png",
+          "credit": "The Ubuntu MATE Team",
+          "license": "GPL",
+          "caption": "Ubuntu MATE menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Debian_13.0.0_MATE_Appearance_Preferences_Menta_-_English.png/1280px-Debian_13.0.0_MATE_Appearance_Preferences_Menta_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_MATE_Appearance_Preferences_Menta_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Appearance preferences"
+        }
+      ]
     },
     {
       "id": "lxqt",
@@ -927,11 +1729,48 @@
       ],
       "repology": "lxqt-session",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/LXQt_2.0.0_Ambiance_screenshot.png/960px-LXQt_2.0.0_Ambiance_screenshot.png",
-        "page": "https://commons.wikimedia.org/wiki/File:LXQt_2.0.0_Ambiance_screenshot.png",
-        "credit": "LXQt developers",
+        "url": "https://lxqt-project.org/images/screenshots/ambiance.png",
+        "page": "https://lxqt-project.org/screenshots/",
+        "credit": "LXQt team",
         "license": "CC BY-SA 3.0"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://lxqt-project.org/images/screenshots/ambiance.png",
+          "page": "https://lxqt-project.org/screenshots/",
+          "credit": "LXQt team",
+          "license": "CC BY-SA 3.0",
+          "caption": "Ambiance theme with apps"
+        },
+        {
+          "url": "https://lxqt-project.org/images/screenshots/arch-colors.png",
+          "page": "https://lxqt-project.org/screenshots/",
+          "credit": "LXQt team",
+          "license": "CC BY-SA 3.0",
+          "caption": "Menu and configuration center"
+        },
+        {
+          "url": "https://lxqt-project.org/images/screenshots/kwin_wayland.png",
+          "page": "https://lxqt-project.org/screenshots/",
+          "credit": "LXQt team",
+          "license": "CC BY-SA 3.0",
+          "caption": "Wayland session on KWin"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Lubuntu_26.04_LTS_PCManFM-Qt_2.3.0_Bear2_-_English.jpg/1280px-Lubuntu_26.04_LTS_PCManFM-Qt_2.3.0_Bear2_-_English.jpg",
+          "page": "https://commons.wikimedia.org/wiki/File:Lubuntu_26.04_LTS_PCManFM-Qt_2.3.0_Bear2_-_English.jpg",
+          "credit": "Lubuntu Team",
+          "license": "GPL",
+          "caption": "Lubuntu file manager"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Debian_13.0.0_LXQt_menu_-_English.png/1280px-Debian_13.0.0_LXQt_menu_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Debian_13.0.0_LXQt_menu_-_English.png",
+          "credit": "The Debian Project",
+          "license": "GPL",
+          "caption": "Application menu"
+        }
+      ]
     },
     {
       "id": "pantheon",
@@ -957,11 +1796,48 @@
       ],
       "repology": "gala",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Elementary_OS_8.0_default_desktop_-_English.png/960px-Elementary_OS_8.0_default_desktop_-_English.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_default_desktop_-_English.png",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Elementary_OS_8.0_menu_1_-_English.png/960px-Elementary_OS_8.0_menu_1_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_menu_1_-_English.png",
         "credit": "elementary, Inc.",
-        "license": "GPL-3.0"
-      }
+        "license": "GPLv3"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Elementary_OS_8.0_menu_1_-_English.png/1280px-Elementary_OS_8.0_menu_1_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_menu_1_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Applications menu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Elementary_OS_8.0_Appearance_dark_-_English.png/1280px-Elementary_OS_8.0_Appearance_dark_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_Appearance_dark_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "Dark style settings"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Elementary_OS_8.0_Settings_-_English.png/1280px-Elementary_OS_8.0_Settings_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_Settings_-_English.png",
+          "credit": "elementary, Inc.",
+          "license": "GPLv3",
+          "caption": "System Settings"
+        },
+        {
+          "url": "https://elementary.io/images/screenshots/appcenter.png",
+          "page": "https://elementary.io/",
+          "credit": "elementary, Inc.",
+          "license": "MIT",
+          "caption": "AppCenter app store"
+        },
+        {
+          "url": "https://elementary.io/images/screenshots/music.png",
+          "page": "https://elementary.io/",
+          "credit": "elementary, Inc.",
+          "license": "MIT",
+          "caption": "Music app"
+        }
+      ]
     }
   ],
   "compositors": [
@@ -1058,11 +1934,55 @@
       "repology": "hyprland",
       "nvidia_note": "Works on NVIDIA with a recent driver; the Hyprland wiki's NVIDIA page lists the settings.",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Hyprland_screen.png/960px-Hyprland_screen.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Hyprland_screen.png",
-        "credit": "Worthymelight",
-        "license": "CC BY 4.0"
-      }
+        "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/peak_poetry/images/anyrun.png",
+        "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/peak_poetry",
+        "credit": "Lokesh Krishna",
+        "license": "MIT"
+      },
+      "gallery": [
+        {
+          "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/peak_poetry/images/anyrun.png",
+          "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/peak_poetry",
+          "credit": "Lokesh Krishna",
+          "license": "MIT",
+          "caption": "Launcher over a mountain scene"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elifouts/Dotfiles/f8e22e323f7fead4c6751fbb6bffd1f98edbb514/v2/rice-default.png",
+          "page": "https://github.com/elifouts/Dotfiles",
+          "credit": "Eli Fouts",
+          "license": "GPL-3.0",
+          "caption": "Translucent floating windows"
+        },
+        {
+          "url": "https://ml4w.com/os/screen-217-2.jpg",
+          "page": "https://github.com/mylinuxforwork/dotfiles",
+          "credit": "Stephan Raabe (ML4W)",
+          "license": "GPL-3.0",
+          "caption": "Launcher and wallpaper picker"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/linkfrg/dotfiles/9d1e780d5c5fd6067bd3ce6d7cbdccd196afbd72/.github/assets/main.png",
+          "page": "https://github.com/linkfrg/dotfiles",
+          "credit": "Link (linkfrg)",
+          "license": "GPL-3.0",
+          "caption": "Settings and control center"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/peak_poetry/images/browsers.png",
+          "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/peak_poetry",
+          "credit": "Lokesh Krishna",
+          "license": "MIT",
+          "caption": "Browser and terminal side by side"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/elifouts/Dotfiles/f8e22e323f7fead4c6751fbb6bffd1f98edbb514/ModernRice1.png",
+          "page": "https://github.com/elifouts/Dotfiles",
+          "credit": "Eli Fouts",
+          "license": "GPL-3.0",
+          "caption": "Tiled widgets and monitors"
+        }
+      ]
     },
     {
       "id": "niri",
@@ -1137,11 +2057,55 @@
       ],
       "repology": "niri",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Screenshot_LXQt-Niri_2025-06-11.png/960px-Screenshot_LXQt-Niri_2025-06-11.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Screenshot_LXQt-Niri_2025-06-11.png",
-        "credit": "Stefan Draxlbauer",
-        "license": "CC0"
-      }
+        "url": "https://github.com/user-attachments/assets/dea5909e-1859-4aaa-9d88-d37f9663e00b",
+        "page": "https://github.com/niri-wm/niri",
+        "credit": "niri project",
+        "license": "GPL-3.0"
+      },
+      "gallery": [
+        {
+          "url": "https://github.com/user-attachments/assets/dea5909e-1859-4aaa-9d88-d37f9663e00b",
+          "page": "https://github.com/niri-wm/niri",
+          "credit": "niri project",
+          "license": "GPL-3.0",
+          "caption": "Windows in scrolling columns"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/tranquil_in_lavender/images/docs.png",
+          "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/tranquil_in_lavender",
+          "credit": "Lokesh Krishna",
+          "license": "MIT",
+          "caption": "Notes and a book side by side"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/niri-wm/niri/9955d921ce6491e34fb74ec94f30a7cca76826e4/docs/wiki/img/blur.png",
+          "page": "https://niri-wm.github.io/niri/Window-Effects.html",
+          "credit": "niri project",
+          "license": "GPL-3.0",
+          "caption": "Background blur on windows"
+        },
+        {
+          "url": "https://github.com/user-attachments/assets/adcf7a97-8dd4-4264-9149-ea406ef25bcc",
+          "page": "https://github.com/niri-wm/niri/releases/tag/v25.05",
+          "credit": "niri project",
+          "license": "Not stated (official project media)",
+          "caption": "Zoomed-out overview"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/tranquil_in_lavender/images/browser.png",
+          "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/tranquil_in_lavender",
+          "credit": "Lokesh Krishna",
+          "license": "MIT",
+          "caption": "Browser on a calm desktop"
+        },
+        {
+          "url": "https://github.com/user-attachments/assets/7d579b28-5f16-4c57-b8fe-88f6dac4d133",
+          "page": "https://github.com/niri-wm/niri/releases/tag/v25.01",
+          "credit": "niri project",
+          "license": "Not stated (official project media)",
+          "caption": "Xfce desktop icons on niri"
+        }
+      ]
     },
     {
       "id": "sway",
@@ -1224,11 +2188,48 @@
       "repology": "sway",
       "nvidia_note": "On the NVIDIA driver, start sway with --unsupported-gpu.",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Sway_1.4_Window_Manager.png/960px-Sway_1.4_Window_Manager.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Sway_1.4_Window_Manager.png",
-        "credit": "Tomskyhaha",
-        "license": "CC BY-SA 4.0"
-      }
+        "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/catppuccin/images/music.png",
+        "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/catppuccin",
+        "credit": "Lokesh Krishna",
+        "license": "MIT"
+      },
+      "gallery": [
+        {
+          "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/catppuccin/images/music.png",
+          "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/catppuccin",
+          "credit": "Lokesh Krishna",
+          "license": "MIT",
+          "caption": "Music player and visualizer"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Ubuntu_Sway_Remix_26.04_LTS_Tiling_2.png/1280px-Ubuntu_Sway_Remix_26.04_LTS_Tiling_2.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Sway_Remix_26.04_LTS_Tiling_2.png",
+          "credit": "Aleksey Samoilov",
+          "license": "GPL",
+          "caption": "Tiled editor, monitor and files"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lokesh-krishna/dotfiles/887a66e21feb711ca33cdf952adc5f52a34d4023/tokyo-night/images/wofi.png",
+          "page": "https://github.com/lokesh-krishna/dotfiles/tree/main/tokyo-night",
+          "credit": "Lokesh Krishna",
+          "license": "MIT",
+          "caption": "Launcher over a purple forest"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Ubuntu_Sway_Remix_26.04_LTS_Menu_1.png/1280px-Ubuntu_Sway_Remix_26.04_LTS_Menu_1.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Sway_Remix_26.04_LTS_Menu_1.png",
+          "credit": "Aleksey Samoilov",
+          "license": "GPL",
+          "caption": "App grid launcher"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Ubuntu_Sway_Remix_26.04_LTS_default_desktop.png/1280px-Ubuntu_Sway_Remix_26.04_LTS_default_desktop.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Sway_Remix_26.04_LTS_default_desktop.png",
+          "credit": "Aleksey Samoilov",
+          "license": "GPL",
+          "caption": "Default desktop"
+        }
+      ]
     },
     {
       "id": "kwin",
@@ -1326,11 +2327,48 @@
       ],
       "repology": "kwin",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kde_Plasma_6.png/960px-Kde_Plasma_6.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Kde_Plasma_6.png",
-        "credit": "Axo1otl",
-        "license": "GPL"
-      }
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Kwin_6.4_overview.png/960px-Kwin_6.4_overview.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Kwin_6.4_overview.png",
+        "credit": "The Entropyst",
+        "license": "CC0"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Kwin_6.4_overview.png/1280px-Kwin_6.4_overview.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Kwin_6.4_overview.png",
+          "credit": "The Entropyst",
+          "license": "CC0",
+          "caption": "Overview of virtual desktops"
+        },
+        {
+          "url": "https://kde.org/announcements/plasma/6/6.8.0/fullscreen_with_apps.png",
+          "page": "https://kde.org/announcements/plasma/6/6.8.0/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Plasma 6.8 with apps open"
+        },
+        {
+          "url": "https://kde.org/announcements/plasma/6/6.8.0/31-steam-shadow-frame-after.png",
+          "page": "https://kde.org/announcements/plasma/6/6.8.0/",
+          "credit": "KDE",
+          "license": "CC BY 4.0",
+          "caption": "Window rules add shadows"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/KDE_Plasma_6.6.4.png/1280px-KDE_Plasma_6.6.4.png",
+          "page": "https://commons.wikimedia.org/wiki/File:KDE_Plasma_6.6.4.png",
+          "credit": "Jonahplayz",
+          "license": "CC0",
+          "caption": "Several apps on Wayland"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Cover_Switch_on_KDE_Plasma_5.24_screenshot.png/1280px-Cover_Switch_on_KDE_Plasma_5.24_screenshot.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Cover_Switch_on_KDE_Plasma_5.24_screenshot.png",
+          "credit": "VulcanSphere (screenshot); KDE developers (software)",
+          "license": "GPL",
+          "caption": "Cover Switch effect"
+        }
+      ]
     },
     {
       "id": "river",
@@ -1418,7 +2456,43 @@
         "ScreenCast"
       ],
       "repology": "river",
-      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges."
+      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges.",
+      "gallery": [
+        {
+          "url": "https://raw.githubusercontent.com/roblillack/canoe/82ff6d8dbb3fd179d633810410a340309ac6d75a/assets/canoe-screenshot-1.png",
+          "page": "https://github.com/roblillack/canoe",
+          "credit": "Robert Lillack",
+          "license": "MIT",
+          "caption": "Classic stacking with Canoe"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/adarsh-67r/riverwm/054b7ede61738591e9eb5275962d63dad20a6dea/screenshots/1.png",
+          "page": "https://github.com/adarsh-67r/riverwm",
+          "credit": "Adarsh (adarsh-67r)",
+          "license": "GPL-3.0",
+          "caption": "App launcher and bar"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/kewuaa/kwm/ee81d6e352250a0e97d31cc0e93870416aa6c479/images/tile.png",
+          "page": "https://github.com/kewuaa/kwm",
+          "credit": "kewuaa",
+          "license": "GPL-3.0",
+          "caption": "Tiled editor and terminals"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/adarsh-67r/riverwm/054b7ede61738591e9eb5275962d63dad20a6dea/screenshots/4.png",
+          "page": "https://github.com/adarsh-67r/riverwm",
+          "credit": "Adarsh (adarsh-67r)",
+          "license": "GPL-3.0",
+          "caption": "Code editor and terminals tiled"
+        }
+      ],
+      "screenshot": {
+        "url": "https://raw.githubusercontent.com/roblillack/canoe/82ff6d8dbb3fd179d633810410a340309ac6d75a/assets/canoe-screenshot-1.png",
+        "page": "https://github.com/roblillack/canoe",
+        "credit": "Robert Lillack",
+        "license": "MIT"
+      }
     },
     {
       "id": "cosmic-comp",
@@ -1503,11 +2577,48 @@
       ],
       "repology": "cosmic-comp",
       "screenshot": {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Pop%21_OS_24.04_LTS_default_desktop_-_English.png/960px-Pop%21_OS_24.04_LTS_default_desktop_-_English.png",
-        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
+        "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png/960px-Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Beta_six_applications_tiled_-_English.png",
         "credit": "System76",
-        "license": "GPL-3.0"
-      }
+        "license": "GPLv3"
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png/1280px-Pop%21_OS_24.04_Beta_six_applications_tiled_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Beta_six_applications_tiled_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Six windows auto-tiled"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Pop%21_OS_24.04_Beta_six_applications_in_Workspaces_-_English.png/1280px-Pop%21_OS_24.04_Beta_six_applications_in_Workspaces_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Beta_six_applications_in_Workspaces_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Workspaces overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Pop%21_OS_24.04_LTS_Tiling_on_-_English.png/1280px-Pop%21_OS_24.04_LTS_Tiling_on_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_Tiling_on_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Tiling toggle in the panel"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Pop%21_OS_24.04_Beta_two_applications_tiled_-_English.png/1280px-Pop%21_OS_24.04_Beta_two_applications_tiled_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Beta_two_applications_tiled_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Two windows tiled, dark"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Pop%21_OS_24.04_Alpha_7_Settings_Window_Management_-_English.png/1280px-Pop%21_OS_24.04_Alpha_7_Settings_Window_Management_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_Alpha_7_Settings_Window_Management_-_English.png",
+          "credit": "System76",
+          "license": "GPLv3",
+          "caption": "Window management settings"
+        }
+      ]
     },
     {
       "id": "mutter",
@@ -1585,7 +2696,44 @@
         "page": "https://commons.wikimedia.org/wiki/File:GNOME_Shell.png",
         "credit": "Guilieb",
         "license": "CC BY-SA 4.0"
-      }
+      },
+      "gallery": [
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/GNOME_Shell.png/1280px-GNOME_Shell.png",
+          "page": "https://commons.wikimedia.org/wiki/File:GNOME_Shell.png",
+          "credit": "Guilieb (formerly Filorinwiki)",
+          "license": "CC BY-SA 4.0",
+          "caption": "Activities overview"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Ubuntu_26.10_GNOME_Files_51.0.1_tiling_-_English.png/1280px-Ubuntu_26.10_GNOME_Files_51.0.1_tiling_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.10_GNOME_Files_51.0.1_tiling_-_English.png",
+          "credit": "Canonical Limited",
+          "license": "GPL",
+          "caption": "Side-by-side tiled windows"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Ubuntu_26.04_LTS_Workspace_Switcher_-_English.png/1280px-Ubuntu_26.04_LTS_Workspace_Switcher_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_26.04_LTS_Workspace_Switcher_-_English.png",
+          "credit": "Canonical Limited",
+          "license": "GPL",
+          "caption": "Overview on Ubuntu"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/GNOME_48.0_on_GNOME_OS_%283%29.png/1280px-GNOME_48.0_on_GNOME_OS_%283%29.png",
+          "page": "https://commons.wikimedia.org/wiki/File:GNOME_48.0_on_GNOME_OS_(3).png",
+          "credit": "Wiktorpyk",
+          "license": "CC BY-SA 4.0",
+          "caption": "App grid and workspaces"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Bazzite_42_GNOME_switcher_-_English.png/1280px-Bazzite_42_GNOME_switcher_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Bazzite_42_GNOME_switcher_-_English.png",
+          "credit": "The Bazzite Team",
+          "license": "GPL",
+          "caption": "Empty workspace in overview"
+        }
+      ]
     },
     {
       "id": "wayfire",
@@ -1658,7 +2806,50 @@
       ],
       "logo": "wayfire",
       "repology": "wayfire",
-      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges."
+      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges.",
+      "gallery": [
+        {
+          "url": "https://user-images.githubusercontent.com/82564850/176285312-5e08add4-2c65-426a-b6f2-94e8729680c2.png",
+          "page": "https://github.com/Tryware/Wayfire-Lavender",
+          "credit": "Tryware",
+          "license": "Not stated",
+          "caption": "Desktop cube with apps"
+        },
+        {
+          "url": "https://user-images.githubusercontent.com/82564850/176285345-3c2f06aa-3b4f-47a6-ad3c-2bf77697dffb.png",
+          "page": "https://github.com/Tryware/Wayfire-Lavender",
+          "credit": "Tryware",
+          "license": "Not stated",
+          "caption": "Floating file managers"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/wiki/WayfireWM/wayfire/images/expo.png",
+          "page": "https://github.com/WayfireWM/wayfire/wiki",
+          "credit": "Wayfire project (Ilia Bozhinov)",
+          "license": "Not stated (official project media)",
+          "caption": "Expo workspace grid"
+        },
+        {
+          "url": "https://github.com/user-attachments/assets/493099cd-1939-4730-8ca4-65bbb77d3ec6",
+          "page": "https://github.com/wb9688/wwp-switcher",
+          "credit": "wb9688",
+          "license": "MIT",
+          "caption": "Classic window switcher"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/wiki/WayfireWM/wayfire/images/cube-deform.png",
+          "page": "https://github.com/WayfireWM/wayfire/wiki",
+          "credit": "Wayfire project (Ilia Bozhinov)",
+          "license": "Not stated (official project media)",
+          "caption": "Deformed desktop cube"
+        }
+      ],
+      "screenshot": {
+        "url": "https://user-images.githubusercontent.com/82564850/176285312-5e08add4-2c65-426a-b6f2-94e8729680c2.png",
+        "page": "https://github.com/Tryware/Wayfire-Lavender",
+        "credit": "Tryware",
+        "license": "Not stated"
+      }
     },
     {
       "id": "labwc",
@@ -1743,7 +2934,57 @@
       ],
       "logo": "labwc",
       "repology": "labwc",
-      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges."
+      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges.",
+      "gallery": [
+        {
+          "url": "https://labwc.github.io/img/scrot9-bunsenlabs.png",
+          "page": "https://labwc.github.io/",
+          "credit": "labwc project",
+          "license": "GPL-2.0",
+          "caption": "BunsenLabs-style desktop"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Ubuntu_Budgie_26.04_LTS_Budgie_Desktop_Settings_Labwc_compositor_theme_-_English.png/1280px-Ubuntu_Budgie_26.04_LTS_Budgie_Desktop_Settings_Labwc_compositor_theme_-_English.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Ubuntu_Budgie_26.04_LTS_Budgie_Desktop_Settings_Labwc_compositor_theme_-_English.png",
+          "credit": "Ubuntu Budgie Team",
+          "license": "GPL",
+          "caption": "Budgie with labwc theme setting"
+        },
+        {
+          "url": "https://labwc.github.io/img/scrot0-landing-page.png",
+          "page": "https://labwc.github.io/",
+          "credit": "labwc project",
+          "license": "GPL-2.0",
+          "caption": "Root menu and labwc-tweaks"
+        },
+        {
+          "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Raspberry_Pi_OS_13_screenshot.png/1280px-Raspberry_Pi_OS_13_screenshot.png",
+          "page": "https://commons.wikimedia.org/wiki/File:Raspberry_Pi_OS_13_screenshot.png",
+          "credit": "Raspberry Pi Holdings",
+          "license": "GPL",
+          "caption": "Raspberry Pi OS desktop"
+        },
+        {
+          "url": "https://labwc.github.io/img/scrot7-noctalia.png",
+          "page": "https://labwc.github.io/",
+          "credit": "labwc project",
+          "license": "GPL-2.0",
+          "caption": "Noctalia shell widgets"
+        },
+        {
+          "url": "https://labwc.github.io/img/scrot4-lxqt.png",
+          "page": "https://labwc.github.io/",
+          "credit": "labwc project",
+          "license": "GPL-2.0",
+          "caption": "LXQt session on labwc"
+        }
+      ],
+      "screenshot": {
+        "url": "https://labwc.github.io/img/scrot9-bunsenlabs.png",
+        "page": "https://labwc.github.io/",
+        "credit": "labwc project",
+        "license": "GPL-2.0"
+      }
     }
   ],
   "ideas": [

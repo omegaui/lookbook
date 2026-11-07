@@ -12,6 +12,8 @@ const ASPECT_WIDTH: i32 = 16;
 const ASPECT_HEIGHT: i32 = 10;
 const CORNER_RADIUS: f32 = 14.0;
 const PLACEHOLDER: gdk::RGBA = gdk::RGBA::new(0.5, 0.5, 0.55, 0.15);
+/// A faint edge, so dark screenshots stand out from a dark page.
+const OUTLINE: gdk::RGBA = gdk::RGBA::new(0.5, 0.5, 0.55, 0.35);
 
 mod imp {
     use super::*;
@@ -129,9 +131,11 @@ fn draw_whole(snapshot: &gtk::Snapshot, texture: &gdk::Texture, bounds: &graphen
         width,
         height,
     );
-    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(area, CORNER_RADIUS));
+    let outline = gsk::RoundedRect::from_rect(area, CORNER_RADIUS);
+    snapshot.push_rounded_clip(&outline);
     snapshot.append_scaled_texture(texture, gsk::ScalingFilter::Trilinear, &area);
     snapshot.pop();
+    snapshot.append_border(&outline, &[1.0; 4], &[OUTLINE; 4]);
 }
 
 fn fill_rounded(snapshot: &gtk::Snapshot, rect: &graphene::Rect, color: &gdk::RGBA) {

@@ -102,6 +102,9 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `8d08edc` | Release manifest and `install-release.sh`; the release app is installed on the user's machine for testing |
 | `c3ec080`, `810fb56` | App icon: the penguin at a desk (made in another session) |
 | `b293a62` | Linux & You renamed to Lookbook: app ID `io.github.omegaui.Lookbook`, repository `omegaui/lookbook`, catalog at `omegaui.github.io/lookbook`, new metainfo summary and description, README, landing page (`catalog/index.html`); GitHub description and homepage updated, repository renamed |
+| `ec64e0c` | The Devel build is named "Lookbook (Devel)" in launchers |
+| `6e3c158` | Flat look (no isometric art; `EdgePicture`, `DesktopScene`, `IconTile`, `LayerStack`), Explore's Hall of Fame shows Hyprland's ricing contest winners (refreshed by the Catalog workflow), details pages get a Screenshots gallery |
+| (next) | 165 gallery screenshots for all 34 items, gathered by three agents from Commons, official project media and rice READMEs; the pipeline recognises images served without a Content-Type (hypr.land) |
 
 Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
@@ -117,12 +120,13 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 ## Open work, in priority order
 
 1. ~~App icon~~ done: a penguin with headphones coding at a cosy desk, with a terminal mug, on a lavender rounded tile. The user made the artwork with ChatGPT (`.agentic-coding/design/icon/source/penguin-at-desk.png`) and chose it over our drafts (the first-commit placeholder looked like existing marks; the isometric room was too detailed; then a flat penguin in a night badge). `make_icon.py` crops the tile, replaces its soft background-removal edge with a crisp rounded one, places it on GNOME's grid (112 of 128 px) and writes 8-bit PNGs at 16 to 512 px into `data/icons/hicolor/`, plus a Devel version with hazard stripes across the desk. The symbolic icon is a penguin head with headphones. Because the icon is raster artwork, `data/icons/meson.build` installs PNG sizes instead of a scalable SVG.
-2. **Review findings** (`review.md`). Done: 1.4 (app ID matches the repository), 1.6 (no "Linux" in the name), 1.10 (summary), 1.11 (description), 1.16 (README), 1.18 (GSettings description). Next, in the review's order: the three Flathub blockers (1.1 to 1.3), then 2.1, 2.5, 2.4 and 2.6.
-3. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Drawn art is also still the fallback for river, labwc and Wayfire, which have no Commons screenshot.
-4. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`; the local release manifest downloads crates during the build), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) before Flathub.
-5. **App CI**: a workflow that builds the Flatpak and runs the tests on each push (only the catalog is automated today).
-6. Maybe: cache the release feeds for a few hours (the GitHub Atom feeds add up to about 3 MB per launch); more rices for river, labwc and Wayfire.
-7. Later: upgrade to gtk4-rs 0.11, libadwaita-rs 0.9, soup3 0.9.
+2. **Check the gallery licenses marked "Not stated"** in `catalog.json` (Linux Mint and Cinnamon's linuxmint.com image, Silverblue's fedoraproject.org and Fedora Magazine images, the Agama installer, two niri release-note images, the Wayfire wiki and Wayfire-Lavender images). The KDE images are recorded as CC BY 4.0 from the kde.org website repository's README, not the pages themselves. Replace any the user is not comfortable with.
+3. **Review findings** (`review.md`). Done: 1.4 (app ID matches the repository), 1.6 (no "Linux" in the name), 1.10 (summary), 1.11 (description), 1.16 (README), 1.18 (GSettings description). Next, in the review's order: the three Flathub blockers (1.1 to 1.3), then 2.1, 2.5, 2.4 and 2.6.
+4. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Drawn art is also still the fallback for river, labwc and Wayfire, which have no Commons screenshot.
+5. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`; the local release manifest downloads crates during the build), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) before Flathub.
+6. **App CI**: a workflow that builds the Flatpak and runs the tests on each push (only the catalog is automated today).
+7. Maybe: cache the release feeds for a few hours (the GitHub Atom feeds add up to about 3 MB per launch); more rices for river, labwc and Wayfire.
+8. Later: upgrade to gtk4-rs 0.11, libadwaita-rs 0.9, soup3 0.9.
 
 ## Decisions
 

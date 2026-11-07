@@ -239,6 +239,16 @@ class MediaTests(unittest.TestCase):
             build.check_hosted_media(catalog(), build.Report(), status_of=lambda url: "gone")
 
 
+class SniffTests(unittest.TestCase):
+    def test_webp_png_and_jpeg_look_like_media(self):
+        self.assertTrue(build.looks_like_media(b"RIFF\x00\x01\x02\x03WEBPVP8 "))
+        self.assertTrue(build.looks_like_media(b"\x89PNG\r\n\x1a\n"))
+        self.assertTrue(build.looks_like_media(b"\xff\xd8\xff\xe0"))
+
+    def test_html_does_not(self):
+        self.assertFalse(build.looks_like_media(b"<!DOCTYPE html>"))
+
+
 class PublishTests(unittest.TestCase):
     def test_writes_catalog_manifest_and_index(self):
         with tempfile.TemporaryDirectory() as folder:

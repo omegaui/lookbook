@@ -96,17 +96,33 @@ def media_status(url):
     "gone" means the server answered clearly: 404/410, or a page that is not an
     image or video (Wikimedia answers bad thumbnail sizes with an HTML page).
     Timeouts and server errors are "unknown", so a bad day upstream never
-    deletes data.
+    deletes data. Some servers (hypr.land) send no Content-Type; then the
+    first bytes tell whether it is a picture or clip.
     """
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Range": "bytes=0-0"})
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Range": "bytes=0-15"})
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
             content_type = response.headers.get("Content-Type", "")
+            first_bytes = response.read(16)
     except urllib.error.HTTPError as error:
         return "gone" if error.code in (404, 410) else "unknown"
     except (urllib.error.URLError, TimeoutError, OSError):
         return "unknown"
-    return "ok" if content_type.startswith(("image/", "video/")) else "gone"
+    if content_type.startswith(("image/", "video/")):
+        return "ok"
+    if not content_type and looks_like_media(first_bytes):
+        return "ok"
+    return "gone"
+
+
+def looks_like_media(first_bytes):
+    """True when the bytes start like a PNG, JPEG, GIF, WebP, MP4 or WebM file."""
+    signatures = (b"\x89PNG", b"\xff\xd8\xff", b"GIF8", b"\x1a\x45\xdf\xa3")
+    if first_bytes.startswith(signatures):
+        return True
+    is_webp = first_bytes[:4] == b"RIFF" and first_bytes[8:12] == b"WEBP"
+    is_mp4 = first_bytes[4:8] == b"ftyp"
+    return is_webp or is_mp4
 
 
 # Step 1: protocols
