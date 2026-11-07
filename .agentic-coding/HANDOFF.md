@@ -4,7 +4,7 @@ Last updated: 2026-11-07, after the commit "Match the details pages and Desktops
 
 ## What the app is
 
-Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.LinuxAndYou`, development ID `…LinuxAndYou.Devel`). It works like an app store for the Linux desktop: galleries of distros, desktops and Wayland compositors, a Hall of Fame of setups, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
+Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.LinuxAndYou`, development ID `…LinuxAndYou.Devel`). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors, a Hall of Fame of setups, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
 
 ### Product rules from the user
 
