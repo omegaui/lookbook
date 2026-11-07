@@ -4,7 +4,7 @@ use adw::subclass::prelude::*;
 use gtk::prelude::*;
 use gtk::glib;
 
-use super::{chip_label, CardBadge, CardContent, LogoTile};
+use super::{chip_label, feature_check, CardBadge, CardContent, FeatureCheck, LogoTile};
 use crate::catalog::ItemRef;
 
 mod imp {
@@ -23,6 +23,8 @@ mod imp {
         pub description_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub chips_box: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
+        pub checks_box: gtk::TemplateChild<gtk::Box>,
         pub item: RefCell<Option<ItemRef>>,
     }
 
@@ -74,6 +76,15 @@ impl CatalogCard {
         imp.description_label.set_label(&content.description);
         self.show_badge(content.badge);
         self.show_chips(&content.chips);
+        self.show_checks(&content.checks);
+    }
+
+    fn show_checks(&self, checks: &[FeatureCheck]) {
+        let checks_box = &self.imp().checks_box;
+        for check in checks {
+            checks_box.append(&feature_check(check));
+        }
+        checks_box.set_visible(!checks.is_empty());
     }
 
     fn show_badge(&self, badge: Option<CardBadge>) {

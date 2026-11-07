@@ -3,10 +3,12 @@
 //! Today it is loaded from a snapshot bundled in the app's resources. Later it
 //! is downloaded from the published catalog, with the snapshot as a fallback.
 
+mod features;
 mod item_ref;
 mod loader;
 mod model;
 
+pub use features::key_features;
 pub use item_ref::ItemRef;
 pub use model::*;
 

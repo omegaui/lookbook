@@ -143,6 +143,22 @@ flowboxchild:hover .catalog-card {
   padding: 14px 16px;
 }
 
+.feature-check.supported {
+  color: var(--success-color);
+}
+
+.feature-check.missing {
+  color: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+.protocol-chip {
+  font-family: monospace;
+  font-size: 0.85em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: color-mix(in srgb, currentColor 7%, transparent);
+}
+
 /* Your system banner */
 
 .system-teaser {

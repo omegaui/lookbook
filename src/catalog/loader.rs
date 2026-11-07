@@ -75,6 +75,29 @@ mod tests {
     }
 
     #[test]
+    fn every_compositor_has_protocol_data() {
+        let catalog = bundled_catalog();
+
+        for compositor in &catalog.compositors {
+            assert!(
+                compositor.supports("wl_compositor"),
+                "{} has no protocol list",
+                compositor.id
+            );
+        }
+    }
+
+    #[test]
+    fn mutter_has_no_layer_shell_and_sway_does() {
+        let catalog = bundled_catalog();
+        let mutter = catalog.find_compositor("mutter").unwrap();
+        let sway = catalog.find_compositor("sway").unwrap();
+
+        assert!(!mutter.supports("zwlr_layer_shell_v1"));
+        assert!(sway.supports("zwlr_layer_shell_v1"));
+    }
+
+    #[test]
     fn spotlights_point_to_items() {
         let catalog = bundled_catalog();
 

@@ -1,0 +1,103 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $CompositorsPage: Adw.Bin {
+  child: ScrolledWindow {
+    hscrollbar-policy: never;
+
+    child: Adw.Clamp {
+      maximum-size: 1180;
+      tightening-threshold: 900;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 20;
+        margin-top: 12;
+        margin-bottom: 40;
+        margin-start: 16;
+        margin-end: 16;
+
+        Box {
+          spacing: 16;
+
+          Box {
+            orientation: vertical;
+            spacing: 4;
+            hexpand: true;
+
+            Label {
+              styles [
+                "title-1",
+              ]
+
+              label: _("Compositors");
+              xalign: 0;
+            }
+
+            Label {
+              styles [
+                "dim-label",
+              ]
+
+              label: _("The compositor draws your windows and decides how they move.");
+              xalign: 0;
+              wrap: true;
+            }
+          }
+
+          Adw.ToggleGroup kind_toggles {
+            styles [
+              "round",
+            ]
+
+            valign: end;
+            active-name: "all";
+
+            Adw.Toggle {
+              name: "all";
+              label: _("All");
+            }
+
+            Adw.Toggle {
+              name: "tiling";
+              label: _("Tiling");
+            }
+
+            Adw.Toggle {
+              name: "scrolling";
+              label: _("Scrolling");
+            }
+
+            Adw.Toggle {
+              name: "stacking";
+              label: _("Stacking");
+            }
+          }
+        }
+
+        FlowBox compositors_flowbox {
+          selection-mode: none;
+          homogeneous: true;
+          min-children-per-line: 1;
+          max-children-per-line: 3;
+          column-spacing: 12;
+          row-spacing: 12;
+          margin-top: 8;
+        }
+
+        Label {
+          styles [
+            "dim-label",
+            "caption",
+          ]
+
+          label: _(
+            "Protocol support comes from wayland-explorer, which lists the globals each compositor offers to apps in the version shown on its page."
+          );
+          xalign: 0;
+          wrap: true;
+        }
+      };
+    };
+  };
+}

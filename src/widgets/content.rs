@@ -4,9 +4,34 @@ use gettextrs::gettext;
 
 use super::TileContent;
 use crate::catalog::{
-    Accent, Catalog, Collection, Compositor, Desktop, Distro, ItemKind, ItemRef, ItemSummary,
-    Spotlight,
+    key_features, Accent, Catalog, Collection, Compositor, Desktop, Distro, ItemKind, ItemRef,
+    ItemSummary, Spotlight,
 };
+
+/// Whether a compositor has one key feature, for example "Layer shell".
+#[derive(Debug, Clone)]
+pub struct FeatureCheck {
+    pub label: String,
+    pub supported: bool,
+}
+
+fn feature_checks(compositor: &Compositor) -> Vec<FeatureCheck> {
+    key_features()
+        .into_iter()
+        .map(|feature| FeatureCheck {
+            supported: feature.is_supported_by(compositor),
+            label: feature.label,
+        })
+        .collect()
+}
+
+/// The full protocol list of a compositor, for its details page.
+#[derive(Debug, Clone)]
+pub struct ProtocolSummary {
+    pub version: String,
+    pub checked_on: String,
+    pub globals: Vec<String>,
+}
 use crate::system::SystemInfo;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -48,6 +73,8 @@ pub struct CardContent {
     pub description: String,
     pub chips: Vec<String>,
     pub badge: Option<CardBadge>,
+    /// Key feature checks, shown on compositor cards only.
+    pub checks: Vec<FeatureCheck>,
 }
 
 impl CardContent {
@@ -61,6 +88,7 @@ impl CardContent {
             badge: system
                 .is_current_distro(distro)
                 .then_some(CardBadge::YouAreHere),
+            checks: Vec::new(),
         }
     }
 
@@ -74,6 +102,7 @@ impl CardContent {
             badge: system
                 .is_running(&desktop.session_names)
                 .then_some(CardBadge::RunningNow),
+            checks: Vec::new(),
         }
     }
 
@@ -87,6 +116,7 @@ impl CardContent {
             badge: system
                 .is_running(&compositor.session_names)
                 .then_some(CardBadge::RunningNow),
+            checks: feature_checks(compositor),
         }
     }
 }
@@ -114,6 +144,10 @@ pub struct DetailContent {
     pub badge: Option<CardBadge>,
     pub facts: Vec<Fact>,
     pub website: String,
+    /// Compositors only.
+    pub checks: Vec<FeatureCheck>,
+    /// Compositors only.
+    pub protocols: Option<ProtocolSummary>,
 }
 
 impl DetailContent {
@@ -145,6 +179,8 @@ impl DetailContent {
                 fact(gettext("Packages"), &distro.package_manager),
             ],
             website: distro.website.clone(),
+            checks: Vec::new(),
+            protocols: None,
         }
     }
 
@@ -161,6 +197,8 @@ impl DetailContent {
                 fact(gettext("Toolkit"), &desktop.toolkit),
             ],
             website: desktop.website.clone(),
+            checks: Vec::new(),
+            protocols: None,
         }
     }
 
@@ -178,6 +216,12 @@ impl DetailContent {
                 fact(gettext("Config"), &compositor.config),
             ],
             website: compositor.website.clone(),
+            checks: feature_checks(compositor),
+            protocols: Some(ProtocolSummary {
+                version: compositor.protocols.version.clone(),
+                checked_on: compositor.protocols.checked_on.clone(),
+                globals: compositor.protocols.globals.clone(),
+            }),
         }
     }
 }

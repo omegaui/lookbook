@@ -1,0 +1,138 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DesktopsPage: Adw.Bin {
+  child: ScrolledWindow {
+    hscrollbar-policy: never;
+
+    child: Adw.Clamp {
+      maximum-size: 1180;
+      tightening-threshold: 900;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 24;
+        margin-top: 12;
+        margin-bottom: 40;
+        margin-start: 16;
+        margin-end: 16;
+
+        Box {
+          orientation: vertical;
+          spacing: 4;
+
+          Label {
+            styles [
+              "title-1",
+            ]
+
+            label: _("Desktops");
+            xalign: 0;
+          }
+
+          Label {
+            styles [
+              "dim-label",
+            ]
+
+            label: _("A desktop environment bundles a compositor, a shell, settings and apps into one experience.");
+            xalign: 0;
+            wrap: true;
+          }
+        }
+
+        // Linux & You is a GNOME app first, so GNOME gets the featured spot.
+        Box featured_banner {
+          styles [
+            "spotlight",
+            "accent-blue",
+          ]
+
+          spacing: 20;
+
+          $LogoTile featured_tile {
+            valign: center;
+            margin-start: 32;
+          }
+
+          Box {
+            orientation: vertical;
+            spacing: 8;
+            hexpand: true;
+            valign: center;
+            margin-top: 32;
+            margin-bottom: 32;
+
+            Label {
+              styles [
+                "kicker",
+              ]
+
+              label: _("Made for GNOME");
+              xalign: 0;
+            }
+
+            Label featured_name_label {
+              styles [
+                "title-1",
+              ]
+
+              xalign: 0;
+            }
+
+            Label featured_tagline_label {
+              xalign: 0;
+              wrap: true;
+              max-width-chars: 50;
+            }
+
+            Box {
+              spacing: 10;
+              margin-top: 8;
+
+              Button {
+                styles [
+                  "pill",
+                  "suggested-action",
+                ]
+
+                label: _("Explore GNOME");
+                action-name: "win.show-item";
+                action-target: "'desktop:gnome'";
+              }
+
+              Button {
+                styles [
+                  "pill",
+                ]
+
+                label: _("What Can I Build?");
+                action-name: "win.show-page";
+                action-target: "'system'";
+              }
+            }
+          }
+        }
+
+        Label {
+          styles [
+            "title-2",
+          ]
+
+          label: _("All Desktops");
+          xalign: 0;
+          margin-top: 12;
+        }
+
+        FlowBox desktops_flowbox {
+          selection-mode: none;
+          homogeneous: true;
+          min-children-per-line: 1;
+          max-children-per-line: 3;
+          column-spacing: 12;
+          row-spacing: 12;
+        }
+      };
+    };
+  };
+}

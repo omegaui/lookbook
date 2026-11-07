@@ -9,7 +9,10 @@ mod wall;
 
 pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
-pub use content::{CardBadge, CardContent, CollectionContent, DetailContent, Fact, SpotlightContent};
+pub use content::{
+    CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck, ProtocolSummary,
+    SpotlightContent,
+};
 pub use logo_tile::{LogoTile, TileContent};
 pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;
@@ -44,6 +47,37 @@ pub fn fact_tile(fact: &Fact) -> gtk::Box {
     tile.append(&label);
     tile.append(&value);
     tile
+}
+
+/// A check mark or a cross next to a feature name, for example "✓ Layer shell".
+pub fn feature_check(check: &FeatureCheck) -> gtk::Box {
+    let row = gtk::Box::new(gtk::Orientation::Horizontal, 4);
+    row.add_css_class("feature-check");
+
+    let (icon_name, css_class) = if check.supported {
+        ("object-select-symbolic", "supported")
+    } else {
+        ("window-close-symbolic", "missing")
+    };
+    row.add_css_class(css_class);
+
+    let icon = gtk::Image::from_icon_name(icon_name);
+    icon.set_pixel_size(14);
+    icon.set_accessible_role(gtk::AccessibleRole::Presentation);
+
+    let label = gtk::Label::new(Some(&check.label));
+    label.add_css_class("caption-heading");
+
+    let state = if check.supported {
+        gettextrs::gettext("Supported")
+    } else {
+        gettextrs::gettext("Not supported")
+    };
+    row.update_property(&[gtk::accessible::Property::Description(&state)]);
+
+    row.append(&icon);
+    row.append(&label);
+    row
 }
 
 /// Opens the details page of the card the user activates in `flowbox`.

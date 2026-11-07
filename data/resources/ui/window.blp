@@ -59,11 +59,7 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
             title: _("Desktops");
             icon-name: "lay-desktops-symbolic";
 
-            child: Adw.StatusPage {
-              icon-name: "lay-desktops-symbolic";
-              title: _("Desktops");
-              description: _("The desktop gallery comes next.");
-            };
+            child: $DesktopsPage desktops_page {};
           }
 
           Adw.ViewStackPage {
@@ -71,11 +67,7 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
             title: _("Compositors");
             icon-name: "lay-compositors-symbolic";
 
-            child: Adw.StatusPage {
-              icon-name: "lay-compositors-symbolic";
-              title: _("Compositors");
-              description: _("The compositor gallery comes next.");
-            };
+            child: $CompositorsPage compositors_page {};
           }
 
           Adw.ViewStackPage {

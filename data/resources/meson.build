@@ -1,6 +1,8 @@
 blueprints = custom_target(
   'blueprints',
   input: files(
+    'ui/pages/compositors_page.blp',
+    'ui/pages/desktops_page.blp',
     'ui/pages/distros_page.blp',
     'ui/pages/explore_page.blp',
     'ui/pages/item_detail_page.blp',

@@ -136,7 +136,7 @@ template $ExplorePage: Adw.Bin {
               halign: start;
               valign: center;
               margin-start: 12;
-              clicked => $on_previous_spotlight();
+              clicked => $on_previous_spotlight() swapped;
             }
 
             [overlay]
@@ -151,7 +151,7 @@ template $ExplorePage: Adw.Bin {
               halign: end;
               valign: center;
               margin-end: 12;
-              clicked => $on_next_spotlight();
+              clicked => $on_next_spotlight() swapped;
             }
           }
 

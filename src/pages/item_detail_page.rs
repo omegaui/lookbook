@@ -6,8 +6,12 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
+use gettextrs::gettext;
+
 use crate::catalog::Screenshot;
-use crate::widgets::{fact_tile, fill_wall_grid, CardBadge, DetailContent, LogoTile};
+use crate::widgets::{
+    fact_tile, feature_check, fill_wall_grid, CardBadge, DetailContent, LogoTile, ProtocolSummary,
+};
 
 const TILE_SIZE: i32 = 96;
 
@@ -31,6 +35,14 @@ mod imp {
         pub wall_grid: gtk::TemplateChild<gtk::Grid>,
         #[template_child]
         pub facts_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        #[template_child]
+        pub protocols_section: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
+        pub protocols_summary_label: gtk::TemplateChild<gtk::Label>,
+        #[template_child]
+        pub checks_box: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
+        pub protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
         pub website: RefCell<String>,
     }
 
@@ -79,6 +91,7 @@ impl ItemDetailPage {
         page.show_header(content);
         page.show_screenshots(screenshots);
         page.show_facts(content);
+        page.show_protocols(content);
         page
     }
 
@@ -115,6 +128,29 @@ impl ItemDetailPage {
         }
     }
 
+    /// Shows the key feature checks and the full protocol list of a compositor.
+    fn show_protocols(&self, content: &DetailContent) {
+        let Some(protocols) = &content.protocols else {
+            return;
+        };
+        let imp = self.imp();
+
+        imp.protocols_summary_label
+            .set_label(&protocols_summary_text(protocols));
+
+        for check in &content.checks {
+            imp.checks_box.append(&feature_check(check));
+        }
+
+        for global in &protocols.globals {
+            let chip = gtk::Label::new(Some(global));
+            chip.add_css_class("protocol-chip");
+            imp.protocols_flowbox.append(&chip);
+        }
+
+        imp.protocols_section.set_visible(true);
+    }
+
     fn open_website(&self) {
         let website = self.imp().website.borrow().clone();
         let window = self.root().and_downcast::<gtk::Window>();
@@ -125,4 +161,12 @@ impl ItemDetailPage {
             }
         });
     }
+}
+
+/// For example "63 protocols in version 0.52.1, checked on 2025-11-20. Data from wayland-explorer."
+fn protocols_summary_text(protocols: &ProtocolSummary) -> String {
+    gettext("{count} protocols in version {version}, checked on {date}. Data from wayland-explorer.")
+        .replace("{count}", &protocols.globals.len().to_string())
+        .replace("{version}", &protocols.version)
+        .replace("{date}", &protocols.checked_on)
 }

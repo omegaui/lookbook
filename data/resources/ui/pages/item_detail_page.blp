@@ -73,7 +73,7 @@ template $ItemDetailPage: Adw.NavigationPage {
               ]
 
               valign: center;
-              clicked => $on_website_clicked();
+              clicked => $on_website_clicked() swapped;
 
               child: Adw.ButtonContent {
                 label: _("Website");
@@ -124,6 +124,48 @@ template $ItemDetailPage: Adw.NavigationPage {
               max-children-per-line: 4;
               column-spacing: 12;
               row-spacing: 12;
+            }
+          }
+
+          // Compositors only: what the compositor offers to apps.
+          Box protocols_section {
+            orientation: vertical;
+            spacing: 16;
+            visible: false;
+
+            Label {
+              styles [
+                "title-2",
+              ]
+
+              label: _("Wayland Protocols");
+              xalign: 0;
+            }
+
+            Label protocols_summary_label {
+              styles [
+                "dim-label",
+              ]
+
+              xalign: 0;
+              wrap: true;
+            }
+
+            Box checks_box {
+              spacing: 16;
+            }
+
+            Expander {
+              label: _("Show All Protocols");
+
+              child: FlowBox protocols_flowbox {
+                selection-mode: none;
+                min-children-per-line: 1;
+                max-children-per-line: 6;
+                column-spacing: 6;
+                row-spacing: 6;
+                margin-top: 12;
+              };
             }
           }
         };

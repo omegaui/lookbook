@@ -216,6 +216,15 @@ pub enum CompositorKind {
 }
 
 impl CompositorKind {
+    /// Matches the toggle names in the Compositors page's layout filter.
+    pub fn id(self) -> &'static str {
+        match self {
+            Self::Tiling => "tiling",
+            Self::Scrolling => "scrolling",
+            Self::Stacking => "stacking",
+        }
+    }
+
     pub fn label(self) -> String {
         match self {
             Self::Tiling => gettext("Tiling"),
@@ -239,4 +248,30 @@ pub struct Compositor {
     pub logo: Option<String>,
     /// Values of `XDG_CURRENT_DESKTOP` that mean this compositor is running.
     pub session_names: Vec<String>,
+    /// Starts of global names that only this compositor offers, for example "hyprland_".
+    pub fingerprints: Vec<String>,
+    pub protocols: ProtocolSupport,
+}
+
+impl Compositor {
+    pub fn supports(&self, interface: &str) -> bool {
+        self.protocols.globals.iter().any(|global| global == interface)
+    }
+
+    /// Whether any global the compositor offers starts with one of its fingerprints.
+    pub fn matches_fingerprint(&self, globals: &[String]) -> bool {
+        self.fingerprints.iter().any(|fingerprint| {
+            globals.iter().any(|global| global.starts_with(fingerprint.as_str()))
+        })
+    }
+}
+
+/// The Wayland globals a compositor offers, from wayland-explorer
+/// (https://github.com/vially/wayland-explorer).
+#[derive(Debug, Clone, Deserialize)]
+pub struct ProtocolSupport {
+    /// The compositor version the list was taken from.
+    pub version: String,
+    pub checked_on: String,
+    pub globals: Vec<String>,
 }

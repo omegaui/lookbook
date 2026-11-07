@@ -8,7 +8,7 @@ use gtk::{gio, glib};
 use crate::application::LinuxAndYouApplication;
 use crate::catalog::{Catalog, ItemRef};
 use crate::config::{APP_ID, PROFILE};
-use crate::pages::{DistrosPage, ExplorePage, ItemDetailPage};
+use crate::pages::{CompositorsPage, DesktopsPage, DistrosPage, ExplorePage, ItemDetailPage};
 use crate::system::SystemInfo;
 use crate::widgets::DetailContent;
 
@@ -28,6 +28,10 @@ mod imp {
         pub explore_page: gtk::TemplateChild<ExplorePage>,
         #[template_child]
         pub distros_page: gtk::TemplateChild<DistrosPage>,
+        #[template_child]
+        pub desktops_page: gtk::TemplateChild<DesktopsPage>,
+        #[template_child]
+        pub compositors_page: gtk::TemplateChild<CompositorsPage>,
         pub settings: gio::Settings,
         pub catalog: RefCell<Option<Rc<Catalog>>>,
         pub system: RefCell<Option<Rc<SystemInfo>>>,
@@ -40,6 +44,8 @@ mod imp {
                 view_stack: gtk::TemplateChild::default(),
                 explore_page: gtk::TemplateChild::default(),
                 distros_page: gtk::TemplateChild::default(),
+                desktops_page: gtk::TemplateChild::default(),
+                compositors_page: gtk::TemplateChild::default(),
                 settings: gio::Settings::new(APP_ID),
                 catalog: RefCell::default(),
                 system: RefCell::default(),
@@ -56,6 +62,8 @@ mod imp {
         fn class_init(klass: &mut Self::Class) {
             ExplorePage::ensure_type();
             DistrosPage::ensure_type();
+            DesktopsPage::ensure_type();
+            CompositorsPage::ensure_type();
             klass.bind_template();
         }
 
@@ -181,6 +189,8 @@ impl LinuxAndYouWindow {
 
         imp.explore_page.show_catalog(&catalog, &system);
         imp.distros_page.show_catalog(&catalog, &system);
+        imp.desktops_page.show_catalog(&catalog, &system);
+        imp.compositors_page.show_catalog(&catalog, &system);
 
         imp.catalog.replace(Some(catalog));
         imp.system.replace(Some(system));
