@@ -59,6 +59,7 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Check Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 batch-compile /tmp/blp $PWD/data/resources $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Format Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 format -f $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Full build, install and Meson tests | `.agentic-coding/scripts/build-flatpak.sh` | 2 to 4 minutes; run in the background |
+| Build and install the optimized release app (`io.github.omegaui.LinuxAndYou`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
 | Open the app on a page | `.agentic-coding/scripts/open-page.sh wallpapers` | |
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
 | Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |

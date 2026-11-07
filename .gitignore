@@ -25,3 +25,5 @@
 
 # Python caches (catalog/build.py tests)
 __pycache__/
+/_flatpak_build_release/
+/.flatpak-builder-release/
