@@ -100,7 +100,7 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `4cdf3db` | Handoff wording: a guide, not an app store |
 | `8d08edc` | Release manifest and `install-release.sh`; the release app is installed on the user's machine for testing |
 | `c3ec080`, `810fb56` | App icon: the penguin at a desk (made in another session) |
-| Rename commit | Linux & You renamed to Lookbook: app ID `io.github.omegaui.Lookbook`, repository `omegaui/lookbook`, catalog at `omegaui.github.io/lookbook`, new metainfo summary and description, README, landing page (`catalog/index.html`), copyright notice in LICENSE |
+| `b293a62` | Linux & You renamed to Lookbook: app ID `io.github.omegaui.Lookbook`, repository `omegaui/lookbook`, catalog at `omegaui.github.io/lookbook`, new metainfo summary and description, README, landing page (`catalog/index.html`); GitHub description and homepage updated, repository renamed |
 
 Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
@@ -157,6 +157,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - **GTK cannot play an `https://` video file in the sandbox** (no GVfs; `gtk_gst_media_file_source_setup_cb: assertion 'stream != NULL'`). Download the bytes with libsoup and play a `gio::MemoryInputStream`; it is seekable, so looping works.
 - **A wrapping label's natural width is its whole text on one line**, which widens FlowBox cards; give long wrapping labels `max-width-chars`.
 - **flatpak-builder copies the whole project folder**, including another build's folder; both manifests list the build folders under `skip`.
+- **LICENSE must stay the plain GPL text.** Even a two-line name and copyright header made GitHub report the license as "Other" (`NOASSERTION`). Put project notices in the README.
 - **Logs**: run `flatpak run io.github.omegaui.Lookbook.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
 
 ## Design
