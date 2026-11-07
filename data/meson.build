@@ -3,6 +3,7 @@ subdir('icons')
 # Desktop file
 desktop_conf = configuration_data()
 desktop_conf.set('icon', application_id)
+desktop_conf.set('name', app_name)
 desktop_file = i18n.merge_file(
   type: 'desktop',
   input: configure_file(
@@ -28,6 +29,7 @@ endif
 # Metainfo
 metainfo_conf = configuration_data()
 metainfo_conf.set('app-id', application_id)
+metainfo_conf.set('name', app_name)
 metainfo_conf.set('gettext-package', gettext_package)
 metainfo_file = i18n.merge_file(
   input: configure_file(

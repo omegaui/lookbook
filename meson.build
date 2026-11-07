@@ -42,10 +42,13 @@ if get_option('profile') == 'development'
     version_suffix = '-@0@'.format(vcs_tag)
   endif
   application_id = '@0@.@1@'.format(base_id, profile)
+  # The Devel build sits next to the release one; its own name tells them apart.
+  app_name = 'Lookbook (Devel)'
 else
   profile = ''
   version_suffix = ''
   application_id = base_id
+  app_name = 'Lookbook'
 endif
 
 meson.add_dist_script(

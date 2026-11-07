@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Lookbook
+Name=@name@
 Comment=Find a Linux desktop that fits you
 Type=Application
 Exec=lookbook
