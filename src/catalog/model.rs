@@ -26,6 +26,50 @@ pub struct Catalog {
     /// Where "What's new this month" reads recent releases.
     #[serde(default)]
     pub news_sources: Vec<NewsSource>,
+    /// Complete setups people share for a compositor, like end-4's dots.
+    #[serde(default)]
+    pub rices: Vec<Rice>,
+}
+
+/// A rice: someone's complete, shareable setup of bars, launchers, themes and
+/// more, installed from their repository.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Rice {
+    pub id: String,
+    pub name: String,
+    /// Who makes it, for example "end-4".
+    pub author: String,
+    pub tagline: String,
+    /// The compositors (by id) it runs on.
+    pub compositors: Vec<String>,
+    /// What its shell is made with, for example "Quickshell" or "Waybar".
+    pub built_with: Vec<String>,
+    /// The distros its installer supports, for example "Arch, Fedora".
+    pub installs_on: Option<String>,
+    /// Its repository, where the install guide lives.
+    pub link: String,
+    pub license: String,
+    /// A picture or clip from its own README, loaded live and never bundled.
+    pub preview: RicePreview,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct RicePreview {
+    pub kind: RicePreviewKind,
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum RicePreviewKind {
+    Image,
+    Video,
+}
+
+impl Rice {
+    pub fn runs_on(&self, compositor_id: &str) -> bool {
+        self.compositors.iter().any(|id| id == compositor_id)
+    }
 }
 
 /// One project's release feed, for "What's new this month".

@@ -1,0 +1,154 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $RiceCard: Adw.Bin {
+  styles [
+    "card",
+    "rice-card",
+  ]
+
+  overflow: hidden;
+
+  child: Box {
+    orientation: vertical;
+
+    // The rice's own picture or clip from its README. A soft gradient shows
+    // until a picture arrives; a clip waits for the Play button.
+    Overlay {
+      child: Stack preview_stack {
+        transition-type: crossfade;
+
+        StackPage {
+          name: "placeholder";
+
+          child: Box {
+            styles [
+              "rice-placeholder",
+            ]
+
+            height-request: 190;
+          };
+        }
+      };
+
+      [overlay]
+      Adw.Spinner spinner {
+        width-request: 32;
+        height-request: 32;
+        halign: center;
+        valign: center;
+        visible: false;
+      }
+
+      [overlay]
+      Button play_button {
+        styles [
+          "circular",
+          "osd",
+          "rice-play",
+        ]
+
+        icon-name: "media-playback-start-symbolic";
+        tooltip-text: _("Play Preview");
+        halign: center;
+        valign: center;
+        visible: false;
+        clicked => $on_play_clicked() swapped;
+      }
+    }
+
+    Box {
+      orientation: vertical;
+      spacing: 8;
+      margin-top: 14;
+      margin-bottom: 16;
+      margin-start: 16;
+      margin-end: 16;
+
+      Box {
+        spacing: 12;
+
+        Box {
+          orientation: vertical;
+          valign: center;
+          hexpand: true;
+
+          Label name_label {
+            styles [
+              "title-4",
+            ]
+
+            xalign: 0;
+            ellipsize: end;
+          }
+
+          Label author_label {
+            styles [
+              "caption",
+              "dim-label",
+            ]
+
+            xalign: 0;
+            ellipsize: end;
+          }
+        }
+
+        Button {
+          styles [
+            "pill",
+            "suggested-action",
+          ]
+
+          label: _("Get It");
+          valign: center;
+          clicked => $on_get_clicked() swapped;
+        }
+      }
+
+      Label tagline_label {
+        styles [
+          "dim-label",
+        ]
+
+        xalign: 0;
+        wrap: true;
+        wrap-mode: word_char;
+        lines: 3;
+        ellipsize: end;
+        max-width-chars: 30;
+      }
+
+      Box chips_box {
+        spacing: 6;
+      }
+
+      Box {
+        spacing: 8;
+        margin-top: 2;
+
+        Label {
+          styles [
+            "caption-heading",
+          ]
+
+          label: _("Runs on");
+        }
+
+        Box compositors_box {
+          spacing: 4;
+        }
+      }
+
+      Label details_label {
+        styles [
+          "caption",
+          "dim-label",
+        ]
+
+        xalign: 0;
+        wrap: true;
+        max-width-chars: 30;
+      }
+    }
+  };
+}

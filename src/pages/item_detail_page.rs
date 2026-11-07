@@ -19,7 +19,7 @@ use crate::widgets::{
     chip_label, extension_card, fact_tile, feature_check, fill_protocol_lists, fill_wall_grid,
     fill_with_cards, open_details_on_activate, screenshot_credit, CardBadge, CardContent,
     CatalogCard, DetailContent, IdeaCard, IsoPicture, IsoScene, LogoTile, ProtocolSummary,
-    ScreenshotCard,
+    RiceCard, ScreenshotCard,
 };
 
 const TILE_SIZE: i32 = 96;
@@ -39,6 +39,12 @@ mod imp {
         pub name_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub run_button: gtk::TemplateChild<gtk::Button>,
+        #[template_child]
+        pub rices_section: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
+        pub rices_title_label: gtk::TemplateChild<gtk::Label>,
+        #[template_child]
+        pub rices_flowbox: gtk::TemplateChild<gtk::FlowBox>,
         #[template_child]
         pub banner_art: gtk::TemplateChild<gtk::Stack>,
         #[template_child]
@@ -152,6 +158,7 @@ impl ItemDetailPage {
         page.show_screenshots(content, catalog);
         page.load_banner_screenshot(catalog.hosted_screenshot(content.item.kind, &content.item.id));
         page.show_facts(content);
+        page.show_rices(content, catalog);
         page.show_extensions(content);
         page.show_ideas(content, catalog);
         page.show_comparison(content, catalog, system);
@@ -225,6 +232,29 @@ impl ItemDetailPage {
                 }
             }
         ));
+    }
+
+    /// Compositors only: the rices that run on it. Hidden when there are none.
+    fn show_rices(&self, content: &DetailContent, catalog: &Catalog) {
+        if content.item.kind != ItemKind::Compositor {
+            return;
+        }
+        let imp = self.imp();
+        let rices: Vec<_> = catalog
+            .rices
+            .iter()
+            .filter(|rice| rice.runs_on(&content.item.id))
+            .collect();
+        if rices.is_empty() {
+            return;
+        }
+
+        imp.rices_title_label
+            .set_label(&gettext("Rices for {}").replace("{}", &content.title));
+        for rice in rices {
+            imp.rices_flowbox.append(&RiceCard::new(rice, catalog));
+        }
+        imp.rices_section.set_visible(true);
     }
 
     fn show_facts(&self, content: &DetailContent) {

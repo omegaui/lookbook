@@ -85,6 +85,72 @@ template $CompositorsPage: Adw.Bin {
           margin-top: 8;
         }
 
+        // Rices: complete setups people share for these compositors.
+        Box rices_section {
+          orientation: vertical;
+          spacing: 16;
+          margin-top: 24;
+          visible: false;
+
+          Box {
+            spacing: 12;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Rices");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Complete setups people share: a bar, launcher, lock screen and theme that work together. Pick one, then follow its install guide.");
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            // Filled in code with one toggle per compositor that has rices.
+            Adw.ToggleGroup rice_filter {
+              styles [
+                "round",
+              ]
+
+              valign: center;
+            }
+          }
+
+          FlowBox rices_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 3;
+            column-spacing: 16;
+            row-spacing: 16;
+          }
+
+          Label {
+            styles [
+              "dim-label",
+              "caption",
+            ]
+
+            label: _("Pictures and clips load live from each rice's own repository, and belong to their authors.");
+            xalign: 0;
+            wrap: true;
+          }
+        }
+
         Label {
           styles [
             "dim-label",

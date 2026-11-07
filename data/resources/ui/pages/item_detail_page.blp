@@ -170,6 +170,46 @@ template $ItemDetailPage: Adw.NavigationPage {
             }
           }
 
+          // Compositors only: rices people share for it.
+          Box rices_section {
+            orientation: vertical;
+            spacing: 16;
+            visible: false;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+
+              Label rices_title_label {
+                styles [
+                  "title-2",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Complete setups people share. Pick one, then follow its install guide.");
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            FlowBox rices_flowbox {
+              selection-mode: none;
+              homogeneous: true;
+              min-children-per-line: 1;
+              max-children-per-line: 3;
+              column-spacing: 16;
+              row-spacing: 16;
+            }
+          }
+
           // GNOME only: popular extensions, read live from extensions.gnome.org.
           Box extensions_section {
             orientation: vertical;

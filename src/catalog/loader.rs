@@ -67,6 +67,18 @@ mod tests {
         }
     }
 
+    #[test]
+    fn rices_run_on_listed_compositors() {
+        let catalog = bundled_catalog();
+        assert!(!catalog.rices.is_empty());
+        for rice in &catalog.rices {
+            assert!(!rice.compositors.is_empty(), "{} lists no compositor", rice.id);
+            for id in &rice.compositors {
+                assert!(catalog.find_compositor(id).is_some(), "{} runs on unknown {id}", rice.id);
+            }
+        }
+    }
+
     fn catalog_logos(catalog: &Catalog) -> Vec<&str> {
         let distros = catalog.distros.iter().filter_map(|item| item.logo.as_deref());
         let desktops = catalog.desktops.iter().filter_map(|item| item.logo.as_deref());
