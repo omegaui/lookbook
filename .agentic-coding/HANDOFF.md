@@ -109,7 +109,9 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `6e3c158` | Flat look (no isometric art; `EdgePicture`, `DesktopScene`, `IconTile`, `LayerStack`), Explore's Hall of Fame shows Hyprland's ricing contest winners (refreshed by the Catalog workflow), details pages get a Screenshots gallery |
 | `f099785` | 165 gallery screenshots for all 34 items, gathered by three agents from Commons, official project media and rice READMEs; the pipeline recognises images served without a Content-Type (hypr.land) |
 | `9f0d309` | "How Linux Fits Together": a question mark on the Your System banner opens a dialog that draws your setup, a full desktop (Fedora + GNOME, Mutter inside) and a compositor alone (Arch + Hyprland + pieces you add) as layers you pick; each layer explains what it is, how to change it, and links to examples (`fits_together.rs`, `FitsTogetherDialog`) |
-| (next) | Main menu: Refresh Catalog (Ctrl+R; downloads now and reopens the window on a newer catalog, or says it is up to date), Keyboard Shortcuts (`Adw.ShortcutsDialog`, Ctrl+?; needs the libadwaita `v1_8` feature), What Is Lookbook? (F1; each page row opens its page), About. Alt+1 to Alt+6 open the pages. About credits the new screenshot sources and the Hall of Fame |
+| `d5c7ca9` | Main menu: Refresh Catalog (Ctrl+R; downloads now and reopens the window on a newer catalog, or says it is up to date), Keyboard Shortcuts (`Adw.ShortcutsDialog`, Ctrl+?; needs the libadwaita `v1_8` feature), What Is Lookbook? (F1; each page row opens its page), About. Alt+1 to Alt+6 open the pages. About credits the new screenshot sources and the Hall of Fame |
+
+On 2026-11-07 the user asked for the release build (`d5c7ca9`) to be installed and the Devel app removed. `build-flatpak.sh` installs the Devel app again; the scripts that open pages and dialogs need it.
 
 Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
