@@ -4,6 +4,7 @@
     <file>style.css</file>
     <file compressed="true">catalog/catalog.json</file>
     <file preprocess="xml-stripblanks">ui/window.ui</file>
+    <file preprocess="xml-stripblanks">ui/pages/distros_page.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/explore_page.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/item_detail_page.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/catalog_card.ui</file>

@@ -1,0 +1,170 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DistrosPage: Adw.Bin {
+  child: ScrolledWindow {
+    hscrollbar-policy: never;
+
+    child: Adw.Clamp {
+      maximum-size: 1180;
+      tightening-threshold: 900;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 20;
+        margin-top: 12;
+        margin-bottom: 40;
+        margin-start: 16;
+        margin-end: 16;
+
+        Box {
+          spacing: 16;
+
+          Box {
+            orientation: vertical;
+            spacing: 4;
+            hexpand: true;
+            valign: end;
+
+            Label {
+              styles [
+                "title-1",
+              ]
+
+              label: _("Distros");
+              xalign: 0;
+            }
+
+            Label count_label {
+              styles [
+                "dim-label",
+              ]
+
+              xalign: 0;
+            }
+          }
+
+          SearchEntry search_entry {
+            placeholder-text: _("Search distros");
+            valign: end;
+            width-request: 260;
+          }
+        }
+
+        Box {
+          spacing: 12;
+
+          Label {
+            styles [
+              "heading",
+            ]
+
+            label: _("Family");
+            width-chars: 7;
+            xalign: 0;
+          }
+
+          ScrolledWindow {
+            hscrollbar-policy: external;
+            vscrollbar-policy: never;
+            propagate-natural-width: true;
+            halign: start;
+
+            child: Adw.ToggleGroup family_toggles {
+              styles [
+                "round",
+              ]
+
+              active-name: "all";
+
+              Adw.Toggle {
+                name: "all";
+                label: _("All");
+              }
+
+              Adw.Toggle {
+                name: "independent";
+                label: _("Independent");
+              }
+
+              Adw.Toggle {
+                name: "arch";
+                label: _("Arch-based");
+              }
+
+              Adw.Toggle {
+                name: "debian";
+                label: _("Debian-based");
+              }
+
+              Adw.Toggle {
+                name: "fedora";
+                label: _("Fedora-based");
+              }
+            };
+          }
+        }
+
+        Box {
+          spacing: 12;
+
+          Label {
+            styles [
+              "heading",
+            ]
+
+            label: _("Release");
+            width-chars: 7;
+            xalign: 0;
+          }
+
+          Adw.ToggleGroup release_toggles {
+            styles [
+              "round",
+            ]
+
+            halign: start;
+            active-name: "all";
+
+            Adw.Toggle {
+              name: "all";
+              label: _("Any");
+            }
+
+            Adw.Toggle {
+              name: "rolling";
+              label: _("Rolling");
+            }
+
+            Adw.Toggle {
+              name: "fixed";
+              label: _("Fixed");
+            }
+
+            Adw.Toggle {
+              name: "atomic";
+              label: _("Atomic");
+            }
+          }
+        }
+
+        FlowBox distros_flowbox {
+          selection-mode: none;
+          homogeneous: true;
+          min-children-per-line: 1;
+          max-children-per-line: 4;
+          column-spacing: 12;
+          row-spacing: 12;
+          margin-top: 8;
+        }
+
+        Adw.StatusPage empty_page {
+          icon-name: "edit-find-symbolic";
+          title: _("No Distros Found");
+          description: _("Try another search or filter.");
+          visible: false;
+        }
+      };
+    };
+  };
+}

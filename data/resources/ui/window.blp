@@ -51,11 +51,7 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
             title: _("Distros");
             icon-name: "lay-distros-symbolic";
 
-            child: Adw.StatusPage {
-              icon-name: "lay-distros-symbolic";
-              title: _("Distros");
-              description: _("The full distro gallery comes next.");
-            };
+            child: $DistrosPage distros_page {};
           }
 
           Adw.ViewStackPage {
