@@ -16,89 +16,108 @@ template $LookbookWindow: Adw.ApplicationWindow {
     }
   }
 
-  content: Adw.NavigationView navigation_view {
-    Adw.NavigationPage {
-      title: _("Lookbook");
-      tag: "main";
+  content: Adw.ToastOverlay toast_overlay {
+    child: Adw.NavigationView navigation_view {
+      Adw.NavigationPage {
+        title: _("Lookbook");
+        tag: "main";
 
-      child: Adw.ToolbarView {
-        [top]
-        Adw.HeaderBar header_bar {
-          title-widget: Adw.ViewSwitcher {
-            stack: view_stack;
-            policy: wide;
+        child: Adw.ToolbarView {
+          [top]
+          Adw.HeaderBar header_bar {
+            title-widget: Adw.ViewSwitcher {
+              stack: view_stack;
+              policy: wide;
+            };
+
+            [end]
+            MenuButton {
+              primary: true;
+              icon-name: "open-menu-symbolic";
+              tooltip-text: _("Main Menu");
+              menu-model: primary_menu;
+            }
+          }
+
+          content: Adw.ViewStack view_stack {
+            Adw.ViewStackPage {
+              name: "explore";
+              title: _("Explore");
+              icon-name: "lay-explore-symbolic";
+
+              child: $ExplorePage explore_page {};
+            }
+
+            Adw.ViewStackPage {
+              name: "distros";
+              title: _("Distros");
+              icon-name: "lay-distros-symbolic";
+
+              child: $DistrosPage distros_page {};
+            }
+
+            Adw.ViewStackPage {
+              name: "desktops";
+              title: _("Desktops");
+              icon-name: "lay-desktops-symbolic";
+
+              child: $DesktopsPage desktops_page {};
+            }
+
+            Adw.ViewStackPage {
+              name: "compositors";
+              title: _("Compositors");
+              icon-name: "lay-compositors-symbolic";
+
+              child: $CompositorsPage compositors_page {};
+            }
+
+            Adw.ViewStackPage {
+              name: "wallpapers";
+              title: _("Wallpapers");
+              icon-name: "lay-wallpapers-symbolic";
+
+              child: $WallpapersPage wallpapers_page {};
+            }
+
+            Adw.ViewStackPage {
+              name: "system";
+              title: _("Your System");
+              icon-name: "lay-system-symbolic";
+
+              child: $SystemPage system_page {};
+            }
           };
 
-          [end]
-          MenuButton {
-            primary: true;
-            icon-name: "open-menu-symbolic";
-            tooltip-text: _("Main Menu");
-            menu-model: primary_menu;
-          }
-        }
-
-        content: Adw.ViewStack view_stack {
-          Adw.ViewStackPage {
-            name: "explore";
-            title: _("Explore");
-            icon-name: "lay-explore-symbolic";
-
-            child: $ExplorePage explore_page {};
-          }
-
-          Adw.ViewStackPage {
-            name: "distros";
-            title: _("Distros");
-            icon-name: "lay-distros-symbolic";
-
-            child: $DistrosPage distros_page {};
-          }
-
-          Adw.ViewStackPage {
-            name: "desktops";
-            title: _("Desktops");
-            icon-name: "lay-desktops-symbolic";
-
-            child: $DesktopsPage desktops_page {};
-          }
-
-          Adw.ViewStackPage {
-            name: "compositors";
-            title: _("Compositors");
-            icon-name: "lay-compositors-symbolic";
-
-            child: $CompositorsPage compositors_page {};
-          }
-
-          Adw.ViewStackPage {
-            name: "wallpapers";
-            title: _("Wallpapers");
-            icon-name: "lay-wallpapers-symbolic";
-
-            child: $WallpapersPage wallpapers_page {};
-          }
-
-          Adw.ViewStackPage {
-            name: "system";
-            title: _("Your System");
-            icon-name: "lay-system-symbolic";
-
-            child: $SystemPage system_page {};
+          [bottom]
+          Adw.ViewSwitcherBar switcher_bar {
+            stack: view_stack;
           }
         };
-
-        [bottom]
-        Adw.ViewSwitcherBar switcher_bar {
-          stack: view_stack;
-        }
-      };
-    }
+      }
+    };
   };
 }
 
 menu primary_menu {
   section {
+    item {
+      label: _("_Refresh Catalog");
+      action: "win.refresh-catalog";
+    }
+  }
+
+  section {
+    item {
+      label: _("_Keyboard Shortcuts");
+      action: "app.shortcuts";
+    }
+
+    item {
+      label: _("_What Is Lookbook?");
+      action: "win.what-is-lookbook";
+    }
+
     item {
       label: _("_About Lookbook");
       action: "app.about";

@@ -25,6 +25,7 @@
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_dialog.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_spotlight.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/what_is_lookbook_dialog.ui</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-explore-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-distros-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-desktops-symbolic.svg</file>

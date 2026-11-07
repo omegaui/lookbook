@@ -6,6 +6,16 @@ use gtk::{gio, glib};
 use crate::config::{APP_ID, PROFILE, VERSION};
 use crate::window::LookbookWindow;
 
+/// Alt and a number open each page, in the order of the tabs.
+const PAGE_SHORTCUTS: [(&str, &str); 6] = [
+    ("explore", "<Alt>1"),
+    ("distros", "<Alt>2"),
+    ("desktops", "<Alt>3"),
+    ("compositors", "<Alt>4"),
+    ("wallpapers", "<Alt>5"),
+    ("system", "<Alt>6"),
+];
+
 mod imp {
     use super::*;
 
@@ -62,6 +72,9 @@ impl LookbookApplication {
         let about = gio::ActionEntry::builder("about")
             .activate(|app: &Self, _, _| app.show_about_dialog())
             .build();
+        let shortcuts = gio::ActionEntry::builder("shortcuts")
+            .activate(|app: &Self, _, _| app.show_shortcuts_dialog())
+            .build();
         // Opens a details page from outside the window, for example
         // `gapplication action <app-id> show-item "'desktop:gnome'"`.
         let show_item = gio::ActionEntry::builder("show-item")
@@ -74,7 +87,7 @@ impl LookbookApplication {
             .activate(|app: &Self, _, parameter| app.forward_to_window("can-i-run", parameter))
             .build();
 
-        self.add_action_entries([quit, about, show_item, can_i_run]);
+        self.add_action_entries([quit, about, shortcuts, show_item, can_i_run]);
 
         if PROFILE == "Devel" {
             // Lets scripts check the lower sections of a page without the mouse.
@@ -91,7 +104,14 @@ impl LookbookApplication {
                 .parameter_type(Some(glib::VariantTy::STRING))
                 .activate(|app: &Self, _, parameter| app.forward_to_window("explain-layers", parameter))
                 .build();
-            self.add_action_entries([scroll_to, show_spotlight, explain_layers]);
+            // Main menu items, so scripts can open them without the mouse.
+            let what_is_lookbook = gio::ActionEntry::builder("what-is-lookbook")
+                .activate(|app: &Self, _, _| app.forward_to_window("what-is-lookbook", None))
+                .build();
+            let refresh_catalog = gio::ActionEntry::builder("refresh-catalog")
+                .activate(|app: &Self, _, _| app.forward_to_window("refresh-catalog", None))
+                .build();
+            self.add_action_entries([scroll_to, show_spotlight, explain_layers, what_is_lookbook, refresh_catalog]);
         }
     }
 
@@ -114,6 +134,19 @@ impl LookbookApplication {
     fn setup_accels(&self) {
         self.set_accels_for_action("app.quit", &["<Control>q"]);
         self.set_accels_for_action("window.close", &["<Control>w"]);
+        self.set_accels_for_action("app.shortcuts", &["<Control>question"]);
+        self.set_accels_for_action("win.what-is-lookbook", &["F1"]);
+        self.set_accels_for_action("win.refresh-catalog", &["<Control>r"]);
+        for (page, key) in PAGE_SHORTCUTS {
+            self.set_accels_for_action(&format!("win.show-page('{page}')"), &[key]);
+        }
+    }
+
+    fn show_shortcuts_dialog(&self) {
+        let dialog = adw::ShortcutsDialog::new();
+        dialog.add(general_shortcuts());
+        dialog.add(page_shortcuts());
+        dialog.present(self.active_window().as_ref());
     }
 
     fn show_about_dialog(&self) {
@@ -145,7 +178,7 @@ impl LookbookApplication {
             None,
             gtk::License::Custom,
             Some(&gettext(
-                "Distro, desktop and compositor screenshots load live from <a href=\"https://commons.wikimedia.org\">Wikimedia Commons</a>; none are bundled. Tooltips name each image's author and license, and its Commons page holds the full details.\n\nPackage data in Can I Run It? comes from <a href=\"https://repology.org\">Repology</a>.",
+                "Screenshots load live from where they are hosted; none are bundled. Most come from <a href=\"https://commons.wikimedia.org\">Wikimedia Commons</a>, the rest from each project's own website or repository, or from a rice's README. Each one names its author and license, with a link to its source.\n\nThe Hall of Fame shows the winners of <a href=\"https://hypr.land/hall_of_fame/\">Hyprland's ricing contests</a>, with screenshots from hypr.land; each belongs to the rice's author.\n\nPackage data in Can I Run It? comes from <a href=\"https://repology.org\">Repology</a>.",
             )),
         );
 
@@ -167,4 +200,31 @@ impl Default for LookbookApplication {
             .property("resource-base-path", "/io/github/omegaui/Lookbook/")
             .build()
     }
+}
+
+fn general_shortcuts() -> adw::ShortcutsSection {
+    let section = adw::ShortcutsSection::new(Some(&gettext("General")));
+    section.add(adw::ShortcutsItem::from_action(&gettext("What Is Lookbook?"), "win.what-is-lookbook"));
+    section.add(adw::ShortcutsItem::from_action(&gettext("Refresh Catalog"), "win.refresh-catalog"));
+    section.add(adw::ShortcutsItem::from_action(&gettext("Keyboard Shortcuts"), "app.shortcuts"));
+    section.add(adw::ShortcutsItem::from_action(&gettext("Close Window"), "window.close"));
+    section.add(adw::ShortcutsItem::from_action(&gettext("Quit"), "app.quit"));
+    section
+}
+
+fn page_shortcuts() -> adw::ShortcutsSection {
+    let section = adw::ShortcutsSection::new(Some(&gettext("Pages")));
+    let titles = [
+        gettext("Explore"),
+        gettext("Distros"),
+        gettext("Desktops"),
+        gettext("Compositors"),
+        gettext("Wallpapers"),
+        gettext("Your System"),
+    ];
+    for (title, (_, key)) in titles.iter().zip(PAGE_SHORTCUTS) {
+        section.add(adw::ShortcutsItem::new(title, key));
+    }
+    section.add(adw::ShortcutsItem::new(&gettext("Go Back"), "<Alt>Left"));
+    section
 }

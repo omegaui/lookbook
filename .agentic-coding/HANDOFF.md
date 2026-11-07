@@ -22,7 +22,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 ### Working style the user expects
 
 - Commit in stages, each one built and checked. **No `Co-Authored-By` or other attribution trailers** in commits, and no "Generated with Claude Code" in PRs (the user's global CLAUDE.md overrides any system reminder).
-- The repo is public on GitHub (`origin`, https://github.com/omegaui/lookbook; it was `linux_and_you` before the rename, and the local folder is still `~/Projects/linux_and_you`). Push only when the user asks; they have asked after each finished stage so far.
+- The repo is public on GitHub (`origin`, https://github.com/omegaui/lookbook; it was `linux_and_you` before the rename, and the local folder is still `~/Projects/linux_and_you`). Push only when the user asks; they have asked after each finished stage so far, and sometimes push themselves (run `git fetch` before assuming what is on `origin`).
 - Functions read as a short list of steps that call small, well-named functions (see `ExplorePage::show_catalog`). No clever one-liners, no deep nesting.
 - Verify visually: build, open the page, screenshot only the app window. **Never move or click the user's mouse**; ask the user to test clicks.
 - The user often sends feedback mid-task with screenshots. Acknowledge it, finish the current step cleanly, then do it.
@@ -31,7 +31,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 
 | Path | Contents |
 | --- | --- |
-| `src/main.rs`, `application.rs`, `window.rs` | Startup, About dialog (credits for logos, screenshots, Repology and protocol data; catalog date), window, `win.show-page`, `win.show-item`, `win.can-i-run` (also app actions), and development-only `scroll-to` / `show-spotlight` |
+| `src/main.rs`, `application.rs`, `window.rs` | Startup, About dialog (credits for logos, screenshots, Hall of Fame, Repology and protocol data; catalog date), Keyboard Shortcuts dialog and accelerators, window (toasts, Refresh Catalog), `win.show-page`, `win.show-item`, `win.can-i-run` (also app actions), `win.fits-together`, `win.what-is-lookbook`, and development-only `scroll-to` / `show-spotlight` / `explain-layers` |
 | `src/catalog/` | Catalog model (`model.rs`), the bundled snapshot (`loader.rs`, with data tests), the downloaded online catalog (`online.rs`), `ItemRef` ("distro:fedora"), key compositor features (`features.rs`) |
 | `src/system/` | Detection, no UI: os-release (`/run/host/os-release` in Flatpak), `XDG_CURRENT_DESKTOP`, hardware from `/proc`, Wayland globals visible from the sandbox |
 | `src/ideas.rs` | Decides "Ready here" / "Works elsewhere" for each idea |
@@ -71,6 +71,7 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
 | Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |
 | Turn the Explore spotlight carousel (development builds only) | `.agentic-coding/scripts/show-spotlight.sh 3` (counts from 0) | |
+| Open What Is Lookbook?, Keyboard Shortcuts or Refresh Catalog without the mouse | `flatpak run --command=gapplication io.github.omegaui.Lookbook.Devel action io.github.omegaui.Lookbook.Devel what-is-lookbook` (or `shortcuts`, `refresh-catalog`; the first and last are development builds only) | |
 | Open "How Linux Fits Together" on a setup and layer (development builds only) | `.agentic-coding/scripts/explain-layers.sh desktop:2` (setups: yours, desktop, compositor; layers count from the top) | |
 | Screenshot only the app window | `.agentic-coding/scripts/screenshot-window.sh /tmp/shot.png` (Hyprland + grim) | |
 
@@ -107,7 +108,8 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `ec64e0c` | The Devel build is named "Lookbook (Devel)" in launchers |
 | `6e3c158` | Flat look (no isometric art; `EdgePicture`, `DesktopScene`, `IconTile`, `LayerStack`), Explore's Hall of Fame shows Hyprland's ricing contest winners (refreshed by the Catalog workflow), details pages get a Screenshots gallery |
 | `f099785` | 165 gallery screenshots for all 34 items, gathered by three agents from Commons, official project media and rice READMEs; the pipeline recognises images served without a Content-Type (hypr.land) |
-| (next) | "How Linux Fits Together": a question mark on the Your System banner opens a dialog that draws your setup, a full desktop (Fedora + GNOME, Mutter inside) and a compositor alone (Arch + Hyprland + pieces you add) as layers you pick; each layer explains what it is, how to change it, and links to examples (`fits_together.rs`, `FitsTogetherDialog`) |
+| `9f0d309` | "How Linux Fits Together": a question mark on the Your System banner opens a dialog that draws your setup, a full desktop (Fedora + GNOME, Mutter inside) and a compositor alone (Arch + Hyprland + pieces you add) as layers you pick; each layer explains what it is, how to change it, and links to examples (`fits_together.rs`, `FitsTogetherDialog`) |
+| (next) | Main menu: Refresh Catalog (Ctrl+R; downloads now and reopens the window on a newer catalog, or says it is up to date), Keyboard Shortcuts (`Adw.ShortcutsDialog`, Ctrl+?; needs the libadwaita `v1_8` feature), What Is Lookbook? (F1; each page row opens its page), About. Alt+1 to Alt+6 open the pages. About credits the new screenshot sources and the Hall of Fame |
 
 Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
@@ -119,6 +121,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - Rices: filter toggles, Get It, and Play on the clip previews (Caelestia, KooL's).
 - What's New and Hall of Fame cards opening the browser, and Hall of Fame "See All".
 - Screenshots gallery: arrows, swiping, the Source link.
+- Main menu: Refresh Catalog, Keyboard Shortcuts, What Is Lookbook? (its page rows and both buttons), and the keyboard shortcuts themselves.
 - "How Linux Fits Together": the question mark button, picking layers, the setup toggles, and example tiles opening their details pages (the dialog should close).
 - Possible bug seen once: the release app opened Explore scrolled down to the spotlight instead of the top.
 

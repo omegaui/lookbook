@@ -85,7 +85,17 @@ pub async fn refresh_downloaded(session: &soup::Session) -> anyhow::Result<Refre
     if !is_due(&state, now_seconds()) {
         return Ok(RefreshOutcome::NotDue);
     }
+    download(session, state).await
+}
 
+/// Checks for a new catalog now, for Refresh Catalog in the main menu.
+pub async fn download_now(session: &soup::Session) -> anyhow::Result<RefreshOutcome> {
+    download(session, read_state()).await
+}
+
+/// Asks for the published catalog, sending the last ETag so an unchanged
+/// catalog costs almost nothing, and saves a new one.
+async fn download(session: &soup::Session, state: RefreshState) -> anyhow::Result<RefreshOutcome> {
     let message = soup::Message::new("GET", CATALOG_URL)?;
     if let (Some(etag), Some(headers)) = (&state.etag, message.request_headers()) {
         headers.append("If-None-Match", etag);

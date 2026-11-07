@@ -10,7 +10,7 @@ lto = true
 codegen-units = 1
 
 [dependencies]
-adw = { package = "libadwaita", version = "0.8", features = ["v1_7"] }
+adw = { package = "libadwaita", version = "0.8", features = ["v1_8"] }
 anyhow = "1"
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
 gtk = { package = "gtk4", version = "0.10", features = ["v4_18"] }

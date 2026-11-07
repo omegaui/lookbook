@@ -3,10 +3,12 @@ use std::rc::Rc;
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
+use gettextrs::gettext;
+use gtk::glib::clone;
 use gtk::{gio, glib};
 
 use crate::application::LookbookApplication;
-use crate::catalog::{Catalog, ItemRef};
+use crate::catalog::{download_now, Catalog, ItemRef, RefreshOutcome};
 use crate::fits_together::SceneKind;
 use crate::config::{APP_ID, PROFILE};
 use crate::pages::{
@@ -15,7 +17,7 @@ use crate::pages::{
 };
 use crate::system::SystemInfo;
 use crate::run_check;
-use crate::widgets::{DetailContent, RunCheckDialog, TileContent};
+use crate::widgets::{DetailContent, RunCheckDialog, TileContent, WhatIsLookbookDialog};
 
 const MAIN_PAGE_TAG: &str = "main";
 /// Desktops that place windows freely. Tiling compositors size windows themselves
@@ -63,6 +65,8 @@ mod imp {
     #[template(resource = "/io/github/omegaui/Lookbook/ui/window.ui")]
     pub struct LookbookWindow {
         #[template_child]
+        pub toast_overlay: gtk::TemplateChild<adw::ToastOverlay>,
+        #[template_child]
         pub navigation_view: gtk::TemplateChild<adw::NavigationView>,
         #[template_child]
         pub view_stack: gtk::TemplateChild<adw::ViewStack>,
@@ -86,6 +90,7 @@ mod imp {
     impl Default for LookbookWindow {
         fn default() -> Self {
             Self {
+                toast_overlay: gtk::TemplateChild::default(),
                 navigation_view: gtk::TemplateChild::default(),
                 view_stack: gtk::TemplateChild::default(),
                 explore_page: gtk::TemplateChild::default(),
@@ -201,7 +206,20 @@ impl LookbookWindow {
             })
             .build();
 
-        self.add_action_entries([show_page, show_item, can_i_run]);
+        // Main menu: check for a new catalog now, and explain the app.
+        let refresh_catalog = gio::ActionEntry::builder("refresh-catalog")
+            .activate(|window: &Self, _, _| window.refresh_catalog())
+            .build();
+        let what_is_lookbook = gio::ActionEntry::builder("what-is-lookbook")
+            .activate(|window: &Self, _, _| WhatIsLookbookDialog::default().present(Some(window)))
+            .build();
+        let fits_together = gio::ActionEntry::builder("fits-together")
+            .activate(|window: &Self, _, _| {
+                window.imp().system_page.explain_layers();
+            })
+            .build();
+
+        self.add_action_entries([show_page, show_item, can_i_run, refresh_catalog, what_is_lookbook, fits_together]);
 
         if PROFILE == "Devel" {
             self.add_scroll_action();
@@ -270,6 +288,55 @@ impl LookbookWindow {
             page.upcast()
         };
         find_scrolled_window(&root)
+    }
+
+    /// Checks for a newer catalog now. A new one opens in a fresh window, so
+    /// every page shows it; otherwise a toast says what happened.
+    fn refresh_catalog(&self) {
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = window)]
+            self,
+            async move {
+                let outcome = download_now(&crate::http::shared_session()).await;
+                window.finish_refresh(outcome);
+            }
+        ));
+    }
+
+    fn finish_refresh(&self, outcome: anyhow::Result<RefreshOutcome>) {
+        match outcome {
+            Ok(_) if self.newer_catalog_saved() => self.reopen_with_new_catalog(),
+            Ok(_) => self.show_toast(&up_to_date_text(self.catalog_date())),
+            Err(error) => {
+                tracing::warn!("Could not refresh the catalog: {error:#}");
+                self.show_toast(&gettext("Could not reach the catalog. Check your connection and try again."));
+            }
+        }
+    }
+
+    /// Whether the catalog the app would load now is newer than the one shown.
+    fn newer_catalog_saved(&self) -> bool {
+        let shown = self.imp().catalog.borrow().as_ref().map(|catalog| catalog.generated_at.clone());
+        match (Catalog::load(), shown) {
+            (Ok(available), Some(shown)) => available.generated_at > shown,
+            _ => false,
+        }
+    }
+
+    fn reopen_with_new_catalog(&self) {
+        let Some(app) = self.application().and_downcast::<LookbookApplication>() else {
+            return;
+        };
+        let window = LookbookWindow::new(&app);
+        window.present();
+        if let Some(date) = window.catalog_date() {
+            window.show_toast(&gettext("Catalog updated to {date}").replace("{date}", &date));
+        }
+        self.close();
+    }
+
+    pub fn show_toast(&self, text: &str) {
+        self.imp().toast_overlay.add_toast(adw::Toast::new(text));
     }
 
     fn show_page(&self, page_name: &str) {
@@ -381,5 +448,13 @@ impl LookbookWindow {
         settings.set_boolean("is-maximized", self.is_maximized())?;
 
         Ok(())
+    }
+}
+
+/// For example "The catalog is up to date (2026-11-07)".
+fn up_to_date_text(date: Option<String>) -> String {
+    match date {
+        Some(date) => gettext("The catalog is up to date ({date})").replace("{date}", &date),
+        None => gettext("The catalog is up to date"),
     }
 }

@@ -26,6 +26,7 @@ mod wall;
 mod wallpaper_card;
 mod wallpaper_dialog;
 mod wallpaper_spotlight;
+mod what_is_lookbook_dialog;
 
 pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
@@ -57,6 +58,7 @@ pub use wall::fill_wall_grid;
 pub use wallpaper_card::WallpaperCard;
 pub use wallpaper_dialog::{WallpaperDialog, WallpaperDialogContext};
 pub use wallpaper_spotlight::WallpaperSpotlight;
+pub use what_is_lookbook_dialog::WhatIsLookbookDialog;
 
 use gtk::prelude::*;
 

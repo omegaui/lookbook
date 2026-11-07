@@ -1,0 +1,319 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WhatIsLookbookDialog: Adw.Dialog {
+  title: _("What Is Lookbook?");
+  content-width: 560;
+  content-height: 720;
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: ScrolledWindow {
+      hscrollbar-policy: never;
+
+      child: Adw.Clamp {
+        maximum-size: 520;
+
+        child: Box {
+          orientation: vertical;
+          spacing: 24;
+          margin-top: 6;
+          margin-bottom: 24;
+          margin-start: 18;
+          margin-end: 18;
+
+          Box {
+            orientation: vertical;
+            spacing: 6;
+            halign: center;
+
+            Image app_icon {
+              styles [
+                "icon-dropshadow",
+              ]
+
+              pixel-size: 112;
+              margin-bottom: 6;
+            }
+
+            Label {
+              styles [
+                "title-1",
+              ]
+
+              label: _("Lookbook");
+            }
+
+            Label {
+              styles [
+                "dim-label",
+              ]
+
+              label: _("A friendly guide to the Linux desktop");
+              wrap: true;
+              justify: center;
+            }
+          }
+
+          Label {
+            label: _(
+              "Linux comes in many shapes. Lookbook shows what they look like and what they can do, so you can find one that fits you. It is a guide, not a store: nothing is sold or installed from here."
+            );
+            wrap: true;
+            justify: center;
+          }
+
+          Box {
+            halign: center;
+            spacing: 10;
+
+            Button {
+              styles [
+                "pill",
+              ]
+
+              label: _("How Linux Fits Together");
+              action-name: "win.fits-together";
+              clicked => $on_close_clicked() swapped;
+            }
+
+            Button {
+              styles [
+                "pill",
+                "suggested-action",
+              ]
+
+              label: _("Start Exploring");
+              clicked => $on_close_clicked() swapped;
+            }
+          }
+
+          Label {
+            styles [
+              "heading",
+            ]
+
+            label: _("What's Inside");
+            xalign: 0;
+          }
+
+          ListBox pages_list {
+            styles [
+              "boxed-list",
+            ]
+
+            selection-mode: none;
+            row-activated => $on_page_activated() swapped;
+
+            Adw.ActionRow {
+              title: _("Explore");
+              subtitle: _("Collections, spotlights, this month's releases and the Hall of Fame.");
+              activatable: true;
+              action-name: "win.show-page";
+              action-target: "'explore'";
+
+              [prefix]
+              Image {
+                styles [
+                  "welcome-tile",
+                  "explore",
+                ]
+
+                icon-name: "lay-explore-symbolic";
+                valign: center;
+              }
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Distros");
+              subtitle: _("The Linux you install, like Fedora, Ubuntu or Arch.");
+              activatable: true;
+              action-name: "win.show-page";
+              action-target: "'distros'";
+
+              [prefix]
+              Image {
+                styles [
+                  "welcome-tile",
+                  "distros",
+                ]
+
+                icon-name: "lay-distros-symbolic";
+                valign: center;
+              }
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Desktops");
+              subtitle: _("What you see and touch, like GNOME, KDE Plasma or COSMIC.");
+              activatable: true;
+              action-name: "win.show-page";
+              action-target: "'desktops'";
+
+              [prefix]
+              Image {
+                styles [
+                  "welcome-tile",
+                  "desktops",
+                ]
+
+                icon-name: "lay-desktops-symbolic";
+                valign: center;
+              }
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Compositors");
+              subtitle: _("Tiling and scrolling setups like Hyprland and niri, with rices to start from.");
+              activatable: true;
+              action-name: "win.show-page";
+              action-target: "'compositors'";
+
+              [prefix]
+              Image {
+                styles [
+                  "welcome-tile",
+                  "compositors",
+                ]
+
+                icon-name: "lay-compositors-symbolic";
+                valign: center;
+              }
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Wallpapers");
+              subtitle: _("Wallpapers from artists' collections, set with one click.");
+              activatable: true;
+              action-name: "win.show-page";
+              action-target: "'wallpapers'";
+
+              [prefix]
+              Image {
+                styles [
+                  "welcome-tile",
+                  "wallpapers",
+                ]
+
+                icon-name: "lay-wallpapers-symbolic";
+                valign: center;
+              }
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Your System");
+              subtitle: _("What you run, and what you can build on it.");
+              activatable: true;
+              action-name: "win.show-page";
+              action-target: "'system'";
+
+              [prefix]
+              Image {
+                styles [
+                  "welcome-tile",
+                  "system",
+                ]
+
+                icon-name: "lay-system-symbolic";
+                valign: center;
+              }
+
+              [suffix]
+              Image {
+                icon-name: "go-next-symbolic";
+              }
+            }
+          }
+
+          Label {
+            styles [
+              "heading",
+            ]
+
+            label: _("Good to Know");
+            xalign: 0;
+          }
+
+          ListBox {
+            styles [
+              "boxed-list",
+            ]
+
+            selection-mode: none;
+
+            Adw.ActionRow {
+              title: _("Free, with no catches");
+              subtitle: _("No ads, no accounts and no tracking. Lookbook is free software under the GPL.");
+
+              [prefix]
+              Image {
+                styles [
+                  "dim-label",
+                ]
+
+                icon-name: "emblem-favorite-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Always current");
+              subtitle: _("The catalog of distros, desktops and screenshots updates every day, without app updates.");
+
+              [prefix]
+              Image {
+                styles [
+                  "dim-label",
+                ]
+
+                icon-name: "view-refresh-symbolic";
+              }
+            }
+
+            Adw.ActionRow {
+              title: _("Credit where it is due");
+              subtitle: _(
+                "Screenshots and wallpapers load from their makers' own pages, and each one names its author."
+              );
+
+              [prefix]
+              Image {
+                styles [
+                  "dim-label",
+                ]
+
+                icon-name: "starred-symbolic";
+              }
+            }
+          }
+        };
+      };
+    };
+  };
+}

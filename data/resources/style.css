@@ -447,3 +447,20 @@ flowboxchild:hover .showcase-card {
   padding: 6px 12px 6px 6px;
   border-radius: 12px;
 }
+
+/* What Is Lookbook?: a colored tile for each page. */
+
+.welcome-tile {
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 10px;
+  color: white;
+  -gtk-icon-size: 20px;
+}
+
+.welcome-tile.explore { background-color: var(--blue-3); }
+.welcome-tile.distros { background-color: var(--orange-3); }
+.welcome-tile.desktops { background-color: var(--purple-3); }
+.welcome-tile.compositors { background-color: var(--green-5); }
+.welcome-tile.wallpapers { background-color: var(--red-3); }
+.welcome-tile.system { background-color: var(--dark-2); }
