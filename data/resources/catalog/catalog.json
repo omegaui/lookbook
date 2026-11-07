@@ -160,7 +160,8 @@
       "website": "https://fedoraproject.org/workstation/",
       "logo": "fedora",
       "os_release_id": "fedora",
-      "os_release_variant": "workstation"
+      "os_release_variant": "workstation",
+      "default_desktop": "GNOME"
     },
     {
       "id": "arch",
@@ -173,7 +174,8 @@
       "package_manager": "pacman",
       "website": "https://archlinux.org",
       "logo": "archlinux",
-      "os_release_id": "arch"
+      "os_release_id": "arch",
+      "default_desktop": "Your choice"
     },
     {
       "id": "debian",
@@ -186,7 +188,8 @@
       "package_manager": "apt",
       "website": "https://www.debian.org",
       "logo": "debian",
-      "os_release_id": "debian"
+      "os_release_id": "debian",
+      "default_desktop": "GNOME"
     },
     {
       "id": "ubuntu",
@@ -199,7 +202,8 @@
       "package_manager": "apt",
       "website": "https://ubuntu.com",
       "logo": "ubuntu",
-      "os_release_id": "ubuntu"
+      "os_release_id": "ubuntu",
+      "default_desktop": "GNOME"
     },
     {
       "id": "linuxmint",
@@ -212,7 +216,8 @@
       "package_manager": "apt",
       "website": "https://linuxmint.com",
       "logo": "linuxmint",
-      "os_release_id": "linuxmint"
+      "os_release_id": "linuxmint",
+      "default_desktop": "Cinnamon"
     },
     {
       "id": "opensuse-tumbleweed",
@@ -225,7 +230,8 @@
       "package_manager": "zypper",
       "website": "https://get.opensuse.org/tumbleweed/",
       "logo": "opensuse",
-      "os_release_id": "opensuse-tumbleweed"
+      "os_release_id": "opensuse-tumbleweed",
+      "default_desktop": "KDE Plasma"
     },
     {
       "id": "nixos",
@@ -238,7 +244,8 @@
       "package_manager": "nix",
       "website": "https://nixos.org",
       "logo": "nixos",
-      "os_release_id": "nixos"
+      "os_release_id": "nixos",
+      "default_desktop": "Your choice"
     },
     {
       "id": "cachyos",
@@ -251,7 +258,8 @@
       "package_manager": "pacman",
       "website": "https://cachyos.org",
       "logo": "cachyos",
-      "os_release_id": "cachyos"
+      "os_release_id": "cachyos",
+      "default_desktop": "Your choice"
     },
     {
       "id": "bazzite",
@@ -263,7 +271,9 @@
       "release": "atomic",
       "package_manager": "rpm-ostree",
       "website": "https://bazzite.gg",
-      "os_release_id": "bazzite"
+      "os_release_id": "bazzite",
+      "default_desktop": "KDE Plasma or GNOME",
+      "logo": "bazzite"
     },
     {
       "id": "fedora-silverblue",
@@ -277,7 +287,8 @@
       "website": "https://fedoraproject.org/atomic-desktops/silverblue/",
       "logo": "fedora",
       "os_release_id": "fedora",
-      "os_release_variant": "silverblue"
+      "os_release_variant": "silverblue",
+      "default_desktop": "GNOME"
     },
     {
       "id": "pop",
@@ -290,7 +301,8 @@
       "package_manager": "apt",
       "website": "https://system76.com/pop/",
       "logo": "popos",
-      "os_release_id": "pop"
+      "os_release_id": "pop",
+      "default_desktop": "COSMIC"
     },
     {
       "id": "elementary",
@@ -303,7 +315,8 @@
       "package_manager": "apt",
       "website": "https://elementary.io",
       "logo": "elementary",
-      "os_release_id": "elementary"
+      "os_release_id": "elementary",
+      "default_desktop": "Pantheon"
     },
     {
       "id": "endeavouros",
@@ -316,7 +329,8 @@
       "package_manager": "pacman",
       "website": "https://endeavouros.com",
       "logo": "endeavouros",
-      "os_release_id": "endeavouros"
+      "os_release_id": "endeavouros",
+      "default_desktop": "KDE Plasma"
     },
     {
       "id": "void",
@@ -329,7 +343,8 @@
       "package_manager": "xbps",
       "website": "https://voidlinux.org",
       "logo": "voidlinux",
-      "os_release_id": "void"
+      "os_release_id": "void",
+      "default_desktop": "Your choice"
     },
     {
       "id": "alpine",
@@ -342,7 +357,8 @@
       "package_manager": "apk",
       "website": "https://alpinelinux.org",
       "logo": "alpinelinux",
-      "os_release_id": "alpine"
+      "os_release_id": "alpine",
+      "default_desktop": "Your choice"
     },
     {
       "id": "gentoo",
@@ -355,7 +371,8 @@
       "package_manager": "portage",
       "website": "https://www.gentoo.org",
       "logo": "gentoo",
-      "os_release_id": "gentoo"
+      "os_release_id": "gentoo",
+      "default_desktop": "Your choice"
     }
   ],
   "desktops": [
@@ -371,6 +388,14 @@
       "logo": "gnome",
       "session_names": [
         "GNOME"
+      ],
+      "shell": "GNOME Shell",
+      "extend_with": "Shell extensions (GJS)",
+      "wayland": "Wayland only",
+      "toolkit_family": "gtk",
+      "layout": "dock",
+      "bars": [
+        "top"
       ]
     },
     {
@@ -385,6 +410,14 @@
       "logo": "kdeplasma",
       "session_names": [
         "KDE"
+      ],
+      "shell": "Plasma Shell",
+      "extend_with": "Widgets and KWin scripts",
+      "wayland": "Wayland by default",
+      "toolkit_family": "qt",
+      "layout": "panel",
+      "bars": [
+        "bottom"
       ]
     },
     {
@@ -398,6 +431,15 @@
       "website": "https://system76.com/cosmic",
       "session_names": [
         "COSMIC"
+      ],
+      "shell": "COSMIC Panel and Dock",
+      "extend_with": "Applets (Rust)",
+      "wayland": "Wayland only",
+      "toolkit_family": "rust",
+      "layout": "dock",
+      "bars": [
+        "top",
+        "dock"
       ]
     },
     {
@@ -413,6 +455,14 @@
       "session_names": [
         "X-Cinnamon",
         "Cinnamon"
+      ],
+      "shell": "Cinnamon",
+      "extend_with": "Spices (JavaScript)",
+      "wayland": "Wayland is experimental",
+      "toolkit_family": "gtk",
+      "layout": "panel",
+      "bars": [
+        "bottom"
       ]
     },
     {
@@ -427,6 +477,15 @@
       "logo": "xfce",
       "session_names": [
         "XFCE"
+      ],
+      "shell": "Xfce Panel",
+      "extend_with": "Panel plugins (C)",
+      "wayland": "Wayland in progress",
+      "toolkit_family": "gtk",
+      "layout": "dock",
+      "bars": [
+        "top",
+        "dock"
       ]
     },
     {
@@ -441,6 +500,14 @@
       "logo": "budgie",
       "session_names": [
         "Budgie"
+      ],
+      "shell": "Budgie Desktop",
+      "extend_with": "Applets (Vala, C)",
+      "wayland": "Wayland with labwc",
+      "toolkit_family": "gtk",
+      "layout": "dock",
+      "bars": [
+        "top"
       ]
     },
     {
@@ -455,6 +522,15 @@
       "logo": "mate",
       "session_names": [
         "MATE"
+      ],
+      "shell": "MATE Panel",
+      "extend_with": "Panel applets (C, Python)",
+      "wayland": "X11 first",
+      "toolkit_family": "gtk",
+      "layout": "panel",
+      "bars": [
+        "top",
+        "bottom"
       ]
     },
     {
@@ -469,6 +545,14 @@
       "logo": "lxqt",
       "session_names": [
         "LXQt"
+      ],
+      "shell": "LXQt Panel",
+      "extend_with": "Panel plugins (C++)",
+      "wayland": "Wayland with many compositors",
+      "toolkit_family": "qt",
+      "layout": "panel",
+      "bars": [
+        "bottom"
       ]
     },
     {
@@ -483,6 +567,15 @@
       "logo": "pantheon",
       "session_names": [
         "Pantheon"
+      ],
+      "shell": "Wingpanel and Dock",
+      "extend_with": "Wingpanel indicators (Vala)",
+      "wayland": "Wayland session available",
+      "toolkit_family": "gtk",
+      "layout": "dock",
+      "bars": [
+        "top",
+        "dock"
       ]
     }
   ],
@@ -1131,7 +1224,8 @@
       "portals": [
         "Screenshot",
         "ScreenCast"
-      ]
+      ],
+      "logo": "wayfire"
     },
     {
       "id": "labwc",
@@ -1213,7 +1307,8 @@
       "portals": [
         "Screenshot",
         "ScreenCast"
-      ]
+      ],
+      "logo": "labwc"
     }
   ],
   "ideas": [

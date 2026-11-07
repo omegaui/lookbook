@@ -1,0 +1,111 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DesktopCard: Adw.Bin {
+  styles [
+    "card",
+    "desktop-card",
+  ]
+
+  overflow: hidden;
+
+  child: Box {
+    orientation: vertical;
+
+    // A small drawing of the desktop: its color, a window and its default bars.
+    $MiniDesktop art {}
+
+    Box {
+      orientation: vertical;
+      spacing: 8;
+      margin-top: 14;
+      margin-bottom: 16;
+      margin-start: 16;
+      margin-end: 16;
+
+      Box {
+        spacing: 12;
+
+        $LogoTile tile {
+          valign: center;
+        }
+
+        Box {
+          orientation: vertical;
+          valign: center;
+          hexpand: true;
+
+          Box {
+            spacing: 8;
+
+            Label name_label {
+              styles [
+                "title-4",
+              ]
+
+              xalign: 0;
+              ellipsize: end;
+            }
+
+            Label badge_label {
+              styles [
+                "badge",
+              ]
+
+              visible: false;
+              valign: center;
+            }
+          }
+
+          Label wayland_label {
+            styles [
+              "caption",
+              "dim-label",
+            ]
+
+            xalign: 0;
+            ellipsize: end;
+          }
+        }
+      }
+
+      Label tagline_label {
+        styles [
+          "dim-label",
+        ]
+
+        xalign: 0;
+        wrap: true;
+        wrap-mode: word_char;
+        lines: 2;
+        ellipsize: end;
+        max-width-chars: 30;
+      }
+
+      Box chips_box {
+        spacing: 6;
+      }
+
+      Box {
+        spacing: 6;
+        margin-top: 2;
+
+        Image {
+          icon-name: "application-x-addon-symbolic";
+          pixel-size: 14;
+          accessible-role: presentation;
+        }
+
+        Label extend_label {
+          styles [
+            "caption",
+          ]
+
+          xalign: 0;
+          use-markup: true;
+          ellipsize: end;
+        }
+      }
+    }
+  };
+}

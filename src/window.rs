@@ -29,6 +29,21 @@ fn runs_on_stacking_desktop() -> bool {
     })
 }
 
+/// Finds the first scrolled window inside a widget, searching depth first.
+fn find_scrolled_window(widget: &gtk::Widget) -> Option<gtk::ScrolledWindow> {
+    if let Some(scrolled) = widget.downcast_ref::<gtk::ScrolledWindow>() {
+        return Some(scrolled.clone());
+    }
+    let mut child = widget.first_child();
+    while let Some(current) = child {
+        if let Some(found) = find_scrolled_window(&current) {
+            return Some(found);
+        }
+        child = current.next_sibling();
+    }
+    None
+}
+
 mod imp {
     use super::*;
 
@@ -165,6 +180,45 @@ impl LinuxAndYouWindow {
             .build();
 
         self.add_action_entries([show_page, show_item]);
+
+        if PROFILE == "Devel" {
+            self.add_scroll_action();
+        }
+    }
+
+    /// Development builds only: `win.scroll-to` scrolls the page in view to a
+    /// fraction of its height (0.0 is the top, 1.0 the bottom), so a script can
+    /// check the lower sections of a page without touching the mouse.
+    fn add_scroll_action(&self) {
+        let scroll_to = gio::ActionEntry::builder("scroll-to")
+            .parameter_type(Some(glib::VariantTy::DOUBLE))
+            .activate(|window: &Self, _, parameter| {
+                if let Some(fraction) = parameter.and_then(|value| value.get::<f64>()) {
+                    window.scroll_to(fraction);
+                }
+            })
+            .build();
+        self.add_action_entries([scroll_to]);
+    }
+
+    fn scroll_to(&self, fraction: f64) {
+        let Some(scrolled) = self.visible_scrolled_window() else {
+            return;
+        };
+        let adjustment = scrolled.vadjustment();
+        let range = adjustment.upper() - adjustment.page_size();
+        adjustment.set_value(range * fraction.clamp(0.0, 1.0));
+    }
+
+    fn visible_scrolled_window(&self) -> Option<gtk::ScrolledWindow> {
+        let imp = self.imp();
+        let page = imp.navigation_view.visible_page()?;
+        let root: gtk::Widget = if page.tag().as_deref() == Some(MAIN_PAGE_TAG) {
+            imp.view_stack.visible_child()?
+        } else {
+            page.upcast()
+        };
+        find_scrolled_window(&root)
     }
 
     fn show_page(&self, page_name: &str) {
@@ -186,9 +240,8 @@ impl LinuxAndYouWindow {
             return;
         };
 
-        let screenshots = catalog.screenshots_of(&item.id);
         imp.navigation_view
-            .push(&ItemDetailPage::new(&content, &screenshots, &catalog));
+            .push(&ItemDetailPage::new(&content, &catalog, &system));
     }
 
     fn remember_last_page(&self) {

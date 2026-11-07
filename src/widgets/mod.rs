@@ -1,6 +1,8 @@
 mod catalog_card;
 mod collection_card;
 mod content;
+mod desktop_card;
+mod extension_card;
 mod idea_card;
 mod iso;
 mod iso_scene;
@@ -8,6 +10,8 @@ mod iso_stack;
 mod iso_tile;
 mod protocol_card;
 mod logo_tile;
+mod mini_desktop;
+mod natural_width_cap;
 mod screenshot_card;
 mod screenshot_mock;
 mod spotlight_card;
@@ -18,15 +22,19 @@ mod wallpaper_dialog;
 pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
 pub use content::{
-    CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck, ProtocolSummary,
-    SpotlightContent,
+    scene_for_desktop, CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck,
+    ProtocolSummary, SpotlightContent,
 };
+pub use desktop_card::DesktopCard;
+pub use extension_card::extension_card;
 pub use idea_card::IdeaCard;
 pub use iso_scene::{IsoScene, SceneLayout};
 pub use iso_stack::{IsoStack, StackLayer};
 pub use iso_tile::IsoTile;
 pub use protocol_card::fill_protocol_lists;
 pub use logo_tile::{LogoTile, TileContent};
+pub use mini_desktop::MiniDesktop;
+pub use natural_width_cap::NaturalWidthCap;
 pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;
 pub use spotlight_card::SpotlightCard;
@@ -108,13 +116,18 @@ pub fn feature_check(check: &FeatureCheck) -> gtk::Box {
     row
 }
 
+/// The catalog item a gallery card opens, for both kinds of card.
+fn card_item(card: &gtk::Widget) -> Option<crate::catalog::ItemRef> {
+    if let Some(card) = card.downcast_ref::<CatalogCard>() {
+        return card.item();
+    }
+    card.downcast_ref::<DesktopCard>().and_then(DesktopCard::item)
+}
+
 /// Opens the details page of the card the user activates in `flowbox`.
 pub fn open_details_on_activate(flowbox: &gtk::FlowBox) {
     flowbox.connect_child_activated(|flowbox, child| {
-        let Some(card) = child.child().and_downcast::<CatalogCard>() else {
-            return;
-        };
-        let Some(item) = card.item() else {
+        let Some(item) = child.child().as_ref().and_then(card_item) else {
             return;
         };
 

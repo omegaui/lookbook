@@ -13,6 +13,7 @@
     <file preprocess="xml-stripblanks">ui/pages/wallpapers_page.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/catalog_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/collection_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/desktop_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/idea_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/protocol_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/screenshot_card.ui</file>
@@ -30,6 +31,9 @@
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-alpinelinux-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-archlinux-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-budgie-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-wayfire-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-labwc-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-bazzite-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-cachyos-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-cinnamon-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-debian-symbolic.svg</file>

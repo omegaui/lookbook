@@ -4,8 +4,8 @@ use gettextrs::gettext;
 
 use super::{SceneLayout, TileContent};
 use crate::catalog::{
-    key_features, Accent, Catalog, Collection, Compositor, CompositorKind, Desktop, Distro,
-    FeatureSupport, ItemKind, ItemRef, ItemSummary, Spotlight,
+    key_features, Accent, Catalog, Collection, Compositor, CompositorKind, Desktop, DesktopLayout,
+    Distro, FeatureSupport, ItemKind, ItemRef, ItemSummary, Spotlight,
 };
 
 /// Whether a compositor has one key feature, for example "Layer shell".
@@ -170,12 +170,20 @@ fn fact(label: String, value: &str) -> Fact {
 /// Everything the details page shows about one item.
 #[derive(Debug, Clone)]
 pub struct DetailContent {
+    pub item: ItemRef,
     pub title: String,
     pub tile: TileContent,
     pub tagline: String,
     pub badge: Option<CardBadge>,
+    /// Short facts under the tagline, for example "Rolling" and "pacman".
+    pub chips: Vec<String>,
+    /// "At a Glance", or "Inside GNOME" for desktops.
+    pub facts_title: String,
     pub facts: Vec<Fact>,
     pub website: String,
+    /// The brand color the header scene is drawn in.
+    pub color: String,
+    pub scene: SceneLayout,
     /// Compositors only.
     pub checks: Vec<FeatureCheck>,
     /// Compositors only.
@@ -199,18 +207,24 @@ impl DetailContent {
 
     fn for_distro(distro: &Distro, system: &SystemInfo) -> Self {
         Self {
+            item: ItemRef::new(ItemKind::Distro, &distro.id),
             title: distro.name.clone(),
             tile: tile_content(&distro.short, &distro.color, distro.logo.as_deref()),
             tagline: distro.tagline.clone(),
             badge: system
                 .is_current_distro(distro)
                 .then_some(CardBadge::YouAreHere),
+            chips: vec![distro.release.label(), distro.package_manager.clone()],
+            facts_title: gettext("At a Glance"),
             facts: vec![
                 fact(gettext("Based on"), &distro.family.label()),
                 fact(gettext("Releases"), &distro.release.label()),
                 fact(gettext("Packages"), &distro.package_manager),
+                fact(gettext("Desktop"), &distro.default_desktop),
             ],
             website: distro.website.clone(),
+            color: distro.color.clone(),
+            scene: SceneLayout::Floating,
             checks: Vec::new(),
             protocols: None,
         }
@@ -218,17 +232,24 @@ impl DetailContent {
 
     fn for_desktop(desktop: &Desktop, system: &SystemInfo) -> Self {
         Self {
+            item: ItemRef::new(ItemKind::Desktop, &desktop.id),
             title: desktop.name.clone(),
             tile: tile_content(&desktop.short, &desktop.color, desktop.logo.as_deref()),
             tagline: desktop.tagline.clone(),
             badge: system
                 .is_running(&desktop.session_names)
                 .then_some(CardBadge::RunningNow),
+            chips: vec![desktop.wayland.clone(), desktop.toolkit.clone()],
+            facts_title: gettext("Inside {}").replace("{}", &desktop.name),
             facts: vec![
                 fact(gettext("Compositor"), &desktop.compositor),
+                fact(gettext("Shell"), &desktop.shell),
                 fact(gettext("Toolkit"), &desktop.toolkit),
+                fact(gettext("Extend with"), &desktop.extend_with),
             ],
             website: desktop.website.clone(),
+            color: desktop.color.clone(),
+            scene: scene_for_desktop(desktop.layout),
             checks: Vec::new(),
             protocols: None,
         }
@@ -236,18 +257,23 @@ impl DetailContent {
 
     fn for_compositor(compositor: &Compositor, system: &SystemInfo) -> Self {
         Self {
+            item: ItemRef::new(ItemKind::Compositor, &compositor.id),
             title: compositor.name.clone(),
             tile: tile_content(&compositor.short, &compositor.color, compositor.logo.as_deref()),
             tagline: compositor.tagline.clone(),
             badge: system
                 .is_running(&compositor.session_names)
                 .then_some(CardBadge::RunningNow),
+            chips: vec![compositor.kind.label(), compositor.base.clone()],
+            facts_title: gettext("At a Glance"),
             facts: vec![
                 fact(gettext("Layout"), &compositor.kind.label()),
                 fact(gettext("Built on"), &compositor.base),
                 fact(gettext("Config"), &compositor.config),
             ],
             website: compositor.website.clone(),
+            color: compositor.color.clone(),
+            scene: scene_for_compositor(compositor.kind),
             checks: feature_checks(compositor),
             protocols: Some(ProtocolSummary {
                 version: compositor.protocols.version.clone(),
@@ -255,6 +281,13 @@ impl DetailContent {
                 globals: compositor.protocols.globals.clone(),
             }),
         }
+    }
+}
+
+pub fn scene_for_desktop(layout: DesktopLayout) -> SceneLayout {
+    match layout {
+        DesktopLayout::Dock => SceneLayout::Floating,
+        DesktopLayout::Panel => SceneLayout::Panel,
     }
 }
 

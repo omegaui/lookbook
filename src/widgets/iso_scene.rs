@@ -23,6 +23,8 @@ pub enum SceneLayout {
     /// Overlapping windows with a top bar and a dock, like GNOME.
     #[default]
     Floating,
+    /// Overlapping windows over a full-width bottom panel, like KDE Plasma.
+    Panel,
 }
 
 const FLOOR_THICKNESS: f32 = 14.0;
@@ -49,6 +51,17 @@ const TOP_BAR: gdk::RGBA = rgb(0x00, 0x00, 0x00);
 const FLOOR_DOT: gdk::RGBA = gdk::RGBA::new(1.0, 1.0, 1.0, 0.25);
 const DOCK: gdk::RGBA = gdk::RGBA::new(1.0, 1.0, 1.0, 0.55);
 
+/// `base` moved `amount` (0 to 1) of the way toward `target`.
+fn mix(base: gdk::RGBA, target: gdk::RGBA, amount: f32) -> gdk::RGBA {
+    let blend = |from: f32, to: f32| from + (to - from) * amount;
+    gdk::RGBA::new(
+        blend(base.red(), target.red()),
+        blend(base.green(), target.green()),
+        blend(base.blue(), target.blue()),
+        base.alpha(),
+    )
+}
+
 const fn rgb(red: u8, green: u8, blue: u8) -> gdk::RGBA {
     gdk::RGBA::new(red as f32 / 255.0, green as f32 / 255.0, blue as f32 / 255.0, 1.0)
 }
@@ -62,6 +75,15 @@ struct ScenePalette {
 }
 
 impl ScenePalette {
+    /// Builds the floor from any brand color: a lighter top and a darker edge.
+    fn from_color(color: gdk::RGBA) -> Self {
+        Self {
+            accent: color,
+            floor: mix(color, gdk::RGBA::WHITE, 0.45),
+            floor_edge: mix(color, gdk::RGBA::BLACK, 0.3),
+        }
+    }
+
     fn for_accent(accent: Accent) -> Self {
         let (accent, floor, floor_edge) = match accent {
             Accent::Blue => (rgb(0x35, 0x84, 0xe4), rgb(0x62, 0xa0, 0xea), rgb(0x1a, 0x5f, 0xb4)),
@@ -113,7 +135,7 @@ mod imp {
     #[derive(Debug, Default)]
     pub struct IsoScene {
         pub layout: Cell<SceneLayout>,
-        pub accent: Cell<Option<Accent>>,
+        pub(super) palette: Cell<Option<ScenePalette>>,
     }
 
     #[glib::object_subclass]
@@ -145,7 +167,10 @@ mod imp {
         }
 
         fn snapshot(&self, snapshot: &gtk::Snapshot) {
-            let palette = ScenePalette::for_accent(self.accent.get().unwrap_or(Accent::Blue));
+            let palette = self
+                .palette
+                .get()
+                .unwrap_or_else(|| ScenePalette::for_accent(Accent::Blue));
             let widget = self.obj();
             let width = widget.width() as f32;
             let height = widget.height() as f32;
@@ -158,6 +183,7 @@ mod imp {
                 SceneLayout::Scrolling => draw_scrolling_scene(snapshot, &palette),
                 SceneLayout::Tiling => draw_tiling_scene(snapshot, &palette),
                 SceneLayout::Floating => draw_floating_scene(snapshot, &palette),
+                SceneLayout::Panel => draw_panel_scene(snapshot, &palette),
             }
 
             snapshot.restore();
@@ -173,9 +199,19 @@ glib::wrapper! {
 
 impl IsoScene {
     pub fn set_scene(&self, layout: SceneLayout, accent: Accent) {
+        self.show(layout, ScenePalette::for_accent(accent));
+    }
+
+    /// Like `set_scene`, with the floor colored from a brand color such as "#1793d1".
+    pub fn set_scene_color(&self, layout: SceneLayout, color: &str) {
+        let color = gdk::RGBA::parse(color).unwrap_or(rgb(0x35, 0x84, 0xe4));
+        self.show(layout, ScenePalette::from_color(color));
+    }
+
+    fn show(&self, layout: SceneLayout, palette: ScenePalette) {
         let imp = self.imp();
         imp.layout.set(layout);
-        imp.accent.set(Some(accent));
+        imp.palette.set(Some(palette));
         self.queue_draw();
     }
 }
@@ -222,6 +258,30 @@ fn draw_floating_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
     draw_windows(snapshot, palette, &windows);
 
     draw_dock(snapshot, palette, graphene::Rect::new(220.0, 292.0, 200.0, 34.0));
+}
+
+/// KDE Plasma and similar: overlapping windows and a full-width bottom panel.
+fn draw_panel_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
+    let floor = graphene::Rect::new(0.0, -60.0, 640.0, 400.0);
+    draw_floor(snapshot, palette, floor);
+
+    let windows = [
+        window(40.0, -40.0, 340.0, 220.0, WindowKind::Browser),
+        focused(window(250.0, 50.0, 330.0, 200.0, WindowKind::Files)),
+    ];
+    draw_windows(snapshot, palette, &windows);
+
+    let panel = graphene::Rect::new(floor.x() + 14.0, floor.y() + floor.height() - 52.0, floor.width() - 28.0, 38.0);
+    fill_rounded(snapshot, panel, 10.0, &TOP_BAR);
+
+    let launcher = graphene::Rect::new(panel.x() + 10.0, panel.y() + 8.0, 22.0, 22.0);
+    fill_rounded(snapshot, launcher, 6.0, &palette.accent);
+    for index in 0..3 {
+        let task = graphene::Rect::new(panel.x() + 48.0 + index as f32 * 32.0, panel.y() + 8.0, 22.0, 22.0);
+        fill_rounded(snapshot, task, 6.0, &DOCK);
+    }
+    let clock = graphene::Rect::new(panel.x() + panel.width() - 70.0, panel.y() + 14.0, 56.0, 10.0);
+    fill_rounded(snapshot, clock, 5.0, &DOCK);
 }
 
 /// The ground the windows stand on, with a visible edge and a dot grid.

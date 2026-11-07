@@ -4,12 +4,17 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::glib;
 
-use crate::catalog::Catalog;
+use crate::catalog::{Catalog, Desktop};
 use crate::system::SystemInfo;
-use crate::widgets::{open_details_on_activate, CardContent, CatalogCard, LogoTile, TileContent};
+use crate::widgets::{
+    chip_label, open_details_on_activate, scene_for_desktop, DesktopCard, IsoScene, LogoTile,
+    TileContent,
+};
 
 const FEATURED_DESKTOP: &str = "gnome";
-const FEATURED_TILE_SIZE: i32 = 96;
+const FEATURED_TILE_SIZE: i32 = 72;
+/// The toolkit filter's toggle that shows every desktop.
+const ALL_TOOLKITS: &str = "all";
 
 mod imp {
     use super::*;
@@ -24,7 +29,11 @@ mod imp {
         #[template_child]
         pub featured_name_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
-        pub featured_tagline_label: gtk::TemplateChild<gtk::Label>,
+        pub featured_chips_box: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
+        pub featured_scene: gtk::TemplateChild<IsoScene>,
+        #[template_child]
+        pub toolkit_filter: gtk::TemplateChild<adw::ToggleGroup>,
         #[template_child]
         pub desktops_flowbox: gtk::TemplateChild<gtk::FlowBox>,
     }
@@ -37,7 +46,9 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
+            IsoScene::ensure_type();
             klass.bind_template();
+            klass.bind_template_callbacks();
         }
 
         fn instance_init(obj: &glib::subclass::InitializingObject<Self>) {
@@ -49,6 +60,15 @@ mod imp {
         fn constructed(&self) {
             self.parent_constructed();
             open_details_on_activate(&self.desktops_flowbox);
+            self.obj().filter_by_toolkit();
+        }
+    }
+
+    #[gtk::template_callbacks]
+    impl DesktopsPage {
+        #[template_callback]
+        fn on_toolkit_changed(&self) {
+            self.desktops_flowbox.invalidate_filter();
         }
     }
 
@@ -84,13 +104,41 @@ impl DesktopsPage {
             icon_name: None,
         });
         imp.featured_name_label.set_label(&desktop.name);
-        imp.featured_tagline_label.set_label(&desktop.tagline);
+        imp.featured_scene
+            .set_scene_color(scene_for_desktop(desktop.layout), &desktop.color);
+        self.show_featured_chips(desktop);
+    }
+
+    fn show_featured_chips(&self, desktop: &Desktop) {
+        let chips_box = &self.imp().featured_chips_box;
+        for chip in [&desktop.compositor, &desktop.toolkit, &desktop.wayland] {
+            chips_box.append(&chip_label(chip));
+        }
     }
 
     fn show_desktops(&self, catalog: &Catalog, system: &SystemInfo) {
         for desktop in &catalog.desktops {
-            let content = CardContent::for_desktop(desktop, system);
-            self.imp().desktops_flowbox.append(&CatalogCard::new(&content));
+            self.imp()
+                .desktops_flowbox
+                .append(&DesktopCard::new(desktop, system));
         }
+    }
+
+    /// Shows only the cards whose toolkit matches the chosen toggle.
+    fn filter_by_toolkit(&self) {
+        let imp = self.imp();
+        let filter = imp.toolkit_filter.get();
+        imp.desktops_flowbox.set_filter_func(move |child| {
+            let chosen = filter.active_name();
+            let chosen = chosen.as_deref().unwrap_or(ALL_TOOLKITS);
+            if chosen == ALL_TOOLKITS {
+                return true;
+            }
+            child
+                .child()
+                .and_downcast::<DesktopCard>()
+                .and_then(|card| card.toolkit_id())
+                .is_some_and(|toolkit| toolkit == chosen)
+        });
     }
 }

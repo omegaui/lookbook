@@ -48,47 +48,67 @@ template $DesktopsPage: Adw.Bin {
             "accent-blue",
           ]
 
-          spacing: 20;
-
-          $LogoTile featured_tile {
-            valign: center;
-            margin-start: 32;
-          }
+          overflow: hidden;
 
           Box {
             orientation: vertical;
-            spacing: 8;
-            hexpand: true;
+            spacing: 14;
             valign: center;
-            margin-top: 32;
-            margin-bottom: 32;
+            margin-top: 36;
+            margin-bottom: 36;
+            margin-start: 36;
+            margin-end: 8;
+
+            Box {
+              spacing: 16;
+
+              $LogoTile featured_tile {
+                valign: center;
+              }
+
+              Box {
+                orientation: vertical;
+                spacing: 2;
+                valign: center;
+
+                Label {
+                  styles [
+                    "kicker",
+                  ]
+
+                  label: _("Made for GNOME");
+                  xalign: 0;
+                }
+
+                Label featured_name_label {
+                  styles [
+                    "hero-title",
+                  ]
+
+                  xalign: 0;
+                }
+              }
+            }
 
             Label {
               styles [
-                "kicker",
+                "hero-subtitle",
               ]
 
-              label: _("Made for GNOME");
-              xalign: 0;
-            }
-
-            Label featured_name_label {
-              styles [
-                "title-1",
-              ]
-
-              xalign: 0;
-            }
-
-            Label featured_tagline_label {
+              label: _("Linux &amp; You is a GNOME app first. See what GNOME is made of, which extensions people love, and what you can build on it.");
+              use-markup: true;
               xalign: 0;
               wrap: true;
-              max-width-chars: 50;
+              max-width-chars: 44;
+            }
+
+            Box featured_chips_box {
+              spacing: 6;
             }
 
             Box {
               spacing: 10;
-              margin-top: 8;
+              margin-top: 6;
 
               Button {
                 styles [
@@ -112,16 +132,55 @@ template $DesktopsPage: Adw.Bin {
               }
             }
           }
+
+          $IsoScene featured_scene {
+            hexpand: true;
+          }
         }
 
-        Label {
-          styles [
-            "title-2",
-          ]
-
-          label: _("All Desktops");
-          xalign: 0;
+        Box {
+          spacing: 12;
           margin-top: 12;
+
+          Label {
+            styles [
+              "title-2",
+            ]
+
+            label: _("All Desktops");
+            xalign: 0;
+            hexpand: true;
+          }
+
+          // Shows only desktops built with one toolkit family.
+          Adw.ToggleGroup toolkit_filter {
+            styles [
+              "round",
+            ]
+
+            active-name: "all";
+            notify::active-name => $on_toolkit_changed() swapped;
+
+            Adw.Toggle {
+              name: "all";
+              label: _("All");
+            }
+
+            Adw.Toggle {
+              name: "gtk";
+              label: _("GTK");
+            }
+
+            Adw.Toggle {
+              name: "qt";
+              label: _("Qt");
+            }
+
+            Adw.Toggle {
+              name: "rust";
+              label: _("Rust");
+            }
+          }
         }
 
         FlowBox desktops_flowbox {
@@ -129,8 +188,8 @@ template $DesktopsPage: Adw.Bin {
           homogeneous: true;
           min-children-per-line: 1;
           max-children-per-line: 3;
-          column-spacing: 12;
-          row-spacing: 12;
+          column-spacing: 16;
+          row-spacing: 16;
         }
       };
     };

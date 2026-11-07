@@ -264,6 +264,8 @@ pub struct Distro {
     pub os_release_id: String,
     /// The `VARIANT_ID` field, for distros that share an `ID`, like Fedora editions.
     pub os_release_variant: Option<String>,
+    /// For example "GNOME", or "Your choice" when the installer asks.
+    pub default_desktop: String,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -279,6 +281,58 @@ pub struct Desktop {
     pub logo: Option<String>,
     /// Values of `XDG_CURRENT_DESKTOP` that mean this desktop is running.
     pub session_names: Vec<String>,
+    /// The program that draws panels and menus, for example "GNOME Shell".
+    pub shell: String,
+    /// How people extend it, for example "Shell extensions (GJS)".
+    pub extend_with: String,
+    /// How far along its Wayland session is, for example "Wayland only".
+    pub wayland: String,
+    pub toolkit_family: ToolkitFamily,
+    pub layout: DesktopLayout,
+    /// The bars it shows by default, drawn on the gallery card.
+    #[serde(default)]
+    pub bars: Vec<DesktopBar>,
+}
+
+/// A bar a desktop shows by default.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum DesktopBar {
+    /// A thin bar across the top, like GNOME's.
+    Top,
+    /// A full-width panel along the bottom, like KDE Plasma's taskbar.
+    Bottom,
+    /// A floating row of app icons near the bottom.
+    Dock,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ToolkitFamily {
+    Gtk,
+    Qt,
+    Rust,
+}
+
+impl ToolkitFamily {
+    /// Matches the toggle names in the Desktops page's toolkit filter.
+    pub fn id(self) -> &'static str {
+        match self {
+            Self::Gtk => "gtk",
+            Self::Qt => "qt",
+            Self::Rust => "rust",
+        }
+    }
+}
+
+/// Where the desktop's panel sits by default.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum DesktopLayout {
+    /// A top bar and a dock, like GNOME.
+    Dock,
+    /// A full-width bottom panel, like KDE Plasma.
+    Panel,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]

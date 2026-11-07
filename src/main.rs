@@ -2,6 +2,8 @@ mod application;
 mod catalog;
 #[rustfmt::skip]
 mod config;
+mod details;
+mod extensions;
 mod ideas;
 mod pages;
 mod system;

@@ -15,6 +15,17 @@ pub fn fill_wall_grid(grid: &gtk::Grid, screenshots: &[&Screenshot]) {
         let card = ScreenshotCard::new(screenshot);
         grid.attach(&card, cell.column, cell.row, cell.width, cell.height);
     }
+
+    if screenshots.len() == 1 {
+        keep_lone_screenshot_at_half_width(grid);
+    }
+}
+
+/// The grid's columns share its width, so a lone screenshot would fill all of it
+/// and grow very tall. An empty cell beside it keeps it to half the width.
+fn keep_lone_screenshot_at_half_width(grid: &gtk::Grid) {
+    let empty_cell = gtk::Box::new(gtk::Orientation::Vertical, 0);
+    grid.attach(&empty_cell, 2, 0, 2, 2);
 }
 
 /// Where a screenshot sits in the grid.

@@ -3,7 +3,7 @@ use adw::subclass::prelude::*;
 use gettextrs::gettext;
 use gtk::{gio, glib};
 
-use crate::config::{APP_ID, VERSION};
+use crate::config::{APP_ID, PROFILE, VERSION};
 use crate::window::LinuxAndYouWindow;
 
 mod imp {
@@ -62,8 +62,33 @@ impl LinuxAndYouApplication {
         let about = gio::ActionEntry::builder("about")
             .activate(|app: &Self, _, _| app.show_about_dialog())
             .build();
+        // Opens a details page from outside the window, for example
+        // `gapplication action <app-id> show-item "'desktop:gnome'"`.
+        let show_item = gio::ActionEntry::builder("show-item")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .activate(|app: &Self, _, parameter| app.forward_to_window("show-item", parameter))
+            .build();
 
-        self.add_action_entries([quit, about]);
+        self.add_action_entries([quit, about, show_item]);
+
+        if PROFILE == "Devel" {
+            // Lets scripts check the lower sections of a page without the mouse.
+            let scroll_to = gio::ActionEntry::builder("scroll-to")
+                .parameter_type(Some(glib::VariantTy::DOUBLE))
+                .activate(|app: &Self, _, parameter| app.forward_to_window("scroll-to", parameter))
+                .build();
+            self.add_action_entries([scroll_to]);
+        }
+    }
+
+    fn forward_to_window(&self, action_name: &str, target: Option<&glib::Variant>) {
+        let Some(window) = self.active_window() else {
+            return;
+        };
+        let window_action = format!("win.{action_name}");
+        if let Err(error) = window.activate_action(&window_action, target) {
+            tracing::warn!("Could not run {window_action}: {error}");
+        }
     }
 
     fn setup_accels(&self) {
@@ -87,7 +112,7 @@ impl LinuxAndYouApplication {
             None,
             gtk::License::Custom,
             Some(&gettext(
-                "Distro, desktop and compositor logos are trademarks of their owners. Linux &amp; You uses them only to identify each project.\n\nLogos come from <a href=\"https://simpleicons.org\">Simple Icons</a> (CC0 1.0, with these exceptions: Debian CC BY-SA 3.0, Gentoo CC BY-SA 2.5, NixOS CC BY 4.0, niri CC BY-SA 4.0, Fedora under the Fedora logo usage guidelines) and <a href=\"https://github.com/Lukas-W/font-logos\">font-logos</a> (Unlicense) for Budgie, LXQt, MATE and river.",
+                "Distro, desktop and compositor logos are trademarks of their owners. Linux &amp; You uses them only to identify each project.\n\nLogos come from <a href=\"https://simpleicons.org\">Simple Icons</a> (CC0 1.0, with these exceptions: Debian CC BY-SA 3.0, Gentoo CC BY-SA 2.5, NixOS CC BY 4.0, niri CC BY-SA 4.0, Fedora under the Fedora logo usage guidelines) and <a href=\"https://github.com/Lukas-W/font-logos\">font-logos</a> (Unlicense) for Budgie, LXQt, MATE and river. The Bazzite logo comes from its press kit (Apache-2.0), the labwc logo is by Johan Malm (CC BY-SA 4.0), and the Wayfire logo is traced from wf-shell's icon (MIT).",
             )),
         );
 

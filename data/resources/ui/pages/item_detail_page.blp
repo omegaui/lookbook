@@ -20,26 +20,34 @@ template $ItemDetailPage: Adw.NavigationPage {
           margin-bottom: 40;
           margin-start: 16;
           margin-end: 16;
-          // Header: logo, name, tagline and website.
+          // Banner: logo, name and facts, next to a scene drawn in the item's colors.
           Box {
-            spacing: 20;
+            styles [
+              "detail-banner",
+            ]
 
-            $LogoTile tile {
-              valign: center;
-            }
+            overflow: hidden;
 
             Box {
               orientation: vertical;
-              spacing: 6;
+              spacing: 12;
               valign: center;
-              hexpand: true;
+              margin-top: 36;
+              margin-bottom: 36;
+              margin-start: 36;
+              margin-end: 8;
+
+              $LogoTile tile {
+                halign: start;
+              }
 
               Box {
                 spacing: 10;
+                margin-top: 6;
 
                 Label name_label {
                   styles [
-                    "title-1",
+                    "hero-title",
                   ]
 
                   xalign: 0;
@@ -58,27 +66,40 @@ template $ItemDetailPage: Adw.NavigationPage {
 
               Label tagline_label {
                 styles [
-                  "dim-label",
+                  "hero-subtitle",
                 ]
 
                 xalign: 0;
                 wrap: true;
+                max-width-chars: 40;
+              }
+
+              Box chips_box {
+                spacing: 6;
+              }
+
+              Box {
+                spacing: 10;
+                margin-top: 6;
+
+                Button {
+                  styles [
+                    "pill",
+                    "suggested-action",
+                  ]
+
+                  clicked => $on_website_clicked() swapped;
+
+                  child: Adw.ButtonContent {
+                    label: _("Website");
+                    icon-name: "adw-external-link-symbolic";
+                  };
+                }
               }
             }
 
-            Button {
-              styles [
-                "pill",
-                "suggested-action",
-              ]
-
-              valign: center;
-              clicked => $on_website_clicked() swapped;
-
-              child: Adw.ButtonContent {
-                label: _("Website");
-                icon-name: "adw-external-link-symbolic";
-              };
+            $IsoScene scene {
+              hexpand: true;
             }
           }
 
@@ -108,12 +129,11 @@ template $ItemDetailPage: Adw.NavigationPage {
             orientation: vertical;
             spacing: 16;
 
-            Label {
+            Label facts_title_label {
               styles [
                 "title-2",
               ]
 
-              label: _("At a Glance");
               xalign: 0;
             }
 
@@ -122,6 +142,147 @@ template $ItemDetailPage: Adw.NavigationPage {
               homogeneous: true;
               min-children-per-line: 1;
               max-children-per-line: 4;
+              column-spacing: 12;
+              row-spacing: 12;
+            }
+          }
+
+          // GNOME only: popular extensions, read live from extensions.gnome.org.
+          Box extensions_section {
+            orientation: vertical;
+            spacing: 16;
+            visible: false;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Popular Extensions");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Live from extensions.gnome.org");
+                xalign: 0;
+              }
+            }
+
+            FlowBox extensions_flowbox {
+              selection-mode: none;
+              homogeneous: true;
+              min-children-per-line: 1;
+              max-children-per-line: 3;
+              column-spacing: 12;
+              row-spacing: 16;
+            }
+          }
+
+          // Desktops and compositors: the ideas this item supports.
+          Box ideas_section {
+            orientation: vertical;
+            spacing: 16;
+            visible: false;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+
+              Label ideas_title_label {
+                styles [
+                  "title-2",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+
+              Label ideas_note_label {
+                styles [
+                  "dim-label",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            FlowBox ideas_flowbox {
+              selection-mode: none;
+              homogeneous: true;
+              min-children-per-line: 1;
+              max-children-per-line: 2;
+              column-spacing: 12;
+              row-spacing: 12;
+            }
+          }
+
+          // Versus your system.
+          Box versus_section {
+            styles [
+              "versus-panel",
+            ]
+
+            orientation: vertical;
+            spacing: 18;
+            visible: false;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+
+              Label {
+                styles [
+                  "kicker",
+                ]
+
+                label: _("Versus your system");
+                xalign: 0;
+              }
+
+              Label versus_title_label {
+                styles [
+                  "title-2",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Grid versus_grid {
+              column-spacing: 12;
+              row-spacing: 8;
+              column-homogeneous: true;
+            }
+          }
+
+          Box similar_section {
+            orientation: vertical;
+            spacing: 16;
+            visible: false;
+
+            Label similar_title_label {
+              styles [
+                "title-2",
+              ]
+
+              xalign: 0;
+            }
+
+            FlowBox similar_flowbox {
+              selection-mode: none;
+              homogeneous: true;
+              min-children-per-line: 1;
+              max-children-per-line: 3;
               column-spacing: 12;
               row-spacing: 12;
             }

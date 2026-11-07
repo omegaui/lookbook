@@ -1,6 +1,6 @@
 # Handoff: Linux & You
 
-Last updated: 2026-11-07, at commit `ace644f` ("Add the Wallpapers section, read live from each collection"). The working tree was clean at that commit.
+Last updated: 2026-11-07, after the commit "Match the details pages and Desktops gallery to the design". Check `git log` for anything newer.
 
 ## What the app is
 
@@ -32,13 +32,15 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 | `src/catalog/` | Catalog model (`model.rs`), loading the bundled snapshot (`loader.rs`, with data tests), `ItemRef` ("distro:fedora"), key compositor features (`features.rs`) |
 | `src/system/` | Detection, no UI: os-release (`/run/host/os-release` in Flatpak), `XDG_CURRENT_DESKTOP`, hardware from `/proc`, Wayland globals visible from the sandbox |
 | `src/ideas.rs` | Decides "Ready here" / "Works elsewhere" for each idea |
+| `src/details.rs` | What a details page compares (Versus your system), which ideas an item supports, and similar items. No UI code |
+| `src/extensions.rs` | Popular GNOME Shell extensions, read live from the extensions.gnome.org API |
 | `src/wallpapers/` | Live wallpaper sources: libsoup HTTP, copyparty and WordPress adapters, the Wallpaper portal call |
 | `src/pages/` | Explore, Distros, Desktops, Compositors, Wallpapers, Your System, and the shared item details page |
-| `src/widgets/` | Cards, `LogoTile`, `IsoScene` (isometric spotlight art), `ScreenshotMock` (drawn Hall of Fame shots), `IdeaCard`, wallpaper card and preview dialog, `content.rs` (catalog item → card text) |
+| `src/widgets/` | Cards, `LogoTile`, `IsoScene` (isometric scenes in an accent or brand color), `MiniDesktop` (desktop card art), `ScreenshotMock` (drawn Hall of Fame shots), `IdeaCard`, `DesktopCard`, extension card, wallpaper card and preview dialog, `NaturalWidthCap`, `content.rs` (catalog item → card text) |
 | `data/resources/catalog/catalog.json` | The bundled catalog snapshot: distros, desktops, compositors (with full protocol lists), collections, spotlights, screenshots, ideas, wallpaper sources |
 | `data/resources/ui/` | Blueprint UI files |
 | `data/resources/style.css` | Styles; uses libadwaita CSS variables, so dark mode works |
-| `data/resources/icons/scalable/apps/` | 27 distro/desktop/compositor logos as symbolic SVGs (credits: `docs/logo-credits.md`) |
+| `data/resources/icons/scalable/apps/` | 30 distro/desktop/compositor logos as symbolic SVGs (credits: `docs/logo-credits.md`) |
 | `docs/research/` | `data-sources.md` (live data plan), `ideas.md` (what people build), `wallpapers.md` (sources and decision) |
 | `build-aux/` | Flatpak manifest (`…Devel.json`, GNOME 51 runtime) and the vendoring script |
 | `.agentic-coding/design/` | The approved wireframe |
@@ -50,11 +52,13 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Task | Command | Time |
 | --- | --- | --- |
 | Quick compile check | `.agentic-coding/scripts/cargo-sdk.sh check` | Seconds |
-| Unit tests (27) | `.agentic-coding/scripts/cargo-sdk.sh test` | Seconds |
+| Unit tests | `.agentic-coding/scripts/cargo-sdk.sh test` | Seconds |
 | Check Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 batch-compile /tmp/blp $PWD/data/resources $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Format Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 format -f $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Full build, install and Meson tests | `.agentic-coding/scripts/build-flatpak.sh` | 2 to 4 minutes; run in the background |
 | Open the app on a page | `.agentic-coding/scripts/open-page.sh wallpapers` | |
+| Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
+| Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |
 | Screenshot only the app window | `.agentic-coding/scripts/screenshot-window.sh /tmp/shot.png` (Hyprland + grim) | |
 
 A full build must pass "Ok: 4, Fail: 0" (cargo tests, desktop file, GSettings schema, metainfo). Keep the build free of compiler warnings.
@@ -74,8 +78,9 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `d1d30d9` | Your System: detection, 16 ideas with routes, visible Wayland globals |
 | `f22f520` | Isometric spotlight scenes, Hall of Fame (renamed) with app icons and links, hover lift, yellow feature ticks, portal-based screen capture |
 | `ace644f` | Wallpapers tab (live from orangc + LinuxH2O), preview with Set as Wallpaper / Save / Source, maximize and layout fixes, KDE Plasma panel mock |
-| (next) | Wallpaper preview: blurred thumbnail and a "Loading full quality…" pill until the full image arrives |
-| (next) | Your System redesign: glowing isometric stack (`IsoStack`), Scan Again / Copy Report, GPU names from `pci.ids`, idea icon tiles, protocol cards with descriptions (`catalog.protocols`, `ProtocolCard`, `IsoTile`) on Your System and compositor details |
+| `fe27f7f` | Wallpaper preview: blurred thumbnail and a "Loading full quality…" pill until the full image arrives |
+| `da79927` | Your System redesign: glowing isometric stack (`IsoStack`), Scan Again / Copy Report, GPU names from `pci.ids`, idea icon tiles, protocol cards with descriptions (`catalog.protocols`, `ProtocolCard`, `IsoTile`) on Your System and compositor details |
+| (next) | Details pages and Desktops gallery to match the design: banner with a brand-color scene, Hall of Fame, Inside/At a Glance facts, Popular Extensions (GNOME, live), What You Can Build on it, Versus your system, Similar items; Desktops page with the GNOME banner, toolkit filter and `DesktopCard`s; Bazzite, labwc and Wayfire logos |
 
 Not yet confirmed by clicking (the agent cannot click; ask the user):
 
@@ -85,9 +90,10 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 
 ## Open work, in priority order
 
-1. ~~Your System hero, more futuristic.~~ Done. Remaining Your System polish only if the user asks. The user asked for this. Plan: a dark panel with a glowing isometric stack of slabs (hardware, kernel, distro, compositor, apps) with the distro and compositor logos on their slabs, a ring gauge for "ideas ready", and stats as HUD-style readouts. Draw it like `IsoScene` (flat transform `scale(1, 0.64) rotate(-28°)`, edges via `screen_drop_in_floor`).
-2. **Details pages to match the design.** The user said the app does not match the design yet (Budgie's page is nearly empty). Add: a header banner with an `IsoScene` in the item's brand color; **Versus your system** (compare with the detected distro/desktop/compositor); **Similar items** (same family / kind / toolkit); **What you can build on this item** (run `ideas::evaluate` with that item as the setup; a desktop uses its compositor, for example Budgie → labwc). For GNOME: Inside GNOME, Popular extensions (extensions.gnome.org API, needs the online catalog or a live call), Ideas for GNOME.
-3. **Gallery card art from the design**: mini isometric desktop drawings on desktop cards, layout drawings on compositor cards, tinted capsules on distro cards.
+1. **Four spotlights** on Explore, in this order: Distro, Desktop, Compositor, Wallpaper. The wallpaper spotlight shows a live wallpaper (tilted `IsoPicture`) with View Wallpaper and Browse Wallpapers. "View Details" opens the item, not the gallery.
+2. **"Can I Run It?" must answer something.** A sheet per item: is it packaged for the user's distro (Repology, at most 1 request a second, User-Agent with a contact link; map os-release `ID`/`ID_LIKE` to a Repology repo), install command, which ideas the user gains or loses against the current setup, GPU notes (NVIDIA on wlroots), and how to try it (VM, live USB).
+3. **"What's new this month in Linux"** on Explore: release cards from the last 31 days, read live. Checked feeds (all 200 on 2026-11-07): kernel.org `releases.json`; endoflife.date API v1 for distros and `kde-plasma` (no `gnome` product there); KDE `announcements/index.xml` (items have empty titles, the version is in the link); GitHub `releases.atom` for Hyprland, niri (`niri-wm/niri`), sway, labwc, Wayfire, COSMIC (`pop-os/cosmic-epoch`); Codeberg RSS for river. GNOME Discourse announcements carry no release posts, so GNOME needs another source.
+4. **Gallery card art** still to do: layout drawings on compositor cards, tinted capsules on distro cards.
 4. **Online catalog.** Same repo: hand-written sources in a `catalog/` folder, a scheduled GitHub Action that builds `catalog.json` and deploys it to GitHub Pages (`https://omegaui.github.io/linux_and_you/v1/catalog.json`) without committing generated data. The app fetches at most daily with `If-None-Match`, caches it, and falls back to the bundled snapshot. Details and sources: `docs/research/data-sources.md`.
 5. **Real screenshots in the Hall of Fame** instead of drawn mocks, once the online catalog can carry image URLs.
 6. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) and of "Linux" in the app name before Flathub.
@@ -96,7 +102,7 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 ## Decisions
 
 - **Rust + GTK 4 + libadwaita, Blueprint UI, Meson + Cargo, GNOME 51 runtime.**
-- **Logos**: Simple Icons and font-logos, cleaned to symbolic SVGs, drawn white on the brand-color tile. Bazzite, COSMIC, Wayfire and labwc have no logo yet and show letters.
+- **Logos**: Simple Icons and font-logos, cleaned to symbolic SVGs, drawn white on the brand-color tile. Bazzite comes from its press kit, labwc from its repo (CC BY-SA 4.0), Wayfire traced from wf-shell's icon. COSMIC has no usable logo yet and shows letters.
 - **Protocol support** comes from wayland-explorer (MIT) per compositor, with version and date. Inside Flatpak, compositors hide privileged globals (layer shell, capture, session lock), so ideas are judged against the catalog list for the detected compositor, not the globals the app sees. The compositor is detected by `XDG_CURRENT_DESKTOP`, then by "fingerprint" globals only it offers.
 - **Screen capture** counts when the compositor offers a capture protocol or its portal backend provides the ScreenCast portal (so GNOME and KDE show it). Each compositor lists its usual portals in the catalog.
 - **Wallpapers**: neither source has a license. The user chose to build the section now, read the sources live (never bundle or mirror), credit them, keep a takedown list (`wallpaper_blocklist`) in the catalog, and email both owners for permission. If either says no, remove its entry from the catalog. Details: `docs/research/wallpapers.md`.
@@ -114,6 +120,9 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 - **zsh**: `LINES` is a reserved variable; don't use it in shell scripts run through zsh.
 - **gdk-pixbuf may not decode WebP**; ask copyparty for JPEG thumbnails (`th=j`).
 - Rust's `Variant` boxes itself as `v` in tuples; build portal parameters with `glib::Variant::tuple_from_iter`.
+- **A FlowBox fits children by their natural width**, and a `Picture`'s natural width is its image's full width, so big screenshots give one card per row. Wrap the card in `NaturalWidthCap`.
+- **Widgets with a layout manager (like `adw::Bin`) never call their own `measure`.** Subclass `gtk::Widget` and lay out the child yourself when you need to change measuring.
+- **`gapplication action … scroll-to 1` sends an integer**; the scroll script formats the number as a double.
 
 ## Design
 
