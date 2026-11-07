@@ -11,6 +11,7 @@ blueprints = custom_target(
     'ui/widgets/catalog_card.blp',
     'ui/widgets/collection_card.blp',
     'ui/widgets/idea_card.blp',
+    'ui/widgets/protocol_card.blp',
     'ui/widgets/screenshot_card.blp',
     'ui/widgets/spotlight_card.blp',
     'ui/widgets/wallpaper_card.blp',

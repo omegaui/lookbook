@@ -81,6 +81,7 @@ impl DesktopsPage {
             short: desktop.short.clone(),
             color: desktop.color.clone(),
             logo: desktop.logo.clone(),
+            icon_name: None,
         });
         imp.featured_name_label.set_label(&desktop.name);
         imp.featured_tagline_label.set_label(&desktop.tagline);

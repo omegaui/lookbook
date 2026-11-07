@@ -75,6 +75,7 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `f22f520` | Isometric spotlight scenes, Hall of Fame (renamed) with app icons and links, hover lift, yellow feature ticks, portal-based screen capture |
 | `ace644f` | Wallpapers tab (live from orangc + LinuxH2O), preview with Set as Wallpaper / Save / Source, maximize and layout fixes, KDE Plasma panel mock |
 | (next) | Wallpaper preview: blurred thumbnail and a "Loading full quality…" pill until the full image arrives |
+| (next) | Your System redesign: glowing isometric stack (`IsoStack`), Scan Again / Copy Report, GPU names from `pci.ids`, idea icon tiles, protocol cards with descriptions (`catalog.protocols`, `ProtocolCard`, `IsoTile`) on Your System and compositor details |
 
 Not yet confirmed by clicking (the agent cannot click; ask the user):
 
@@ -84,7 +85,7 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 
 ## Open work, in priority order
 
-1. **Your System hero, more futuristic.** The user asked for this. Plan: a dark panel with a glowing isometric stack of slabs (hardware, kernel, distro, compositor, apps) with the distro and compositor logos on their slabs, a ring gauge for "ideas ready", and stats as HUD-style readouts. Draw it like `IsoScene` (flat transform `scale(1, 0.64) rotate(-28°)`, edges via `screen_drop_in_floor`).
+1. ~~Your System hero, more futuristic.~~ Done. Remaining Your System polish only if the user asks. The user asked for this. Plan: a dark panel with a glowing isometric stack of slabs (hardware, kernel, distro, compositor, apps) with the distro and compositor logos on their slabs, a ring gauge for "ideas ready", and stats as HUD-style readouts. Draw it like `IsoScene` (flat transform `scale(1, 0.64) rotate(-28°)`, edges via `screen_drop_in_floor`).
 2. **Details pages to match the design.** The user said the app does not match the design yet (Budgie's page is nearly empty). Add: a header banner with an `IsoScene` in the item's brand color; **Versus your system** (compare with the detected distro/desktop/compositor); **Similar items** (same family / kind / toolkit); **What you can build on this item** (run `ideas::evaluate` with that item as the setup; a desktop uses its compositor, for example Budgie → labwc). For GNOME: Inside GNOME, Popular extensions (extensions.gnome.org API, needs the online catalog or a live call), Ideas for GNOME.
 3. **Gallery card art from the design**: mini isometric desktop drawings on desktop cards, layout drawings on compositor cards, tinted capsules on distro cards.
 4. **Online catalog.** Same repo: hand-written sources in a `catalog/` folder, a scheduled GitHub Action that builds `catalog.json` and deploys it to GitHub Pages (`https://omegaui.github.io/linux_and_you/v1/catalog.json`) without committing generated data. The app fetches at most daily with `If-None-Match`, caches it, and falls back to the bundled snapshot. Details and sources: `docs/research/data-sources.md`.

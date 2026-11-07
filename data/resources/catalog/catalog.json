@@ -1243,7 +1243,9 @@
             "kde-plasma"
           ]
         }
-      ]
+      ],
+      "icon": "lay-idea-bar-symbolic",
+      "color": "#1c71d8"
     },
     {
       "id": "launcher",
@@ -1271,7 +1273,9 @@
             "kde-plasma"
           ]
         }
-      ]
+      ],
+      "icon": "system-search-symbolic",
+      "color": "#1c71d8"
     },
     {
       "id": "dock",
@@ -1300,7 +1304,9 @@
             "kde-plasma"
           ]
         }
-      ]
+      ],
+      "icon": "lay-idea-dock-symbolic",
+      "color": "#1c71d8"
     },
     {
       "id": "notifications",
@@ -1314,7 +1320,9 @@
             "zwlr_layer_shell_v1"
           ]
         }
-      ]
+      ],
+      "icon": "preferences-system-notifications-symbolic",
+      "color": "#1c71d8"
     },
     {
       "id": "wallpaper",
@@ -1342,7 +1350,9 @@
             "kde-plasma"
           ]
         }
-      ]
+      ],
+      "icon": "preferences-desktop-wallpaper-symbolic",
+      "color": "#1c71d8"
     },
     {
       "id": "lock-screen",
@@ -1356,7 +1366,9 @@
             "ext_session_lock_manager_v1"
           ]
         }
-      ]
+      ],
+      "icon": "system-lock-screen-symbolic",
+      "color": "#813d9c"
     },
     {
       "id": "screenshot",
@@ -1381,7 +1393,9 @@
           "kind": "portal",
           "label": "Screenshot portal"
         }
-      ]
+      ],
+      "icon": "camera-photo-symbolic",
+      "color": "#c64600"
     },
     {
       "id": "recorder",
@@ -1399,7 +1413,9 @@
           "kind": "portal",
           "label": "ScreenCast portal + PipeWire"
         }
-      ]
+      ],
+      "icon": "media-record-symbolic",
+      "color": "#c64600"
     },
     {
       "id": "clipboard",
@@ -1427,7 +1443,9 @@
             "gnome"
           ]
         }
-      ]
+      ],
+      "icon": "edit-paste-symbolic",
+      "color": "#26774d"
     },
     {
       "id": "idle",
@@ -1441,7 +1459,9 @@
             "ext_idle_notifier_v1"
           ]
         }
-      ]
+      ],
+      "icon": "weather-clear-night-symbolic",
+      "color": "#813d9c"
     },
     {
       "id": "keep-awake",
@@ -1459,7 +1479,9 @@
           "kind": "portal",
           "label": "Inhibit portal"
         }
-      ]
+      ],
+      "icon": "display-brightness-symbolic",
+      "color": "#813d9c"
     },
     {
       "id": "night-light",
@@ -1480,7 +1502,9 @@
             "hyprland_ctm_control_manager_v1"
           ]
         }
-      ]
+      ],
+      "icon": "night-light-symbolic",
+      "color": "#9c6e03"
     },
     {
       "id": "blur",
@@ -1501,7 +1525,9 @@
             "gnome"
           ]
         }
-      ]
+      ],
+      "icon": "applications-graphics-symbolic",
+      "color": "#c01c28"
     },
     {
       "id": "keyboard",
@@ -1522,7 +1548,9 @@
             "gnome"
           ]
         }
-      ]
+      ],
+      "icon": "input-keyboard-symbolic",
+      "color": "#26774d"
     },
     {
       "id": "display-profiles",
@@ -1550,7 +1578,9 @@
             "kde_output_management_v2"
           ]
         }
-      ]
+      ],
+      "icon": "video-display-symbolic",
+      "color": "#9c6e03"
     },
     {
       "id": "tiling",
@@ -1571,7 +1601,9 @@
             "kde-plasma"
           ]
         }
-      ]
+      ],
+      "icon": "view-grid-symbolic",
+      "color": "#1c71d8"
     }
   ],
   "wallpaper_sources": [
@@ -1592,5 +1624,266 @@
       "credit": "Compiled by LinuxH2O."
     }
   ],
-  "wallpaper_blocklist": []
+  "wallpaper_blocklist": [],
+  "protocols": [
+    {
+      "interface": "xdg_wm_base",
+      "name": "XDG shell",
+      "description": "Gives apps normal windows and popups.",
+      "useful_for": "Every app window",
+      "category": "shell"
+    },
+    {
+      "interface": "zwlr_layer_shell_v1",
+      "name": "Layer shell",
+      "description": "Lets a program draw on desktop layers: background, bottom, top and overlay.",
+      "useful_for": "Status bars, docks, launchers, notifications, wallpapers",
+      "category": "shell"
+    },
+    {
+      "interface": "zxdg_decoration_manager_v1",
+      "name": "XDG decoration",
+      "description": "Decides whether the app or the compositor draws title bars.",
+      "useful_for": "Server-side title bars",
+      "category": "shell"
+    },
+    {
+      "interface": "xdg_activation_v1",
+      "name": "XDG activation",
+      "description": "Lets one app hand focus to another.",
+      "useful_for": "Opening links and files in another app",
+      "category": "shell"
+    },
+    {
+      "interface": "ext_background_effect_manager_v1",
+      "name": "Background effect",
+      "description": "Asks the compositor to blur what is behind a surface.",
+      "useful_for": "Frosted glass panels and bars",
+      "category": "shell"
+    },
+    {
+      "interface": "zwlr_screencopy_manager_v1",
+      "name": "Screen copy (wlroots)",
+      "description": "Copies the contents of a monitor into a buffer.",
+      "useful_for": "Screenshots, screen recording",
+      "category": "capture"
+    },
+    {
+      "interface": "ext_image_copy_capture_manager_v1",
+      "name": "Image copy capture",
+      "description": "Captures monitors or windows into buffers. The standard successor to wlroots screen copy.",
+      "useful_for": "Screenshots, recording, window thumbnails",
+      "category": "capture"
+    },
+    {
+      "interface": "ext_output_image_capture_source_manager_v1",
+      "name": "Monitor capture source",
+      "description": "Picks a monitor as the source for image copy capture.",
+      "useful_for": "Screenshots of one monitor",
+      "category": "capture"
+    },
+    {
+      "interface": "ext_foreign_toplevel_image_capture_source_manager_v1",
+      "name": "Window capture source",
+      "description": "Picks one window as the source for image copy capture.",
+      "useful_for": "Window screenshots, live thumbnails",
+      "category": "capture"
+    },
+    {
+      "interface": "zwlr_export_dmabuf_manager_v1",
+      "name": "Export DMA-BUF",
+      "description": "Exports monitors as GPU buffers, without copying.",
+      "useful_for": "Low-overhead recording",
+      "category": "capture"
+    },
+    {
+      "interface": "hyprland_toplevel_export_manager_v1",
+      "name": "Window export (Hyprland)",
+      "description": "Captures a single window on Hyprland.",
+      "useful_for": "Window sharing, thumbnails",
+      "category": "capture"
+    },
+    {
+      "interface": "zwlr_foreign_toplevel_manager_v1",
+      "name": "Window management",
+      "description": "Lists open windows and lets a program focus, minimize or close them.",
+      "useful_for": "Taskbars, docks, window switchers",
+      "category": "windows"
+    },
+    {
+      "interface": "ext_foreign_toplevel_list_v1",
+      "name": "Window list",
+      "description": "Lists open windows, without control over them.",
+      "useful_for": "Window lists, switchers",
+      "category": "windows"
+    },
+    {
+      "interface": "ext_workspace_manager_v1",
+      "name": "Workspaces",
+      "description": "Lists workspaces and lets a program switch between them.",
+      "useful_for": "Workspace buttons on bars",
+      "category": "windows"
+    },
+    {
+      "interface": "zwlr_data_control_manager_v1",
+      "name": "Data control (wlroots)",
+      "description": "Reads and sets the clipboard without a focused window.",
+      "useful_for": "Clipboard managers and history",
+      "category": "windows"
+    },
+    {
+      "interface": "ext_data_control_manager_v1",
+      "name": "Data control",
+      "description": "Reads and sets the clipboard without a focused window.",
+      "useful_for": "Clipboard managers and history",
+      "category": "windows"
+    },
+    {
+      "interface": "ext_session_lock_manager_v1",
+      "name": "Session lock",
+      "description": "Lets a program lock the session and draw the lock screen.",
+      "useful_for": "Lock screens",
+      "category": "security"
+    },
+    {
+      "interface": "ext_idle_notifier_v1",
+      "name": "Idle notifier",
+      "description": "Tells a program when the user has been away for a while.",
+      "useful_for": "Idle daemons, auto-lock, dimming",
+      "category": "security"
+    },
+    {
+      "interface": "zwp_idle_inhibit_manager_v1",
+      "name": "Idle inhibit",
+      "description": "Keeps the screen awake while a window is visible.",
+      "useful_for": "Video players, presentations",
+      "category": "security"
+    },
+    {
+      "interface": "wp_security_context_manager_v1",
+      "name": "Security context",
+      "description": "Marks sandboxed apps, so the compositor can limit what they see.",
+      "useful_for": "Flatpak sandboxing",
+      "category": "security"
+    },
+    {
+      "interface": "hyprland_global_shortcuts_manager_v1",
+      "name": "Global shortcuts (Hyprland)",
+      "description": "Lets apps register shortcuts that work anywhere.",
+      "useful_for": "Push-to-talk, launchers",
+      "category": "input"
+    },
+    {
+      "interface": "zwp_virtual_keyboard_manager_v1",
+      "name": "Virtual keyboard",
+      "description": "Lets a program send key presses.",
+      "useful_for": "On-screen keyboards, automation",
+      "category": "input"
+    },
+    {
+      "interface": "zwlr_virtual_pointer_manager_v1",
+      "name": "Virtual pointer",
+      "description": "Lets a program move and click the pointer.",
+      "useful_for": "Remote control, automation",
+      "category": "input"
+    },
+    {
+      "interface": "zwp_input_method_manager_v2",
+      "name": "Input method",
+      "description": "Lets an input method compose text for the focused app.",
+      "useful_for": "Typing in other languages, emoji pickers",
+      "category": "input"
+    },
+    {
+      "interface": "zwp_text_input_manager_v3",
+      "name": "Text input",
+      "description": "Connects text fields with input methods.",
+      "useful_for": "Typing in other languages",
+      "category": "input"
+    },
+    {
+      "interface": "wp_cursor_shape_manager_v1",
+      "name": "Cursor shape",
+      "description": "Lets apps pick a named cursor that the compositor draws.",
+      "useful_for": "Consistent cursors",
+      "category": "input"
+    },
+    {
+      "interface": "zwp_pointer_constraints_v1",
+      "name": "Pointer constraints",
+      "description": "Locks the pointer in place or keeps it inside a window.",
+      "useful_for": "Games, 3D editors",
+      "category": "input"
+    },
+    {
+      "interface": "zwp_relative_pointer_manager_v1",
+      "name": "Relative pointer",
+      "description": "Sends raw mouse movement.",
+      "useful_for": "Games",
+      "category": "input"
+    },
+    {
+      "interface": "zwlr_output_manager_v1",
+      "name": "Output management",
+      "description": "Reads and changes monitor modes, positions and scale.",
+      "useful_for": "Display settings, monitor profiles",
+      "category": "outputs"
+    },
+    {
+      "interface": "zwlr_output_power_manager_v1",
+      "name": "Output power",
+      "description": "Turns monitors on and off.",
+      "useful_for": "Idle daemons",
+      "category": "outputs"
+    },
+    {
+      "interface": "zwlr_gamma_control_manager_v1",
+      "name": "Gamma control",
+      "description": "Sets the color curves of a monitor.",
+      "useful_for": "Night light",
+      "category": "outputs"
+    },
+    {
+      "interface": "hyprland_ctm_control_manager_v1",
+      "name": "Color transform (Hyprland)",
+      "description": "Sets a color matrix for each monitor on Hyprland.",
+      "useful_for": "Night light on Hyprland",
+      "category": "outputs"
+    },
+    {
+      "interface": "wp_fractional_scale_manager_v1",
+      "name": "Fractional scale",
+      "description": "Tells apps the exact scale, such as 125%.",
+      "useful_for": "Sharp text on high-resolution screens",
+      "category": "outputs"
+    },
+    {
+      "interface": "wp_color_manager_v1",
+      "name": "Color management",
+      "description": "Describes the color spaces of windows and monitors.",
+      "useful_for": "HDR and color-accurate apps",
+      "category": "outputs"
+    },
+    {
+      "interface": "wp_tearing_control_manager_v1",
+      "name": "Tearing control",
+      "description": "Lets fullscreen apps allow tearing for lower latency.",
+      "useful_for": "Games",
+      "category": "outputs"
+    },
+    {
+      "interface": "wp_drm_lease_device_v1",
+      "name": "DRM lease",
+      "description": "Hands a display directly to an app.",
+      "useful_for": "VR headsets",
+      "category": "outputs"
+    },
+    {
+      "interface": "zwp_linux_dmabuf_v1",
+      "name": "Linux DMA-BUF",
+      "description": "Shares GPU buffers with the compositor without copying.",
+      "useful_for": "Fast rendering, video playback",
+      "category": "core"
+    }
+  ]
 }

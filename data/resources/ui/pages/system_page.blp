@@ -16,19 +16,22 @@ template $SystemPage: Adw.Bin {
         margin-bottom: 40;
         margin-start: 16;
         margin-end: 16;
-        // Summary: what you run and how many ideas are ready.
+        // Hero: what you run, how many ideas are ready, and the stack it is built from.
         Box {
           styles [
-            "system-teaser",
+            "system-hero",
           ]
 
-          spacing: 24;
+          overflow: hidden;
 
           Box {
             orientation: vertical;
-            spacing: 10;
-            hexpand: true;
+            spacing: 14;
             valign: center;
+            margin-top: 40;
+            margin-bottom: 40;
+            margin-start: 40;
+            margin-end: 8;
 
             Label {
               styles [
@@ -41,7 +44,7 @@ template $SystemPage: Adw.Bin {
 
             Label title_label {
               styles [
-                "title-1",
+                "hero-title",
               ]
 
               xalign: 0;
@@ -49,31 +52,71 @@ template $SystemPage: Adw.Bin {
             }
 
             Label session_label {
+              styles [
+                "hero-subtitle",
+              ]
+
               xalign: 0;
               wrap: true;
+              max-width-chars: 44;
             }
 
             Box {
-              spacing: 12;
+              orientation: vertical;
+              spacing: 8;
               margin-top: 8;
 
-              LevelBar ready_bar {
-                hexpand: true;
-                valign: center;
-                max-value: 1;
+              Box {
+                Label {
+                  styles [
+                    "heading",
+                  ]
+
+                  label: _("Ideas ready on your system");
+                  xalign: 0;
+                  hexpand: true;
+                }
+
+                Label ready_label {
+                  styles [
+                    "heading",
+                  ]
+                }
               }
 
-              Label ready_label {
+              LevelBar ready_bar {
+                max-value: 1;
+              }
+            }
+
+            Box {
+              spacing: 10;
+              margin-top: 8;
+
+              Button {
                 styles [
-                  "heading",
+                  "pill",
+                  "suggested-action",
                 ]
+
+                label: _("Scan Again");
+                clicked => $on_scan_clicked() swapped;
+              }
+
+              Button copy_button {
+                styles [
+                  "pill",
+                  "hero-button",
+                ]
+
+                label: _("Copy Report");
+                clicked => $on_copy_clicked() swapped;
               }
             }
           }
 
-          Box tiles_box {
-            spacing: 12;
-            valign: center;
+          $IsoStack stack {
+            hexpand: true;
           }
         }
 
@@ -81,7 +124,7 @@ template $SystemPage: Adw.Bin {
           selection-mode: none;
           homogeneous: true;
           min-children-per-line: 1;
-          max-children-per-line: 4;
+          max-children-per-line: 3;
           column-spacing: 12;
           row-spacing: 12;
         }
@@ -92,6 +135,7 @@ template $SystemPage: Adw.Bin {
           spacing: 16;
 
           Box {
+            orientation: vertical;
             spacing: 12;
 
             Box {
@@ -123,7 +167,7 @@ template $SystemPage: Adw.Bin {
                 "round",
               ]
 
-              valign: end;
+              halign: start;
               active-name: "all";
 
               Adw.Toggle {
@@ -147,40 +191,51 @@ template $SystemPage: Adw.Bin {
             selection-mode: none;
             homogeneous: true;
             min-children-per-line: 1;
-            max-children-per-line: 3;
+            max-children-per-line: 2;
             column-spacing: 12;
             row-spacing: 12;
           }
         }
 
-        // What the sandbox can see.
+        // Protocols, grouped by job.
         Box {
           orientation: vertical;
-          spacing: 12;
+          spacing: 16;
 
-          Label {
-            styles [
-              "title-2",
-            ]
+          Box {
+            orientation: vertical;
+            spacing: 4;
 
-            label: _("What Apps Can See");
-            xalign: 0;
+            Label {
+              styles [
+                "title-2",
+              ]
+
+              label: _("Wayland Protocols");
+              xalign: 0;
+            }
+
+            Label protocols_note_label {
+              styles [
+                "dim-label",
+              ]
+
+              xalign: 0;
+              wrap: true;
+            }
           }
 
-          Label {
-            styles [
-              "dim-label",
-            ]
-
-            label: _(
-              "These Wayland protocols are visible from inside the Flatpak sandbox. Compositors hide some protocols, like layer shell and screen capture, from sandboxed apps. That is why the ideas above use the full list your compositor offers to programs outside the sandbox."
-            );
-            xalign: 0;
-            wrap: true;
+          FlowBox protocols_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 2;
+            column-spacing: 12;
+            row-spacing: 12;
           }
 
-          Expander visible_expander {
-            child: FlowBox visible_flowbox {
+          Expander more_protocols_expander {
+            child: FlowBox more_protocols_flowbox {
               selection-mode: none;
               min-children-per-line: 1;
               max-children-per-line: 6;

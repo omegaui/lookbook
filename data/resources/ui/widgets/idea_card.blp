@@ -8,63 +8,78 @@ template $IdeaCard: Adw.Bin {
   ]
 
   child: Box {
-    orientation: vertical;
-    spacing: 8;
+    spacing: 14;
+
+    $LogoTile tile {
+      valign: start;
+    }
 
     Box {
-      spacing: 8;
+      orientation: vertical;
+      spacing: 6;
+      hexpand: true;
 
-      Image status_icon {
-        pixel-size: 16;
-        valign: center;
-        accessible-role: presentation;
+      Box {
+        spacing: 8;
+
+        Label name_label {
+          styles [
+            "heading",
+          ]
+
+          xalign: 0;
+          wrap: true;
+        }
+
+        Label status_label {
+          styles [
+            "badge",
+          ]
+
+          valign: center;
+        }
       }
 
-      Label name_label {
+      Label description_label {
         styles [
-          "heading",
+          "dim-label",
         ]
 
         xalign: 0;
-        hexpand: true;
         wrap: true;
       }
 
-      Label status_label {
+      Box {
+        spacing: 6;
+
+        Label route_label {
+          styles [
+            "chip",
+          ]
+
+          wrap: true;
+        }
+
+        Label interface_label {
+          styles [
+            "protocol-chip",
+          ]
+
+          visible: false;
+          ellipsize: end;
+        }
+      }
+
+      Label places_label {
         styles [
-          "badge",
+          "caption",
+          "dim-label",
         ]
 
-        valign: start;
+        xalign: 0;
+        wrap: true;
+        visible: false;
       }
-    }
-
-    Label description_label {
-      styles [
-        "dim-label",
-      ]
-
-      xalign: 0;
-      wrap: true;
-    }
-
-    Label route_label {
-      styles [
-        "chip",
-      ]
-
-      halign: start;
-      wrap: true;
-    }
-
-    Label places_label {
-      styles [
-        "caption",
-      ]
-
-      xalign: 0;
-      wrap: true;
-      visible: false;
     }
   };
 }

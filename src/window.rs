@@ -188,7 +188,7 @@ impl LinuxAndYouWindow {
 
         let screenshots = catalog.screenshots_of(&item.id);
         imp.navigation_view
-            .push(&ItemDetailPage::new(&content, &screenshots));
+            .push(&ItemDetailPage::new(&content, &screenshots, &catalog));
     }
 
     fn remember_last_page(&self) {
@@ -215,7 +215,7 @@ impl LinuxAndYouWindow {
         imp.desktops_page.show_catalog(&catalog, &system);
         imp.compositors_page.show_catalog(&catalog, &system);
         imp.wallpapers_page.show_catalog(&catalog, &system);
-        imp.system_page.show_system(&catalog, &system);
+        imp.system_page.show_system(catalog.clone(), &system);
 
         imp.catalog.replace(Some(catalog));
         imp.system.replace(Some(system));

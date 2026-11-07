@@ -7,9 +7,11 @@ mod features;
 mod item_ref;
 mod loader;
 mod model;
+mod protocols;
 
 pub use features::{key_features, FeatureSupport};
 pub use item_ref::ItemRef;
+pub use protocols::{ProtocolInfo, ProtocolOverview};
 pub use model::*;
 
 /// The few fields every catalog item has, used for small tiles and lists.

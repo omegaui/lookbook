@@ -5,8 +5,9 @@ use crate::system::SystemInfo;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum IdeaStatus {
-    /// Buildable here. `route` says how, for example "Shell extension (GJS)".
-    Ready { route: String },
+    /// Buildable here. `route` says how, for example "Layer shell", and
+    /// `interface` names the protocol it uses, if any, for example "zwlr_layer_shell_v1".
+    Ready { route: String, interface: Option<String> },
     /// Not buildable here. `needs` names what is missing, `places` where it works.
     WorksElsewhere { needs: String, places: Vec<String> },
 }
@@ -38,6 +39,7 @@ pub fn evaluate(idea: &Idea, setup: &CurrentSetup<'_>, catalog: &Catalog) -> Ide
     match working_route {
         Some(route) => IdeaStatus::Ready {
             route: route.label.clone(),
+            interface: route.requires.first().cloned(),
         },
         None => IdeaStatus::WorksElsewhere {
             needs: first_route_label(idea),
@@ -139,13 +141,22 @@ mod tests {
     #[test]
     fn status_bar_on_gnome_is_a_shell_extension() {
         let status = status_of("status-bar", &["GNOME"]);
-        assert_eq!(status, IdeaStatus::Ready { route: "Top bar extension (GJS)".to_owned() });
+        assert_eq!(
+            status,
+            IdeaStatus::Ready { route: "Top bar extension (GJS)".to_owned(), interface: None }
+        );
     }
 
     #[test]
     fn status_bar_on_hyprland_uses_layer_shell() {
         let status = status_of("status-bar", &["Hyprland"]);
-        assert_eq!(status, IdeaStatus::Ready { route: "Layer shell".to_owned() });
+        assert_eq!(
+            status,
+            IdeaStatus::Ready {
+                route: "Layer shell".to_owned(),
+                interface: Some("zwlr_layer_shell_v1".to_owned()),
+            }
+        );
     }
 
     #[test]

@@ -10,6 +10,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gdk, glib, graphene, gsk};
 
+use super::iso::{apply_floor_transform, screen_drop_in_floor};
 use crate::catalog::Accent;
 
 /// How the windows sit on the floor.
@@ -24,8 +25,6 @@ pub enum SceneLayout {
     Floating,
 }
 
-const TURN_DEGREES: f32 = -28.0;
-const FLATTEN: f32 = 0.64;
 const FLOOR_THICKNESS: f32 = 14.0;
 const WINDOW_THICKNESS: f32 = 8.0;
 const WINDOW_RADIUS: f32 = 12.0;
@@ -153,8 +152,7 @@ mod imp {
 
             snapshot.save();
             snapshot.translate(&graphene::Point::new(width * 0.06, height * 0.58));
-            snapshot.scale(1.0, FLATTEN);
-            snapshot.rotate(TURN_DEGREES);
+            apply_floor_transform(snapshot);
 
             match self.layout.get() {
                 SceneLayout::Scrolling => draw_scrolling_scene(snapshot, &palette),
@@ -412,36 +410,4 @@ fn fill_rounded(snapshot: &gtk::Snapshot, rect: graphene::Rect, radius: f32, col
 
 fn offset(rect: graphene::Rect, dx: f32, dy: f32) -> graphene::Rect {
     graphene::Rect::new(rect.x() + dx, rect.y() + dy, rect.width(), rect.height())
-}
-
-/// The move on the floor that shows up as `drop` pixels straight down on screen.
-/// It undoes the flatten and the turn, so edges hang straight down like a real slab.
-fn screen_drop_in_floor(drop: f32) -> (f32, f32) {
-    let unflattened_y = drop / FLATTEN;
-    let angle = (-TURN_DEGREES).to_radians();
-    let dx = -unflattened_y * angle.sin();
-    let dy = unflattened_y * angle.cos();
-    (dx, dy)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Applies the scene transform (turn, then flatten) to a floor offset.
-    fn to_screen(dx: f32, dy: f32) -> (f32, f32) {
-        let angle = TURN_DEGREES.to_radians();
-        let turned_x = dx * angle.cos() - dy * angle.sin();
-        let turned_y = dx * angle.sin() + dy * angle.cos();
-        (turned_x, turned_y * FLATTEN)
-    }
-
-    #[test]
-    fn drop_points_straight_down_on_screen() {
-        let (dx, dy) = screen_drop_in_floor(10.0);
-        let (screen_x, screen_y) = to_screen(dx, dy);
-
-        assert!(screen_x.abs() < 0.01, "screen x was {screen_x}");
-        assert!((screen_y - 10.0).abs() < 0.01, "screen y was {screen_y}");
-    }
 }

@@ -9,6 +9,8 @@ pub struct Hardware {
     pub cpu_model: String,
     pub cpu_threads: usize,
     pub memory_bytes: u64,
+    /// One name per graphics card, for example "Intel Raptor Lake-S UHD Graphics".
+    pub gpus: Vec<String>,
 }
 
 impl Hardware {
@@ -21,6 +23,7 @@ impl Hardware {
             cpu_model: parse_cpu_model(&cpuinfo),
             cpu_threads: count_cpu_threads(&cpuinfo),
             memory_bytes: parse_memory_bytes(&meminfo),
+            gpus: super::gpu::detect_gpus(),
         }
     }
 }

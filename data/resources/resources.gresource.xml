@@ -14,6 +14,7 @@
     <file preprocess="xml-stripblanks">ui/widgets/catalog_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/collection_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/idea_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/protocol_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/screenshot_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/spotlight_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_card.ui</file>
@@ -24,6 +25,8 @@
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-compositors-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-system-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-wallpapers-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-idea-bar-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/lay-idea-dock-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-alpinelinux-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-archlinux-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/apps/lay-logo-budgie-symbolic.svg</file>

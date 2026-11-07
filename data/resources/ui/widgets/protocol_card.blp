@@ -1,0 +1,93 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ProtocolCard: Adw.Bin {
+  styles [
+    "card",
+    "protocol-card",
+  ]
+
+  child: Box {
+    spacing: 16;
+
+    $IsoTile art {
+      valign: center;
+    }
+
+    Box {
+      orientation: vertical;
+      spacing: 4;
+      valign: center;
+      hexpand: true;
+
+      Box {
+        spacing: 8;
+
+        Label name_label {
+          styles [
+            "heading",
+          ]
+
+          xalign: 0;
+          wrap: true;
+        }
+
+        Label hidden_label {
+          styles [
+            "badge",
+            "elsewhere",
+          ]
+
+          label: _("Hidden in Flatpak");
+          tooltip-text: _(
+            "The compositor hides this protocol from sandboxed apps, so Linux & You cannot see it. Programs outside the sandbox can."
+          );
+          valign: center;
+          visible: false;
+        }
+      }
+
+      Label interface_label {
+        styles [
+          "caption",
+          "dim-label",
+          "monospace",
+        ]
+
+        xalign: 0;
+        ellipsize: end;
+      }
+
+      Label description_label {
+        xalign: 0;
+        wrap: true;
+        margin-top: 4;
+      }
+
+      Box {
+        spacing: 6;
+        margin-top: 4;
+
+        Label {
+          styles [
+            "caption-heading",
+            "useful-for",
+          ]
+
+          label: _("Useful for");
+          valign: start;
+        }
+
+        Label useful_for_label {
+          styles [
+            "caption",
+          ]
+
+          xalign: 0;
+          wrap: true;
+          hexpand: true;
+        }
+      }
+    }
+  };
+}

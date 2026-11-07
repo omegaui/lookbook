@@ -2,7 +2,11 @@ mod catalog_card;
 mod collection_card;
 mod content;
 mod idea_card;
+mod iso;
 mod iso_scene;
+mod iso_stack;
+mod iso_tile;
+mod protocol_card;
 mod logo_tile;
 mod screenshot_card;
 mod screenshot_mock;
@@ -19,6 +23,9 @@ pub use content::{
 };
 pub use idea_card::IdeaCard;
 pub use iso_scene::{IsoScene, SceneLayout};
+pub use iso_stack::{IsoStack, StackLayer};
+pub use iso_tile::IsoTile;
+pub use protocol_card::fill_protocol_lists;
 pub use logo_tile::{LogoTile, TileContent};
 pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;
@@ -54,6 +61,14 @@ pub fn fact_tile(fact: &Fact) -> gtk::Box {
 
     tile.append(&label);
     tile.append(&value);
+
+    if let Some(detail) = &fact.detail {
+        let detail_label = gtk::Label::new(Some(detail));
+        detail_label.add_css_class("dim-label");
+        detail_label.set_xalign(0.0);
+        detail_label.set_wrap(true);
+        tile.append(&detail_label);
+    }
     tile
 }
 

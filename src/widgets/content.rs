@@ -77,6 +77,7 @@ fn tile_content(short: &str, color: &str, logo: Option<&str>) -> TileContent {
         short: short.to_owned(),
         color: color.to_owned(),
         logo: logo.map(str::to_owned),
+        icon_name: None,
     }
 }
 
@@ -137,18 +138,33 @@ impl CardContent {
     }
 }
 
-/// One labelled value on a details page, for example "Packages: dnf".
+/// One labelled value, for example "Packages: dnf", with an optional second line.
 #[derive(Debug, Clone)]
 pub struct Fact {
     pub label: String,
     pub value: String,
+    pub detail: Option<String>,
+}
+
+impl Fact {
+    pub fn new(label: String, value: &str) -> Self {
+        Self {
+            label,
+            value: value.to_owned(),
+            detail: None,
+        }
+    }
+
+    pub fn with_detail(label: String, value: &str, detail: &str) -> Self {
+        Self {
+            detail: Some(detail.to_owned()),
+            ..Self::new(label, value)
+        }
+    }
 }
 
 fn fact(label: String, value: &str) -> Fact {
-    Fact {
-        label,
-        value: value.to_owned(),
-    }
+    Fact::new(label, value)
 }
 
 /// Everything the details page shows about one item.

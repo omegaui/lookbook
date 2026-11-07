@@ -12,6 +12,9 @@ pub struct Catalog {
     pub desktops: Vec<Desktop>,
     pub compositors: Vec<Compositor>,
     pub ideas: Vec<Idea>,
+    /// Plain-language descriptions of the protocols that matter to builders.
+    #[serde(default)]
+    pub protocols: Vec<super::ProtocolInfo>,
     #[serde(default)]
     pub wallpaper_sources: Vec<WallpaperSource>,
     /// Image URLs hidden on request, for example after a takedown request.
@@ -47,6 +50,10 @@ pub struct Idea {
     pub id: String,
     pub name: String,
     pub description: String,
+    /// A symbolic icon name, from the icon theme or the app's own icons.
+    pub icon: String,
+    /// The tile color for the idea's category, for example blue for shell tools.
+    pub color: String,
     /// The ways to build it. The idea is ready when any one of them works on the user's system.
     pub routes: Vec<IdeaRoute>,
 }

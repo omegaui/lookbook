@@ -8,9 +8,10 @@ use gtk::{gio, glib};
 
 use gettextrs::gettext;
 
-use crate::catalog::Screenshot;
+use crate::catalog::{Catalog, Screenshot};
 use crate::widgets::{
-    fact_tile, feature_check, fill_wall_grid, CardBadge, DetailContent, LogoTile, ProtocolSummary,
+    fact_tile, feature_check, fill_protocol_lists, fill_wall_grid, CardBadge, DetailContent,
+    LogoTile, ProtocolSummary,
 };
 
 const TILE_SIZE: i32 = 96;
@@ -42,7 +43,11 @@ mod imp {
         #[template_child]
         pub checks_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
-        pub protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        pub protocol_cards_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        #[template_child]
+        pub more_protocols_expander: gtk::TemplateChild<gtk::Expander>,
+        #[template_child]
+        pub more_protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
         pub website: RefCell<String>,
     }
 
@@ -83,7 +88,7 @@ glib::wrapper! {
 }
 
 impl ItemDetailPage {
-    pub fn new(content: &DetailContent, screenshots: &[&Screenshot]) -> Self {
+    pub fn new(content: &DetailContent, screenshots: &[&Screenshot], catalog: &Catalog) -> Self {
         let page: Self = glib::Object::builder()
             .property("title", &content.title)
             .build();
@@ -91,7 +96,7 @@ impl ItemDetailPage {
         page.show_header(content);
         page.show_screenshots(screenshots);
         page.show_facts(content);
-        page.show_protocols(content);
+        page.show_protocols(content, catalog);
         page
     }
 
@@ -128,12 +133,14 @@ impl ItemDetailPage {
         }
     }
 
-    /// Shows the key feature checks and the full protocol list of a compositor.
-    fn show_protocols(&self, content: &DetailContent) {
+    /// Shows the key feature checks and what the compositor offers: a card per
+    /// described protocol, and the rest under "more protocols".
+    fn show_protocols(&self, content: &DetailContent, catalog: &Catalog) {
         let Some(protocols) = &content.protocols else {
             return;
         };
         let imp = self.imp();
+        let overview = catalog.protocol_overview(&protocols.globals);
 
         imp.protocols_summary_label
             .set_label(&protocols_summary_text(protocols));
@@ -142,12 +149,17 @@ impl ItemDetailPage {
             imp.checks_box.append(&feature_check(check));
         }
 
-        for global in &protocols.globals {
-            let chip = gtk::Label::new(Some(global));
-            chip.add_css_class("protocol-chip");
-            imp.protocols_flowbox.append(&chip);
-        }
-
+        fill_protocol_lists(
+            &imp.protocol_cards_flowbox,
+            &imp.more_protocols_flowbox,
+            &overview,
+            None,
+        );
+        imp.more_protocols_expander.set_label(Some(
+            &gettext("{} more protocols").replace("{}", &overview.others.len().to_string()),
+        ));
+        imp.more_protocols_expander
+            .set_visible(!overview.others.is_empty());
         imp.protocols_section.set_visible(true);
     }
 

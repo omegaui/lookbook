@@ -168,7 +168,11 @@ impl LogoTile {
     pub fn set_content(&self, content: &TileContent) {
         let imp = self.imp();
         imp.text.replace(content.short.clone());
-        imp.logo_icon.replace(content.logo.as_deref().map(logo_icon_name));
+        let logo_icon = content
+            .icon_name
+            .clone()
+            .or_else(|| content.logo.as_deref().map(logo_icon_name));
+        imp.logo_icon.replace(logo_icon);
         imp.color
             .set(gdk::RGBA::parse(content.color.as_str()).unwrap_or(FALLBACK_COLOR));
         self.queue_draw();
@@ -187,4 +191,6 @@ pub struct TileContent {
     pub color: String,
     /// A bundled logo id, for example "fedora".
     pub logo: Option<String>,
+    /// Any symbolic icon name, used instead of `logo`, for example "camera-photo-symbolic".
+    pub icon_name: Option<String>,
 }

@@ -1,5 +1,6 @@
 //! Detects what the user runs. This module has no UI code.
 
+mod gpu;
 mod hardware;
 mod os_release;
 mod session;
