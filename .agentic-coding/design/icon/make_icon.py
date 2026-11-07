@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-"""Draws the Linux & You app icons: a slim penguin with a yellow scarf, standing
-on snow inside a round night-sky badge. The penguin is our own and kept apart
-from Tux (standing and slim, no white face mask, no yellow feet, a scarf).
+"""Builds the Linux & You app icons from the chosen artwork: a penguin with
+headphones coding at a cosy desk, with a terminal mug (source/penguin-at-desk.png,
+made by the user with ChatGPT).
 
     python3 .agentic-coding/design/icon/make_icon.py
 
-Writes, in data/icons/:
-- io.github.omegaui.LinuxAndYou.svg           the app icon (128x128)
-- io.github.omegaui.LinuxAndYou.Devel.svg     the same with GNOME's development stripes on the ice
-- io.github.omegaui.LinuxAndYou-symbolic.svg  a 16x16 one-color penguin
+The source is a 1254 px PNG whose rounded tile has a soft, glowing edge left by
+background removal. This script:
 
-and preview-final.png next to this script. Earlier explorations: make_concepts.py
-(isometric), make_flat.py (flat room corner), make_penguin.py (penguin layouts).
+1. crops the tile and makes it exactly square;
+2. gives it a crisp rounded edge, a little inside the soft one, with the tile
+   fully opaque inside;
+3. places it on GNOME's 128 grid (the tile fills 112 of 128 px);
+4. writes PNGs at every size GNOME looks for, plus a development version with
+   GNOME's hazard stripes across the desk, and a one-color symbolic SVG.
+
+Needs ImageMagick (`magick`) and rsvg-convert (for the preview).
 """
 
 import subprocess
@@ -19,110 +23,136 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent.parent
+SOURCE = HERE / "source/penguin-at-desk.png"
+WORK = HERE / "render"
 ICONS = ROOT / "data/icons"
 APP_ID = "io.github.omegaui.LinuxAndYou"
 FONT = "/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf"
 
-# GNOME palette, lightest to darkest.
-BLUE = ["#99c1f1", "#62a0ea", "#3584e4", "#1c71d8", "#1a5fb4"]
-YELLOW = ["#f9f06b", "#f8e45c", "#f6d32d", "#f5c211", "#e5a50a"]
-ORANGE = ["#ffbe6f", "#ffa348", "#ff7800", "#e66100", "#c64600"]
-LIGHT = ["#ffffff", "#f6f5f4", "#deddda", "#c0bfbc", "#9a9996"]
-DARK = ["#77767b", "#5e5c64", "#3d3846", "#241f31", "#000000"]
-ICE = "#d6ecfb"
+# Where the tile sits in the source image (measured where it is at least 95% opaque).
+TILE_CROP = "897x906+174+185"
+# The tile's corner radius in the source is about 220 of its 897 px.
+CORNER_SHARE = 220 / 897
+# How far inside the soft edge the clean edge goes, at 1024 px.
+EDGE_INSET = 12
+MASTER = 1024
+# The tile fills 112 of the 128 px grid.
+TILE_SHARE = 112 / 128
+# The desk band, where the development stripes go, starts this far down the tile.
+DESK_TOP_SHARE = 0.87
+SIZES = [16, 24, 32, 48, 64, 128, 256, 512]
 
-# The penguin's outline, belly and flippers, in the 128 grid, feet at about y = 100.
-BODY = "M 64,10 C 84,10 90,32 90,54 C 90,82 82,100 64,100 C 46,100 38,82 38,54 C 38,32 44,10 64,10 Z"
-BELLY = "M 64,42 C 77,42 80,58 80,72 C 80,88 74,96 64,96 C 54,96 48,88 48,72 C 48,58 51,42 64,42 Z"
-LEFT_FLIPPER = '<ellipse cx="39" cy="66" rx="7" ry="20" transform="rotate(18 39 66)"'
-RIGHT_FLIPPER = '<ellipse cx="89" cy="66" rx="7" ry="20" transform="rotate(-18 89 66)"'
-
-
-def penguin():
-    return f"""
-  {LEFT_FLIPPER} fill="{DARK[2]}"/>
-  {RIGHT_FLIPPER} fill="{DARK[2]}"/>
-  <path d="{BODY}" fill="{DARK[3]}"/>
-  <path d="{BELLY}" fill="{LIGHT[0]}"/>
-  <circle cx="55.5" cy="30" r="3.4" fill="{LIGHT[0]}"/>
-  <circle cx="72.5" cy="30" r="3.4" fill="{LIGHT[0]}"/>
-  <path d="M 58,36 L 70,36 L 64,43.5 Z" fill="{ORANGE[2]}" stroke="{ORANGE[2]}" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M 41,47 C 52,53 76,53 87,47 L 87,55 C 76,61 52,61 41,55 Z" fill="{YELLOW[2]}"/>
-  <path d="M 72,54 L 80,54 L 82,74 L 73,72 Z" fill="{YELLOW[4]}"/>
-  <ellipse cx="55" cy="100.5" rx="8" ry="3.5" fill="{ORANGE[3]}"/>
-  <ellipse cx="73" cy="100.5" rx="8" ry="3.5" fill="{ORANGE[3]}"/>"""
+STRIPE_YELLOW = "#f6d32d"
+STRIPE_DARK = "#241f31"
 
 
-def app_icon(devel=False):
-    ice = "url(#devel-stripes)" if devel else ICE
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-<defs>
-  <clipPath id="badge"><circle cx="64" cy="64" r="58"/></clipPath>
-  <pattern id="devel-stripes" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-    <rect width="5" height="10" fill="{YELLOW[2]}"/>
-    <rect x="5" width="5" height="10" fill="{DARK[3]}"/>
-  </pattern>
-</defs>
-<circle cx="64" cy="64" r="58" fill="{BLUE[4]}"/>
-<g clip-path="url(#badge)">
-  <circle cx="30" cy="34" r="2.5" fill="{LIGHT[0]}"/>
-  <circle cx="100" cy="28" r="2" fill="{LIGHT[0]}"/>
-  <circle cx="104" cy="52" r="1.5" fill="{LIGHT[0]}"/>
-  <path d="M 0,96 C 30,84 98,84 128,96 L 128,128 L 0,128 Z" fill="{LIGHT[0]}"/>
-  <path d="M 0,108 C 40,100 88,100 128,108 L 128,128 L 0,128 Z" fill="{ice}"/>
-</g>{penguin()}
-</svg>
-"""
+def magick(*args):
+    subprocess.run(["magick", *map(str, args)], check=True)
+
+
+def clean_tile():
+    """The tile, square, with a crisp rounded edge and no glow."""
+    tile = WORK / "tile.png"
+    mask = WORK / "mask.png"
+    magick(SOURCE, "-crop", TILE_CROP, "+repage", "-resize", f"{MASTER}x{MASTER}!", tile)
+
+    radius = round(MASTER * CORNER_SHARE) - EDGE_INSET
+    last = MASTER - 1 - EDGE_INSET
+    magick(
+        "-size", f"{MASTER}x{MASTER}", "xc:black", "-fill", "white",
+        "-draw", f"roundrectangle {EDGE_INSET},{EDGE_INSET} {last},{last} {radius},{radius}", mask,
+    )
+    clean = WORK / "tile-clean.png"
+    # Fully opaque tile, then keep only what lies inside the mask.
+    magick(tile, "-alpha", "off", "-alpha", "set", "(", mask, "-alpha", "copy", ")", "-compose", "DstIn", "-composite", clean)
+    return clean
+
+
+def with_devel_stripes(tile):
+    """The tile with yellow and dark diagonal stripes across the desk."""
+    stripes = WORK / "stripes.png"
+    lines = []
+    for offset in range(-MASTER, 2 * MASTER, 72):
+        lines += ["-draw", f"line {offset},{MASTER} {offset + MASTER},0"]
+    magick("-size", f"{MASTER}x{MASTER}", f"xc:{STRIPE_YELLOW}", "-stroke", STRIPE_DARK, "-strokewidth", 36, *lines, stripes)
+
+    desk_top = round(MASTER * DESK_TOP_SHARE)
+    band = WORK / "band.png"
+    magick(stripes, "-crop", f"{MASTER}x{MASTER - desk_top}+0+{desk_top}", "+repage", band)
+    devel = WORK / "tile-devel.png"
+    magick(tile, band, "-geometry", f"+0+{desk_top}", "-compose", "SrcAtop", "-composite", devel)
+    return devel
+
+
+def on_grid(tile, name):
+    """The tile centred on a transparent square, filling 112 of 128 px."""
+    tile_size = round(MASTER * TILE_SHARE)
+    master = WORK / f"{name}-master.png"
+    magick(
+        "-size", f"{MASTER}x{MASTER}", "xc:none",
+        "(", tile, "-resize", f"{tile_size}x{tile_size}", ")",
+        "-gravity", "center", "-composite", master,
+    )
+    return master
+
+
+def export_sizes(master, icon_name):
+    """PNGs in data/icons/hicolor/<size>x<size>/apps/, sharpened a little when small."""
+    for size in SIZES:
+        folder = ICONS / "hicolor" / f"{size}x{size}" / "apps"
+        folder.mkdir(parents=True, exist_ok=True)
+        sharpen = ["-unsharp", "0x0.6+0.6+0"] if size <= 48 else []
+        magick(
+            master, "-filter", "Lanczos", "-resize", f"{size}x{size}", *sharpen, "-strip",
+            # 8 bits per channel: the source is 8-bit, and 16-bit PNGs are four times larger.
+            "-depth", "8", "-define", "png:compression-level=9", "-define", "png:compression-filter=5",
+            folder / f"{icon_name}.png",
+        )
 
 
 def symbolic_icon():
-    """The penguin's silhouette with its belly cut out, scaled from the 128 grid."""
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-<g transform="translate(0 1.5) scale(0.125)" fill="#2e3436">
-  <path fill-rule="evenodd" d="{BODY} {BELLY}"/>
-  {LEFT_FLIPPER}/>
-  {RIGHT_FLIPPER}/>
-  <ellipse cx="55" cy="100.5" rx="9" ry="4.5"/>
-  <ellipse cx="73" cy="100.5" rx="9" ry="4.5"/>
-</g>
+    """A penguin's head with headphones, in one color."""
+    return """<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <path fill="#2e3436" fill-rule="evenodd" d="M 8,3 C 11.6,3 13.5,5.8 13.5,9.2 C 13.5,12.6 11.2,15 8,15 C 4.8,15 2.5,12.6 2.5,9.2 C 2.5,5.8 4.4,3 8,3 Z M 6,7.4 C 4.6,7.4 4,8.6 4,10 C 4,12 5.6,13.4 8,13.4 C 10.4,13.4 12,12 12,10 C 12,8.6 11.4,7.4 10,7.4 C 9.1,7.4 8.5,7.9 8,8.5 C 7.5,7.9 6.9,7.4 6,7.4 Z"/>
+  <path fill="#2e3436" d="M 8,0.5 C 4,0.5 1.2,3.3 1.2,7.4 L 1.2,8.4 L 2.6,8.4 L 2.6,7.4 C 2.6,4.1 4.8,1.9 8,1.9 C 11.2,1.9 13.4,4.1 13.4,7.4 L 13.4,8.4 L 14.8,8.4 L 14.8,7.4 C 14.8,3.3 12,0.5 8,0.5 Z"/>
+  <rect fill="#2e3436" x="0.5" y="7.6" width="3" height="4.6" rx="1.2"/>
+  <rect fill="#2e3436" x="12.5" y="7.6" width="3" height="4.6" rx="1.2"/>
+  <circle fill="#2e3436" cx="6.6" cy="10" r="0.8"/>
+  <circle fill="#2e3436" cx="9.4" cy="10" r="0.8"/>
+  <path fill="#2e3436" d="M 6.9,11.1 L 9.1,11.1 L 8,12.5 Z"/>
 </svg>
 """
 
 
-def render_preview(rows_to_draw):
-    tmp = HERE / "render"
-    tmp.mkdir(exist_ok=True)
+def preview():
+    """One row per icon: 128 on light and dark, then 64, 32, 24 and 16 px."""
     rows = []
-    for label, source, sizes in rows_to_draw:
+    for label, name, symbolic in [("app icon", APP_ID, False), ("development build", f"{APP_ID}.Devel", False), ("symbolic", f"{APP_ID}-symbolic", True)]:
         cells = []
-        for size, background in sizes:
-            png = tmp / f"{source.stem}-{size}-{background[1:]}.png"
-            subprocess.run(["rsvg-convert", "-w", str(size), "-h", str(size), "-o", str(png), str(source)], check=True)
-            cell = tmp / f"cell-{png.name}"
-            subprocess.run(["magick", "-size", "160x160", f"xc:{background}", str(png), "-gravity", "center", "-composite", str(cell)], check=True)
-            cells.append(str(cell))
-        row = tmp / f"row-{source.stem}.png"
-        subprocess.run(["magick", *cells, "+append", str(row)], check=True)
-        labelled = tmp / f"labelled-{source.stem}.png"
-        subprocess.run(
-            ["magick", str(row), "-background", "#ffffff", "-font", FONT, "-pointsize", "20", "-fill", "#241f31", f"label:  {label}", "-gravity", "west", "-append", str(labelled)],
-            check=True,
-        )
-        rows.append(str(labelled))
-    subprocess.run(["magick", *rows, "-append", str(HERE / "preview-final.png")], check=True)
+        for size, background in [(128, "#f6f5f4"), (128, "#241f31"), (64, "#f6f5f4"), (32, "#f6f5f4"), (24, "#f6f5f4"), (16, "#f6f5f4")]:
+            if symbolic:
+                picture = WORK / f"symbolic-{size}.png"
+                subprocess.run(["rsvg-convert", "-w", str(size), "-h", str(size), "-o", str(picture), str(ICONS / f"{name}.svg")], check=True)
+            else:
+                picture = ICONS / "hicolor" / f"{size}x{size}" / "apps" / f"{name}.png"
+            cell = WORK / f"cell-{name}-{size}-{background[1:]}.png"
+            magick("-size", "160x160", f"xc:{background}", picture, "-gravity", "center", "-composite", cell)
+            cells.append(cell)
+        row = WORK / f"row-{name}.png"
+        magick(*cells, "+append", row)
+        labelled = WORK / f"labelled-{name}.png"
+        magick(row, "-background", "#ffffff", "-font", FONT, "-pointsize", "20", "-fill", "#241f31", f"label:  {label}", "-gravity", "west", "-append", labelled)
+        rows.append(labelled)
+    magick(*rows, "-append", HERE / "preview-final.png")
 
 
 def main():
-    app = ICONS / f"{APP_ID}.svg"
-    devel = ICONS / f"{APP_ID}.Devel.svg"
-    symbolic = ICONS / f"{APP_ID}-symbolic.svg"
-    app.write_text(app_icon())
-    devel.write_text(app_icon(devel=True))
-    symbolic.write_text(symbolic_icon())
-
-    full = [(128, "#f6f5f4"), (128, "#241f31"), (64, "#f6f5f4"), (32, "#f6f5f4"), (16, "#f6f5f4")]
-    small = [(128, "#f6f5f4"), (64, "#f6f5f4"), (32, "#f6f5f4"), (16, "#f6f5f4"), (16, "#ffffff")]
-    render_preview([("app icon", app, full), ("development build", devel, full), ("symbolic", symbolic, small)])
+    WORK.mkdir(exist_ok=True)
+    tile = clean_tile()
+    export_sizes(on_grid(tile, "app"), APP_ID)
+    export_sizes(on_grid(with_devel_stripes(tile), "devel"), f"{APP_ID}.Devel")
+    (ICONS / f"{APP_ID}-symbolic.svg").write_text(symbolic_icon())
+    preview()
     print(HERE / "preview-final.png")
 
 
