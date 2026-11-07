@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Placeholder symbolic icon. Replace with the final design. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <path fill="#2e3436" d="M 6 3 a 5 5 0 1 0 0 10 a 5 5 0 0 0 2 -0.42 a 5 5 0 1 0 0 -9.16 A 5 5 0 0 0 6 3 z m 2 2.1 a 3 3 0 0 1 0 5.8 a 5 5 0 0 0 0 -5.8 z"/>
+<g transform="translate(0 1.5) scale(0.125)" fill="#2e3436">
+  <path fill-rule="evenodd" d="M 64,10 C 84,10 90,32 90,54 C 90,82 82,100 64,100 C 46,100 38,82 38,54 C 38,32 44,10 64,10 Z M 64,42 C 77,42 80,58 80,72 C 80,88 74,96 64,96 C 54,96 48,88 48,72 C 48,58 51,42 64,42 Z"/>
+  <ellipse cx="39" cy="66" rx="7" ry="20" transform="rotate(18 39 66)"/>
+  <ellipse cx="89" cy="66" rx="7" ry="20" transform="rotate(-18 89 66)"/>
+  <ellipse cx="55" cy="100.5" rx="9" ry="4.5"/>
+  <ellipse cx="73" cy="100.5" rx="9" ry="4.5"/>
+</g>
 </svg>
