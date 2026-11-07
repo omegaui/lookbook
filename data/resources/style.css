@@ -130,6 +130,27 @@
   .spotlight.accent-brown { background-color: color-mix(in srgb, var(--brown-3) 10%, var(--window-bg-color)); }
 }
 
+/* Wallpapers */
+
+.wallpaper-card {
+  padding: 0;
+  background: none;
+  transition: transform 200ms ease-out;
+}
+
+.wallpaper-card:hover {
+  transform: translateY(-4px);
+}
+
+.wallpaper-thumbnail {
+  border-radius: 12px;
+  background-color: var(--card-bg-color);
+}
+
+.wallpaper-preview {
+  border-radius: 16px;
+}
+
 /* Hall of fame: each screenshot is a button that lifts on hover. */
 
 .screenshot-card {

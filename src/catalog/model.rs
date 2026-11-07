@@ -12,6 +12,33 @@ pub struct Catalog {
     pub desktops: Vec<Desktop>,
     pub compositors: Vec<Compositor>,
     pub ideas: Vec<Idea>,
+    #[serde(default)]
+    pub wallpaper_sources: Vec<WallpaperSource>,
+    /// Image URLs hidden on request, for example after a takedown request.
+    #[serde(default)]
+    pub wallpaper_blocklist: Vec<String>,
+}
+
+/// Where a wallpaper collection lives, and how to read its live list.
+#[derive(Debug, Clone, Deserialize)]
+pub struct WallpaperSource {
+    pub id: String,
+    pub name: String,
+    pub kind: WallpaperSourceKind,
+    /// The address the live list is read from.
+    pub index_url: String,
+    /// The page people visit to see the collection.
+    pub link: String,
+    pub credit: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum WallpaperSourceKind {
+    /// A copyparty file server, which lists files as JSON and makes thumbnails.
+    Copyparty,
+    /// A WordPress page whose images carry a `srcset` of sizes.
+    WordpressPage,
 }
 
 /// Something people build on their desktop, like a status bar or a lock screen.
@@ -136,8 +163,12 @@ pub struct Screenshot {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum MockLayout {
+    /// Tiled windows under a top bar, like Hyprland or sway.
     Tiled,
+    /// Floating windows, a top bar and a dock, like GNOME.
     Floating,
+    /// Floating windows over a full-width bottom panel, like KDE Plasma.
+    Panel,
 }
 
 #[derive(Debug, Clone, Deserialize)]

@@ -9,6 +9,7 @@
     "command": "linux-and-you",
     "finish-args": [
         "--share=ipc",
+        "--share=network",
         "--socket=wayland",
         "--device=dri",
         "--env=RUST_LOG=linux_and_you=debug",

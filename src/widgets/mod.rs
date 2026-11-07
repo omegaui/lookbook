@@ -8,6 +8,8 @@ mod screenshot_card;
 mod screenshot_mock;
 mod spotlight_card;
 mod wall;
+mod wallpaper_card;
+mod wallpaper_dialog;
 
 pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
@@ -22,6 +24,8 @@ pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;
 pub use spotlight_card::SpotlightCard;
 pub use wall::fill_wall_grid;
+pub use wallpaper_card::WallpaperCard;
+pub use wallpaper_dialog::{WallpaperDialog, WallpaperDialogContext};
 
 use gtk::prelude::*;
 

@@ -1,0 +1,141 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WallpapersPage: Adw.Bin {
+  child: ScrolledWindow {
+    hscrollbar-policy: never;
+
+    child: Adw.Clamp {
+      maximum-size: 1180;
+      tightening-threshold: 900;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 20;
+        margin-top: 12;
+        margin-bottom: 40;
+        margin-start: 16;
+        margin-end: 16;
+
+        Box {
+          spacing: 16;
+
+          Box {
+            orientation: vertical;
+            spacing: 4;
+            hexpand: true;
+
+            Label {
+              styles [
+                "title-1",
+              ]
+
+              label: _("Wallpapers");
+              xalign: 0;
+            }
+
+            Label {
+              styles [
+                "dim-label",
+              ]
+
+              label: _("Make the look yours. Each collection is read live, so you see what is there today.");
+              xalign: 0;
+              wrap: true;
+            }
+          }
+
+          Adw.ToggleGroup source_toggles {
+            styles [
+              "round",
+            ]
+
+            valign: end;
+          }
+        }
+
+        Stack content_stack {
+          StackPage {
+            name: "loading";
+
+            child: Box {
+              orientation: vertical;
+              spacing: 12;
+              halign: center;
+              margin-top: 80;
+              margin-bottom: 80;
+
+              Adw.Spinner {
+                width-request: 48;
+                height-request: 48;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Loading wallpapers…");
+              }
+            };
+          }
+
+          StackPage {
+            name: "error";
+
+            child: Adw.StatusPage {
+              icon-name: "network-offline-symbolic";
+              title: _("Could Not Load Wallpapers");
+              description: _("Check your connection and try again.");
+
+              child: Button {
+                styles [
+                  "pill",
+                  "suggested-action",
+                ]
+
+                label: _("Try Again");
+                halign: center;
+                clicked => $on_retry_clicked() swapped;
+              };
+            };
+          }
+
+          StackPage {
+            name: "grid";
+
+            child: Box {
+              orientation: vertical;
+              spacing: 20;
+
+              FlowBox wallpapers_flowbox {
+                selection-mode: none;
+                homogeneous: true;
+                min-children-per-line: 2;
+                max-children-per-line: 4;
+                column-spacing: 12;
+                row-spacing: 16;
+              }
+
+              Button show_more_button {
+                styles [
+                  "pill",
+                ]
+
+                label: _("Show More");
+                halign: center;
+                clicked => $on_show_more_clicked() swapped;
+              }
+            };
+          }
+        }
+
+        Box credits_box {
+          orientation: vertical;
+          spacing: 4;
+          margin-top: 12;
+        }
+      };
+    };
+  };
+}

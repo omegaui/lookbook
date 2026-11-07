@@ -7,7 +7,8 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
   height-request: 294;
 
   Adw.Breakpoint {
-    condition ("max-width: 720sp")
+    // Six tabs need about 980px in the header; below that they move to a bottom bar.
+    condition ("max-width: 1020sp")
 
     setters {
       switcher_bar.reveal: true;
@@ -68,6 +69,14 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
             icon-name: "lay-compositors-symbolic";
 
             child: $CompositorsPage compositors_page {};
+          }
+
+          Adw.ViewStackPage {
+            name: "wallpapers";
+            title: _("Wallpapers");
+            icon-name: "lay-wallpapers-symbolic";
+
+            child: $WallpapersPage wallpapers_page {};
           }
 
           Adw.ViewStackPage {

@@ -22,7 +22,7 @@ template $ExplorePage: Adw.Bin {
             "hero",
           ]
 
-          homogeneous: true;
+          homogeneous: false;
           overflow: hidden;
 
           Box {
@@ -97,6 +97,7 @@ template $ExplorePage: Adw.Bin {
           ScrolledWindow {
             hscrollbar-policy: external;
             vscrollbar-policy: never;
+            hexpand: true;
 
             child: Box collections_box {
               styles [

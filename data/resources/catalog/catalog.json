@@ -119,10 +119,10 @@
       "author": "Sample",
       "subject": "kde-plasma",
       "mock": {
-        "layout": "floating",
+        "layout": "panel",
         "wallpaper": "#1d99f3",
         "glow": "#7ec4f8",
-        "bar": "#232629",
+        "bar": "#202326",
         "window": "#fcfcfc",
         "title_bar": "#dee0e2",
         "accent": "#1d99f3",
@@ -1573,5 +1573,24 @@
         }
       ]
     }
-  ]
+  ],
+  "wallpaper_sources": [
+    {
+      "id": "orangc",
+      "name": "orangc's walls",
+      "kind": "copyparty",
+      "index_url": "https://files.orangc.net/media/walls/",
+      "link": "https://orangc.net/walls",
+      "credit": "Collected by orangc. The images belong to their original artists."
+    },
+    {
+      "id": "linuxh2o",
+      "name": "LinuxH2O",
+      "kind": "wordpress-page",
+      "index_url": "https://linuxh2o.com/wallpapers/",
+      "link": "https://linuxh2o.com/wallpapers/",
+      "credit": "Compiled by LinuxH2O."
+    }
+  ],
+  "wallpaper_blocklist": []
 }

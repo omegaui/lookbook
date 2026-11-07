@@ -10,11 +10,24 @@ use crate::catalog::{Catalog, ItemRef};
 use crate::config::{APP_ID, PROFILE};
 use crate::pages::{
     CompositorsPage, DesktopsPage, DistrosPage, ExplorePage, ItemDetailPage, SystemPage,
+    WallpapersPage,
 };
 use crate::system::SystemInfo;
 use crate::widgets::DetailContent;
 
 const MAIN_PAGE_TAG: &str = "main";
+/// Desktops that place windows freely. Tiling compositors size windows themselves
+/// and may ignore a maximize request, which leaves the app drawn wider than its tile.
+const STACKING_DESKTOPS: [&str; 7] = ["GNOME", "KDE", "X-Cinnamon", "XFCE", "MATE", "Pantheon", "Budgie"];
+
+fn runs_on_stacking_desktop() -> bool {
+    let session = crate::system::Session::detect();
+    session.desktop_names.iter().any(|running| {
+        STACKING_DESKTOPS
+            .iter()
+            .any(|desktop| desktop.eq_ignore_ascii_case(running))
+    })
+}
 
 mod imp {
     use super::*;
@@ -35,6 +48,8 @@ mod imp {
         #[template_child]
         pub compositors_page: gtk::TemplateChild<CompositorsPage>,
         #[template_child]
+        pub wallpapers_page: gtk::TemplateChild<WallpapersPage>,
+        #[template_child]
         pub system_page: gtk::TemplateChild<SystemPage>,
         pub settings: gio::Settings,
         pub catalog: RefCell<Option<Rc<Catalog>>>,
@@ -50,6 +65,7 @@ mod imp {
                 distros_page: gtk::TemplateChild::default(),
                 desktops_page: gtk::TemplateChild::default(),
                 compositors_page: gtk::TemplateChild::default(),
+                wallpapers_page: gtk::TemplateChild::default(),
                 system_page: gtk::TemplateChild::default(),
                 settings: gio::Settings::new(APP_ID),
                 catalog: RefCell::default(),
@@ -69,6 +85,7 @@ mod imp {
             DistrosPage::ensure_type();
             DesktopsPage::ensure_type();
             CompositorsPage::ensure_type();
+            WallpapersPage::ensure_type();
             SystemPage::ensure_type();
             klass.bind_template();
         }
@@ -197,6 +214,7 @@ impl LinuxAndYouWindow {
         imp.distros_page.show_catalog(&catalog, &system);
         imp.desktops_page.show_catalog(&catalog, &system);
         imp.compositors_page.show_catalog(&catalog, &system);
+        imp.wallpapers_page.show_catalog(&catalog, &system);
         imp.system_page.show_system(&catalog, &system);
 
         imp.catalog.replace(Some(catalog));
@@ -210,7 +228,7 @@ impl LinuxAndYouWindow {
 
         self.set_default_size(width, height);
 
-        if settings.boolean("is-maximized") {
+        if settings.boolean("is-maximized") && runs_on_stacking_desktop() {
             self.maximize();
         }
     }

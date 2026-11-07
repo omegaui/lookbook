@@ -1,0 +1,33 @@
+using Gtk 4.0;
+
+template $WallpaperCard: Button {
+  styles [
+    "flat",
+    "wallpaper-card",
+  ]
+
+  child: Box {
+    orientation: vertical;
+    spacing: 6;
+    // A fixed height keeps every thumbnail the same size; cover crops to fill it.
+    Picture picture {
+      styles [
+        "wallpaper-thumbnail",
+      ]
+
+      height-request: 150;
+      content-fit: cover;
+      can-shrink: true;
+      overflow: hidden;
+    }
+
+    Label title_label {
+      styles [
+        "caption-heading",
+      ]
+
+      xalign: 0;
+      ellipsize: end;
+    }
+  };
+}

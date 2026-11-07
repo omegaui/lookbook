@@ -5,6 +5,7 @@ mod config;
 mod ideas;
 mod pages;
 mod system;
+mod wallpapers;
 mod widgets;
 mod window;
 

@@ -1,0 +1,104 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WallpaperDialog: Adw.Dialog {
+  content-width: 960;
+  content-height: 680;
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: Adw.ToastOverlay toast_overlay {
+      child: Box {
+        orientation: vertical;
+        spacing: 16;
+        margin-start: 24;
+        margin-end: 24;
+        margin-bottom: 24;
+
+        Picture picture {
+          styles [
+            "wallpaper-preview",
+          ]
+
+          content-fit: contain;
+          vexpand: true;
+          overflow: hidden;
+        }
+
+        Box {
+          spacing: 12;
+
+          Box {
+            orientation: vertical;
+            spacing: 2;
+            hexpand: true;
+            valign: center;
+
+            Label title_label {
+              styles [
+                "title-3",
+              ]
+
+              xalign: 0;
+              ellipsize: end;
+            }
+
+            Label credit_label {
+              styles [
+                "dim-label",
+                "caption",
+              ]
+
+              xalign: 0;
+              wrap: true;
+            }
+          }
+
+          Button {
+            styles [
+              "pill",
+            ]
+
+            label: _("Source");
+            valign: center;
+            clicked => $on_source_clicked() swapped;
+          }
+
+          Button save_button {
+            styles [
+              "pill",
+            ]
+
+            label: _("Save…");
+            valign: center;
+            clicked => $on_save_clicked() swapped;
+          }
+
+          Button set_button {
+            styles [
+              "pill",
+              "suggested-action",
+            ]
+
+            label: _("Set as Wallpaper");
+            valign: center;
+            clicked => $on_set_clicked() swapped;
+          }
+        }
+
+        Label hint_label {
+          styles [
+            "dim-label",
+            "caption",
+          ]
+
+          xalign: 0;
+          wrap: true;
+          visible: false;
+        }
+      };
+    };
+  };
+}

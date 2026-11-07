@@ -151,11 +151,17 @@ mod imp {
             snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(bounds, CORNER_RADIUS));
             snapshot.append_color(&palette.wallpaper, &bounds);
             draw_glow(&canvas);
-            draw_top_bar(&canvas);
 
             match palette.layout {
-                MockLayout::Tiled => draw_tiled_desktop(&canvas),
-                MockLayout::Floating => draw_floating_desktop(&canvas),
+                MockLayout::Tiled => {
+                    draw_top_bar(&canvas);
+                    draw_tiled_desktop(&canvas);
+                }
+                MockLayout::Floating => {
+                    draw_top_bar(&canvas);
+                    draw_floating_desktop(&canvas);
+                }
+                MockLayout::Panel => draw_panel_desktop(&canvas),
             }
 
             snapshot.pop();
@@ -271,17 +277,71 @@ fn draw_folders(canvas: &Canvas<'_>, window: graphene::Rect, color: &gdk::RGBA) 
 
 /// A browser behind a music player, and a dock of app icons.
 fn draw_floating_desktop(canvas: &Canvas<'_>) {
+    draw_browser_and_music(canvas);
+    draw_dock(canvas);
+}
+
+/// KDE Plasma: no top bar, a full-width panel along the bottom.
+fn draw_panel_desktop(canvas: &Canvas<'_>) {
+    draw_browser_and_music(canvas);
+    draw_bottom_panel(canvas);
+}
+
+fn draw_browser_and_music(canvas: &Canvas<'_>) {
     let (width, height) = (canvas.width, canvas.height);
-    let browser = graphene::Rect::new(width * 0.08, height * 0.16, width * 0.5, height * 0.58);
-    let music = graphene::Rect::new(width * 0.44, height * 0.32, width * 0.46, height * 0.5);
+    let browser = graphene::Rect::new(width * 0.08, height * 0.12, width * 0.5, height * 0.58);
+    let music = graphene::Rect::new(width * 0.44, height * 0.28, width * 0.46, height * 0.5);
 
     let browser_body = draw_floating_window(canvas, browser, "web-browser-symbolic");
     draw_browser_page(canvas, browser_body);
 
     let music_body = draw_floating_window(canvas, music, "audio-x-generic-symbolic");
     draw_music_player(canvas, music_body);
+}
 
-    draw_dock(canvas);
+/// A launcher on the left, task icons with a marker under the active one,
+/// and the tray with a clock on the right.
+fn draw_bottom_panel(canvas: &Canvas<'_>) {
+    let palette = &canvas.palette;
+    let (width, height) = (canvas.width, canvas.height);
+    let panel = graphene::Rect::new(0.0, height * 0.89, width, height * 0.11);
+    canvas.snapshot.append_color(&palette.bar, &panel);
+
+    let icon_size = panel.height() * 0.6;
+    let icon_top = panel.y() + (panel.height() - icon_size) / 2.0;
+    let step = icon_size * 1.6;
+
+    let launcher_x = panel.height() * 0.3;
+    canvas.icon("lay-logo-kdeplasma-symbolic", launcher_x, icon_top, icon_size, &palette.accent);
+
+    let tasks = ["utilities-terminal-symbolic", "folder-symbolic", "web-browser-symbolic"];
+    let active_task = 2;
+    for (index, icon_name) in tasks.iter().enumerate() {
+        let x = launcher_x + step * (index as f32 + 1.4);
+        canvas.icon(icon_name, x, icon_top, icon_size, &gdk::RGBA::WHITE);
+
+        if index == active_task {
+            let marker = graphene::Rect::new(x, panel.y() + panel.height() - 3.0, icon_size, 2.0);
+            canvas.fill(marker, 1.0, &palette.accent);
+        }
+    }
+
+    let tray = ["network-wireless-symbolic", "audio-volume-high-symbolic"];
+    let clock_width = icon_size * 2.2;
+    let clock_x = width - clock_width - panel.height() * 0.3;
+    for (index, icon_name) in tray.iter().enumerate() {
+        let x = clock_x - step * (tray.len() - index) as f32;
+        canvas.icon(icon_name, x, icon_top, icon_size * 0.8, &gdk::RGBA::WHITE);
+    }
+
+    let clock_line = (panel.height() * 0.16).max(2.0);
+    let clock_top = panel.y() + panel.height() / 2.0 - clock_line * 1.25;
+    canvas.fill(graphene::Rect::new(clock_x, clock_top, clock_width, clock_line), clock_line / 2.0, &gdk::RGBA::WHITE);
+    canvas.fill(
+        graphene::Rect::new(clock_x + clock_width * 0.2, clock_top + clock_line * 1.5, clock_width * 0.6, clock_line),
+        clock_line / 2.0,
+        &palette.text,
+    );
 }
 
 /// Draws the window with its app icon in the title bar. Returns the area below the title bar.
