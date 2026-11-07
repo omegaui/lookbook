@@ -5,7 +5,7 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
-use crate::application::LinuxAndYouApplication;
+use crate::application::LookbookApplication;
 use crate::catalog::{Catalog, ItemRef};
 use crate::config::{APP_ID, PROFILE};
 use crate::pages::{
@@ -59,8 +59,8 @@ mod imp {
     use super::*;
 
     #[derive(Debug, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/window.ui")]
-    pub struct LinuxAndYouWindow {
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/window.ui")]
+    pub struct LookbookWindow {
         #[template_child]
         pub navigation_view: gtk::TemplateChild<adw::NavigationView>,
         #[template_child]
@@ -82,7 +82,7 @@ mod imp {
         pub system: RefCell<Option<Rc<SystemInfo>>>,
     }
 
-    impl Default for LinuxAndYouWindow {
+    impl Default for LookbookWindow {
         fn default() -> Self {
             Self {
                 navigation_view: gtk::TemplateChild::default(),
@@ -101,9 +101,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LinuxAndYouWindow {
-        const NAME: &'static str = "LinuxAndYouWindow";
-        type Type = super::LinuxAndYouWindow;
+    impl ObjectSubclass for LookbookWindow {
+        const NAME: &'static str = "LookbookWindow";
+        type Type = super::LookbookWindow;
         type ParentType = adw::ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
@@ -121,7 +121,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LinuxAndYouWindow {
+    impl ObjectImpl for LookbookWindow {
         fn constructed(&self) {
             self.parent_constructed();
             let window = self.obj();
@@ -134,9 +134,9 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LinuxAndYouWindow {}
+    impl WidgetImpl for LookbookWindow {}
 
-    impl WindowImpl for LinuxAndYouWindow {
+    impl WindowImpl for LookbookWindow {
         fn close_request(&self) -> glib::Propagation {
             if let Err(error) = self.obj().save_window_state() {
                 tracing::warn!("Could not save the window state: {error}");
@@ -145,19 +145,19 @@ mod imp {
         }
     }
 
-    impl ApplicationWindowImpl for LinuxAndYouWindow {}
-    impl AdwApplicationWindowImpl for LinuxAndYouWindow {}
+    impl ApplicationWindowImpl for LookbookWindow {}
+    impl AdwApplicationWindowImpl for LookbookWindow {}
 }
 
 glib::wrapper! {
-    pub struct LinuxAndYouWindow(ObjectSubclass<imp::LinuxAndYouWindow>)
+    pub struct LookbookWindow(ObjectSubclass<imp::LookbookWindow>)
         @extends gtk::Widget, gtk::Window, gtk::ApplicationWindow, adw::ApplicationWindow,
         @implements gio::ActionMap, gio::ActionGroup, gtk::Accessible, gtk::Buildable,
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
 }
 
-impl LinuxAndYouWindow {
-    pub fn new(app: &LinuxAndYouApplication) -> Self {
+impl LookbookWindow {
+    pub fn new(app: &LookbookApplication) -> Self {
         glib::Object::builder().property("application", app).build()
     }
 

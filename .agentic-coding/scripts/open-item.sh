@@ -5,7 +5,7 @@
 #   .agentic-coding/scripts/open-item.sh desktop:gnome
 set -eu
 
-APP=io.github.omegaui.LinuxAndYou.Devel
+APP=io.github.omegaui.Lookbook.Devel
 ITEM=${1:?usage: open-item.sh kind:id}
 
 flatpak run --command=gapplication "$APP" action "$APP" show-item "'$ITEM'"

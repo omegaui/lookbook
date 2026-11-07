@@ -1,12 +1,12 @@
 {
-    "id": "io.github.omegaui.LinuxAndYou",
+    "id": "io.github.omegaui.Lookbook",
     "runtime": "org.gnome.Platform",
     "runtime-version": "51",
     "sdk": "org.gnome.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
-    "command": "linux-and-you",
+    "command": "lookbook",
     "finish-args": [
         "--share=ipc",
         "--share=network",
@@ -39,7 +39,7 @@
     ],
     "modules": [
         {
-            "name": "linux-and-you",
+            "name": "lookbook",
             "buildsystem": "meson",
             "run-tests": true,
             "config-opts": [

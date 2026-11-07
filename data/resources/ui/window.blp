@@ -1,8 +1,8 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $LinuxAndYouWindow: Adw.ApplicationWindow {
-  title: _("Linux & You");
+template $LookbookWindow: Adw.ApplicationWindow {
+  title: _("Lookbook");
   width-request: 360;
   height-request: 294;
 
@@ -18,7 +18,7 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
 
   content: Adw.NavigationView navigation_view {
     Adw.NavigationPage {
-      title: _("Linux & You");
+      title: _("Lookbook");
       tag: "main";
 
       child: Adw.ToolbarView {
@@ -100,7 +100,7 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
 menu primary_menu {
   section {
     item {
-      label: _("_About Linux & You");
+      label: _("_About Lookbook");
       action: "app.about";
     }
   }

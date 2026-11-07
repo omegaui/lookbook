@@ -1,4 +1,4 @@
-//! The desktop environment gallery. GNOME is featured, because Linux & You is a GNOME app first.
+//! The desktop environment gallery. GNOME is featured, because Lookbook is a GNOME app first.
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
@@ -26,7 +26,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/pages/desktops_page.ui")]
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/desktops_page.ui")]
     pub struct DesktopsPage {
         #[template_child]
         pub featured_banner: gtk::TemplateChild<gtk::Box>,

@@ -1,5 +1,5 @@
 project(
-  'linux-and-you',
+  'lookbook',
   'rust',
   version: '0.1.0',
   meson_version: '>= 1.0',
@@ -9,7 +9,7 @@ project(
 i18n = import('i18n')
 gnome = import('gnome')
 
-base_id = 'io.github.omegaui.LinuxAndYou'
+base_id = 'io.github.omegaui.Lookbook'
 
 dependency('glib-2.0', version: '>= 2.82')
 dependency('gio-2.0', version: '>= 2.82')

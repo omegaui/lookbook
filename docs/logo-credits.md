@@ -1,6 +1,6 @@
 # Logo credits
 
-The logos in `data/resources/icons/scalable/apps/lay-logo-*-symbolic.svg` are trademarks of their owners. Linux & You uses them only to identify each project, and draws them in white on the project's brand color.
+The logos in `data/resources/icons/scalable/apps/lay-logo-*-symbolic.svg` are trademarks of their owners. Lookbook uses them only to identify each project, and draws them in white on the project's brand color.
 
 Each file was reduced to its `viewBox` and `<path>` elements so GTK can recolor it as a symbolic icon. The shapes are unchanged.
 

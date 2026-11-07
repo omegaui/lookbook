@@ -24,7 +24,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/widgets/showcase_card.ui")]
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/showcase_card.ui")]
     pub struct ShowcaseCard {
         #[template_child]
         pub art_stack: gtk::TemplateChild<gtk::Stack>,

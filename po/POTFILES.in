@@ -1,7 +1,7 @@
 # Files with translatable strings.
-data/io.github.omegaui.LinuxAndYou.desktop.in.in
-data/io.github.omegaui.LinuxAndYou.gschema.xml.in
-data/io.github.omegaui.LinuxAndYou.metainfo.xml.in.in
+data/io.github.omegaui.Lookbook.desktop.in.in
+data/io.github.omegaui.Lookbook.gschema.xml.in
+data/io.github.omegaui.Lookbook.metainfo.xml.in.in
 data/resources/ui/pages/compositors_page.blp
 data/resources/ui/pages/desktops_page.blp
 data/resources/ui/pages/distros_page.blp

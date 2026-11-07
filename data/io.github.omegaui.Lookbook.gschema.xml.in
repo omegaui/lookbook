@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="@gettext-package@">
-  <schema id="@app-id@" path="/io/github/omegaui/LinuxAndYou/">
+  <schema id="@app-id@" path="/io/github/omegaui/Lookbook/">
     <key name="window-width" type="i">
       <default>1200</default>
       <summary>Window width</summary>
@@ -16,7 +16,7 @@
     <key name="last-page" type="s">
       <default>"explore"</default>
       <summary>Last visible page</summary>
-      <description>The page shown when the app starts: "explore", "distros", "desktops", "compositors" or "system".</description>
+      <description>The page shown when the app starts: "explore", "distros", "desktops", "compositors", "wallpapers" or "system".</description>
     </key>
   </schema>
 </schemalist>

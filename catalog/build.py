@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the catalog Linux & You downloads at runtime.
+"""Builds the catalog Lookbook downloads at runtime.
 
 The hand-written catalog lives in data/resources/catalog/catalog.json; the app
 bundles that file as its fallback. This script:
@@ -9,8 +9,8 @@ bundles that file as its fallback. This script:
 2. checks that every hosted screenshot still loads, and drops the ones that
    are gone;
 3. checks that every reference in the catalog points at something real;
-4. writes the published files: v1/catalog.json, v1/manifest.json and a small
-   index page.
+4. writes the published files: v1/catalog.json, v1/manifest.json and the
+   landing page (from catalog/index.html).
 
 It uses only the Python standard library, so it runs anywhere.
 
@@ -24,6 +24,7 @@ import datetime
 import hashlib
 import json
 import os
+import string
 import sys
 import urllib.error
 import urllib.request
@@ -33,12 +34,13 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "data/resources/catalog/catalog.json"
 SOURCES_CONFIG = ROOT / "catalog/sources.json"
 LOGO_DIR = ROOT / "data/resources/icons/scalable/apps"
+INDEX_TEMPLATE = Path(__file__).resolve().parent / "index.html"
 
 # The app reads v1/catalog.json and ignores a catalog with another schema
 # version. Bump both, and publish under v2/, for changes old apps cannot read.
 SCHEMA_VERSION = 1
 PUBLISH_DIR = "v1"
-USER_AGENT = "LinuxAndYou-catalog/1 (+https://github.com/omegaui/linux_and_you)"
+USER_AGENT = "Lookbook-catalog/1 (+https://github.com/omegaui/lookbook)"
 TIMEOUT_SECONDS = 30
 # If more media than this fails, the network is more likely at fault than the
 # images: stop, so the last good catalog stays published.
@@ -285,21 +287,9 @@ def publish(catalog, out_dir, now):
 
 
 def index_page(now):
-    return f"""<!doctype html>
-<html lang="en">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Linux &amp; You catalog</title>
-<style>body{{font:16px/1.5 system-ui,sans-serif;max-width:40rem;margin:3rem auto;padding:0 1rem}}</style>
-<h1>Linux &amp; You catalog</h1>
-<p>The data the <a href="https://github.com/omegaui/linux_and_you">Linux &amp; You</a> app reads: distros, desktops, compositors, rices and where to find their latest releases.</p>
-<ul>
-<li><a href="{PUBLISH_DIR}/catalog.json">{PUBLISH_DIR}/catalog.json</a></li>
-<li><a href="{PUBLISH_DIR}/manifest.json">{PUBLISH_DIR}/manifest.json</a></li>
-</ul>
-<p>Built {now}.</p>
-</html>
-"""
+    """Fills in the landing page template (index.html next to this script)."""
+    template = string.Template(INDEX_TEMPLATE.read_text())
+    return template.substitute(publish_dir=PUBLISH_DIR, built=now)
 
 
 def save_source(catalog, now):

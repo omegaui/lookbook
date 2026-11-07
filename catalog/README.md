@@ -1,10 +1,10 @@
 # The catalog
 
-Linux & You's data — distros, desktops, compositors, rices, ideas, release
+Lookbook's data — distros, desktops, compositors, rices, ideas, release
 feeds — lives in one hand-written file, `data/resources/catalog/catalog.json`.
 The app bundles that file, and also downloads the copy published at:
 
-**https://omegaui.github.io/linux_and_you/v1/catalog.json**
+**https://omegaui.github.io/lookbook/v1/catalog.json**
 
 so data can change without an app release.
 
@@ -25,8 +25,8 @@ the Actions tab. It:
      is more likely at fault);
    - checks that every reference points at something real and every logo file
      exists;
-   - writes `v1/catalog.json`, `v1/manifest.json` (hash, size, date) and an
-     index page;
+   - writes `v1/catalog.json`, `v1/manifest.json` (hash, size, date) and the
+     landing page from `catalog/index.html`;
 3. commits refreshed data back to `main` as "Refresh catalog data", so the
    snapshot in the next app release is current too;
 4. deploys to GitHub Pages.
@@ -38,7 +38,7 @@ Pull requests that touch the catalog run steps 1 and 2 only.
 
 `src/catalog/online.rs` checks for a new copy at most once a day, with
 `If-None-Match`, and keeps it in the app's cache folder
-(`~/.var/app/io.github.omegaui.LinuxAndYou/cache/linux-and-you/`). The next
+(`~/.var/app/io.github.omegaui.Lookbook/cache/lookbook/`). The next
 launch uses it if it parses, has the schema version the app reads, and is newer
 than the bundled snapshot; otherwise the app uses the bundled snapshot. The
 About dialog shows the date of the catalog in use.

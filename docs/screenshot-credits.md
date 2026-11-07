@@ -1,6 +1,6 @@
 # Screenshot credits
 
-Distro, desktop and compositor screenshots load live from Wikimedia Commons as 960px thumbnails, the first time they appear on screen. Linux & You never bundles them. Each image's Commons page holds its full license and author details; tooltips in the app name the author and license.
+Distro, desktop and compositor screenshots load live from Wikimedia Commons as 960px thumbnails, the first time they appear on screen. Lookbook never bundles them. Each image's Commons page holds its full license and author details; tooltips in the app name the author and license.
 
 | Item | Image | Author | License |
 | --- | --- | --- | --- |

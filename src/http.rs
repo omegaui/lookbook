@@ -4,7 +4,7 @@ use gtk::glib;
 use soup::prelude::*;
 
 /// Names the app and links to its repository, so source owners know who is asking.
-const USER_AGENT: &str = "LinuxAndYou/0.1 (+https://github.com/omegaui/linux_and_you)";
+const USER_AGENT: &str = "Lookbook/0.1 (+https://github.com/omegaui/lookbook)";
 const TIMEOUT_SECONDS: u32 = 30;
 
 thread_local! {

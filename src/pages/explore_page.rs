@@ -29,7 +29,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/pages/explore_page.ui")]
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/explore_page.ui")]
     pub struct ExplorePage {
         #[template_child]
         pub collections_box: gtk::TemplateChild<gtk::Box>,
@@ -215,7 +215,7 @@ impl ExplorePage {
         imp.news_spinner.set_visible(still_loading);
         imp.news_status_label.set_visible(!still_loading && nothing_found);
         imp.news_status_label
-            .set_label(&gettext("No new releases reached Linux & You this month. Check your connection, or come back in a few days."));
+            .set_label(&gettext("No new releases reached Lookbook this month. Check your connection, or come back in a few days."));
     }
 
     fn show_wall_of_fame(&self, catalog: &Catalog) {

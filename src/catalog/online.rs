@@ -18,12 +18,12 @@ use soup::prelude::*;
 
 use super::Catalog;
 
-const CATALOG_URL: &str = "https://omegaui.github.io/linux_and_you/v1/catalog.json";
+const CATALOG_URL: &str = "https://omegaui.github.io/lookbook/v1/catalog.json";
 /// The catalog schema this version of the app reads. The workflow publishes
 /// other schema versions under other paths, and the app ignores them.
 pub const SCHEMA_VERSION: u32 = 1;
 const REFRESH_INTERVAL: Duration = Duration::from_secs(24 * 60 * 60);
-const CACHE_FOLDER: &str = "linux-and-you";
+const CACHE_FOLDER: &str = "lookbook";
 const CATALOG_FILE: &str = "catalog.json";
 const STATE_FILE: &str = "catalog-state.json";
 

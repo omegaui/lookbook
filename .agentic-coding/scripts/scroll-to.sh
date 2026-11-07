@@ -5,7 +5,7 @@
 #   .agentic-coding/scripts/scroll-to.sh 0.5
 set -eu
 
-APP=io.github.omegaui.LinuxAndYou.Devel
+APP=io.github.omegaui.Lookbook.Devel
 FRACTION=${1:?usage: scroll-to.sh fraction}
 
 flatpak run --command=gapplication "$APP" action "$APP" scroll-to "$(printf %f "$FRACTION")"

@@ -14,7 +14,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/widgets/spotlight_card.ui")]
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/spotlight_card.ui")]
     pub struct SpotlightCard {
         #[template_child]
         pub tile: gtk::TemplateChild<LogoTile>,

@@ -1,4 +1,4 @@
-//! Lists the Wayland globals the compositor shows to Linux & You.
+//! Lists the Wayland globals the compositor shows to Lookbook.
 //!
 //! Inside Flatpak, compositors hide privileged globals (layer shell, screen
 //! capture, session lock and others) from the app. So this list is "what a

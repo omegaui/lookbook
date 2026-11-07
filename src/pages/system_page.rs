@@ -29,7 +29,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/pages/system_page.ui")]
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/system_page.ui")]
     pub struct SystemPage {
         #[template_child]
         pub title_label: gtk::TemplateChild<gtk::Label>,
@@ -241,7 +241,7 @@ impl SystemPage {
             Some(compositor) => gettext("Built in means your desktop or compositor already includes it. An idea is ready to build when {compositor} {version} offers what it needs, from wayland-explorer data.")
                 .replace("{compositor}", &compositor.name)
                 .replace("{version}", &compositor.protocols.version),
-            None => gettext("Linux & You could not tell which compositor you run, so only portal and desktop routes count."),
+            None => gettext("Lookbook could not tell which compositor you run, so only portal and desktop routes count."),
         };
         imp.ideas_note_label.set_label(&note);
     }
@@ -267,7 +267,7 @@ impl SystemPage {
             .compositor
             .map_or(gettext("Your compositor"), |compositor| compositor.name.clone());
         imp.protocols_note_label.set_label(
-            &gettext("{compositor} offers {total} protocols. Linux & You can see {visible} of them from inside its sandbox.")
+            &gettext("{compositor} offers {total} protocols. Lookbook can see {visible} of them from inside its sandbox.")
                 .replace("{compositor}", &compositor_name)
                 .replace("{total}", &globals.len().to_string())
                 .replace("{visible}", &system.visible_globals.len().to_string()),
@@ -283,7 +283,7 @@ impl SystemPage {
     fn prepare_report(&self, catalog: &Catalog, system: &SystemInfo, statuses: &[IdeaStatus]) {
         let hardware = &system.hardware;
         let mut lines = vec![
-            "Linux & You report".to_owned(),
+            "Lookbook report".to_owned(),
             format!("Distro: {}", system.os_release.pretty_name),
             format!("Desktop: {}", system.desktop_name(catalog)),
             format!("Session: {}", system.session.session_type),
@@ -411,7 +411,7 @@ fn session_text(session_type: &str) -> String {
         "x11" => gettext("X11 session"),
         _ => gettext("Session"),
     };
-    gettext("{session}. Linux & You read your os-release file, your session variables and the protocols your compositor offers.")
+    gettext("{session}. Lookbook read your os-release file, your session variables and the protocols your compositor offers.")
         .replace("{session}", &session)
 }
 

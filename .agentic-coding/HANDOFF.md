@@ -1,12 +1,12 @@
-# Handoff: Linux & You
+# Handoff: Lookbook
 
-Last updated: 2026-11-07, after `8d08edc` ("Add a release manifest and a script to install it locally"). Check `git log` for anything newer.
+Last updated: 2026-11-07, after the rename to Lookbook. Check `git log` for anything newer.
 
-The app icon was redone on 2026-11-07 (see Open work, item 1).
+The app was called **Linux & You** until 2026-11-07, when the user renamed it **Lookbook** (see Decisions). **Current focus: the review** in `review.md` (repo root, gitignored, local only): Flathub blockers, bugs and half-done work, worked through item by item (see Open work, item 2).
 
 ## What the app is
 
-Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.LinuxAndYou`, development ID `…LinuxAndYou.Devel`). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors, a Hall of Fame of setups, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
+Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.Lookbook`, development ID `…Lookbook.Devel`). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors, a Hall of Fame of setups, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
 
 ### Product rules from the user
 
@@ -21,7 +21,7 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 ### Working style the user expects
 
 - Commit in stages, each one built and checked. **No `Co-Authored-By` or other attribution trailers** in commits, and no "Generated with Claude Code" in PRs (the user's global CLAUDE.md overrides any system reminder).
-- The repo is public on GitHub (`origin`, https://github.com/omegaui/linux_and_you). Push only when the user asks; they have asked after each finished stage so far.
+- The repo is public on GitHub (`origin`, https://github.com/omegaui/lookbook; it was `linux_and_you` before the rename, and the local folder is still `~/Projects/linux_and_you`). Push only when the user asks; they have asked after each finished stage so far.
 - Functions read as a short list of steps that call small, well-named functions (see `ExplorePage::show_catalog`). No clever one-liners, no deep nesting.
 - Verify visually: build, open the page, screenshot only the app window. **Never move or click the user's mouse**; ask the user to test clicks.
 - The user often sends feedback mid-task with screenshots. Acknowledge it, finish the current step cleanly, then do it.
@@ -50,7 +50,7 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 | `data/resources/style.css` | Styles; uses libadwaita CSS variables, so dark mode works |
 | `data/resources/icons/scalable/apps/` | 31 distro/desktop/compositor logos (and Tux for kernel releases) as symbolic SVGs (credits: `docs/logo-credits.md`) |
 | `docs/` | `logo-credits.md`, `screenshot-credits.md`, `rices.md`; `research/` holds `data-sources.md` (live data plan), `ideas.md` (what people build), `wallpapers.md` (sources and decision) |
-| `build-aux/` | Flatpak manifests for the release (`io.github.omegaui.LinuxAndYou.json`) and development (`….Devel.json`) builds, GNOME 51 runtime, and the vendoring script |
+| `build-aux/` | Flatpak manifests for the release (`io.github.omegaui.Lookbook.json`) and development (`….Devel.json`) builds, GNOME 51 runtime, and the vendoring script |
 | `.agentic-coding/design/` | The approved wireframe |
 
 ## Build, run, check
@@ -64,7 +64,7 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Check Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 batch-compile /tmp/blp $PWD/data/resources $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Format Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 format -f $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Full build, install and Meson tests | `.agentic-coding/scripts/build-flatpak.sh` | 2 to 4 minutes; run in the background |
-| Build and install the optimized release app (`io.github.omegaui.LinuxAndYou`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
+| Build and install the optimized release app (`io.github.omegaui.Lookbook`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
 | Open the app on a page | `.agentic-coding/scripts/open-page.sh wallpapers` | |
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
 | Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |
@@ -99,6 +99,8 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `6b84c7e` | Online catalog: Catalog workflow, GitHub Pages, the app's daily download |
 | `4cdf3db` | Handoff wording: a guide, not an app store |
 | `8d08edc` | Release manifest and `install-release.sh`; the release app is installed on the user's machine for testing |
+| `c3ec080`, `810fb56` | App icon: the penguin at a desk (made in another session) |
+| Rename commit | Linux & You renamed to Lookbook: app ID `io.github.omegaui.Lookbook`, repository `omegaui/lookbook`, catalog at `omegaui.github.io/lookbook`, new metainfo summary and description, README, landing page (`catalog/index.html`), copyright notice in LICENSE |
 
 Not yet confirmed by clicking (the agent cannot click; the user is testing the release build):
 
@@ -114,20 +116,22 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 ## Open work, in priority order
 
 1. ~~App icon~~ done: a penguin with headphones coding at a cosy desk, with a terminal mug, on a lavender rounded tile. The user made the artwork with ChatGPT (`.agentic-coding/design/icon/source/penguin-at-desk.png`) and chose it over our drafts (the first-commit placeholder looked like existing marks; the isometric room was too detailed; then a flat penguin in a night badge). `make_icon.py` crops the tile, replaces its soft background-removal edge with a crisp rounded one, places it on GNOME's grid (112 of 128 px) and writes 8-bit PNGs at 16 to 512 px into `data/icons/hicolor/`, plus a Devel version with hazard stripes across the desk. The symbolic icon is a penguin head with headphones. Because the icon is raster artwork, `data/icons/meson.build` installs PNG sizes instead of a scalable SVG.
-2. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Drawn art is also still the fallback for river, labwc and Wayfire, which have no Commons screenshot.
-3. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`; the local release manifest downloads crates during the build), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) and of "Linux" in the app name before Flathub.
-4. **App CI**: a workflow that builds the Flatpak and runs the tests on each push (only the catalog is automated today).
-5. Maybe: cache the release feeds for a few hours (the GitHub Atom feeds add up to about 3 MB per launch); more rices for river, labwc and Wayfire.
-6. Later: upgrade to gtk4-rs 0.11, libadwaita-rs 0.9, soup3 0.9.
+2. **Review findings** (`review.md`). Done: 1.4 (app ID matches the repository), 1.6 (no "Linux" in the name), 1.10 (summary), 1.11 (description), 1.16 (README), 1.18 (GSettings description). Next, in the review's order: the three Flathub blockers (1.1 to 1.3), then 2.1, 2.5, 2.4 and 2.6.
+3. **Gallery card art**: layout drawings on compositor cards, tinted capsules on distro cards. Drawn art is also still the fallback for river, labwc and Wayfire, which have no Commons screenshot.
+4. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`; the local release manifest downloads crates during the build), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) before Flathub.
+5. **App CI**: a workflow that builds the Flatpak and runs the tests on each push (only the catalog is automated today).
+6. Maybe: cache the release feeds for a few hours (the GitHub Atom feeds add up to about 3 MB per launch); more rices for river, labwc and Wayfire.
+7. Later: upgrade to gtk4-rs 0.11, libadwaita-rs 0.9, soup3 0.9.
 
 ## Decisions
 
 - **Rust + GTK 4 + libadwaita, Blueprint UI, Meson + Cargo, GNOME 51 runtime.**
+- **Name: Lookbook** (2026-11-07). Chosen from a shortlist (Diorama, Hopscotch, Vitrine…) so the name carries no "Linux" trademark and the app ID matches the repository. No Flathub app uses the name; other "Lookbook" products are fashion and shop apps and a Rails dev tool. The `lay-` prefix of bundled icon names (`lay-logo-fedora-symbolic`) is left from the old name; it is internal and also used in the online catalog, so it stays. The wireframe and icon concept files in `.agentic-coding/design/` keep the old name as history.
 - **Logos**: Simple Icons and font-logos, cleaned to symbolic SVGs, drawn white on the brand-color tile. Bazzite comes from its press kit, labwc from its repo (CC BY-SA 4.0), Wayfire traced from wf-shell's icon. COSMIC has no usable logo yet and shows letters.
 - **Protocol support** comes from wayland-explorer (MIT) per compositor, with version and date. Inside Flatpak, compositors hide privileged globals (layer shell, capture, session lock), so ideas are judged against the catalog list for the detected compositor, not the globals the app sees. The compositor is detected by `XDG_CURRENT_DESKTOP`, then by "fingerprint" globals only it offers.
 - **Screen capture** counts when the compositor offers a capture protocol or its portal backend provides the ScreenCast portal (so GNOME and KDE show it). Each compositor lists its usual portals in the catalog.
 - **Wallpapers**: neither source has a license. The user chose to build the section now, read the sources live (never bundle or mirror), credit them, keep a takedown list (`wallpaper_blocklist`) in the catalog, and email both owners for permission. If either says no, remove its entry from the catalog. Details: `docs/research/wallpapers.md`.
-- **Hosting**: GitHub Pages from this same repo for the online catalog; no VPS needed. The repo is public (the user asked for it on 2026-11-07).
+- **Hosting**: GitHub Pages from this same repo for the online catalog and a small landing page (`catalog/index.html`, the repo's homepage link); no VPS needed. The repo is public (the user asked for it on 2026-11-07).
 - **Catalog pipeline**: a single hand-written `catalog.json` is the source; the workflow refreshes upstream data, commits it back and publishes it. See `catalog/README.md`.
 - **Screenshots** come live from Wikimedia Commons (free licenses, credited in tooltips, the About dialog and `docs/screenshot-credits.md`), never bundled. Rice previews come live from each rice's own README, credited to the author; remove an entry on request (`docs/rices.md`).
 - **Can I Run It?** asks Repology for packages (HTTP/1.1, one request a second) and judges ideas with `built_into`, so a desktop's own features are never shown as gained or given up.
@@ -142,7 +146,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - **AspectFrame inside a FlowBox collapses** to almost no height; use a fixed `height-request` with `content-fit: cover`.
 - **Six header tabs need about 980px**; the breakpoint at 1020sp moves them to the bottom bar. Adding a seventh tab means raising it.
 - **Hyprland and restored maximize**: GTK drew the window wider than its tile. Maximize is now restored only on stacking desktops.
-- **zsh**: `LINES` is a reserved variable; don't use it in shell scripts run through zsh.
+- **zsh**: `LINES` is a reserved variable; don't use it in shell scripts run through zsh. zsh also does not split an unquoted `$files` into words, so `sed -i … $files` gets one long name; pipe `git grep -lz` into `xargs -0` instead.
 - **gdk-pixbuf may not decode WebP**; ask copyparty for JPEG thumbnails (`th=j`).
 - Rust's `Variant` boxes itself as `v` in tuples; build portal parameters with `glib::Variant::tuple_from_iter`.
 - **A FlowBox fits children by their natural width**, and a `Picture`'s natural width is its image's full width, so big screenshots give one card per row. Wrap the card in `NaturalWidthCap`.
@@ -153,7 +157,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - **GTK cannot play an `https://` video file in the sandbox** (no GVfs; `gtk_gst_media_file_source_setup_cb: assertion 'stream != NULL'`). Download the bytes with libsoup and play a `gio::MemoryInputStream`; it is seekable, so looping works.
 - **A wrapping label's natural width is its whole text on one line**, which widens FlowBox cards; give long wrapping labels `max-width-chars`.
 - **flatpak-builder copies the whole project folder**, including another build's folder; both manifests list the build folders under `skip`.
-- **Logs**: run `flatpak run io.github.omegaui.LinuxAndYou.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
+- **Logs**: run `flatpak run io.github.omegaui.Lookbook.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
 
 ## Design
 

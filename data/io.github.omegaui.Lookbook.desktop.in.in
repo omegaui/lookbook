@@ -1,12 +1,12 @@
 [Desktop Entry]
-Name=Linux & You
-Comment=Explore distros, compositors and what your system can do
+Name=Lookbook
+Comment=Find a Linux desktop that fits you
 Type=Application
-Exec=linux-and-you
+Exec=lookbook
 Terminal=false
 Categories=GTK;GNOME;System;
 # Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
-Keywords=Linux;Distro;Distribution;Wayland;Compositor;Desktop;System;
+Keywords=Linux;Distro;Distribution;Wayland;Compositor;Desktop;Wallpaper;Rice;System;
 # Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 Icon=@icon@
 StartupNotify=true

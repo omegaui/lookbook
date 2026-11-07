@@ -42,7 +42,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/LinuxAndYou/ui/pages/distros_page.ui")]
+    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/distros_page.ui")]
     pub struct DistrosPage {
         #[template_child]
         pub count_label: gtk::TemplateChild<gtk::Label>,

@@ -13,7 +13,7 @@ Link shorthand: `ego/N` is `https://extensions.gnome.org/extension/N`, `gh:` is 
    - Look up what that compositor supports in the catalog, which is built from wayland-explorer's per-compositor data (see [data-sources.md](data-sources.md)).
    - Show the globals the app actually saw separately, as "visible to apps".
 2. **What GNOME offers.** Mutter 51 has no layer-shell, session-lock, screencopy, data-control or foreign-toplevel. It does have `ext_background_effect_manager_v1` (new in GNOME 51), `zwp_idle_inhibit_manager_v1` and `xdg_activation_v1`. On GNOME most ideas are built as Shell extensions, portals or D-Bus services.
-3. **A Flatpak can install GNOME extensions.** Extension Manager does it through the `org.gnome.Shell.Extensions` D-Bus interface with `--talk-name=org.gnome.Shell.Extensions`. Linux & You could offer "Install" for featured extensions later.
+3. **A Flatpak can install GNOME extensions.** Extension Manager does it through the `org.gnome.Shell.Extensions` D-Bus interface with `--talk-name=org.gnome.Shell.Extensions`. Lookbook could offer "Install" for featured extensions later.
 4. **Projects move and get renamed often**, so example links must come from the live catalog, not the app's code. Changes found this year:
    - hyprexpo and hyprscrolling left hyprland-plugins in May 2026; scrolling is now built into Hyprland.
    - swww is now awww (Codeberg).

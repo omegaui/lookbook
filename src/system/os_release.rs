@@ -4,7 +4,7 @@ use std::fs;
 /// `/etc/os-release` there describes the Flatpak runtime, not the user's distro.
 const OS_RELEASE_PATHS: [&str; 3] = ["/run/host/os-release", "/etc/os-release", "/usr/lib/os-release"];
 
-/// The fields of the os-release file that Linux & You uses.
+/// The fields of the os-release file that Lookbook uses.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct OsRelease {
     pub id: String,

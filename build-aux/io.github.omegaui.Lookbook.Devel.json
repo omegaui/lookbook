@@ -1,18 +1,18 @@
 {
-    "id": "io.github.omegaui.LinuxAndYou.Devel",
+    "id": "io.github.omegaui.Lookbook.Devel",
     "runtime": "org.gnome.Platform",
     "runtime-version": "51",
     "sdk": "org.gnome.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
-    "command": "linux-and-you",
+    "command": "lookbook",
     "finish-args": [
         "--share=ipc",
         "--share=network",
         "--socket=wayland",
         "--device=dri",
-        "--env=RUST_LOG=linux_and_you=debug",
+        "--env=RUST_LOG=lookbook=debug",
         "--env=G_MESSAGES_DEBUG=none",
         "--env=RUST_BACKTRACE=1"
     ],
@@ -42,7 +42,7 @@
     ],
     "modules": [
         {
-            "name": "linux-and-you",
+            "name": "lookbook",
             "buildsystem": "meson",
             "run-tests": true,
             "config-opts": [

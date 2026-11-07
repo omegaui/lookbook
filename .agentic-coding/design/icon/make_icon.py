@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the Linux & You app icons from the chosen artwork: a penguin with
+"""Builds the Lookbook app icons from the chosen artwork: a penguin with
 headphones coding at a cosy desk, with a terminal mug (source/penguin-at-desk.png,
 made by the user with ChatGPT).
 
@@ -26,7 +26,7 @@ ROOT = HERE.parent.parent.parent
 SOURCE = HERE / "source/penguin-at-desk.png"
 WORK = HERE / "render"
 ICONS = ROOT / "data/icons"
-APP_ID = "io.github.omegaui.LinuxAndYou"
+APP_ID = "io.github.omegaui.Lookbook"
 FONT = "/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf"
 
 # Where the tile sits in the source image (measured where it is at least 95% opaque).
