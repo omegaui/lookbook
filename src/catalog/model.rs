@@ -11,6 +11,39 @@ pub struct Catalog {
     pub distros: Vec<Distro>,
     pub desktops: Vec<Desktop>,
     pub compositors: Vec<Compositor>,
+    pub ideas: Vec<Idea>,
+}
+
+/// Something people build on their desktop, like a status bar or a lock screen.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Idea {
+    pub id: String,
+    pub name: String,
+    pub description: String,
+    /// The ways to build it. The idea is ready when any one of them works on the user's system.
+    pub routes: Vec<IdeaRoute>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum RouteKind {
+    /// Works on compositors that offer every global in `requires`.
+    Protocol,
+    /// Works on the desktops in `desktops`, for example as a GNOME Shell extension.
+    Desktop,
+    /// Works through an XDG desktop portal, on any desktop.
+    Portal,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct IdeaRoute {
+    pub kind: RouteKind,
+    /// How to build it this way, for example "Layer shell" or "Shell extension (GJS)".
+    pub label: String,
+    #[serde(default)]
+    pub requires: Vec<String>,
+    #[serde(default)]
+    pub desktops: Vec<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]

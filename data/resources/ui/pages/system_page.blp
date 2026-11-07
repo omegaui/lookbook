@@ -1,0 +1,196 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SystemPage: Adw.Bin {
+  child: ScrolledWindow {
+    hscrollbar-policy: never;
+
+    child: Adw.Clamp {
+      maximum-size: 1180;
+      tightening-threshold: 900;
+
+      child: Box {
+        orientation: vertical;
+        spacing: 32;
+        margin-top: 12;
+        margin-bottom: 40;
+        margin-start: 16;
+        margin-end: 16;
+        // Summary: what you run and how many ideas are ready.
+        Box {
+          styles [
+            "system-teaser",
+          ]
+
+          spacing: 24;
+
+          Box {
+            orientation: vertical;
+            spacing: 10;
+            hexpand: true;
+            valign: center;
+
+            Label {
+              styles [
+                "kicker",
+              ]
+
+              label: _("Your system");
+              xalign: 0;
+            }
+
+            Label title_label {
+              styles [
+                "title-1",
+              ]
+
+              xalign: 0;
+              wrap: true;
+            }
+
+            Label session_label {
+              xalign: 0;
+              wrap: true;
+            }
+
+            Box {
+              spacing: 12;
+              margin-top: 8;
+
+              LevelBar ready_bar {
+                hexpand: true;
+                valign: center;
+                max-value: 1;
+              }
+
+              Label ready_label {
+                styles [
+                  "heading",
+                ]
+              }
+            }
+          }
+
+          Box tiles_box {
+            spacing: 12;
+            valign: center;
+          }
+        }
+
+        FlowBox facts_flowbox {
+          selection-mode: none;
+          homogeneous: true;
+          min-children-per-line: 1;
+          max-children-per-line: 4;
+          column-spacing: 12;
+          row-spacing: 12;
+        }
+
+        // Ideas.
+        Box {
+          orientation: vertical;
+          spacing: 16;
+
+          Box {
+            spacing: 12;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Ideas You Can Build");
+                xalign: 0;
+              }
+
+              Label ideas_note_label {
+                styles [
+                  "dim-label",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Adw.ToggleGroup status_toggles {
+              styles [
+                "round",
+              ]
+
+              valign: end;
+              active-name: "all";
+
+              Adw.Toggle {
+                name: "all";
+                label: _("All");
+              }
+
+              Adw.Toggle {
+                name: "ready";
+                label: _("Ready Here");
+              }
+
+              Adw.Toggle {
+                name: "elsewhere";
+                label: _("Works Elsewhere");
+              }
+            }
+          }
+
+          FlowBox ideas_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 3;
+            column-spacing: 12;
+            row-spacing: 12;
+          }
+        }
+
+        // What the sandbox can see.
+        Box {
+          orientation: vertical;
+          spacing: 12;
+
+          Label {
+            styles [
+              "title-2",
+            ]
+
+            label: _("What Apps Can See");
+            xalign: 0;
+          }
+
+          Label {
+            styles [
+              "dim-label",
+            ]
+
+            label: _(
+              "These Wayland protocols are visible from inside the Flatpak sandbox. Compositors hide some protocols, like layer shell and screen capture, from sandboxed apps. That is why the ideas above use the full list your compositor offers to programs outside the sandbox."
+            );
+            xalign: 0;
+            wrap: true;
+          }
+
+          Expander visible_expander {
+            child: FlowBox visible_flowbox {
+              selection-mode: none;
+              min-children-per-line: 1;
+              max-children-per-line: 6;
+              column-spacing: 6;
+              row-spacing: 6;
+              margin-top: 12;
+            };
+          }
+        }
+      };
+    };
+  };
+}

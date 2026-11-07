@@ -75,11 +75,7 @@ template $LinuxAndYouWindow: Adw.ApplicationWindow {
             title: _("Your System");
             icon-name: "lay-system-symbolic";
 
-            child: Adw.StatusPage {
-              icon-name: "lay-system-symbolic";
-              title: _("Your System");
-              description: _("Your distro, desktop and the ideas you can build come next.");
-            };
+            child: $SystemPage system_page {};
           }
         };
 

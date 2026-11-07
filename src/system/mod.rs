@@ -1,19 +1,25 @@
 //! Detects what the user runs. This module has no UI code.
 
+mod hardware;
 mod os_release;
 mod session;
+mod wayland;
 
 use gettextrs::gettext;
 
+pub use hardware::Hardware;
 pub use os_release::OsRelease;
 pub use session::Session;
 
-use crate::catalog::{Catalog, Distro};
+use crate::catalog::{Catalog, Compositor, Desktop, Distro};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct SystemInfo {
     pub os_release: OsRelease,
     pub session: Session,
+    pub hardware: Hardware,
+    /// The Wayland globals visible from inside the sandbox.
+    pub visible_globals: Vec<String>,
 }
 
 impl SystemInfo {
@@ -21,6 +27,8 @@ impl SystemInfo {
         Self {
             os_release: OsRelease::load(),
             session: Session::detect(),
+            hardware: Hardware::detect(),
+            visible_globals: wayland::visible_globals(),
         }
     }
 
@@ -43,6 +51,35 @@ impl SystemInfo {
         })
     }
 
+    pub fn current_distro<'a>(&self, catalog: &'a Catalog) -> Option<&'a Distro> {
+        catalog
+            .distros
+            .iter()
+            .find(|distro| self.is_current_distro(distro))
+    }
+
+    pub fn current_desktop<'a>(&self, catalog: &'a Catalog) -> Option<&'a Desktop> {
+        catalog
+            .desktops
+            .iter()
+            .find(|desktop| self.is_running(&desktop.session_names))
+    }
+
+    /// Checks `XDG_CURRENT_DESKTOP` first, then globals only one compositor offers.
+    pub fn current_compositor<'a>(&self, catalog: &'a Catalog) -> Option<&'a Compositor> {
+        let by_session = catalog
+            .compositors
+            .iter()
+            .find(|compositor| self.is_running(&compositor.session_names));
+
+        by_session.or_else(|| {
+            catalog
+                .compositors
+                .iter()
+                .find(|compositor| compositor.matches_fingerprint(&self.visible_globals))
+        })
+    }
+
     pub fn distro_name(&self) -> String {
         if !self.os_release.name.is_empty() {
             return self.os_release.name.clone();
@@ -52,10 +89,10 @@ impl SystemInfo {
 
     /// The running desktop's name, preferring the catalog's spelling.
     pub fn desktop_name(&self, catalog: &Catalog) -> String {
-        if let Some(desktop) = catalog.desktops.iter().find(|desktop| self.is_running(&desktop.session_names)) {
+        if let Some(desktop) = self.current_desktop(catalog) {
             return desktop.name.clone();
         }
-        if let Some(compositor) = catalog.compositors.iter().find(|compositor| self.is_running(&compositor.session_names)) {
+        if let Some(compositor) = self.current_compositor(catalog) {
             return compositor.name.clone();
         }
         if let Some(name) = self.session.desktop_names.first() {

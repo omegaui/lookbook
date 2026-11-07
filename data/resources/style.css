@@ -143,6 +143,23 @@ flowboxchild:hover .catalog-card {
   padding: 14px 16px;
 }
 
+.idea-card {
+  padding: 16px;
+}
+
+.idea-card.elsewhere {
+  background-color: color-mix(in srgb, var(--card-bg-color) 60%, transparent);
+}
+
+.badge.ready {
+  color: var(--success-color);
+  background-color: color-mix(in srgb, var(--success-bg-color) 15%, transparent);
+}
+
+.badge.elsewhere {
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+}
+
 .feature-check.supported {
   color: var(--success-color);
 }

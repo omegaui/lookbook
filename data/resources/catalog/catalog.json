@@ -1173,5 +1173,363 @@
         ]
       }
     }
+  ],
+  "ideas": [
+    {
+      "id": "status-bar",
+      "name": "Status bar",
+      "description": "A panel pinned to a screen edge, like Waybar.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Layer shell",
+          "requires": [
+            "zwlr_layer_shell_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Top bar extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Plasma widget (QML)",
+          "desktops": [
+            "kde-plasma"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "launcher",
+      "name": "App launcher",
+      "description": "A pop-up search that starts apps, like fuzzel or Walker.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Layer shell",
+          "requires": [
+            "zwlr_layer_shell_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Search provider (D-Bus)",
+          "desktops": [
+            "gnome"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "KRunner plugin",
+          "desktops": [
+            "kde-plasma"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dock",
+      "name": "Dock",
+      "description": "App icons that stay on screen, like Dash to Dock.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Layer shell + window list",
+          "requires": [
+            "zwlr_layer_shell_v1",
+            "zwlr_foreign_toplevel_manager_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Shell extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Plasma panel",
+          "desktops": [
+            "kde-plasma"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "name": "Notification daemon",
+      "description": "Show notifications as your own floating cards, like mako.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Layer shell + D-Bus",
+          "requires": [
+            "zwlr_layer_shell_v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wallpaper",
+      "name": "Live wallpaper",
+      "description": "Animated or video wallpapers, like awww or mpvpaper.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Layer shell",
+          "requires": [
+            "zwlr_layer_shell_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Shell extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Wallpaper plugin",
+          "desktops": [
+            "kde-plasma"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lock-screen",
+      "name": "Lock screen",
+      "description": "Your own lock screen, like hyprlock or gtklock.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Session lock",
+          "requires": [
+            "ext_session_lock_manager_v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "screenshot",
+      "name": "Screenshot tool",
+      "description": "Capture the screen or a region, then annotate it.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Screen copy",
+          "requires": [
+            "zwlr_screencopy_manager_v1"
+          ]
+        },
+        {
+          "kind": "protocol",
+          "label": "Image copy capture",
+          "requires": [
+            "ext_image_copy_capture_manager_v1"
+          ]
+        },
+        {
+          "kind": "portal",
+          "label": "Screenshot portal"
+        }
+      ]
+    },
+    {
+      "id": "recorder",
+      "name": "Screen recorder",
+      "description": "Record the screen or a window, like Kooha.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Screen copy",
+          "requires": [
+            "zwlr_screencopy_manager_v1"
+          ]
+        },
+        {
+          "kind": "portal",
+          "label": "ScreenCast portal + PipeWire"
+        }
+      ]
+    },
+    {
+      "id": "clipboard",
+      "name": "Clipboard history",
+      "description": "Keep a history of what you copy, like cliphist.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Data control",
+          "requires": [
+            "zwlr_data_control_manager_v1"
+          ]
+        },
+        {
+          "kind": "protocol",
+          "label": "Data control",
+          "requires": [
+            "ext_data_control_manager_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Shell extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "idle",
+      "name": "Idle daemon",
+      "description": "Dim or lock the screen after you step away, like hypridle.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Idle notifier",
+          "requires": [
+            "ext_idle_notifier_v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "keep-awake",
+      "name": "Keep-awake switch",
+      "description": "Stop the screen from sleeping while something runs.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Idle inhibit",
+          "requires": [
+            "zwp_idle_inhibit_manager_v1"
+          ]
+        },
+        {
+          "kind": "portal",
+          "label": "Inhibit portal"
+        }
+      ]
+    },
+    {
+      "id": "night-light",
+      "name": "Night light",
+      "description": "Warm the screen colors in the evening, like wlsunset.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Gamma control",
+          "requires": [
+            "zwlr_gamma_control_manager_v1"
+          ]
+        },
+        {
+          "kind": "protocol",
+          "label": "Hyprland color transform",
+          "requires": [
+            "hyprland_ctm_control_manager_v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blur",
+      "name": "Blur behind your app",
+      "description": "Ask the compositor to blur what is under your window.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Background effect",
+          "requires": [
+            "ext_background_effect_manager_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Shell extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "keyboard",
+      "name": "On-screen keyboard",
+      "description": "Type with touch or a pointer, like wvkbd.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Virtual keyboard",
+          "requires": [
+            "zwp_virtual_keyboard_manager_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Shell extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "display-profiles",
+      "name": "Display profiles",
+      "description": "Switch monitor layouts when you plug in, like kanshi.",
+      "routes": [
+        {
+          "kind": "protocol",
+          "label": "Output management",
+          "requires": [
+            "zwlr_output_manager_v1"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "Mutter DisplayConfig (D-Bus)",
+          "desktops": [
+            "gnome"
+          ]
+        },
+        {
+          "kind": "protocol",
+          "label": "KDE output management",
+          "requires": [
+            "kde_output_management_v2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tiling",
+      "name": "Window tiling",
+      "description": "Snap windows into layouts, like Tiling Shell or Krohnkite.",
+      "routes": [
+        {
+          "kind": "desktop",
+          "label": "Shell extension (GJS)",
+          "desktops": [
+            "gnome"
+          ]
+        },
+        {
+          "kind": "desktop",
+          "label": "KWin script",
+          "desktops": [
+            "kde-plasma"
+          ]
+        }
+      ]
+    }
   ]
 }

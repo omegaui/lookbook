@@ -9,8 +9,10 @@
     <file preprocess="xml-stripblanks">ui/pages/distros_page.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/explore_page.ui</file>
     <file preprocess="xml-stripblanks">ui/pages/item_detail_page.ui</file>
+    <file preprocess="xml-stripblanks">ui/pages/system_page.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/catalog_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/collection_card.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/idea_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/screenshot_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/spotlight_card.ui</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-explore-symbolic.svg</file>

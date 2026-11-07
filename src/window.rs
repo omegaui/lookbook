@@ -8,7 +8,9 @@ use gtk::{gio, glib};
 use crate::application::LinuxAndYouApplication;
 use crate::catalog::{Catalog, ItemRef};
 use crate::config::{APP_ID, PROFILE};
-use crate::pages::{CompositorsPage, DesktopsPage, DistrosPage, ExplorePage, ItemDetailPage};
+use crate::pages::{
+    CompositorsPage, DesktopsPage, DistrosPage, ExplorePage, ItemDetailPage, SystemPage,
+};
 use crate::system::SystemInfo;
 use crate::widgets::DetailContent;
 
@@ -32,6 +34,8 @@ mod imp {
         pub desktops_page: gtk::TemplateChild<DesktopsPage>,
         #[template_child]
         pub compositors_page: gtk::TemplateChild<CompositorsPage>,
+        #[template_child]
+        pub system_page: gtk::TemplateChild<SystemPage>,
         pub settings: gio::Settings,
         pub catalog: RefCell<Option<Rc<Catalog>>>,
         pub system: RefCell<Option<Rc<SystemInfo>>>,
@@ -46,6 +50,7 @@ mod imp {
                 distros_page: gtk::TemplateChild::default(),
                 desktops_page: gtk::TemplateChild::default(),
                 compositors_page: gtk::TemplateChild::default(),
+                system_page: gtk::TemplateChild::default(),
                 settings: gio::Settings::new(APP_ID),
                 catalog: RefCell::default(),
                 system: RefCell::default(),
@@ -64,6 +69,7 @@ mod imp {
             DistrosPage::ensure_type();
             DesktopsPage::ensure_type();
             CompositorsPage::ensure_type();
+            SystemPage::ensure_type();
             klass.bind_template();
         }
 
@@ -191,6 +197,7 @@ impl LinuxAndYouWindow {
         imp.distros_page.show_catalog(&catalog, &system);
         imp.desktops_page.show_catalog(&catalog, &system);
         imp.compositors_page.show_catalog(&catalog, &system);
+        imp.system_page.show_system(&catalog, &system);
 
         imp.catalog.replace(Some(catalog));
         imp.system.replace(Some(system));

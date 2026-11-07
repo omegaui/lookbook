@@ -91,6 +91,13 @@ impl LinuxAndYouApplication {
             )),
         );
 
+        dialog.add_legal_section(
+            &gettext("Wayland protocol data"),
+            Some("© 2026 Valentin Hăloiu, wayland-explorer"),
+            gtk::License::MitX11,
+            None,
+        );
+
         dialog.present(self.active_window().as_ref());
     }
 }

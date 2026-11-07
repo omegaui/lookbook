@@ -1,6 +1,7 @@
 mod catalog_card;
 mod collection_card;
 mod content;
+mod idea_card;
 mod logo_tile;
 mod screenshot_card;
 mod screenshot_mock;
@@ -13,6 +14,7 @@ pub use content::{
     CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck, ProtocolSummary,
     SpotlightContent,
 };
+pub use idea_card::IdeaCard;
 pub use logo_tile::{LogoTile, TileContent};
 pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;

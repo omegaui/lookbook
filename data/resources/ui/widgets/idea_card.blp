@@ -1,0 +1,70 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $IdeaCard: Adw.Bin {
+  styles [
+    "card",
+    "idea-card",
+  ]
+
+  child: Box {
+    orientation: vertical;
+    spacing: 8;
+
+    Box {
+      spacing: 8;
+
+      Image status_icon {
+        pixel-size: 16;
+        valign: center;
+        accessible-role: presentation;
+      }
+
+      Label name_label {
+        styles [
+          "heading",
+        ]
+
+        xalign: 0;
+        hexpand: true;
+        wrap: true;
+      }
+
+      Label status_label {
+        styles [
+          "badge",
+        ]
+
+        valign: start;
+      }
+    }
+
+    Label description_label {
+      styles [
+        "dim-label",
+      ]
+
+      xalign: 0;
+      wrap: true;
+    }
+
+    Label route_label {
+      styles [
+        "chip",
+      ]
+
+      halign: start;
+      wrap: true;
+    }
+
+    Label places_label {
+      styles [
+        "caption",
+      ]
+
+      xalign: 0;
+      wrap: true;
+      visible: false;
+    }
+  };
+}
