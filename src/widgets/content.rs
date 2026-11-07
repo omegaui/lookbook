@@ -2,10 +2,10 @@
 
 use gettextrs::gettext;
 
-use super::TileContent;
+use super::{SceneLayout, TileContent};
 use crate::catalog::{
-    key_features, Accent, Catalog, Collection, Compositor, Desktop, Distro, ItemKind, ItemRef,
-    ItemSummary, Spotlight,
+    key_features, Accent, Catalog, Collection, Compositor, CompositorKind, Desktop, Distro,
+    FeatureSupport, ItemKind, ItemRef, ItemSummary, Spotlight,
 };
 
 /// Whether a compositor has one key feature, for example "Layer shell".
@@ -13,16 +13,32 @@ use crate::catalog::{
 pub struct FeatureCheck {
     pub label: String,
     pub supported: bool,
+    /// How it is provided when that is not a Wayland protocol, for example
+    /// "Through the ScreenCast portal".
+    pub note: Option<String>,
 }
 
 fn feature_checks(compositor: &Compositor) -> Vec<FeatureCheck> {
     key_features()
         .into_iter()
-        .map(|feature| FeatureCheck {
-            supported: feature.is_supported_by(compositor),
-            label: feature.label,
+        .map(|feature| {
+            let support = feature.support_on(compositor);
+            FeatureCheck {
+                label: feature.label,
+                supported: support != FeatureSupport::Missing,
+                note: support_note(support),
+            }
         })
         .collect()
+}
+
+fn support_note(support: FeatureSupport) -> Option<String> {
+    match support {
+        FeatureSupport::Portal(portal) => {
+            Some(gettext("Through the {} portal").replace("{}", portal))
+        }
+        FeatureSupport::Protocol | FeatureSupport::Missing => None,
+    }
 }
 
 /// The full protocol list of a compositor, for its details page.
@@ -265,8 +281,19 @@ pub struct SpotlightContent {
     pub tagline: String,
     pub chips: Vec<String>,
     pub accent: Accent,
+    /// How the drawn scene arranges its windows.
+    pub scene: SceneLayout,
     /// The view stack page that "View details" opens.
     pub page_name: &'static str,
+}
+
+/// Compositors show their own window layout; desktops and distros float windows.
+fn scene_for_compositor(kind: CompositorKind) -> SceneLayout {
+    match kind {
+        CompositorKind::Scrolling => SceneLayout::Scrolling,
+        CompositorKind::Tiling => SceneLayout::Tiling,
+        CompositorKind::Stacking => SceneLayout::Floating,
+    }
 }
 
 impl SpotlightContent {
@@ -292,6 +319,7 @@ impl SpotlightContent {
             tagline: spotlight.tagline.clone(),
             chips: vec![distro.release.label(), distro.package_manager.clone()],
             accent: spotlight.accent,
+            scene: SceneLayout::Floating,
             page_name: "distros",
         }
     }
@@ -304,6 +332,7 @@ impl SpotlightContent {
             tagline: spotlight.tagline.clone(),
             chips: vec![desktop.compositor.clone(), desktop.toolkit.clone()],
             accent: spotlight.accent,
+            scene: SceneLayout::Floating,
             page_name: "desktops",
         }
     }
@@ -320,6 +349,7 @@ impl SpotlightContent {
                 compositor.config.clone(),
             ],
             accent: spotlight.accent,
+            scene: scene_for_compositor(compositor.kind),
             page_name: "compositors",
         }
     }

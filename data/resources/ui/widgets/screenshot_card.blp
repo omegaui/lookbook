@@ -1,33 +1,42 @@
 using Gtk 4.0;
 
-template $ScreenshotCard: Box {
-  orientation: vertical;
-  spacing: 8;
+template $ScreenshotCard: Button {
+  styles [
+    "flat",
+    "screenshot-card",
+  ]
 
-  $ScreenshotMock mock {
-    vexpand: true;
-  }
+  clicked => $on_clicked() swapped;
 
-  Box {
+  child: Box {
+    orientation: vertical;
     spacing: 8;
 
-    Label title_label {
-      styles [
-        "caption-heading",
-      ]
-
-      xalign: 0;
-      hexpand: true;
-      ellipsize: end;
+    $ScreenshotMock mock {
+      vexpand: true;
     }
 
-    Label author_label {
-      styles [
-        "caption",
-        "dim-label",
-      ]
+    Box {
+      spacing: 8;
 
-      ellipsize: end;
+      Label title_label {
+        styles [
+          "caption-heading",
+        ]
+
+        xalign: 0;
+        hexpand: true;
+        ellipsize: end;
+      }
+
+      Label author_label {
+        styles [
+          "caption",
+          "dim-label",
+        ]
+
+        ellipsize: end;
+      }
     }
-  }
+  };
 }

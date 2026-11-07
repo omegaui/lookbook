@@ -86,78 +86,8 @@ template $SpotlightCard: Box {
     }
   }
 
-  // Decorative: windows laid out on a tilted floor.
-  ScrolledWindow {
-    hscrollbar-policy: external;
-    vscrollbar-policy: never;
-    can-target: false;
-
-    child: Box {
-      styles [
-        "iso-plane",
-      ]
-
-      spacing: 18;
-      halign: start;
-      valign: center;
-      margin-top: 60;
-      margin-bottom: 60;
-      margin-start: 10;
-
-      Box {
-        styles [
-          "mini-window",
-        ]
-
-        width-request: 150;
-        height-request: 230;
-        valign: start;
-      }
-
-      Box {
-        styles [
-          "mini-window",
-          "focused",
-        ]
-
-        width-request: 230;
-        height-request: 230;
-        valign: start;
-      }
-
-      Box {
-        orientation: vertical;
-        spacing: 18;
-        valign: start;
-
-        Box {
-          styles [
-            "mini-window",
-          ]
-
-          width-request: 150;
-          height-request: 106;
-        }
-
-        Box {
-          styles [
-            "mini-window",
-          ]
-
-          width-request: 150;
-          height-request: 106;
-        }
-      }
-
-      Box {
-        styles [
-          "mini-window",
-        ]
-
-        width-request: 190;
-        height-request: 230;
-        valign: start;
-      }
-    };
+  // A drawn isometric desktop, laid out the way the featured item arranges windows.
+  $IsoScene scene {
+    hexpand: true;
   }
 }

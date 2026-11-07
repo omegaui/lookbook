@@ -1,11 +1,11 @@
-//! Lays out Wall of fame screenshots in a grid.
+//! Lays out Hall of fame screenshots in a grid.
 
 use gtk::prelude::*;
 
 use super::ScreenshotCard;
 use crate::catalog::Screenshot;
 
-/// The Wall of fame grid is four columns wide.
+/// The Hall of fame grid is four columns wide.
 const WALL_COLUMNS: i32 = 4;
 
 /// Fills `grid` with `screenshots`. The first one is large; the rest are small.

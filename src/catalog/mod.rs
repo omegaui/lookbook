@@ -8,7 +8,7 @@ mod item_ref;
 mod loader;
 mod model;
 
-pub use features::key_features;
+pub use features::{key_features, FeatureSupport};
 pub use item_ref::ItemRef;
 pub use model::*;
 
@@ -34,7 +34,7 @@ impl Catalog {
         self.compositors.iter().find(|compositor| compositor.id == id)
     }
 
-    /// The Wall of fame entries that show `subject`, for example "gnome".
+    /// The Hall of fame entries that show `subject`, for example "gnome".
     pub fn screenshots_of(&self, subject: &str) -> Vec<&Screenshot> {
         self.screenshots
             .iter()

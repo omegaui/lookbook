@@ -92,11 +92,11 @@ template $ExplorePage: Adw.Bin {
             }
           }
 
-          // Decorative: it does not take input, so scrolling goes to the page.
+          // Takes the pointer so cards lift on hover. It never scrolls
+          // vertically, so the mouse wheel still scrolls the page.
           ScrolledWindow {
             hscrollbar-policy: external;
             vscrollbar-policy: never;
-            can-target: false;
 
             child: Box collections_box {
               styles [
@@ -160,7 +160,7 @@ template $ExplorePage: Adw.Bin {
           }
         }
 
-        // Wall of fame.
+        // Hall of fame.
         Box {
           orientation: vertical;
           spacing: 16;
@@ -174,7 +174,7 @@ template $ExplorePage: Adw.Bin {
                 "title-2",
               ]
 
-              label: _("Wall of Fame");
+              label: _("Hall of Fame");
               xalign: 0;
             }
 

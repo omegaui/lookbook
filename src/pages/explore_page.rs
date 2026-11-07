@@ -1,4 +1,4 @@
-//! The home page: collections, spotlights, the Wall of fame and the galleries.
+//! The home page: collections, spotlights, the Hall of fame and the galleries.
 
 use std::cell::RefCell;
 

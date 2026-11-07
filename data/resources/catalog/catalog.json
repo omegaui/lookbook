@@ -79,7 +79,8 @@
         "title_bar": "#45475a",
         "accent": "#f5c2e7",
         "text": "#a6adc8"
-      }
+      },
+      "link": "https://hypr.land/hall_of_fame/"
     },
     {
       "title": "GNOME default",
@@ -94,7 +95,8 @@
         "title_bar": "#ebebed",
         "accent": "#3584e4",
         "text": "#deddda"
-      }
+      },
+      "link": "https://www.gnome.org"
     },
     {
       "title": "niri + Nord",
@@ -109,7 +111,8 @@
         "title_bar": "#434c5e",
         "accent": "#88c0d0",
         "text": "#d8dee9"
-      }
+      },
+      "link": "https://github.com/niri-wm/niri"
     },
     {
       "title": "KDE Plasma",
@@ -124,7 +127,8 @@
         "title_bar": "#dee0e2",
         "accent": "#1d99f3",
         "text": "#dee0e2"
-      }
+      },
+      "link": "https://kde.org/plasma-desktop/"
     },
     {
       "title": "sway + Gruvbox",
@@ -139,7 +143,8 @@
         "title_bar": "#504945",
         "accent": "#fabd2f",
         "text": "#ebdbb2"
-      }
+      },
+      "link": "https://swaywm.org"
     }
   ],
   "distros": [
@@ -567,7 +572,11 @@
           "zxdg_decoration_manager_v1",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast"
+      ]
     },
     {
       "id": "niri",
@@ -636,7 +645,10 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "ScreenCast"
+      ]
     },
     {
       "id": "sway",
@@ -711,7 +723,11 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast"
+      ]
     },
     {
       "id": "kwin",
@@ -801,7 +817,12 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast",
+        "Wallpaper"
+      ]
     },
     {
       "id": "river",
@@ -883,7 +904,11 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast"
+      ]
     },
     {
       "id": "cosmic-comp",
@@ -961,7 +986,11 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast"
+      ]
     },
     {
       "id": "mutter",
@@ -1027,7 +1056,12 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast",
+        "Wallpaper"
+      ]
     },
     {
       "id": "wayfire",
@@ -1093,7 +1127,11 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast"
+      ]
     },
     {
       "id": "labwc",
@@ -1171,7 +1209,11 @@
           "zxdg_importer_v2",
           "zxdg_output_manager_v1"
         ]
-      }
+      },
+      "portals": [
+        "Screenshot",
+        "ScreenCast"
+      ]
     }
   ],
   "ideas": [

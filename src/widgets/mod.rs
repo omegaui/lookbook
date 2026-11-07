@@ -2,6 +2,7 @@ mod catalog_card;
 mod collection_card;
 mod content;
 mod idea_card;
+mod iso_scene;
 mod logo_tile;
 mod screenshot_card;
 mod screenshot_mock;
@@ -15,6 +16,7 @@ pub use content::{
     SpotlightContent,
 };
 pub use idea_card::IdeaCard;
+pub use iso_scene::{IsoScene, SceneLayout};
 pub use logo_tile::{LogoTile, TileContent};
 pub use screenshot_card::ScreenshotCard;
 pub use screenshot_mock::ScreenshotMock;
@@ -75,7 +77,12 @@ pub fn feature_check(check: &FeatureCheck) -> gtk::Box {
     } else {
         gettextrs::gettext("Not supported")
     };
-    row.update_property(&[gtk::accessible::Property::Description(&state)]);
+    let description = match &check.note {
+        Some(note) => format!("{state}. {note}"),
+        None => state,
+    };
+    row.update_property(&[gtk::accessible::Property::Description(&description)]);
+    row.set_tooltip_text(check.note.as_deref());
 
     row.append(&icon);
     row.append(&label);

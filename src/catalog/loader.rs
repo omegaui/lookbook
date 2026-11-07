@@ -98,6 +98,21 @@ mod tests {
     }
 
     #[test]
+    fn mutter_captures_the_screen_through_the_portal() {
+        let catalog = bundled_catalog();
+        let mutter = catalog.find_compositor("mutter").unwrap();
+        let capture = crate::catalog::key_features()
+            .into_iter()
+            .find(|feature| feature.portal == Some("ScreenCast"))
+            .unwrap();
+
+        assert_eq!(
+            capture.support_on(mutter),
+            crate::catalog::FeatureSupport::Portal("ScreenCast")
+        );
+    }
+
+    #[test]
     fn spotlights_point_to_items() {
         let catalog = bundled_catalog();
 

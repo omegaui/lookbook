@@ -115,7 +115,7 @@ impl ItemDetailPage {
         label.set_visible(true);
     }
 
-    /// The Wall of fame section stays hidden when there are no screenshots yet.
+    /// The Hall of fame section stays hidden when there are no screenshots yet.
     fn show_screenshots(&self, screenshots: &[&Screenshot]) {
         let imp = self.imp();
         fill_wall_grid(&imp.wall_grid, screenshots);

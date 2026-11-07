@@ -2,7 +2,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::glib;
 
-use super::{chip_label, LogoTile, SpotlightContent};
+use super::{chip_label, IsoScene, LogoTile, SpotlightContent};
 
 mod imp {
     use super::*;
@@ -22,6 +22,8 @@ mod imp {
         pub chips_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
         pub details_button: gtk::TemplateChild<gtk::Button>,
+        #[template_child]
+        pub scene: gtk::TemplateChild<IsoScene>,
     }
 
     #[glib::object_subclass]
@@ -32,6 +34,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
+            IsoScene::ensure_type();
             klass.bind_template();
         }
 
@@ -68,6 +71,7 @@ impl SpotlightCard {
         imp.tagline_label.set_label(&content.tagline);
         imp.details_button
             .set_action_target_value(Some(&content.page_name.to_variant()));
+        imp.scene.set_scene(content.scene, content.accent);
 
         for chip in &content.chips {
             imp.chips_box.append(&chip_label(chip));

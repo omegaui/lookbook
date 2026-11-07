@@ -120,13 +120,16 @@ pub struct Spotlight {
     pub accent: Accent,
 }
 
-/// A Wall of fame entry. Until real screenshots are in the catalog, each one
+/// A Hall of fame entry. Until real screenshots are in the catalog, each one
 /// carries the colors for a drawn mock-up.
 #[derive(Debug, Clone, Deserialize)]
 pub struct Screenshot {
     pub title: String,
     pub author: String,
     pub subject: String,
+    /// Where the best real screenshots of this look live, for example
+    /// Hyprland's Hall of Fame page.
+    pub link: String,
     pub mock: MockLook,
 }
 
@@ -284,9 +287,15 @@ pub struct Compositor {
     /// Starts of global names that only this compositor offers, for example "hyprland_".
     pub fingerprints: Vec<String>,
     pub protocols: ProtocolSupport,
+    /// XDG desktop portals its usual portal backend provides, for example "ScreenCast".
+    pub portals: Vec<String>,
 }
 
 impl Compositor {
+    pub fn has_portal(&self, portal: &str) -> bool {
+        self.portals.iter().any(|name| name == portal)
+    }
+
     pub fn supports(&self, interface: &str) -> bool {
         self.protocols.globals.iter().any(|global| global == interface)
     }
