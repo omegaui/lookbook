@@ -153,7 +153,7 @@ impl SystemPage {
 
     fn show_summary(&self, catalog: &Catalog, system: &SystemInfo, statuses: &[IdeaStatus]) {
         let imp = self.imp();
-        let ready = statuses.iter().filter(|status| status.is_ready()).count();
+        let ready = statuses.iter().filter(|status| status.is_available()).count();
         let total = statuses.len();
         let share = if total == 0 { 0.0 } else { ready as f64 / total as f64 };
 
@@ -235,10 +235,10 @@ impl SystemPage {
             imp.ideas_flowbox.append(&IdeaCard::new(idea, status));
         }
         imp.ready_flags
-            .replace(statuses.iter().map(IdeaStatus::is_ready).collect());
+            .replace(statuses.iter().map(IdeaStatus::is_available).collect());
 
         let note = match setup.compositor {
-            Some(compositor) => gettext("An idea is ready when {compositor} {version} offers what it needs, from wayland-explorer data.")
+            Some(compositor) => gettext("Built in means your desktop or compositor already includes it. An idea is ready to build when {compositor} {version} offers what it needs, from wayland-explorer data.")
                 .replace("{compositor}", &compositor.name)
                 .replace("{version}", &compositor.protocols.version),
             None => gettext("Linux & You could not tell which compositor you run, so only portal and desktop routes count."),
@@ -297,6 +297,7 @@ impl SystemPage {
 
         for (idea, status) in catalog.ideas.iter().zip(statuses) {
             let state = match status {
+                IdeaStatus::BuiltIn { by, .. } => format!("built into {by}"),
                 IdeaStatus::Ready { route, .. } => format!("ready ({route})"),
                 IdeaStatus::WorksElsewhere { needs, .. } => format!("works elsewhere (needs {needs})"),
             };

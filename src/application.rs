@@ -69,7 +69,12 @@ impl LinuxAndYouApplication {
             .activate(|app: &Self, _, parameter| app.forward_to_window("show-item", parameter))
             .build();
 
-        self.add_action_entries([quit, about, show_item]);
+        let can_i_run = gio::ActionEntry::builder("can-i-run")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .activate(|app: &Self, _, parameter| app.forward_to_window("can-i-run", parameter))
+            .build();
+
+        self.add_action_entries([quit, about, show_item, can_i_run]);
 
         if PROFILE == "Devel" {
             // Lets scripts check the lower sections of a page without the mouse.
@@ -117,6 +122,15 @@ impl LinuxAndYouApplication {
             gtk::License::Custom,
             Some(&gettext(
                 "Distro, desktop and compositor logos are trademarks of their owners. Linux &amp; You uses them only to identify each project.\n\nLogos come from <a href=\"https://simpleicons.org\">Simple Icons</a> (CC0 1.0, with these exceptions: Debian CC BY-SA 3.0, Gentoo CC BY-SA 2.5, NixOS CC BY 4.0, niri CC BY-SA 4.0, Fedora under the Fedora logo usage guidelines) and <a href=\"https://github.com/Lukas-W/font-logos\">font-logos</a> (Unlicense) for Budgie, LXQt, MATE and river. The Bazzite logo comes from its press kit (Apache-2.0), the labwc logo is by Johan Malm (CC BY-SA 4.0), and the Wayfire logo is traced from wf-shell's icon (MIT).",
+            )),
+        );
+
+        dialog.add_legal_section(
+            &gettext("Desktop screenshots"),
+            None,
+            gtk::License::Custom,
+            Some(&gettext(
+                "Desktop screenshots load live from <a href=\"https://commons.wikimedia.org\">Wikimedia Commons</a>; none are bundled. Each card's tooltip names the author and license, and each image's Commons page holds the full details.\n\nPackage data in Can I Run It? comes from <a href=\"https://repology.org\">Repology</a>.",
             )),
         );
 

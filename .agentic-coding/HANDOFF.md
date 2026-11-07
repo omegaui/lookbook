@@ -34,6 +34,8 @@ Linux & You is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `i
 | `src/ideas.rs` | Decides "Ready here" / "Works elsewhere" for each idea |
 | `src/details.rs` | What a details page compares (Versus your system), which ideas an item supports, and similar items. No UI code |
 | `src/extensions.rs` | Popular GNOME Shell extensions, read live from the extensions.gnome.org API |
+| `src/run_check.rs`, `src/repology.rs` | "Can I Run It?": hardware checks, ideas gained or given up, ways to try, and the Repology package lookup (HTTP/1.1, at most one request a second) |
+| `src/http.rs` | The libsoup session (User-Agent with a contact link), a shared session, GET helpers |
 | `src/wallpapers/` | Live wallpaper sources: libsoup HTTP, copyparty and WordPress adapters, the Wallpaper portal call |
 | `src/pages/` | Explore, Distros, Desktops, Compositors, Wallpapers, Your System, and the shared item details page |
 | `src/widgets/` | Cards, `LogoTile`, `IsoScene` (isometric scenes in an accent or brand color), `MiniDesktop` (desktop card art), `ScreenshotMock` (drawn Hall of Fame shots), `IdeaCard`, `DesktopCard`, extension card, wallpaper card and preview dialog, `NaturalWidthCap`, `content.rs` (catalog item → card text) |
@@ -91,10 +93,10 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 
 ## Open work, in priority order
 
-1. ~~Four spotlights~~ done: Distro (Bazzite), Desktop (GNOME), Compositor (niri), then a wallpaper picked at random from orangc's walls when the carousel reaches it (`WallpaperSpotlight`, tilted `IsoPicture`). "View Details" opens the item. "Can I Run It?" fires `win.can-i-run`, which for now only opens Your System.
-2. **"Can I Run It?" must answer something.** A sheet per item: is it packaged for the user's distro (Repology, at most 1 request a second, User-Agent with a contact link; map os-release `ID`/`ID_LIKE` to a Repology repo), install command, which ideas the user gains or loses against the current setup, GPU notes (NVIDIA on wlroots), and how to try it (VM, live USB).
+1. ~~Four spotlights~~ done: Distro (Bazzite), Desktop (GNOME), Compositor (niri), then a wallpaper picked at random from orangc's walls when the carousel reaches it (`WallpaperSpotlight`, tilted `IsoPicture`). "View Details" opens the item. "Can I Run It?" opens the run-check sheet.
+2. ~~"Can I Run It?"~~ done: `RunCheckDialog` from the spotlight and details pages (`win.can-i-run`, also an app action). Distros list their Repology repos (`repology_repos`, with `{version}`/`{codename}`) and NVIDIA notes; desktops and compositors name their Repology project. Ideas now have `built_into`, so a desktop's own lock screen or a tiling compositor's tiling counts as **Built in** (the user caught Ubuntu "giving up" a lock screen).
 3. **"What's new this month in Linux"** on Explore: release cards from the last 31 days, read live. Checked feeds (all 200 on 2026-11-07): kernel.org `releases.json`; endoflife.date API v1 for distros and `kde-plasma` (no `gnome` product there); KDE `announcements/index.xml` (items have empty titles, the version is in the link); GitHub `releases.atom` for Hyprland, niri (`niri-wm/niri`), sway, labwc, Wayfire, COSMIC (`pop-os/cosmic-epoch`); Codeberg RSS for river. GNOME Discourse announcements carry no release posts, so GNOME needs another source.
-4. **Gallery card art** still to do: layout drawings on compositor cards, tinted capsules on distro cards.
+4. **Gallery card art** still to do: layout drawings on compositor cards, tinted capsules on distro cards. Desktop cards and the GNOME banner now show real screenshots from Wikimedia Commons (`screenshot` in each desktop; credits in `docs/screenshot-credits.md`). The same approach could give the Hall of Fame real images.
 4. **Online catalog.** Same repo: hand-written sources in a `catalog/` folder, a scheduled GitHub Action that builds `catalog.json` and deploys it to GitHub Pages (`https://omegaui.github.io/linux_and_you/v1/catalog.json`) without committing generated data. The app fetches at most daily with `If-None-Match`, caches it, and falls back to the bundled snapshot. Details and sources: `docs/research/data-sources.md`.
 5. **Real screenshots in the Hall of Fame** instead of drawn mocks, once the online catalog can carry image URLs.
 6. **Release prep**: a release manifest with vendored crates (`build-aux/dist-vendor.sh`), screenshots in metainfo, a check of brand guidelines for logos (especially Fedora) and of "Linux" in the app name before Flathub.
@@ -124,6 +126,9 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 - **A FlowBox fits children by their natural width**, and a `Picture`'s natural width is its image's full width, so big screenshots give one card per row. Wrap the card in `NaturalWidthCap`.
 - **Widgets with a layout manager (like `adw::Bin`) never call their own `measure`.** Subclass `gtk::Widget` and lay out the child yourself when you need to change measuring.
 - **`gapplication action … scroll-to 1` sends an integer**; the scroll script formats the number as a double.
+- **Repology resets libsoup's HTTP/2 connections** ("Peer failed to perform TLS handshake"); `http::get_bytes_over_http1` forces HTTP/1.1 (needs the soup3 `v3_4` feature).
+- **Wikimedia Commons serves only standard thumbnail widths** (for example 960px); other widths return an HTML error page. Take `thumburl` from the API with `iiurlwidth=960`.
+- **Logs**: run `flatpak run io.github.omegaui.LinuxAndYou.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
 
 ## Design
 

@@ -13,7 +13,8 @@ use crate::pages::{
     WallpapersPage,
 };
 use crate::system::SystemInfo;
-use crate::widgets::DetailContent;
+use crate::run_check;
+use crate::widgets::{DetailContent, RunCheckDialog, TileContent};
 
 const MAIN_PAGE_TAG: &str = "main";
 /// Desktops that place windows freely. Tiling compositors size windows themselves
@@ -179,10 +180,14 @@ impl LinuxAndYouWindow {
             })
             .build();
 
-        // Until the Can I Run It sheet exists, the question leads to Your System.
         let can_i_run = gio::ActionEntry::builder("can-i-run")
             .parameter_type(Some(glib::VariantTy::STRING))
-            .activate(|window: &Self, _, _| window.show_page("system"))
+            .activate(|window: &Self, _, parameter| {
+                let target = parameter.and_then(|value| value.get::<String>());
+                if let Some(item) = target.as_deref().and_then(ItemRef::parse) {
+                    window.show_run_check(&item);
+                }
+            })
             .build();
 
         self.add_action_entries([show_page, show_item, can_i_run]);
@@ -257,6 +262,32 @@ impl LinuxAndYouWindow {
 
         imp.navigation_view
             .push(&ItemDetailPage::new(&content, &catalog, &system));
+    }
+
+    /// Opens the "Can I Run It?" sheet for an item.
+    fn show_run_check(&self, item: &ItemRef) {
+        let imp = self.imp();
+        let catalog = imp.catalog.borrow().clone();
+        let system = imp.system.borrow().clone();
+        let (Some(catalog), Some(system)) = (catalog, system) else {
+            return;
+        };
+
+        let Some(result) = run_check::check(item, &catalog, &system) else {
+            tracing::warn!("The catalog has no {}", item.to_action_target());
+            return;
+        };
+        let Some(summary) = catalog.summary(item.kind, &item.id) else {
+            return;
+        };
+        let tile = TileContent {
+            short: summary.short.to_owned(),
+            color: summary.color.to_owned(),
+            logo: summary.logo.map(str::to_owned),
+            icon_name: None,
+        };
+
+        RunCheckDialog::new(&result, &tile).present(Some(self));
     }
 
     fn remember_last_page(&self) {

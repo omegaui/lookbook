@@ -11,6 +11,12 @@ pub struct OsRelease {
     pub name: String,
     pub pretty_name: String,
     pub variant_id: Option<String>,
+    /// For example "42" on Fedora 42 or "24.04" on Ubuntu 24.04. Rolling distros leave it out.
+    pub version_id: Option<String>,
+    /// For example "trixie" on Debian 13.
+    pub version_codename: Option<String>,
+    /// The distros this one builds on, for example ["arch"] on CachyOS.
+    pub id_like: Vec<String>,
     pub logo: Option<String>,
 }
 
@@ -33,6 +39,9 @@ impl OsRelease {
                 "NAME" => release.name = value,
                 "PRETTY_NAME" => release.pretty_name = value,
                 "VARIANT_ID" => release.variant_id = Some(value),
+                "VERSION_ID" => release.version_id = Some(value),
+                "VERSION_CODENAME" => release.version_codename = Some(value),
+                "ID_LIKE" => release.id_like = value.split_whitespace().map(str::to_owned).collect(),
                 "LOGO" => release.logo = Some(value),
                 _ => {}
             }
@@ -65,6 +74,15 @@ fn split_entry(line: &str) -> Option<(&str, String)> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn reads_version_and_parent_distros() {
+        let text = "ID=cachyos\nID_LIKE=\"arch\"\nVERSION_ID=\"25.10\"\n";
+        let release = OsRelease::parse(text);
+
+        assert_eq!(release.version_id.as_deref(), Some("25.10"));
+        assert_eq!(release.id_like, vec!["arch".to_owned()]);
+    }
 
     #[test]
     fn parses_quoted_and_plain_values() {

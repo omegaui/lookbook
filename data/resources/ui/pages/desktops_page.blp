@@ -133,8 +133,22 @@ template $DesktopsPage: Adw.Bin {
             }
           }
 
-          $IsoScene featured_scene {
+          // The drawn scene shows until GNOME's real screenshot arrives.
+          Stack featured_art {
+            transition-type: crossfade;
             hexpand: true;
+
+            StackPage {
+              name: "drawing";
+
+              child: $IsoScene featured_scene {};
+            }
+
+            StackPage {
+              name: "screenshot";
+
+              child: $IsoPicture featured_picture {};
+            }
           }
         }
 

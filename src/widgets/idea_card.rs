@@ -64,14 +64,14 @@ glib::wrapper! {
 impl IdeaCard {
     pub fn new(idea: &Idea, status: &IdeaStatus) -> Self {
         let card: Self = glib::Object::new();
-        card.show_idea(idea, status.is_ready());
+        card.show_idea(idea, status.is_available());
         card.show_status(status);
         card
     }
 
-    fn show_idea(&self, idea: &Idea, is_ready: bool) {
+    fn show_idea(&self, idea: &Idea, is_available: bool) {
         let imp = self.imp();
-        let tile_color = if is_ready { idea.color.as_str() } else { ELSEWHERE_TILE_COLOR };
+        let tile_color = if is_available { idea.color.as_str() } else { ELSEWHERE_TILE_COLOR };
 
         imp.tile.set_tile_size(TILE_SIZE);
         imp.tile.set_content(&TileContent {
@@ -86,9 +86,24 @@ impl IdeaCard {
 
     fn show_status(&self, status: &IdeaStatus) {
         match status {
+            IdeaStatus::BuiltIn { by, route } => self.show_built_in(by, route.as_deref()),
             IdeaStatus::Ready { route, interface } => self.show_ready(route, interface.as_deref()),
             IdeaStatus::WorksElsewhere { needs, places } => self.show_elsewhere(needs, places),
         }
+    }
+
+    /// "Built in", and how to make your own instead when that is possible too.
+    fn show_built_in(&self, by: &str, route: Option<&str>) {
+        let imp = self.imp();
+        imp.status_label.set_label(&gettext("Built in"));
+        imp.status_label.add_css_class("ready");
+        let text = match route {
+            Some(route) => gettext("Part of {by}. Make your own with: {route}")
+                .replace("{by}", by)
+                .replace("{route}", route),
+            None => gettext("Part of {}").replace("{}", by),
+        };
+        imp.route_label.set_label(&text);
     }
 
     fn show_ready(&self, route: &str, interface: Option<&str>) {

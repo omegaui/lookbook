@@ -1,0 +1,91 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $RunCheckDialog: Adw.Dialog {
+  content-width: 600;
+  content-height: 720;
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {}
+
+    content: ScrolledWindow {
+      hscrollbar-policy: never;
+
+      child: Adw.Clamp {
+        maximum-size: 560;
+
+        child: Box {
+          orientation: vertical;
+          spacing: 24;
+          margin-top: 6;
+          margin-bottom: 24;
+          margin-start: 18;
+          margin-end: 18;
+
+          // The answer first: the item, then a one-line verdict.
+          Box {
+            spacing: 16;
+
+            $LogoTile tile {
+              valign: center;
+            }
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              valign: center;
+              hexpand: true;
+
+              Label question_label {
+                styles [
+                  "kicker",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+
+              Label verdict_label {
+                styles [
+                  "title-2",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+
+              Label verdict_detail_label {
+                styles [
+                  "dim-label",
+                ]
+
+                xalign: 0;
+                wrap: true;
+              }
+            }
+          }
+
+          Adw.PreferencesGroup checks_group {
+            title: _("Your Computer");
+          }
+
+          Adw.PreferencesGroup package_group {
+            title: _("Packages");
+            description: _("Package data from Repology");
+            visible: false;
+          }
+
+          Adw.PreferencesGroup ideas_group {
+            title: _("Compared With Your Setup");
+            visible: false;
+          }
+
+          Adw.PreferencesGroup try_group {
+            title: _("How to Try It");
+          }
+        };
+      };
+    };
+  };
+}

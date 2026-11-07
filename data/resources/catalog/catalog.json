@@ -172,7 +172,14 @@
       "logo": "fedora",
       "os_release_id": "fedora",
       "os_release_variant": "workstation",
-      "default_desktop": "GNOME"
+      "default_desktop": "GNOME",
+      "repology_repos": [
+        {
+          "repo": "fedora_{version}",
+          "install": "sudo dnf install {package}"
+        }
+      ],
+      "nvidia_note": "Install the NVIDIA driver from RPM Fusion; GNOME Software offers it once third-party repositories are on."
     },
     {
       "id": "arch",
@@ -186,7 +193,19 @@
       "website": "https://archlinux.org",
       "logo": "archlinux",
       "os_release_id": "arch",
-      "default_desktop": "Your choice"
+      "default_desktop": "Your choice",
+      "repology_repos": [
+        {
+          "repo": "arch",
+          "install": "sudo pacman -S {package}"
+        },
+        {
+          "repo": "aur",
+          "label": "AUR",
+          "install": "paru -S {package}"
+        }
+      ],
+      "nvidia_note": "Install nvidia-open (or nvidia for older cards) and enable kernel mode setting."
     },
     {
       "id": "debian",
@@ -200,7 +219,19 @@
       "website": "https://www.debian.org",
       "logo": "debian",
       "os_release_id": "debian",
-      "default_desktop": "GNOME"
+      "default_desktop": "GNOME",
+      "repology_repos": [
+        {
+          "repo": "debian_{version}",
+          "install": "sudo apt install {package}"
+        },
+        {
+          "repo": "debian_{version}_backports",
+          "label": "backports",
+          "install": "sudo apt install -t {codename}-backports {package}"
+        }
+      ],
+      "nvidia_note": "Install nvidia-driver from the non-free repository."
     },
     {
       "id": "ubuntu",
@@ -214,7 +245,14 @@
       "website": "https://ubuntu.com",
       "logo": "ubuntu",
       "os_release_id": "ubuntu",
-      "default_desktop": "GNOME"
+      "default_desktop": "GNOME",
+      "repology_repos": [
+        {
+          "repo": "ubuntu_{version}",
+          "install": "sudo apt install {package}"
+        }
+      ],
+      "nvidia_note": "Additional Drivers installs the NVIDIA driver in a few clicks."
     },
     {
       "id": "linuxmint",
@@ -228,7 +266,14 @@
       "website": "https://linuxmint.com",
       "logo": "linuxmint",
       "os_release_id": "linuxmint",
-      "default_desktop": "Cinnamon"
+      "default_desktop": "Cinnamon",
+      "repology_repos": [
+        {
+          "repo": "ubuntu_24_04",
+          "install": "sudo apt install {package}"
+        }
+      ],
+      "nvidia_note": "Driver Manager installs the NVIDIA driver in a few clicks."
     },
     {
       "id": "opensuse-tumbleweed",
@@ -242,7 +287,14 @@
       "website": "https://get.opensuse.org/tumbleweed/",
       "logo": "opensuse",
       "os_release_id": "opensuse-tumbleweed",
-      "default_desktop": "KDE Plasma"
+      "default_desktop": "KDE Plasma",
+      "repology_repos": [
+        {
+          "repo": "opensuse_tumbleweed",
+          "install": "sudo zypper install {package}"
+        }
+      ],
+      "nvidia_note": "Add NVIDIA's repository, then install the driver with zypper."
     },
     {
       "id": "nixos",
@@ -256,7 +308,19 @@
       "website": "https://nixos.org",
       "logo": "nixos",
       "os_release_id": "nixos",
-      "default_desktop": "Your choice"
+      "default_desktop": "Your choice",
+      "repology_repos": [
+        {
+          "repo": "nix_stable_{version}",
+          "install": "Add pkgs.{package} to environment.systemPackages"
+        },
+        {
+          "repo": "nix_unstable",
+          "label": "unstable",
+          "install": "Add pkgs.{package} from nixpkgs-unstable"
+        }
+      ],
+      "nvidia_note": "Enable hardware.nvidia in your configuration."
     },
     {
       "id": "cachyos",
@@ -270,7 +334,19 @@
       "website": "https://cachyos.org",
       "logo": "cachyos",
       "os_release_id": "cachyos",
-      "default_desktop": "Your choice"
+      "default_desktop": "Your choice",
+      "repology_repos": [
+        {
+          "repo": "arch",
+          "install": "sudo pacman -S {package}"
+        },
+        {
+          "repo": "aur",
+          "label": "AUR",
+          "install": "paru -S {package}"
+        }
+      ],
+      "nvidia_note": "The installer sets up the NVIDIA driver for you."
     },
     {
       "id": "bazzite",
@@ -284,7 +360,14 @@
       "website": "https://bazzite.gg",
       "os_release_id": "bazzite",
       "default_desktop": "KDE Plasma or GNOME",
-      "logo": "bazzite"
+      "logo": "bazzite",
+      "repology_repos": [
+        {
+          "repo": "fedora_{version}",
+          "install": "rpm-ostree install {package}"
+        }
+      ],
+      "nvidia_note": "Pick the NVIDIA image when you download; it ships with the driver installed."
     },
     {
       "id": "fedora-silverblue",
@@ -299,7 +382,14 @@
       "logo": "fedora",
       "os_release_id": "fedora",
       "os_release_variant": "silverblue",
-      "default_desktop": "GNOME"
+      "default_desktop": "GNOME",
+      "repology_repos": [
+        {
+          "repo": "fedora_{version}",
+          "install": "rpm-ostree install {package}"
+        }
+      ],
+      "nvidia_note": "Add the NVIDIA driver from RPM Fusion as a layered package."
     },
     {
       "id": "pop",
@@ -313,7 +403,14 @@
       "website": "https://system76.com/pop/",
       "logo": "popos",
       "os_release_id": "pop",
-      "default_desktop": "COSMIC"
+      "default_desktop": "COSMIC",
+      "repology_repos": [
+        {
+          "repo": "ubuntu_{version}",
+          "install": "sudo apt install {package}"
+        }
+      ],
+      "nvidia_note": "Download the NVIDIA ISO; it ships with the driver installed."
     },
     {
       "id": "elementary",
@@ -327,7 +424,13 @@
       "website": "https://elementary.io",
       "logo": "elementary",
       "os_release_id": "elementary",
-      "default_desktop": "Pantheon"
+      "default_desktop": "Pantheon",
+      "repology_repos": [
+        {
+          "repo": "ubuntu_24_04",
+          "install": "sudo apt install {package}"
+        }
+      ]
     },
     {
       "id": "endeavouros",
@@ -341,7 +444,19 @@
       "website": "https://endeavouros.com",
       "logo": "endeavouros",
       "os_release_id": "endeavouros",
-      "default_desktop": "KDE Plasma"
+      "default_desktop": "KDE Plasma",
+      "repology_repos": [
+        {
+          "repo": "arch",
+          "install": "sudo pacman -S {package}"
+        },
+        {
+          "repo": "aur",
+          "label": "AUR",
+          "install": "paru -S {package}"
+        }
+      ],
+      "nvidia_note": "The installer can set up the NVIDIA driver for you."
     },
     {
       "id": "void",
@@ -355,7 +470,13 @@
       "website": "https://voidlinux.org",
       "logo": "voidlinux",
       "os_release_id": "void",
-      "default_desktop": "Your choice"
+      "default_desktop": "Your choice",
+      "repology_repos": [
+        {
+          "repo": "void_x86_64",
+          "install": "sudo xbps-install {package}"
+        }
+      ]
     },
     {
       "id": "alpine",
@@ -369,7 +490,18 @@
       "website": "https://alpinelinux.org",
       "logo": "alpinelinux",
       "os_release_id": "alpine",
-      "default_desktop": "Your choice"
+      "default_desktop": "Your choice",
+      "repology_repos": [
+        {
+          "repo": "alpine_{version}",
+          "install": "doas apk add {package}"
+        },
+        {
+          "repo": "alpine_edge",
+          "label": "edge",
+          "install": "doas apk add {package}"
+        }
+      ]
     },
     {
       "id": "gentoo",
@@ -383,7 +515,13 @@
       "website": "https://www.gentoo.org",
       "logo": "gentoo",
       "os_release_id": "gentoo",
-      "default_desktop": "Your choice"
+      "default_desktop": "Your choice",
+      "repology_repos": [
+        {
+          "repo": "gentoo",
+          "install": "sudo emerge --ask {package}"
+        }
+      ]
     }
   ],
   "desktops": [
@@ -407,7 +545,14 @@
       "layout": "dock",
       "bars": [
         "top"
-      ]
+      ],
+      "repology": "gnome-shell",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/GNOME_Shell.png/960px-GNOME_Shell.png",
+        "page": "https://commons.wikimedia.org/wiki/File:GNOME_Shell.png",
+        "credit": "Guilieb",
+        "license": "CC BY-SA 4.0"
+      }
     },
     {
       "id": "kde-plasma",
@@ -429,7 +574,14 @@
       "layout": "panel",
       "bars": [
         "bottom"
-      ]
+      ],
+      "repology": "plasma-workspace",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kde_Plasma_6.png/960px-Kde_Plasma_6.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Kde_Plasma_6.png",
+        "credit": "Axo1otl",
+        "license": "GPL"
+      }
     },
     {
       "id": "cosmic",
@@ -451,7 +603,14 @@
       "bars": [
         "top",
         "dock"
-      ]
+      ],
+      "repology": "cosmic-session",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Pop%21_OS_24.04_LTS_default_desktop_-_English.png/960px-Pop%21_OS_24.04_LTS_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Pop!_OS_24.04_LTS_default_desktop_-_English.png",
+        "credit": "System76",
+        "license": "GPL-3.0"
+      }
     },
     {
       "id": "cinnamon",
@@ -474,7 +633,14 @@
       "layout": "panel",
       "bars": [
         "bottom"
-      ]
+      ],
+      "repology": "cinnamon",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Linux_Mint_Cinnamon_22.3.png/960px-Linux_Mint_Cinnamon_22.3.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Linux_Mint_Cinnamon_22.3.png",
+        "credit": "Breno Martins de Oliveira Vasconcelos",
+        "license": "GPL-3.0"
+      }
     },
     {
       "id": "xfce",
@@ -497,7 +663,14 @@
       "bars": [
         "top",
         "dock"
-      ]
+      ],
+      "repology": "xfce4-session",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/XFCE_4.20.png/960px-XFCE_4.20.png",
+        "page": "https://commons.wikimedia.org/wiki/File:XFCE_4.20.png",
+        "credit": "Unknown author",
+        "license": "GPL"
+      }
     },
     {
       "id": "budgie",
@@ -519,7 +692,14 @@
       "layout": "dock",
       "bars": [
         "top"
-      ]
+      ],
+      "repology": "budgie-desktop",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BudgieDesktop-v10.7.jpg/960px-BudgieDesktop-v10.7.jpg",
+        "page": "https://commons.wikimedia.org/wiki/File:BudgieDesktop-v10.7.jpg",
+        "credit": "Joshua Strobl",
+        "license": "Apache-2.0"
+      }
     },
     {
       "id": "mate",
@@ -542,7 +722,14 @@
       "bars": [
         "top",
         "bottom"
-      ]
+      ],
+      "repology": "mate-session-manager",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Mate-desktop-1.26.en.png/960px-Mate-desktop-1.26.en.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Mate-desktop-1.26.en.png",
+        "credit": "the MATE developers",
+        "license": "GPL"
+      }
     },
     {
       "id": "lxqt",
@@ -564,7 +751,14 @@
       "layout": "panel",
       "bars": [
         "bottom"
-      ]
+      ],
+      "repology": "lxqt-session",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/LXQt_2.0.0_Ambiance_screenshot.png/960px-LXQt_2.0.0_Ambiance_screenshot.png",
+        "page": "https://commons.wikimedia.org/wiki/File:LXQt_2.0.0_Ambiance_screenshot.png",
+        "credit": "LXQt developers",
+        "license": "CC BY-SA 3.0"
+      }
     },
     {
       "id": "pantheon",
@@ -587,7 +781,14 @@
       "bars": [
         "top",
         "dock"
-      ]
+      ],
+      "repology": "gala",
+      "screenshot": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Elementary_OS_8.0_default_desktop_-_English.png/960px-Elementary_OS_8.0_default_desktop_-_English.png",
+        "page": "https://commons.wikimedia.org/wiki/File:Elementary_OS_8.0_default_desktop_-_English.png",
+        "credit": "elementary, Inc.",
+        "license": "GPL-3.0"
+      }
     }
   ],
   "compositors": [
@@ -680,7 +881,9 @@
       "portals": [
         "Screenshot",
         "ScreenCast"
-      ]
+      ],
+      "repology": "hyprland",
+      "nvidia_note": "Works on NVIDIA with a recent driver; the Hyprland wiki's NVIDIA page lists the settings."
     },
     {
       "id": "niri",
@@ -752,7 +955,8 @@
       },
       "portals": [
         "ScreenCast"
-      ]
+      ],
+      "repology": "niri"
     },
     {
       "id": "sway",
@@ -831,7 +1035,9 @@
       "portals": [
         "Screenshot",
         "ScreenCast"
-      ]
+      ],
+      "repology": "sway",
+      "nvidia_note": "On the NVIDIA driver, start sway with --unsupported-gpu."
     },
     {
       "id": "kwin",
@@ -926,7 +1132,8 @@
         "Screenshot",
         "ScreenCast",
         "Wallpaper"
-      ]
+      ],
+      "repology": "kwin"
     },
     {
       "id": "river",
@@ -1012,7 +1219,9 @@
       "portals": [
         "Screenshot",
         "ScreenCast"
-      ]
+      ],
+      "repology": "river",
+      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges."
     },
     {
       "id": "cosmic-comp",
@@ -1094,7 +1303,8 @@
       "portals": [
         "Screenshot",
         "ScreenCast"
-      ]
+      ],
+      "repology": "cosmic-comp"
     },
     {
       "id": "mutter",
@@ -1165,7 +1375,8 @@
         "Screenshot",
         "ScreenCast",
         "Wallpaper"
-      ]
+      ],
+      "repology": "mutter"
     },
     {
       "id": "wayfire",
@@ -1236,7 +1447,9 @@
         "Screenshot",
         "ScreenCast"
       ],
-      "logo": "wayfire"
+      "logo": "wayfire",
+      "repology": "wayfire",
+      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges."
     },
     {
       "id": "labwc",
@@ -1319,7 +1532,9 @@
         "Screenshot",
         "ScreenCast"
       ],
-      "logo": "labwc"
+      "logo": "labwc",
+      "repology": "labwc",
+      "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges."
     }
   ],
   "ideas": [
@@ -1327,6 +1542,17 @@
       "id": "status-bar",
       "name": "Status bar",
       "description": "A panel pinned to a screen edge, like Waybar.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "xfce",
+        "budgie",
+        "mate",
+        "lxqt",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1357,6 +1583,17 @@
       "id": "launcher",
       "name": "App launcher",
       "description": "A pop-up search that starts apps, like fuzzel or Walker.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "xfce",
+        "budgie",
+        "mate",
+        "lxqt",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1387,6 +1624,16 @@
       "id": "dock",
       "name": "Dock",
       "description": "App icons that stay on screen, like Dash to Dock.",
+      "built_into": [
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "budgie",
+        "xfce",
+        "mate",
+        "lxqt",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1418,6 +1665,17 @@
       "id": "notifications",
       "name": "Notification daemon",
       "description": "Show notifications as your own floating cards, like mako.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "xfce",
+        "budgie",
+        "mate",
+        "lxqt",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1464,6 +1722,17 @@
       "id": "lock-screen",
       "name": "Lock screen",
       "description": "Your own lock screen, like hyprlock or gtklock.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "xfce",
+        "budgie",
+        "mate",
+        "lxqt",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1480,6 +1749,18 @@
       "id": "screenshot",
       "name": "Screenshot tool",
       "description": "Capture the screen or a region, then annotate it.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "xfce",
+        "budgie",
+        "mate",
+        "lxqt",
+        "pantheon",
+        "niri"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1507,6 +1788,10 @@
       "id": "recorder",
       "name": "Screen recorder",
       "description": "Record the screen or a window, like Kooha.",
+      "built_into": [
+        "gnome",
+        "kde-plasma"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1527,6 +1812,9 @@
       "id": "clipboard",
       "name": "Clipboard history",
       "description": "Keep a history of what you copy, like cliphist.",
+      "built_into": [
+        "kde-plasma"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1557,6 +1845,17 @@
       "id": "idle",
       "name": "Idle daemon",
       "description": "Dim or lock the screen after you step away, like hypridle.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cosmic",
+        "cinnamon",
+        "xfce",
+        "budgie",
+        "mate",
+        "lxqt",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1593,6 +1892,13 @@
       "id": "night-light",
       "name": "Night light",
       "description": "Warm the screen colors in the evening, like wlsunset.",
+      "built_into": [
+        "gnome",
+        "kde-plasma",
+        "cinnamon",
+        "budgie",
+        "pantheon"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1616,6 +1922,12 @@
       "id": "blur",
       "name": "Blur behind your app",
       "description": "Ask the compositor to blur what is under your window.",
+      "built_into": [
+        "kde-plasma",
+        "kwin",
+        "hyprland",
+        "wayfire"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1639,6 +1951,10 @@
       "id": "keyboard",
       "name": "On-screen keyboard",
       "description": "Type with touch or a pointer, like wvkbd.",
+      "built_into": [
+        "gnome",
+        "kde-plasma"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1662,6 +1978,10 @@
       "id": "display-profiles",
       "name": "Display profiles",
       "description": "Switch monitor layouts when you plug in, like kanshi.",
+      "built_into": [
+        "gnome",
+        "kde-plasma"
+      ],
       "routes": [
         {
           "kind": "protocol",
@@ -1692,6 +2012,16 @@
       "id": "tiling",
       "name": "Window tiling",
       "description": "Snap windows into layouts, like Tiling Shell or Krohnkite.",
+      "built_into": [
+        "hyprland",
+        "sway",
+        "niri",
+        "river",
+        "cosmic",
+        "cosmic-comp",
+        "kde-plasma",
+        "kwin"
+      ],
       "routes": [
         {
           "kind": "desktop",

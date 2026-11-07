@@ -95,6 +95,15 @@ template $ItemDetailPage: Adw.NavigationPage {
                     icon-name: "adw-external-link-symbolic";
                   };
                 }
+
+                Button run_button {
+                  styles [
+                    "pill",
+                  ]
+
+                  label: _("Can I Run It?");
+                  action-name: "win.can-i-run";
+                }
               }
             }
 

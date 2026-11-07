@@ -4,11 +4,17 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::glib;
 
-use crate::catalog::{Catalog, Desktop};
+use std::cell::RefCell;
+
+use gtk::glib::clone;
+
+use crate::catalog::{Catalog, Desktop, HostedScreenshot};
+use crate::http::shared_session;
 use crate::system::SystemInfo;
+use crate::wallpapers::fetch_texture;
 use crate::widgets::{
-    chip_label, open_details_on_activate, scene_for_desktop, DesktopCard, IsoScene, LogoTile,
-    TileContent,
+    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, DesktopCard,
+    IsoPicture, IsoScene, LogoTile, TileContent,
 };
 
 const FEATURED_DESKTOP: &str = "gnome";
@@ -31,11 +37,17 @@ mod imp {
         #[template_child]
         pub featured_chips_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
+        pub featured_art: gtk::TemplateChild<gtk::Stack>,
+        #[template_child]
         pub featured_scene: gtk::TemplateChild<IsoScene>,
+        #[template_child]
+        pub featured_picture: gtk::TemplateChild<IsoPicture>,
         #[template_child]
         pub toolkit_filter: gtk::TemplateChild<adw::ToggleGroup>,
         #[template_child]
         pub desktops_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        /// GNOME's screenshot, loaded the first time the banner is on screen.
+        pub featured_screenshot: RefCell<Option<HostedScreenshot>>,
     }
 
     #[glib::object_subclass]
@@ -47,6 +59,7 @@ mod imp {
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
             IsoScene::ensure_type();
+            IsoPicture::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -61,6 +74,7 @@ mod imp {
             self.parent_constructed();
             open_details_on_activate(&self.desktops_flowbox);
             self.obj().filter_by_toolkit();
+            self.obj().load_featured_screenshot_when_shown();
         }
     }
 
@@ -107,6 +121,40 @@ impl DesktopsPage {
         imp.featured_scene
             .set_scene_color(scene_for_desktop(desktop.layout), &desktop.color);
         self.show_featured_chips(desktop);
+        imp.featured_screenshot.replace(desktop.screenshot.clone());
+    }
+
+    fn load_featured_screenshot_when_shown(&self) {
+        self.imp().featured_art.connect_map(clone!(
+            #[weak(rename_to = page)]
+            self,
+            move |_| page.load_featured_screenshot()
+        ));
+    }
+
+    /// Takes the screenshot out of the page, so it loads only once.
+    fn load_featured_screenshot(&self) {
+        let Some(screenshot) = self.imp().featured_screenshot.take() else {
+            return;
+        };
+        glib::spawn_future_local(clone!(
+            #[weak(rename_to = page)]
+            self,
+            async move {
+                match fetch_texture(&shared_session(), &screenshot.url).await {
+                    Ok(texture) => page.show_featured_screenshot(&texture, &screenshot),
+                    Err(error) => tracing::warn!("Could not load GNOME's screenshot: {error:#}"),
+                }
+            }
+        ));
+    }
+
+    fn show_featured_screenshot(&self, texture: &gtk::gdk::Texture, screenshot: &HostedScreenshot) {
+        let imp = self.imp();
+        imp.featured_picture.set_texture(Some(texture));
+        imp.featured_picture
+            .set_tooltip_text(Some(&screenshot_credit(screenshot)));
+        imp.featured_art.set_visible_child_name("screenshot");
     }
 
     fn show_featured_chips(&self, desktop: &Desktop) {

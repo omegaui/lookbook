@@ -4,7 +4,6 @@
 //! list when the Wallpapers page opens and loads images from the source itself.
 
 mod copyparty;
-mod http;
 mod portal;
 mod wordpress;
 
@@ -17,7 +16,7 @@ use crate::system::SystemInfo;
 /// The portal interface apps use to set the background.
 const WALLPAPER_PORTAL: &str = "Wallpaper";
 
-pub use http::new_session;
+pub use crate::http::new_session;
 pub use portal::{file_name_from_url, set_wallpaper};
 
 /// One wallpaper, with addresses on its source's server.
@@ -37,11 +36,11 @@ pub async fn fetch_source(
     match source.kind {
         WallpaperSourceKind::Copyparty => {
             let listing_url = format!("{}?ls", source.index_url);
-            let body = http::get_bytes(session, &listing_url).await?;
+            let body = crate::http::get_bytes(session, &listing_url).await?;
             copyparty::parse_listing(&body, source)
         }
         WallpaperSourceKind::WordpressPage => {
-            let body = http::get_bytes(session, &source.index_url).await?;
+            let body = crate::http::get_bytes(session, &source.index_url).await?;
             Ok(wordpress::parse_page(&String::from_utf8_lossy(&body), source))
         }
     }
@@ -76,7 +75,7 @@ pub async fn fetch_texture(session: &soup::Session, url: &str) -> anyhow::Result
 }
 
 pub async fn fetch_bytes(session: &soup::Session, url: &str) -> anyhow::Result<glib::Bytes> {
-    http::get_bytes(session, url).await
+    crate::http::get_bytes(session, url).await
 }
 
 /// Turns a file name like "dark-forest-2.png" into "Dark forest 2".

@@ -57,6 +57,10 @@ pub struct Idea {
     pub icon: String,
     /// The tile color for the idea's category, for example blue for shell tools.
     pub color: String,
+    /// Desktops and compositors (by id) that already include it, so nobody
+    /// needs to build it there. For example, GNOME has its own lock screen.
+    #[serde(default)]
+    pub built_into: Vec<String>,
     /// The ways to build it. The idea is ready when any one of them works on the user's system.
     pub routes: Vec<IdeaRoute>,
 }
@@ -277,6 +281,24 @@ pub struct Distro {
     pub os_release_variant: Option<String>,
     /// For example "GNOME", or "Your choice" when the installer asks.
     pub default_desktop: String,
+    /// Where Repology lists this distro's packages, in the order to look.
+    #[serde(default)]
+    pub repology_repos: Vec<RepologyRepo>,
+    /// What NVIDIA users should know, for example where to get the driver.
+    pub nvidia_note: Option<String>,
+}
+
+/// One of a distro's package repositories as Repology names it.
+#[derive(Debug, Clone, Deserialize)]
+pub struct RepologyRepo {
+    /// Repology's name for it. `{version}` stands for os-release `VERSION_ID`
+    /// with dots turned into underscores, for example "fedora_{version}".
+    pub repo: String,
+    /// A short name shown next to the distro's, for example "AUR".
+    pub label: Option<String>,
+    /// How to install from it. `{package}` is the package name and
+    /// `{codename}` is os-release `VERSION_CODENAME`.
+    pub install: String,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -303,6 +325,21 @@ pub struct Desktop {
     /// The bars it shows by default, drawn on the gallery card.
     #[serde(default)]
     pub bars: Vec<DesktopBar>,
+    /// Repology's project name for its main package, for example "gnome-shell".
+    pub repology: Option<String>,
+    /// A real screenshot, loaded live from where it is hosted.
+    pub screenshot: Option<HostedScreenshot>,
+}
+
+/// A screenshot the app shows from its host, never bundled, with its credit.
+#[derive(Debug, Clone, Deserialize)]
+pub struct HostedScreenshot {
+    /// The image itself, for example a 960px Wikimedia Commons thumbnail.
+    pub url: String,
+    /// The page that describes the image and its license.
+    pub page: String,
+    pub credit: String,
+    pub license: String,
 }
 
 /// A bar a desktop shows by default.
@@ -392,6 +429,10 @@ pub struct Compositor {
     pub protocols: ProtocolSupport,
     /// XDG desktop portals its usual portal backend provides, for example "ScreenCast".
     pub portals: Vec<String>,
+    /// Repology's project name, for example "hyprland".
+    pub repology: Option<String>,
+    /// What NVIDIA users should know before trying it.
+    pub nvidia_note: Option<String>,
 }
 
 impl Compositor {

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Deserializer};
 
-use crate::wallpapers::fetch_bytes;
+use crate::http::get_bytes;
 
 const API_URL: &str = "https://extensions.gnome.org/api/v1/extensions/?ordering=-downloads&page_size=";
 const SITE_URL: &str = "https://extensions.gnome.org";
@@ -62,7 +62,7 @@ pub fn compact_count(count: u64) -> String {
 
 /// The most downloaded extensions, up to `count`.
 pub async fn fetch_popular(session: &soup::Session, count: usize) -> anyhow::Result<Vec<Extension>> {
-    let body = fetch_bytes(session, &format!("{API_URL}{count}")).await?;
+    let body = get_bytes(session, &format!("{API_URL}{count}")).await?;
     parse_page(&body)
 }
 

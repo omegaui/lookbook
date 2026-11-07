@@ -10,6 +10,7 @@ mod iso_scene;
 mod iso_stack;
 mod iso_tile;
 mod protocol_card;
+mod run_check_dialog;
 mod logo_tile;
 mod mini_desktop;
 mod natural_width_cap;
@@ -27,7 +28,7 @@ pub use content::{
     scene_for_desktop, CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck,
     ProtocolSummary, SpotlightContent,
 };
-pub use desktop_card::DesktopCard;
+pub use desktop_card::{screenshot_credit, DesktopCard};
 pub use extension_card::extension_card;
 pub use idea_card::IdeaCard;
 pub use iso_picture::IsoPicture;
@@ -35,6 +36,7 @@ pub use iso_scene::{IsoScene, SceneLayout};
 pub use iso_stack::{IsoStack, StackLayer};
 pub use iso_tile::IsoTile;
 pub use protocol_card::fill_protocol_lists;
+pub use run_check_dialog::RunCheckDialog;
 pub use logo_tile::{LogoTile, TileContent};
 pub use mini_desktop::MiniDesktop;
 pub use natural_width_cap::NaturalWidthCap;
@@ -118,6 +120,16 @@ pub fn feature_check(check: &FeatureCheck) -> gtk::Box {
     row.append(&icon);
     row.append(&label);
     row
+}
+
+/// Opens `url` in the user's browser, from the window that holds `widget`.
+pub fn open_link(widget: &impl IsA<gtk::Widget>, url: &str) {
+    let window = widget.root().and_downcast::<gtk::Window>();
+    gtk::UriLauncher::new(url).launch(window.as_ref(), gtk::gio::Cancellable::NONE, |result| {
+        if let Err(error) = result {
+            tracing::warn!("Could not open a link: {error}");
+        }
+    });
 }
 
 /// The catalog item a gallery card opens, for both kinds of card.

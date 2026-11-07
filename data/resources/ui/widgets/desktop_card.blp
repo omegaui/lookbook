@@ -12,8 +12,18 @@ template $DesktopCard: Adw.Bin {
   child: Box {
     orientation: vertical;
 
-    // A small drawing of the desktop: its color, a window and its default bars.
-    $MiniDesktop art {}
+    // A real screenshot, loaded live. A small drawing of the desktop (its
+    // color, a window and its default bars) shows until it arrives.
+    Stack art_stack {
+      transition-type: crossfade;
+      height-request: 150;
+
+      StackPage {
+        name: "drawing";
+
+        child: $MiniDesktop art {};
+      }
+    }
 
     Box {
       orientation: vertical;

@@ -5,6 +5,9 @@ use crate::system::SystemInfo;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum IdeaStatus {
+    /// The desktop or compositor already has it, for example GNOME's lock screen.
+    /// `by` names which one. `route` is how to build your own anyway, if possible.
+    BuiltIn { by: String, route: Option<String> },
     /// Buildable here. `route` says how, for example "Layer shell", and
     /// `interface` names the protocol it uses, if any, for example "zwlr_layer_shell_v1".
     Ready { route: String, interface: Option<String> },
@@ -13,8 +16,9 @@ pub enum IdeaStatus {
 }
 
 impl IdeaStatus {
-    pub fn is_ready(&self) -> bool {
-        matches!(self, Self::Ready { .. })
+    /// The user has it: built in, or ready to build.
+    pub fn is_available(&self) -> bool {
+        matches!(self, Self::BuiltIn { .. } | Self::Ready { .. })
     }
 }
 
@@ -36,6 +40,11 @@ impl<'a> CurrentSetup<'a> {
 pub fn evaluate(idea: &Idea, setup: &CurrentSetup<'_>, catalog: &Catalog) -> IdeaStatus {
     let working_route = idea.routes.iter().find(|route| route_works(route, setup));
 
+    if let Some(by) = built_in_by(idea, setup) {
+        let route = working_route.map(|route| route.label.clone());
+        return IdeaStatus::BuiltIn { by, route };
+    }
+
     match working_route {
         Some(route) => IdeaStatus::Ready {
             route: route.label.clone(),
@@ -46,6 +55,19 @@ pub fn evaluate(idea: &Idea, setup: &CurrentSetup<'_>, catalog: &Catalog) -> Ide
             places: places_where_it_works(idea, catalog),
         },
     }
+}
+
+/// The name of the desktop, or else the compositor, that already includes the idea.
+fn built_in_by(idea: &Idea, setup: &CurrentSetup<'_>) -> Option<String> {
+    let includes = |id: &str| idea.built_into.iter().any(|built_into| built_into == id);
+
+    if let Some(desktop) = setup.desktop.filter(|desktop| includes(&desktop.id)) {
+        return Some(desktop.name.clone());
+    }
+    setup
+        .compositor
+        .filter(|compositor| includes(&compositor.id))
+        .map(|compositor| compositor.name.clone())
 }
 
 fn route_works(route: &IdeaRoute, setup: &CurrentSetup<'_>) -> bool {
@@ -139,12 +161,21 @@ mod tests {
     }
 
     #[test]
-    fn status_bar_on_gnome_is_a_shell_extension() {
+    fn gnome_has_a_status_bar_and_extensions_can_replace_it() {
         let status = status_of("status-bar", &["GNOME"]);
         assert_eq!(
             status,
-            IdeaStatus::Ready { route: "Top bar extension (GJS)".to_owned(), interface: None }
+            IdeaStatus::BuiltIn {
+                by: "GNOME".to_owned(),
+                route: Some("Top bar extension (GJS)".to_owned()),
+            }
         );
+    }
+
+    #[test]
+    fn hyprland_tiles_by_itself() {
+        let status = status_of("tiling", &["Hyprland"]);
+        assert!(matches!(status, IdeaStatus::BuiltIn { by, .. } if by == "Hyprland"));
     }
 
     #[test]
@@ -160,9 +191,15 @@ mod tests {
     }
 
     #[test]
-    fn lock_screen_on_gnome_works_elsewhere() {
-        let IdeaStatus::WorksElsewhere { places, .. } = status_of("lock-screen", &["GNOME"]) else {
-            panic!("a custom lock screen should not be ready on GNOME");
+    fn gnome_has_its_own_lock_screen() {
+        let status = status_of("lock-screen", &["GNOME"]);
+        assert_eq!(status, IdeaStatus::BuiltIn { by: "GNOME".to_owned(), route: None });
+    }
+
+    #[test]
+    fn a_custom_lock_screen_needs_session_lock() {
+        let IdeaStatus::WorksElsewhere { places, .. } = status_of("lock-screen", &[]) else {
+            panic!("an unknown session offers no session lock");
         };
         assert!(places.iter().any(|place| place == "sway"));
         assert!(!places.iter().any(|place| place == "Mutter"));
@@ -170,7 +207,7 @@ mod tests {
 
     #[test]
     fn screenshots_always_work_through_the_portal() {
-        assert!(status_of("screenshot", &["GNOME"]).is_ready());
-        assert!(status_of("screenshot", &[]).is_ready());
+        assert!(status_of("screenshot", &["GNOME"]).is_available());
+        assert!(status_of("screenshot", &[]).is_available());
     }
 }

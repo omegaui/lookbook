@@ -36,6 +36,8 @@ mod imp {
         #[template_child]
         pub name_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
+        pub run_button: gtk::TemplateChild<gtk::Button>,
+        #[template_child]
         pub badge_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub tagline_label: gtk::TemplateChild<gtk::Label>,
@@ -158,6 +160,8 @@ impl ItemDetailPage {
         imp.tagline_label.set_label(&content.tagline);
         imp.scene.set_scene_color(content.scene, &content.color);
         imp.website.replace(content.website.clone());
+        let target = content.item.to_action_target().to_variant();
+        imp.run_button.set_action_target_value(Some(&target));
 
         for chip in &content.chips {
             imp.chips_box.append(&chip_label(chip));
@@ -227,7 +231,7 @@ impl ItemDetailPage {
 
         for idea in &catalog.ideas {
             let status = evaluate(idea, &setup, catalog);
-            if status.is_ready() {
+            if status.is_available() {
                 ready_count += 1;
                 imp.ideas_flowbox.append(&IdeaCard::new(idea, &status));
             }
@@ -236,7 +240,7 @@ impl ItemDetailPage {
         imp.ideas_title_label
             .set_label(&gettext("What You Can Build on {}").replace("{}", &content.title));
         imp.ideas_note_label.set_label(
-            &gettext("{ready} of {total} ideas are ready here.")
+            &gettext("{ready} of {total} ideas are built in or ready to build.")
                 .replace("{ready}", &ready_count.to_string())
                 .replace("{total}", &catalog.ideas.len().to_string()),
         );

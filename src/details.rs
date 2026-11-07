@@ -82,7 +82,7 @@ fn compare_desktop(desktop: &Desktop, catalog: &Catalog, system: &SystemInfo) ->
                 &desktop.compositor,
             ),
             row(gettext("Toolkit"), &your_toolkit(&yours), &desktop.toolkit),
-            row(gettext("Ideas ready"), &ready_count(&yours, catalog), &ready_count(&theirs, catalog)),
+            row(gettext("Ideas you have"), &ready_count(&yours, catalog), &ready_count(&theirs, catalog)),
         ],
         is_yours: system.is_running(&desktop.session_names),
     }
@@ -121,7 +121,7 @@ fn compare_compositor(compositor: &Compositor, catalog: &Catalog, system: &Syste
                 yours.compositor.map_or(unknown.as_str(), |compositor| compositor.base.as_str()),
                 &compositor.base,
             ),
-            row(gettext("Ideas ready"), &ready_count(&yours, catalog), &ready_count(&theirs, catalog)),
+            row(gettext("Ideas you have"), &ready_count(&yours, catalog), &ready_count(&theirs, catalog)),
         ],
         is_yours: system.is_running(&compositor.session_names),
     }
@@ -132,7 +132,7 @@ fn ready_count(setup: &CurrentSetup<'_>, catalog: &Catalog) -> String {
     let ready = catalog
         .ideas
         .iter()
-        .filter(|idea| evaluate(idea, setup, catalog).is_ready())
+        .filter(|idea| evaluate(idea, setup, catalog).is_available())
         .count();
 
     gettext("{ready} of {total}")

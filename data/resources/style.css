@@ -335,3 +335,23 @@ flowboxchild:hover .desktop-card {
 .system-teaser .kicker {
   color: var(--light-4);
 }
+
+/* Can I Run It? */
+
+.check-good {
+  color: var(--yellow-5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .check-good {
+    color: var(--yellow-3);
+  }
+}
+
+.check-note {
+  color: var(--accent-color);
+}
+
+.check-problem {
+  color: var(--warning-color);
+}
