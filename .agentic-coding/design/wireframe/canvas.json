@@ -1,0 +1,24 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-11-07T15:00:00Z"},
+  "title": "Linux & You Wireframe",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 2760, "title": "Explore", "expand": "fill", "is_interactive": true},
+    "Distros.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 1340, "title": "Distros", "expand": "fill", "is_interactive": true},
+    "Distro.dc.html": {"x": 2720, "y": 0, "w": 1280, "h": 1560, "title": "Distro details", "expand": "fill", "is_interactive": true},
+    "Desktops.dc.html": {"x": 0, "y": 2880, "w": 1280, "h": 1580, "title": "Desktops", "expand": "fill", "is_interactive": true},
+    "Desktop.dc.html": {"x": 1360, "y": 2880, "w": 1280, "h": 1900, "title": "GNOME details", "expand": "fill", "is_interactive": true},
+    "YourSystemGnome.dc.html": {"x": 2720, "y": 2880, "w": 1280, "h": 1900, "title": "Your System (GNOME session)", "expand": "fill", "is_interactive": true},
+    "Compositors.dc.html": {"x": 0, "y": 4900, "w": 1280, "h": 1200, "title": "Compositors", "expand": "fill", "is_interactive": true},
+    "YourSystem.dc.html": {"x": 1360, "y": 4900, "w": 1280, "h": 2040, "title": "Your System (Hyprland session)", "expand": "fill", "is_interactive": true}
+  },
+  "order": ["Main.dc.html", "Distros.dc.html", "Distro.dc.html", "Desktops.dc.html", "Desktop.dc.html", "YourSystemGnome.dc.html", "Compositors.dc.html", "YourSystem.dc.html"],
+  "notes": {
+    "title": {"x": 0, "y": -300, "text": "Linux & You: store-style wireframe", "kind": "title1", "maxW": 4000},
+    "sample": {"x": 4080, "y": 0, "w": 420, "fill": "orange", "text": "Sample data only. Distro, desktop and compositor facts, protocol support and hardware values are placeholders until the catalog is researched. Logos are letter tiles and screenshots are drawn mock-ups. One Your System screen shows a sample Fedora + GNOME session, the other a sample Arch + Hyprland session."},
+    "free": {"x": 4080, "y": 640, "w": 420, "fill": "green", "text": "Free software, no ads, nothing paid. 'Ready here' means your system already supports an idea; 'Works elsewhere' says which setup supports it."}
+  },
+  "designSystems": []
+}

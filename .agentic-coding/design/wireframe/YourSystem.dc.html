@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your System</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0;background:#deddda}
+a{color:#1c71d8}a:hover{color:#1a5fb4}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #1e1e23; background: #deddda; padding: clamp(0px, 2vw, 24px); box-sizing: border-box; min-height: 100vh">
+<div style="max-width: 1232px; margin: 0 auto; background: #fafafb; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,6,0.12), 0 12px 40px rgba(0,0,6,0.12); overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; flex-wrap: wrap">
+<div style="flex: 1 1 0; min-width: 0"></div>
+<nav aria-label="Sections" style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: center">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg>Explore</a>
+<a href="Distros.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"></path><path d="m3 13 9 5 9-5"></path></svg>Distros</a>
+<a href="Desktops.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg>Desktops</a>
+<a href="Compositors.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="2"></rect><rect x="13" y="4" width="8" height="7" rx="2"></rect><rect x="13" y="13" width="8" height="7" rx="2"></rect></svg>Compositors</a>
+<a href="YourSystem.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; background: rgba(0,0,6,0.08); color: #1e1e23; font-weight: 700; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>Your System</a>
+</nav>
+<div style="flex: 1 1 0; display: flex; justify-content: flex-end; gap: 4px">
+<button aria-label="Main menu" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+<button aria-label="Close" style="width: 40px; height: 40px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><span style="width: 26px; height: 26px; border-radius: 99px; background: rgba(0,0,6,0.08); display: grid; place-items: center"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"></path></svg></span></button>
+</div>
+</header>
+
+<main style="padding: 8px clamp(16px, 3vw, 32px) 40px; display: flex; flex-direction: column; gap: 28px">
+
+<section aria-labelledby="rig-title" style="display: flex; flex-wrap: wrap; align-items: center; background: #241f31; color: #ffffff; border-radius: 24px; overflow: hidden">
+<div style="flex: 1 1 360px; padding: 40px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #c0bfbc">Your system</p>
+<span style="font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: #f8e45c; color: #241f31">Sample data</span>
+</div>
+<h1 id="rig-title" style="margin: 0; font-size: 40px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02em">Arch Linux + Hyprland</h1>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; color: #deddda; max-width: 440px">Wayland session. Linux &amp; You read your os-release file, your session variables and the protocols your compositor offers.</p>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px; max-width: 440px">
+<div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700"><span>Ideas ready on your system</span><span>11 of 13</span></div>
+<div aria-hidden="true" style="height: 12px; border-radius: 99px; background: rgba(255,255,255,0.15)"><div style="width: 85%; height: 12px; border-radius: 99px; background: #57e389"></div></div>
+</div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px">
+<button style="height: 44px; padding: 0 20px; border-radius: 12px; border: 0; background: #ffffff; color: #1e1e23; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer">Scan again</button>
+<button style="height: 44px; padding: 0 20px; border-radius: 12px; border: 0; background: rgba(255,255,255,0.12); color: #ffffff; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer">Copy report</button>
+</div>
+</div>
+<div style="flex: 1 1 440px; display: flex; justify-content: center; padding: 24px">
+<svg role="img" aria-label="Your stack from bottom to top: hardware, Linux kernel, Arch Linux, Hyprland, your apps" width="500" height="400" viewBox="0 0 500 400" style="max-width: 100%; height: auto">
+<g font-family="Inter, sans-serif" font-weight="700" font-size="15">
+<polygon points="60,305 190,370 190,388 60,323" fill="#77767b"></polygon>
+<polygon points="190,370 320,305 320,323 190,388" fill="#5e5c64"></polygon>
+<polygon points="190,240 320,305 190,370 60,305" fill="#9a9996"></polygon>
+<path d="M326 314h30" stroke="#77767b" stroke-width="2"></path>
+<text x="364" y="319" fill="#deddda">Hardware</text>
+<polygon points="60,247 190,312 190,330 60,265" fill="#c9b232"></polygon>
+<polygon points="190,312 320,247 320,265 190,330" fill="#a8941f"></polygon>
+<polygon points="190,182 320,247 190,312 60,247" fill="#f6d32d"></polygon>
+<path d="M326 256h30" stroke="#77767b" stroke-width="2"></path>
+<text x="364" y="261" fill="#deddda">Linux 6.17</text>
+<polygon points="60,189 190,254 190,272 60,207" fill="#1279ab"></polygon>
+<polygon points="190,254 320,189 320,207 190,272" fill="#0e5f88"></polygon>
+<polygon points="190,124 320,189 190,254 60,189" fill="#1793d1"></polygon>
+<path d="M326 198h30" stroke="#77767b" stroke-width="2"></path>
+<text x="364" y="203" fill="#deddda">Arch Linux</text>
+<polygon points="60,131 190,196 190,214 60,149" fill="#2299ad"></polygon>
+<polygon points="190,196 320,131 320,149 190,214" fill="#1b7a8a"></polygon>
+<polygon points="190,66 320,131 190,196 60,131" fill="#33c7de"></polygon>
+<path d="M326 140h30" stroke="#77767b" stroke-width="2"></path>
+<text x="364" y="145" fill="#deddda">Hyprland</text>
+<polygon points="60,73 190,138 190,156 60,91" fill="#d5d5da"></polygon>
+<polygon points="190,138 320,73 320,91 190,156" fill="#bdbdc3"></polygon>
+<polygon points="190,8 320,73 190,138 60,73" fill="#ffffff"></polygon>
+<rect x="150" y="55" width="22" height="22" rx="6" fill="#1c71d8" transform="rotate(0)"></rect>
+<rect x="180" y="62" width="22" height="22" rx="6" fill="#e66100"></rect>
+<rect x="208" y="55" width="22" height="22" rx="6" fill="#26a269"></rect>
+<path d="M326 82h30" stroke="#77767b" stroke-width="2"></path>
+<text x="364" y="87" fill="#deddda">Your apps</text>
+</g>
+</svg>
+</div>
+</section>
+
+<section aria-label="System details" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="6">
+<div style="background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 0 0 1px rgba(0,0,6,0.07); display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; font-weight: 700; color: #5e5c64; text-transform: uppercase; letter-spacing: 0.06em">{{s.label}}</span>
+<span style="font-size: 20px; font-weight: 800">{{s.value}}</span>
+<span style="font-size: 14px; color: #5e5c64">{{s.sub}}</span>
+</div>
+</sc-for>
+</section>
+
+<section aria-labelledby="ideas-title" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<div>
+<h2 id="ideas-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.01em">Ideas you can build</h2>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">An idea is ready when Hyprland offers the protocol it needs.</p>
+</div>
+<div style="display: flex; gap: 4px; padding: 4px; background: rgba(0,0,6,0.06); border-radius: 99px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+<sc-if value="{{f.active}}" hint-placeholder-val="{{false}}"><button aria-pressed="true" onClick="{{f.pick}}" style="height: 40px; padding: 0 18px; border-radius: 99px; border: 0; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,6,0.15); font-family: inherit; font-weight: 700; font-size: 15px; color: #1e1e23; cursor: pointer">{{f.label}}</button></sc-if>
+<sc-if value="{{f.idle}}" hint-placeholder-val="{{true}}"><button aria-pressed="false" onClick="{{f.pick}}" style="height: 40px; padding: 0 18px; border-radius: 99px; border: 0; background: transparent; font-family: inherit; font-weight: 600; font-size: 15px; color: #46454d; cursor: pointer">{{f.label}}</button></sc-if>
+</sc-for>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px">
+<sc-for list="{{ideas}}" as="i" hint-placeholder-count="9">
+<sc-if value="{{i.unlocked}}" hint-placeholder-val="{{true}}">
+<article style="display: flex; gap: 14px; align-items: flex-start; padding: 16px; background: #ffffff; border-radius: 16px; box-shadow: 0 0 0 1px rgba(0,0,6,0.07), 0 2px 4px rgba(0,0,6,0.05)">
+<span aria-hidden="true" style="flex: none; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; background: {{i.color}}; box-shadow: 0 4px 0 rgba(0,0,6,0.18)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{i.path}}"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><h3 style="margin: 0; font-size: 16px; font-weight: 800">{{i.name}}</h3><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #1f6e43; background: #dcf3e5; padding: 2px 8px; border-radius: 99px"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"></path></svg>Ready here</span></div>
+<p style="margin: 0; font-size: 14px; line-height: 1.4; color: #46454d">{{i.desc}}</p>
+<code style="align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; padding: 3px 8px; border-radius: 6px; background: #f0f0f3; color: #3d3846; word-break: break-all">{{i.protocol}}</code>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{i.locked}}" hint-placeholder-val="{{false}}">
+<article style="display: flex; gap: 14px; align-items: flex-start; padding: 16px; background: #f3f3f5; border-radius: 16px; box-shadow: inset 0 0 0 2px rgba(0,0,6,0.08)">
+<span aria-hidden="true" style="flex: none; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; background: #deddda"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#46454d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #46454d">{{i.name}}</h3><span style="font-size: 12px; font-weight: 700; color: #46454d; background: #deddda; padding: 2px 8px; border-radius: 99px">Works elsewhere</span></div>
+<p style="margin: 0; font-size: 14px; line-height: 1.4; color: #5e5c64">{{i.desc}}</p>
+<span style="font-size: 13px; color: #5e5c64">Needs <code style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; padding: 2px 6px; border-radius: 6px; background: #e6e6ea; color: #3d3846; word-break: break-all">{{i.protocol}}</code> · works on {{i.where}}</span>
+</div>
+</article>
+</sc-if>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="proto-title" style="display: flex; flex-direction: column; gap: 16px">
+<div>
+<h2 id="proto-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.01em">Wayland protocols</h2>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">What Hyprland told Linux &amp; You it supports, grouped by job.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; align-items: start">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="6">
+<div style="background: #ffffff; border-radius: 16px; box-shadow: 0 0 0 1px rgba(0,0,6,0.07); overflow: hidden">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 800">{{g.name}}</h3>
+<span style="font-size: 13px; font-weight: 700; color: #5e5c64">{{g.count}}</span>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{g.items}}" as="p" hint-placeholder-count="4">
+<li style="padding: 10px 16px; border-top: 1px solid rgba(0,0,6,0.07); font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #3d3846; word-break: break-all">{{p}}</li>
+</sc-for>
+</ul>
+</div>
+</sc-for>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2040}}'>
+class Component extends DCLogic {
+  allIdeas() {
+    return [
+      { name: 'Status bar', desc: 'A panel pinned to a screen edge.', protocol: 'zwlr_layer_shell_v1', color: '#1c71d8', path: 'M3 4h18v5H3zM6 14h12M6 18h8', unlocked: true },
+      { name: 'App launcher', desc: 'A pop-up search that starts apps.', protocol: 'zwlr_layer_shell_v1', color: '#1c71d8', path: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4', unlocked: true },
+      { name: 'Notification daemon', desc: 'Show notifications as floating cards.', protocol: 'zwlr_layer_shell_v1', color: '#1c71d8', path: 'M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4', unlocked: true },
+      { name: 'Wallpaper engine', desc: 'Draw animated wallpapers behind windows.', protocol: 'zwlr_layer_shell_v1', color: '#1c71d8', path: 'M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6', unlocked: true },
+      { name: 'Lock screen', desc: 'Your own lock screen, drawn by your app.', protocol: 'ext_session_lock_manager_v1', color: '#813d9c', path: 'M5 11h14v10H5zM8 11V8a4 4 0 0 1 8 0v3', unlocked: true },
+      { name: 'Screenshot tool', desc: 'Capture the whole screen or a region.', protocol: 'zwlr_screencopy_manager_v1', color: '#c64600', path: 'M4 7h4l2-3h4l2 3h4v13H4zM12 10a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z', unlocked: true },
+      { name: 'Idle daemon', desc: 'Dim or lock the screen after you step away.', protocol: 'ext_idle_notifier_v1', color: '#813d9c', path: 'M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z', unlocked: true },
+      { name: 'Clipboard manager', desc: 'Keep a history of what you copy.', protocol: 'zwlr_data_control_manager_v1', color: '#26774d', path: 'M8 4h8v3H8zM6 5H5v16h14V5h-1M9 12h6M9 16h4', unlocked: true },
+      { name: 'Taskbar', desc: 'List open windows and switch between them.', protocol: 'zwlr_foreign_toplevel_manager_v1', color: '#26774d', path: 'M3 17h18v4H3zM6 19h2M11 19h2M16 19h2', unlocked: true },
+      { name: 'Night light', desc: 'Warm the screen colors in the evening.', protocol: 'zwlr_gamma_control_manager_v1', color: '#9c6e03', path: 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5', unlocked: true },
+      { name: 'On-screen keyboard', desc: 'Type with touch or a pointer.', protocol: 'zwp_virtual_keyboard_manager_v1', color: '#26774d', path: 'M3 6h18v12H3zM7 10h.01M11 10h.01M15 10h.01M7 14h10', unlocked: true },
+      { name: 'Blur behind panels', desc: 'Ask the compositor to blur what is under your bar.', protocol: 'org_kde_kwin_blur_manager', where: 'KDE Plasma (KWin)', unlocked: false },
+      { name: 'Tinted title bars', desc: 'Give server-side title bars a color per app.', protocol: 'org_kde_kwin_server_decoration_palette_manager', where: 'KDE Plasma (KWin)', unlocked: false }
+    ];
+  }
+
+  renderVals() {
+    const filter = (this.state && this.state.filter) || 'all';
+    const filterList = [
+      { id: 'all', label: 'All' },
+      { id: 'unlocked', label: 'Ready here' },
+      { id: 'locked', label: 'Works elsewhere' }
+    ];
+    const ideas = this.allIdeas()
+      .filter((i) => filter === 'all' || (filter === 'unlocked') === i.unlocked)
+      .map((i) => Object.assign({}, i, { locked: !i.unlocked }));
+    const groups = [
+      { name: 'Shell', items: ['xdg_wm_base', 'zwlr_layer_shell_v1', 'zxdg_decoration_manager_v1', 'xdg_activation_v1'] },
+      { name: 'Screen capture', items: ['zwlr_screencopy_manager_v1', 'ext_image_copy_capture_manager_v1', 'hyprland_toplevel_export_manager_v1'] },
+      { name: 'Input', items: ['zwp_virtual_keyboard_manager_v1', 'zwp_text_input_manager_v3', 'zwp_pointer_constraints_v1', 'zwp_relative_pointer_manager_v1'] },
+      { name: 'Outputs', items: ['zxdg_output_manager_v1', 'zwlr_output_manager_v1', 'zwlr_gamma_control_manager_v1', 'wp_fractional_scale_manager_v1'] },
+      { name: 'Session and security', items: ['ext_session_lock_manager_v1', 'ext_idle_notifier_v1', 'zwp_idle_inhibit_manager_v1', 'wp_security_context_manager_v1'] },
+      { name: 'Windows and clipboard', items: ['zwlr_foreign_toplevel_manager_v1', 'ext_foreign_toplevel_list_v1', 'zwlr_data_control_manager_v1'] }
+    ].map((g) => Object.assign({}, g, { count: g.items.length + ' found' }));
+
+    return {
+      filters: filterList.map((f) => ({
+        label: f.label,
+        active: f.id === filter,
+        idle: f.id !== filter,
+        pick: () => this.setState({ filter: f.id })
+      })),
+      ideas: ideas,
+      groups: groups,
+      stats: [
+        { label: 'Distro', value: 'Arch Linux', sub: 'Rolling · pacman' },
+        { label: 'Session', value: 'Wayland', sub: 'Hyprland' },
+        { label: 'Kernel', value: 'Linux 6.17', sub: 'x86_64' },
+        { label: 'CPU', value: 'Ryzen 7 7840U', sub: '16 threads' },
+        { label: 'Memory', value: '32 GB', sub: 'LPDDR5' },
+        { label: 'GPU', value: 'Radeon 780M', sub: 'Mesa' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

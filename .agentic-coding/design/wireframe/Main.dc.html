@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Explore</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0;background:#deddda}
+a{color:#1c71d8}a:hover{color:#1a5fb4}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #1e1e23; background: #deddda; padding: clamp(0px, 2vw, 24px); box-sizing: border-box; min-height: 100vh">
+<div style="max-width: 1232px; margin: 0 auto; background: #fafafb; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,6,0.12), 0 12px 40px rgba(0,0,6,0.12); overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; flex-wrap: wrap">
+<div style="flex: 1 1 0; min-width: 0"></div>
+<nav aria-label="Sections" style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: center">
+<a href="Main.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; background: rgba(0,0,6,0.08); color: #1e1e23; font-weight: 700; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg>Explore</a>
+<a href="Distros.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"></path><path d="m3 13 9 5 9-5"></path></svg>Distros</a>
+<a href="Desktops.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg>Desktops</a>
+<a href="Compositors.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="2"></rect><rect x="13" y="4" width="8" height="7" rx="2"></rect><rect x="13" y="13" width="8" height="7" rx="2"></rect></svg>Compositors</a>
+<a href="YourSystem.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>Your System</a>
+</nav>
+<div style="flex: 1 1 0; display: flex; justify-content: flex-end; gap: 4px">
+<button aria-label="Search" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg></button>
+<button aria-label="Main menu" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+<button aria-label="Close" style="width: 40px; height: 40px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><span style="width: 26px; height: 26px; border-radius: 99px; background: rgba(0,0,6,0.08); display: grid; place-items: center"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"></path></svg></span></button>
+</div>
+</header>
+
+<main style="padding: 8px clamp(16px, 3vw, 32px) 40px; display: flex; flex-direction: column; gap: 32px">
+
+<section aria-labelledby="hero-title" style="display: flex; flex-wrap: wrap; background: #e7edfb; border-radius: 24px; overflow: hidden; min-height: 400px">
+<div style="flex: 1 1 340px; padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; gap: 16px; position: relative; z-index: 1">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1a5fb4">Linux &amp; You</p>
+<h1 id="hero-title" style="margin: 0; font-size: 44px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02em">Find your corner of Linux</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.5; color: #46454d; max-width: 400px">Browse distros and compositors like a store, then see what your own system can do.</p>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px">
+<a href="YourSystem.dc.html" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 12px; background: #1c71d8; color: #ffffff; font-weight: 700; font-size: 15px; text-decoration: none">Check my system</a>
+<a href="Distros.dc.html" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 12px; background: rgba(0,0,6,0.07); color: #1e1e23; font-weight: 700; font-size: 15px; text-decoration: none">Browse distros</a>
+</div>
+</div>
+<div aria-hidden="true" style="flex: 1 1 520px; position: relative; min-height: 400px; overflow: hidden">
+<div style="position: absolute; left: -40px; top: 80px; display: flex; gap: 28px; transform: rotateX(50deg) rotateZ(-28deg); transform-origin: 50% 50%">
+<sc-for list="{{collections}}" as="c" hint-placeholder-count="5">
+<div style="flex: none; width: 210px; height: 290px; border-radius: 24px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background: {{c.bg}}; color: {{c.fg}}; box-shadow: 14px 20px 0 rgba(0,0,6,0.12)">
+<span style="align-self: flex-start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: rgba(255,255,255,0.4); color: #1e1e23">Collection</span>
+<div style="display: flex; gap: 8px">
+<sc-for list="{{c.items}}" as="i" hint-placeholder-count="3">
+<span style="width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-weight: 800; font-size: 16px; color: #ffffff; background: {{i.color}}; box-shadow: 0 4px 0 rgba(0,0,6,0.2), 0 0 0 2px rgba(255,255,255,0.6)">{{i.short}}</span>
+</sc-for>
+</div>
+<div>
+<div style="font-size: 26px; font-weight: 800; line-height: 1.1">{{c.title}}</div>
+<div style="font-size: 14px; font-weight: 600; margin-top: 6px">{{c.names}}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="spot-title" style="position: relative; display: flex; flex-wrap: wrap; align-items: center; background: #fcefd6; border-radius: 24px; overflow: hidden; min-height: 340px">
+<button aria-label="Previous spotlight" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); z-index: 2; width: 44px; height: 44px; border-radius: 99px; border: 0; background: rgba(255,255,255,0.75); color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg></button>
+<button aria-label="Next spotlight" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); z-index: 2; width: 44px; height: 44px; border-radius: 99px; border: 0; background: rgba(255,255,255,0.75); color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></button>
+<div style="flex: 1 1 340px; padding: 40px 32px 48px 72px; display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1">
+<div style="display: flex; align-items: center; gap: 16px">
+<span aria-hidden="true" style="flex: none; width: 72px; height: 72px; border-radius: 20px; display: grid; place-items: center; font-size: 26px; font-weight: 800; color: #ffffff; background: #c64600; box-shadow: 0 5px 0 rgba(0,0,6,0.18)">ni</span>
+<div>
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8a3a00">Compositor spotlight</p>
+<h2 id="spot-title" style="margin: 2px 0 0; font-size: 36px; font-weight: 800; letter-spacing: -0.02em">niri</h2>
+</div>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; color: #46454d; max-width: 420px">Scrollable tiling. Windows open in columns on an endless strip, so a new window never squeezes the ones you already have.</p>
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<span style="font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: rgba(0,0,6,0.07); color: #3d3846">Scrolling tiling</span>
+<span style="font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: rgba(0,0,6,0.07); color: #3d3846">Smithay</span>
+<span style="font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: rgba(0,0,6,0.07); color: #3d3846">KDL config</span>
+</div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px">
+<a href="Compositors.dc.html" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 12px; background: #1e1e23; color: #ffffff; font-weight: 700; font-size: 15px; text-decoration: none">View details</a>
+<a href="YourSystem.dc.html" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 12px; background: rgba(255,255,255,0.75); color: #1e1e23; font-weight: 700; font-size: 15px; text-decoration: none">Can I run it?</a>
+</div>
+</div>
+<div aria-hidden="true" style="flex: 1 1 460px; position: relative; min-height: 340px; overflow: hidden">
+<div style="position: absolute; left: 10px; top: 70px; display: flex; gap: 18px; align-items: flex-start; transform: rotateX(50deg) rotateZ(-28deg)">
+<div style="flex: none; width: 150px; height: 230px; border-radius: 14px; background: #ffffff; box-shadow: 12px 16px 0 rgba(0,0,6,0.10); overflow: hidden"><div style="height: 22px; background: #efeff2"></div><div style="padding: 14px; display: flex; flex-direction: column; gap: 8px"><div style="height: 8px; width: 80%; border-radius: 4px; background: #e2e2e6"></div><div style="height: 8px; width: 60%; border-radius: 4px; background: #e2e2e6"></div><div style="height: 8px; width: 70%; border-radius: 4px; background: #e2e2e6"></div></div></div>
+<div style="flex: none; width: 230px; height: 230px; border-radius: 14px; background: #ffffff; box-shadow: 12px 16px 0 rgba(0,0,6,0.10), 0 0 0 4px #e66100; overflow: hidden"><div style="height: 22px; background: #ffd9b3"></div><div style="padding: 14px; display: flex; flex-direction: column; gap: 8px"><div style="height: 60px; border-radius: 8px; background: #fde3c7"></div><div style="height: 8px; width: 80%; border-radius: 4px; background: #e2e2e6"></div><div style="height: 8px; width: 55%; border-radius: 4px; background: #e2e2e6"></div></div></div>
+<div style="flex: none; display: flex; flex-direction: column; gap: 18px">
+<div style="width: 150px; height: 106px; border-radius: 14px; background: #ffffff; box-shadow: 12px 16px 0 rgba(0,0,6,0.10); overflow: hidden"><div style="height: 22px; background: #efeff2"></div></div>
+<div style="width: 150px; height: 106px; border-radius: 14px; background: #ffffff; box-shadow: 12px 16px 0 rgba(0,0,6,0.10); overflow: hidden"><div style="height: 22px; background: #efeff2"></div></div>
+</div>
+<div style="flex: none; width: 190px; height: 230px; border-radius: 14px; background: #ffffff; box-shadow: 12px 16px 0 rgba(0,0,6,0.10); overflow: hidden"><div style="height: 22px; background: #efeff2"></div></div>
+<div style="flex: none; width: 150px; height: 230px; border-radius: 14px; background: #ffffff; box-shadow: 12px 16px 0 rgba(0,0,6,0.10); overflow: hidden"><div style="height: 22px; background: #efeff2"></div></div>
+</div>
+</div>
+<div aria-hidden="true" style="position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 2">
+<span style="width: 22px; height: 8px; border-radius: 99px; background: #1e1e23"></span>
+<span style="width: 8px; height: 8px; border-radius: 99px; background: rgba(0,0,6,0.22)"></span>
+<span style="width: 8px; height: 8px; border-radius: 99px; background: rgba(0,0,6,0.22)"></span>
+</div>
+</section>
+
+<section aria-labelledby="wall-title" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<div>
+<h2 id="wall-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.01em">Wall of fame</h2>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">Setups people are proud of. Tap one to see what it runs.</p>
+</div>
+<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #1f6e43; background: #dcf3e5; padding: 5px 10px; border-radius: 99px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 99px; background: #26a269"></span>Live</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px">
+<sc-for list="{{shots}}" as="s" hint-placeholder-count="7">
+<a href="{{s.href}}" style="grid-column: {{s.span}}; grid-row: {{s.rows}}; display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: #1e1e23">
+<span role="img" aria-label="{{s.caption}}" style="position: relative; display: block; flex: 1; min-height: 110px; aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden; background: {{s.wall}}; box-shadow: 0 0 0 1px rgba(0,0,6,0.08)">
+<span style="position: absolute; right: -12%; top: -30%; width: 70%; aspect-ratio: 1; border-radius: 50%; background: {{s.glow}}"></span>
+<span style="position: absolute; left: 0; right: 0; top: 0; height: 6%; background: {{s.bar}}"></span>
+<sc-if value="{{s.tiled}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: 3%; top: 10%; width: 55%; height: 86%; border-radius: 10px; background: {{s.win}}; box-shadow: 0 0 0 2px {{s.accent}}; padding: 5%; box-sizing: border-box; display: flex; flex-direction: column; gap: 6%">
+<span style="display: block; height: 6px; width: 70%; border-radius: 3px; background: {{s.accent}}"></span>
+<span style="display: block; height: 6px; width: 45%; border-radius: 3px; background: {{s.text}}"></span>
+<span style="display: block; height: 6px; width: 60%; border-radius: 3px; background: {{s.text}}"></span>
+</span>
+<span style="position: absolute; left: 61%; top: 10%; width: 36%; height: 41%; border-radius: 10px; background: {{s.win}}"></span>
+<span style="position: absolute; left: 61%; top: 55%; width: 36%; height: 41%; border-radius: 10px; background: {{s.win}}"></span>
+</sc-if>
+<sc-if value="{{s.floating}}" hint-placeholder-val="{{true}}">
+<span style="position: absolute; left: 8%; top: 16%; width: 50%; height: 58%; border-radius: 12px; overflow: hidden; background: {{s.win}}; box-shadow: 0 6px 18px rgba(0,0,6,0.35)"><span style="display: block; height: 16%; background: {{s.title}}"></span></span>
+<span style="position: absolute; left: 44%; top: 32%; width: 46%; height: 50%; border-radius: 12px; overflow: hidden; background: {{s.win}}; box-shadow: 0 6px 18px rgba(0,0,6,0.35)"><span style="display: block; height: 16%; background: {{s.title}}"></span></span>
+<span style="position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); width: 34%; height: 9%; border-radius: 8px; background: rgba(255,255,255,0.35)"></span>
+</sc-if>
+</span>
+<span style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px"><span style="font-weight: 700">{{s.caption}}</span><span style="color: #5e5c64">{{s.by}}</span></span>
+</a>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="distros-title" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<div>
+<h2 id="distros-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.01em">Distros</h2>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">Start from a family you like.</p>
+</div>
+<a href="Distros.dc.html" style="font-weight: 700; font-size: 15px; text-decoration: none">See all</a>
+</div>
+<div style="display: flex; gap: 4px; padding: 4px; background: rgba(0,0,6,0.06); border-radius: 99px; flex-wrap: wrap; align-self: flex-start">
+<sc-for list="{{families}}" as="f" hint-placeholder-count="5">
+<sc-if value="{{f.active}}" hint-placeholder-val="{{false}}">
+<button aria-pressed="true" onClick="{{f.pick}}" style="height: 40px; padding: 0 20px; border-radius: 99px; border: 0; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,6,0.15); font-family: inherit; font-weight: 700; font-size: 15px; color: #1e1e23; cursor: pointer">{{f.label}}</button>
+</sc-if>
+<sc-if value="{{f.idle}}" hint-placeholder-val="{{true}}">
+<button aria-pressed="false" onClick="{{f.pick}}" style="height: 40px; padding: 0 20px; border-radius: 99px; border: 0; background: transparent; font-family: inherit; font-weight: 600; font-size: 15px; color: #46454d; cursor: pointer">{{f.label}}</button>
+</sc-if>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px">
+<sc-for list="{{shown}}" as="d" hint-placeholder-count="8">
+<a href="Distro.dc.html" style="display: flex; gap: 16px; align-items: center; padding: 16px; background: #ffffff; border-radius: 16px; box-shadow: 0 0 0 1px rgba(0,0,6,0.07), 0 2px 4px rgba(0,0,6,0.05); text-decoration: none; color: #1e1e23">
+<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 22px; font-weight: 800; color: #ffffff; background: {{d.color}}; box-shadow: 0 4px 0 rgba(0,0,6,0.15)">{{d.short}}</span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span style="font-weight: 700; font-size: 17px">{{d.name}}</span><sc-if value="{{d.current}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 700; color: #1a5fb4; background: #dbe8fb; padding: 2px 8px; border-radius: 99px">You are here</span></sc-if></span>
+<span style="font-size: 14px; line-height: 1.35; color: #5e5c64">{{d.tag}}</span>
+<span style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px"><span style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: #f0f0f3; color: #3d3846">{{d.release}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: #f0f0f3; color: #3d3846">{{d.pm}}</span></span>
+</span>
+</a>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="desk-title" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<div>
+<h2 id="desk-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.01em">Desktops</h2>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">A full desktop: compositor, shell, settings and apps together.</p>
+</div>
+<a href="Desktops.dc.html" style="font-weight: 700; font-size: 15px; text-decoration: none">See all</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px">
+<sc-for list="{{desktops}}" as="d" hint-placeholder-count="4">
+<a href="{{d.href}}" style="display: flex; gap: 16px; align-items: center; padding: 16px; background: #ffffff; border-radius: 16px; box-shadow: 0 0 0 1px rgba(0,0,6,0.07), 0 2px 4px rgba(0,0,6,0.05); text-decoration: none; color: #1e1e23">
+<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 22px; font-weight: 800; color: #ffffff; background: {{d.color}}; box-shadow: 0 4px 0 rgba(0,0,6,0.15)">{{d.short}}</span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-weight: 700; font-size: 17px">{{d.name}}</span>
+<span style="font-size: 14px; color: #5e5c64">{{d.type}}</span>
+</span>
+</a>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="comp-title" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<div>
+<h2 id="comp-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.01em">Compositors</h2>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">Tiling, scrolling or stacking. Pick how your windows behave.</p>
+</div>
+<a href="Compositors.dc.html" style="font-weight: 700; font-size: 15px; text-decoration: none">See all</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px">
+<sc-for list="{{compositors}}" as="c" hint-placeholder-count="4">
+<a href="Compositors.dc.html" style="display: flex; gap: 16px; align-items: center; padding: 16px; background: #ffffff; border-radius: 16px; box-shadow: 0 0 0 1px rgba(0,0,6,0.07), 0 2px 4px rgba(0,0,6,0.05); text-decoration: none; color: #1e1e23">
+<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 22px; font-weight: 800; color: #ffffff; background: {{c.color}}; box-shadow: 0 4px 0 rgba(0,0,6,0.15)">{{c.short}}</span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span style="font-weight: 700; font-size: 17px">{{c.name}}</span><sc-if value="{{c.current}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 700; color: #1f6e43; background: #dcf3e5; padding: 2px 8px; border-radius: 99px">Running now</span></sc-if></span>
+<span style="font-size: 14px; color: #5e5c64">{{c.type}} · {{c.base}}</span>
+</span>
+</a>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="you-title" style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px; justify-content: space-between; background: #241f31; color: #ffffff; border-radius: 24px; padding: 32px 36px">
+<div style="display: flex; flex-direction: column; gap: 10px; flex: 1 1 320px">
+<p style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #c0bfbc">Your system</p>
+<h2 id="you-title" style="margin: 0; font-size: 28px; font-weight: 800">Arch Linux + Hyprland</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; color: #deddda">11 of 13 ideas are ready on your system. Two need protocols Hyprland does not offer.</p>
+<div aria-hidden="true" style="height: 10px; border-radius: 99px; background: rgba(255,255,255,0.15); max-width: 420px; margin-top: 4px"><div style="width: 85%; height: 10px; border-radius: 99px; background: #57e389"></div></div>
+</div>
+<a href="YourSystem.dc.html" style="display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 12px; background: #ffffff; color: #1e1e23; font-weight: 700; font-size: 15px; text-decoration: none">Open Your System</a>
+</section>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1960}}'>
+class Component extends DCLogic {
+  distros() {
+    return [
+      { name: 'Fedora Workstation', short: 'Fe', color: '#3c6eb4', family: 'fedora', release: 'Fixed', pm: 'dnf', tag: 'Polished GNOME desktop with fresh upstream software' },
+      { name: 'Arch Linux', short: 'Ar', color: '#1793d1', family: 'independent', release: 'Rolling', pm: 'pacman', tag: 'A simple base you build up yourself', current: true },
+      { name: 'Debian', short: 'De', color: '#a80030', family: 'debian', release: 'Fixed', pm: 'apt', tag: 'The universal operating system, known for stability' },
+      { name: 'Ubuntu', short: 'Ub', color: '#e95420', family: 'debian', release: 'Fixed', pm: 'apt', tag: 'Popular desktop with long-term support releases' },
+      { name: 'Linux Mint', short: 'Mi', color: '#5b8f22', family: 'debian', release: 'Fixed', pm: 'apt', tag: 'Familiar Cinnamon desktop for people new to Linux' },
+      { name: 'openSUSE Tumbleweed', short: 'Tw', color: '#4f8a14', family: 'independent', release: 'Rolling', pm: 'zypper', tag: 'Tested rolling release with Btrfs snapshots' },
+      { name: 'NixOS', short: 'Nx', color: '#5277c3', family: 'independent', release: 'Fixed', pm: 'nix', tag: 'Describe your whole system in one config file' },
+      { name: 'CachyOS', short: 'Ca', color: '#00896e', family: 'arch', release: 'Rolling', pm: 'pacman', tag: 'Arch with performance-tuned kernels and packages' },
+      { name: 'Bazzite', short: 'Bz', color: '#6c3fc5', family: 'fedora', release: 'Atomic', pm: 'rpm-ostree', tag: 'Atomic Fedora image tuned for gaming' },
+      { name: 'Pop!_OS', short: 'Po', color: '#2a7f8a', family: 'debian', release: 'Fixed', pm: 'apt', tag: 'Ubuntu-based home of the COSMIC desktop' },
+      { name: 'EndeavourOS', short: 'En', color: '#7f3fbf', family: 'arch', release: 'Rolling', pm: 'pacman', tag: 'Arch made easy, with a friendly installer' },
+      { name: 'Void Linux', short: 'Vo', color: '#478061', family: 'independent', release: 'Rolling', pm: 'xbps', tag: 'Independent rolling distro with runit and xbps' }
+    ];
+  }
+
+  renderVals() {
+    const family = (this.state && this.state.family) || 'all';
+    const familyList = [
+      { id: 'all', label: 'All' },
+      { id: 'independent', label: 'Independent' },
+      { id: 'arch', label: 'Arch-based' },
+      { id: 'debian', label: 'Debian-based' },
+      { id: 'fedora', label: 'Fedora-based' }
+    ];
+    const families = familyList.map((f) => ({
+      label: f.label,
+      active: f.id === family,
+      idle: f.id !== family,
+      pick: () => this.setState({ family: f.id })
+    }));
+    const shown = this.distros().filter((d) => family === 'all' || d.family === family);
+
+    return {
+      families: families,
+      shown: shown,
+      collections: [
+        { title: 'Rolling releases', names: 'Arch · Tumbleweed · Void', bg: '#ffa348', fg: '#241f31', items: [{ short: 'Ar', color: '#1793d1' }, { short: 'Tw', color: '#4f8a14' }, { short: 'Vo', color: '#478061' }] },
+        { title: 'Tiling compositors', names: 'Hyprland · sway · niri', bg: '#5ed4a6', fg: '#241f31', items: [{ short: 'Hy', color: '#0086a8' }, { short: 'Sw', color: '#4c6a2a' }, { short: 'ni', color: '#c64600' }] },
+        { title: 'Built for games', names: 'Bazzite · CachyOS · Nobara', bg: '#9141ac', fg: '#ffffff', items: [{ short: 'Bz', color: '#4a2a91' }, { short: 'Ca', color: '#00896e' }, { short: 'No', color: '#3d3846' }] },
+        { title: 'Hard to break', names: 'Silverblue · NixOS · Aeon', bg: '#1c71d8', fg: '#ffffff', items: [{ short: 'Si', color: '#294172' }, { short: 'Nx', color: '#5277c3' }, { short: 'Ae', color: '#2f6b1e' }] },
+        { title: 'First steps', names: 'Mint · Ubuntu · Zorin', bg: '#f6d32d', fg: '#241f31', items: [{ short: 'Mi', color: '#5b8f22' }, { short: 'Ub', color: '#e95420' }, { short: 'Zo', color: '#0f7fbf' }] }
+      ],
+      shots: [
+        { caption: 'Hyprland + Catppuccin', by: '[author] · Arch', href: 'Compositors.dc.html', wall: '#1e1e2e', glow: '#cba6f7', bar: '#11111b', win: '#313244', accent: '#f5c2e7', text: '#a6adc8', tiled: true, span: 'span 2', rows: 'span 2' },
+        { caption: 'GNOME default', by: 'Official · Fedora', href: 'Desktop.dc.html', wall: '#3584e4', glow: '#62a0ea', bar: '#000000', win: '#fafafb', title: '#ebebed', floating: true, span: 'span 1', rows: 'span 1' },
+        { caption: 'niri + Nord', by: '[author] · NixOS', href: 'Compositors.dc.html', wall: '#2e3440', glow: '#5e81ac', bar: '#3b4252', win: '#3b4252', accent: '#88c0d0', text: '#d8dee9', tiled: true, span: 'span 1', rows: 'span 1' },
+        { caption: 'KDE Plasma', by: '[author] · openSUSE', href: 'Desktops.dc.html', wall: '#1d99f3', glow: '#7ec4f8', bar: '#232629', win: '#fcfcfc', title: '#dee0e2', floating: true, span: 'span 1', rows: 'span 1' },
+        { caption: 'sway + Gruvbox', by: '[author] · Debian', href: 'Compositors.dc.html', wall: '#282828', glow: '#d79921', bar: '#3c3836', win: '#3c3836', accent: '#fabd2f', text: '#ebdbb2', tiled: true, span: 'span 1', rows: 'span 1' },
+        { caption: 'COSMIC', by: 'Official · Pop!_OS', href: 'Desktops.dc.html', wall: '#2a7f8a', glow: '#6acad8', bar: '#1b1b1f', win: '#2b2b30', title: '#38383f', floating: true, span: 'span 1', rows: 'span 1' },
+        { caption: 'Hyprland + Tokyo Night', by: '[author] · CachyOS', href: 'Compositors.dc.html', wall: '#1a1b26', glow: '#7aa2f7', bar: '#16161e', win: '#24283b', accent: '#bb9af7', text: '#a9b1d6', tiled: true, span: 'span 1', rows: 'span 1' }
+      ],
+      desktops: [
+        { name: 'GNOME', short: 'GN', color: '#1c71d8', type: 'Mutter · GTK 4', href: 'Desktop.dc.html' },
+        { name: 'KDE Plasma', short: 'KP', color: '#1d6fc4', type: 'KWin · Qt', href: 'Desktops.dc.html' },
+        { name: 'COSMIC', short: 'Co', color: '#2a7f8a', type: 'cosmic-comp · Rust', href: 'Desktops.dc.html' },
+        { name: 'Cinnamon', short: 'Ci', color: '#5b8f22', type: 'Muffin · GTK 3', href: 'Desktops.dc.html' }
+      ],
+      compositors: [
+        { name: 'Hyprland', short: 'Hy', color: '#0086a8', type: 'Dynamic tiling', base: 'Aquamarine', current: true },
+        { name: 'niri', short: 'ni', color: '#c64600', type: 'Scrolling tiling', base: 'Smithay' },
+        { name: 'sway', short: 'Sw', color: '#4c6a2a', type: 'i3-style tiling', base: 'wlroots' },
+        { name: 'KWin', short: 'KW', color: '#1d6fc4', type: 'Stacking', base: 'KDE Plasma' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

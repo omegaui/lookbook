@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Compositors</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap">
+<style>
+body{margin:0;background:#deddda}
+a{color:#1c71d8}a:hover{color:#1a5fb4}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #1e1e23; background: #deddda; padding: clamp(0px, 2vw, 24px); box-sizing: border-box; min-height: 100vh">
+<div style="max-width: 1232px; margin: 0 auto; background: #fafafb; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,6,0.12), 0 12px 40px rgba(0,0,6,0.12); overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; flex-wrap: wrap">
+<div style="flex: 1 1 0; min-width: 0"></div>
+<nav aria-label="Sections" style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: center">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg>Explore</a>
+<a href="Distros.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"></path><path d="m3 13 9 5 9-5"></path></svg>Distros</a>
+<a href="Desktops.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path></svg>Desktops</a>
+<a href="Compositors.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; background: rgba(0,0,6,0.08); color: #1e1e23; font-weight: 700; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="2"></rect><rect x="13" y="4" width="8" height="7" rx="2"></rect><rect x="13" y="13" width="8" height="7" rx="2"></rect></svg>Compositors</a>
+<a href="YourSystem.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 40px; border-radius: 10px; color: #1e1e23; font-weight: 600; font-size: 15px; text-decoration: none"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"></rect><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>Your System</a>
+</nav>
+<div style="flex: 1 1 0; display: flex; justify-content: flex-end; gap: 4px">
+<button aria-label="Search" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg></button>
+<button aria-label="Main menu" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+<button aria-label="Close" style="width: 40px; height: 40px; border: 0; background: transparent; color: #1e1e23; display: grid; place-items: center; cursor: pointer"><span style="width: 26px; height: 26px; border-radius: 99px; background: rgba(0,0,6,0.08); display: grid; place-items: center"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"></path></svg></span></button>
+</div>
+</header>
+
+<main style="padding: 8px clamp(16px, 3vw, 32px) 40px; display: flex; flex-direction: column; gap: 20px">
+
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+<div>
+<h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em">Compositors</h1>
+<p style="margin: 4px 0 0; font-size: 15px; color: #5e5c64">The compositor draws your windows and decides how they move. {{countText}}</p>
+</div>
+<div style="display: flex; gap: 4px; padding: 4px; background: rgba(0,0,6,0.06); border-radius: 99px; flex-wrap: wrap">
+<sc-for list="{{kinds}}" as="k" hint-placeholder-count="4">
+<sc-if value="{{k.active}}" hint-placeholder-val="{{false}}"><button aria-pressed="true" onClick="{{k.pick}}" style="height: 40px; padding: 0 18px; border-radius: 99px; border: 0; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,6,0.15); font-family: inherit; font-weight: 700; font-size: 15px; color: #1e1e23; cursor: pointer">{{k.label}}</button></sc-if>
+<sc-if value="{{k.idle}}" hint-placeholder-val="{{true}}"><button aria-pressed="false" onClick="{{k.pick}}" style="height: 40px; padding: 0 18px; border-radius: 99px; border: 0; background: transparent; font-family: inherit; font-weight: 600; font-size: 15px; color: #46454d; cursor: pointer">{{k.label}}</button></sc-if>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px">
+<sc-for list="{{shown}}" as="c" hint-placeholder-count="9">
+<article style="display: flex; flex-direction: column; background: #ffffff; border-radius: 18px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,6,0.07), 0 2px 4px rgba(0,0,6,0.05)">
+<div aria-hidden="true" style="position: relative; height: 130px; background: {{c.tint}}; display: grid; place-items: center; overflow: hidden">
+<sc-if value="{{c.isTiling}}" hint-placeholder-val="{{true}}">
+<div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; width: 170px; height: 120px; transform: rotateX(55deg) rotateZ(-40deg)">
+<div style="grid-row: 1 / 3; border-radius: 10px; background: #ffffff; box-shadow: 0 0 0 3px {{c.color}}, 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+</div>
+</sc-if>
+<sc-if value="{{c.isScrolling}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; gap: 8px; width: 300px; height: 100px; transform: rotateX(55deg) rotateZ(-40deg)">
+<div style="flex: none; width: 60px; border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="flex: none; width: 100px; border-radius: 10px; background: #ffffff; box-shadow: 0 0 0 3px {{c.color}}, 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="flex: none; width: 70px; border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="flex: none; width: 60px; border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+</div>
+</sc-if>
+<sc-if value="{{c.isStacking}}" hint-placeholder-val="{{false}}">
+<div style="position: relative; width: 170px; height: 120px; transform: rotateX(55deg) rotateZ(-40deg)">
+<div style="position: absolute; left: 0; top: 0; width: 110px; height: 80px; border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="position: absolute; left: 40px; top: 24px; width: 110px; height: 80px; border-radius: 10px; background: #ffffff; box-shadow: 8px 10px 0 rgba(0,0,6,0.12)"></div>
+<div style="position: absolute; left: 70px; top: 44px; width: 100px; height: 72px; border-radius: 10px; background: #ffffff; box-shadow: 0 0 0 3px {{c.color}}, 8px 10px 0 rgba(0,0,6,0.12)"></div>
+</div>
+</sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px 16px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; font-size: 16px; font-weight: 800; color: #ffffff; background: {{c.color}}; box-shadow: 0 4px 0 rgba(0,0,6,0.15)">{{c.short}}</span>
+<div style="display: flex; flex-direction: column; min-width: 0">
+<span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><h2 style="margin: 0; font-size: 18px; font-weight: 800">{{c.name}}</h2><sc-if value="{{c.current}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 700; color: #1f6e43; background: #dcf3e5; padding: 2px 8px; border-radius: 99px">Running now</span></sc-if></span>
+<span style="font-size: 13px; color: #5e5c64">{{c.type}}</span>
+</div>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.4; color: #46454d">{{c.tag}}</p>
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<span style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: #f0f0f3; color: #3d3846">{{c.base}}</span>
+<span style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: #f0f0f3; color: #3d3846">{{c.config}}</span>
+</div>
+<ul aria-label="Key protocols" style="list-style: none; margin: 4px 0 0; padding: 10px 0 0; border-top: 1px solid rgba(0,0,6,0.07); display: flex; flex-wrap: wrap; gap: 6px 14px">
+<sc-for list="{{c.protocols}}" as="p" hint-placeholder-count="3">
+<li style="display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600">
+<sc-if value="{{p.yes}}" hint-placeholder-val="{{true}}"><svg role="img" aria-label="Supported" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f7a4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"></path></svg><span style="color: #1e1e23">{{p.label}}</span></sc-if>
+<sc-if value="{{p.no}}" hint-placeholder-val="{{false}}"><svg role="img" aria-label="Not supported" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5e5c64" stroke-width="2.5" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"></path></svg><span style="color: #5e5c64">{{p.label}}</span></sc-if>
+</li>
+</sc-for>
+</ul>
+</div>
+</article>
+</sc-for>
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1200}}'>
+class Component extends DCLogic {
+  compositors() {
+    return [
+      { name: 'Hyprland', short: 'Hy', color: '#0086a8', tint: '#d8f0f5', kind: 'tiling', type: 'Dynamic tiling', tag: 'Dynamic tiling with smooth animations and lots of eye candy.', base: 'Aquamarine', config: 'hyprlang', support: [true, true, true], current: true },
+      { name: 'niri', short: 'ni', color: '#c64600', tint: '#fbe6d6', kind: 'scrolling', type: 'Scrolling tiling', tag: 'Windows open in columns on an endless strip that you scroll through.', base: 'Smithay', config: 'KDL', support: [true, true, true] },
+      { name: 'sway', short: 'Sw', color: '#4c6a2a', tint: '#e6eedc', kind: 'tiling', type: 'i3-style tiling', tag: 'Drop-in Wayland replacement for the i3 window manager.', base: 'wlroots', config: 'i3-style text', support: [true, true, true] },
+      { name: 'river', short: 'Ri', color: '#1d5fa8', tint: '#dde8f6', kind: 'tiling', type: 'Dynamic tiling', tag: 'Small tiling compositor where layouts come from separate programs.', base: 'wlroots', config: 'init script', support: [true, true, true] },
+      { name: 'cosmic-comp', short: 'Co', color: '#2a7f8a', tint: '#dcf0f2', kind: 'tiling', type: 'Tiling or floating', tag: 'The COSMIC desktop compositor. Tile or float per workspace.', base: 'Smithay', config: 'COSMIC Settings', support: [true, true, true] },
+      { name: 'KWin', short: 'KW', color: '#1d6fc4', tint: '#dde9f7', kind: 'stacking', type: 'Stacking', tag: 'KDE Plasma compositor with effects and optional tiling.', base: 'KDE Plasma', config: 'System Settings', support: [true, false, false] },
+      { name: 'Mutter', short: 'Mu', color: '#3d3846', tint: '#e8e7ea', kind: 'stacking', type: 'Stacking', tag: 'The compositor behind GNOME Shell.', base: 'GNOME', config: 'Settings and extensions', support: [false, false, false] },
+      { name: 'Wayfire', short: 'Wf', color: '#a33a00', tint: '#f8e2d6', kind: 'stacking', type: 'Stacking with 3D effects', tag: 'Plugin-based compositor with Compiz-style effects.', base: 'wlroots', config: 'INI', support: [true, true, true] },
+      { name: 'labwc', short: 'Lb', color: '#5e5c64', tint: '#ebebed', kind: 'stacking', type: 'Stacking', tag: 'Light stacking compositor inspired by Openbox.', base: 'wlroots', config: 'XML', support: [true, true, true] }
+    ];
+  }
+
+  protocols(support) {
+    const labels = ['Layer shell', 'Session lock', 'Screen capture'];
+    return labels.map((label, index) => ({ label: label, yes: support[index], no: !support[index] }));
+  }
+
+  renderVals() {
+    const kind = (this.state && this.state.kind) || 'all';
+    const kindList = [
+      { id: 'all', label: 'All' },
+      { id: 'tiling', label: 'Tiling' },
+      { id: 'scrolling', label: 'Scrolling' },
+      { id: 'stacking', label: 'Stacking' }
+    ];
+    const shown = this.compositors()
+      .filter((c) => kind === 'all' || c.kind === kind)
+      .map((c) => Object.assign({}, c, {
+        isTiling: c.kind === 'tiling',
+        isScrolling: c.kind === 'scrolling',
+        isStacking: c.kind === 'stacking',
+        protocols: this.protocols(c.support)
+      }));
+
+    return {
+      kinds: kindList.map((k) => ({
+        label: k.label,
+        active: k.id === kind,
+        idle: k.id !== kind,
+        pick: () => this.setState({ kind: k.id })
+      })),
+      shown: shown,
+      countText: shown.length + ' shown.'
+    };
+  }
+}
+</script>
+</body>
+</html>
