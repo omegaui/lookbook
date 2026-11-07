@@ -6,6 +6,7 @@ mod details;
 mod extensions;
 mod http;
 mod ideas;
+mod news;
 mod pages;
 mod repology;
 mod run_check;

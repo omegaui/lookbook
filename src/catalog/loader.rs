@@ -71,7 +71,8 @@ mod tests {
         let distros = catalog.distros.iter().filter_map(|item| item.logo.as_deref());
         let desktops = catalog.desktops.iter().filter_map(|item| item.logo.as_deref());
         let compositors = catalog.compositors.iter().filter_map(|item| item.logo.as_deref());
-        distros.chain(desktops).chain(compositors).collect()
+        let news = catalog.news_sources.iter().filter_map(|source| source.logo.as_deref());
+        distros.chain(desktops).chain(compositors).chain(news).collect()
     }
 
     #[test]

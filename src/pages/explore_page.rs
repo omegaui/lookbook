@@ -1,23 +1,29 @@
 //! The home page: collections, spotlights, the Hall of fame and the galleries.
 
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::glib;
 use gtk::glib::clone;
 
+use gettextrs::gettext;
+
 use crate::catalog::{Catalog, DistroFamily};
+use crate::http::shared_session;
+use crate::news::{fetch_releases, recent_releases, Day, Release};
 use crate::system::SystemInfo;
 use crate::widgets::{
-    fill_wall_grid, open_details_on_activate, CardContent, CatalogCard, CollectionCard,
-    CollectionContent, SpotlightCard, SpotlightContent, WallpaperSpotlight,
+    fill_wall_grid, open_details_on_activate, release_card, CardContent, CatalogCard,
+    CollectionCard, CollectionContent, SpotlightCard, SpotlightContent, WallpaperSpotlight,
 };
 
 /// How many desktops and compositors the home page shows. "See all" opens the rest.
 const HOME_DESKTOP_COUNT: usize = 4;
 const HOME_COMPOSITOR_COUNT: usize = 4;
 const ALL_FAMILIES: &str = "all";
+/// "What's new" shows at most three rows of four.
+const NEWS_COUNT: usize = 12;
 
 mod imp {
     use super::*;
@@ -29,6 +35,12 @@ mod imp {
         pub collections_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
         pub spotlight_carousel: gtk::TemplateChild<adw::Carousel>,
+        #[template_child]
+        pub news_spinner: gtk::TemplateChild<adw::Spinner>,
+        #[template_child]
+        pub news_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        #[template_child]
+        pub news_status_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub wall_grid: gtk::TemplateChild<gtk::Grid>,
         #[template_child]
@@ -43,6 +55,9 @@ mod imp {
         pub system_title_label: gtk::TemplateChild<gtk::Label>,
         /// The family of each card in `distros_flowbox`, in the same order.
         pub distro_families: RefCell<Vec<DistroFamily>>,
+        /// Releases found so far, and how many feeds have not answered yet.
+        pub releases: RefCell<Vec<Release>>,
+        pub feeds_pending: Cell<usize>,
     }
 
     #[glib::object_subclass]
@@ -102,6 +117,7 @@ impl ExplorePage {
         self.show_collections(catalog);
         self.show_spotlights(catalog);
         self.show_wallpaper_spotlight(catalog, system);
+        self.load_news(catalog);
         self.show_wall_of_fame(catalog);
         self.show_distros(catalog, system);
         self.show_desktops(catalog, system);
@@ -144,6 +160,62 @@ impl ExplorePage {
                 card.load();
             }
         });
+    }
+
+    /// Reads every release feed at once; cards appear as feeds answer.
+    fn load_news(&self, catalog: &Catalog) {
+        let imp = self.imp();
+        imp.feeds_pending.set(catalog.news_sources.len());
+        let today = today();
+
+        for source in catalog.news_sources.clone() {
+            glib::spawn_future_local(clone!(
+                #[weak(rename_to = page)]
+                self,
+                async move {
+                    let releases = match fetch_releases(&shared_session(), &source).await {
+                        Ok(releases) => recent_releases(&source, releases, today),
+                        Err(error) => {
+                            tracing::warn!("Could not read {}'s releases: {error:#}", source.name);
+                            Vec::new()
+                        }
+                    };
+                    page.add_releases(releases);
+                }
+            ));
+        }
+        self.show_news_status();
+    }
+
+    fn add_releases(&self, releases: Vec<Release>) {
+        let imp = self.imp();
+        imp.releases.borrow_mut().extend(releases);
+        imp.feeds_pending.set(imp.feeds_pending.get().saturating_sub(1));
+        self.show_newest_releases();
+        self.show_news_status();
+    }
+
+    /// Newest first, so the order settles as slower feeds answer.
+    fn show_newest_releases(&self) {
+        let imp = self.imp();
+        let mut releases = imp.releases.borrow().clone();
+        releases.sort_by(|first, second| second.day.cmp(&first.day));
+
+        imp.news_flowbox.remove_all();
+        for release in releases.iter().take(NEWS_COUNT) {
+            imp.news_flowbox.append(&release_card(release));
+        }
+    }
+
+    fn show_news_status(&self) {
+        let imp = self.imp();
+        let still_loading = imp.feeds_pending.get() > 0;
+        let nothing_found = imp.releases.borrow().is_empty();
+
+        imp.news_spinner.set_visible(still_loading);
+        imp.news_status_label.set_visible(!still_loading && nothing_found);
+        imp.news_status_label
+            .set_label(&gettext("No new releases reached Linux & You this month. Check your connection, or come back in a few days."));
     }
 
     fn show_wall_of_fame(&self, catalog: &Catalog) {
@@ -240,5 +312,15 @@ impl ExplorePage {
         let current = carousel.position().round() as i32;
         let next = (current + step).rem_euclid(count);
         carousel.scroll_to(&carousel.nth_page(next as u32), true);
+    }
+}
+
+/// Today's date on the user's clock.
+fn today() -> Day {
+    let now = glib::DateTime::now_local().expect("the system clock should give a local time");
+    Day {
+        year: now.year(),
+        month: now.month() as u32,
+        day: now.day_of_month() as u32,
     }
 }

@@ -2321,5 +2321,193 @@
       "useful_for": "Fast rendering, video playback",
       "category": "core"
     }
+  ],
+  "news_sources": [
+    {
+      "id": "linux",
+      "name": "Linux",
+      "category": "kernel",
+      "kind": "kernel-org",
+      "url": "https://www.kernel.org/releases.json",
+      "link": "https://www.kernel.org",
+      "logo": "linux",
+      "short": "Tx",
+      "color": "#3d3846"
+    },
+    {
+      "id": "fedora",
+      "name": "Fedora",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/fedora",
+      "link": "https://fedoraproject.org",
+      "logo": "fedora",
+      "short": "Fe",
+      "color": "#3c6eb4"
+    },
+    {
+      "id": "ubuntu",
+      "name": "Ubuntu",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/ubuntu",
+      "link": "https://ubuntu.com/download",
+      "logo": "ubuntu",
+      "short": "Ub",
+      "color": "#e95420"
+    },
+    {
+      "id": "debian",
+      "name": "Debian",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/debian",
+      "link": "https://www.debian.org/News/",
+      "logo": "debian",
+      "short": "De",
+      "color": "#a80030"
+    },
+    {
+      "id": "linuxmint",
+      "name": "Linux Mint",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/linuxmint",
+      "link": "https://linuxmint.com",
+      "logo": "linuxmint",
+      "short": "Mi",
+      "color": "#5b8f22"
+    },
+    {
+      "id": "nixos",
+      "name": "NixOS",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/nixos",
+      "link": "https://nixos.org",
+      "logo": "nixos",
+      "short": "Nx",
+      "color": "#5277c3"
+    },
+    {
+      "id": "alpine",
+      "name": "Alpine Linux",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/alpine",
+      "link": "https://alpinelinux.org/posts/",
+      "logo": "alpinelinux",
+      "short": "Al",
+      "color": "#0d597f"
+    },
+    {
+      "id": "pop",
+      "name": "Pop!_OS",
+      "category": "distro",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/pop-os",
+      "link": "https://system76.com/pop/",
+      "logo": "popos",
+      "short": "Po",
+      "color": "#2a7f8a"
+    },
+    {
+      "id": "gnome",
+      "name": "GNOME",
+      "category": "desktop",
+      "kind": "atom",
+      "url": "https://gitlab.gnome.org/GNOME/gnome-shell/-/tags?format=atom",
+      "link": "https://release.gnome.org",
+      "logo": "gnome",
+      "short": "GN",
+      "color": "#1c71d8"
+    },
+    {
+      "id": "kde-plasma",
+      "name": "KDE Plasma",
+      "category": "desktop",
+      "kind": "endoflife",
+      "url": "https://endoflife.date/api/v1/products/kde-plasma",
+      "link": "https://kde.org/announcements/",
+      "logo": "kdeplasma",
+      "short": "KP",
+      "color": "#1d6fc4"
+    },
+    {
+      "id": "cosmic",
+      "name": "COSMIC",
+      "category": "desktop",
+      "kind": "atom",
+      "url": "https://github.com/pop-os/cosmic-epoch/releases.atom",
+      "link": "https://system76.com/cosmic",
+      "short": "Co",
+      "color": "#2a7f8a"
+    },
+    {
+      "id": "hyprland",
+      "name": "Hyprland",
+      "category": "compositor",
+      "kind": "atom",
+      "url": "https://github.com/hyprwm/Hyprland/releases.atom",
+      "link": "https://hypr.land",
+      "logo": "hyprland",
+      "short": "Hy",
+      "color": "#0086a8"
+    },
+    {
+      "id": "niri",
+      "name": "niri",
+      "category": "compositor",
+      "kind": "atom",
+      "url": "https://github.com/niri-wm/niri/releases.atom",
+      "link": "https://github.com/niri-wm/niri",
+      "logo": "niri",
+      "short": "ni",
+      "color": "#c64600"
+    },
+    {
+      "id": "sway",
+      "name": "sway",
+      "category": "compositor",
+      "kind": "atom",
+      "url": "https://github.com/swaywm/sway/releases.atom",
+      "link": "https://swaywm.org",
+      "logo": "sway",
+      "short": "Sw",
+      "color": "#4c6a2a"
+    },
+    {
+      "id": "river",
+      "name": "river",
+      "category": "compositor",
+      "kind": "rss",
+      "url": "https://codeberg.org/river/river/releases.rss",
+      "link": "https://codeberg.org/river/river",
+      "logo": "river",
+      "short": "Ri",
+      "color": "#1d5fa8"
+    },
+    {
+      "id": "labwc",
+      "name": "labwc",
+      "category": "compositor",
+      "kind": "atom",
+      "url": "https://github.com/labwc/labwc/releases.atom",
+      "link": "https://labwc.github.io",
+      "logo": "labwc",
+      "short": "Lb",
+      "color": "#5e5c64"
+    },
+    {
+      "id": "wayfire",
+      "name": "Wayfire",
+      "category": "compositor",
+      "kind": "atom",
+      "url": "https://github.com/WayfireWM/wayfire/releases.atom",
+      "link": "https://wayfire.org",
+      "logo": "wayfire",
+      "short": "Wf",
+      "color": "#a33a00"
+    }
   ]
 }

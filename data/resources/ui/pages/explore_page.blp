@@ -161,6 +161,64 @@ template $ExplorePage: Adw.Bin {
           }
         }
 
+        // What's new this month: recent releases, read live from each project.
+        Box {
+          orientation: vertical;
+          spacing: 16;
+
+          Box {
+            spacing: 12;
+
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
+
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("What's New This Month");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Releases from the last 31 days, read live from each project.");
+                xalign: 0;
+                wrap: true;
+              }
+            }
+
+            Adw.Spinner news_spinner {
+              valign: center;
+            }
+          }
+
+          FlowBox news_flowbox {
+            selection-mode: none;
+            homogeneous: true;
+            min-children-per-line: 1;
+            max-children-per-line: 4;
+            column-spacing: 12;
+            row-spacing: 12;
+          }
+
+          Label news_status_label {
+            styles [
+              "dim-label",
+            ]
+
+            xalign: 0;
+            wrap: true;
+            visible: false;
+          }
+        }
+
         // Hall of fame.
         Box {
           orientation: vertical;

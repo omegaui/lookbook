@@ -175,6 +175,17 @@
   transform: translateY(-4px);
 }
 
+/* What's new this month */
+
+.release-card {
+  padding: 14px 16px;
+  transition: transform 200ms ease-out;
+}
+
+.release-card:hover {
+  transform: translateY(-3px);
+}
+
 /* Catalog cards */
 
 .catalog-card {

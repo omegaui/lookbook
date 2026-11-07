@@ -6,7 +6,7 @@ Each file was reduced to its `viewBox` and `<path>` elements so GTK can recolor 
 
 | Logo files | Source | License |
 | --- | --- | --- |
-| alpinelinux, archlinux, cachyos, cinnamon, elementary, endeavouros, gnome, hyprland, kde, kdeplasma, linuxmint, opensuse, pantheon, popos, sway, ubuntu, voidlinux, xfce | [Simple Icons](https://simpleicons.org) 16.36.0 | CC0 1.0 |
+| alpinelinux, archlinux, cachyos, linux (Tux, for kernel releases), cinnamon, elementary, endeavouros, gnome, hyprland, kde, kdeplasma, linuxmint, opensuse, pantheon, popos, sway, ubuntu, voidlinux, xfce | [Simple Icons](https://simpleicons.org) 16.36.0 | CC0 1.0 |
 | debian | Simple Icons 16.36.0 | CC BY-SA 3.0 |
 | gentoo | Simple Icons 16.36.0 | CC BY-SA 2.5 |
 | nixos | Simple Icons 16.36.0 | CC BY 4.0 |

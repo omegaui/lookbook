@@ -23,6 +23,51 @@ pub struct Catalog {
     /// Image URLs hidden on request, for example after a takedown request.
     #[serde(default)]
     pub wallpaper_blocklist: Vec<String>,
+    /// Where "What's new this month" reads recent releases.
+    #[serde(default)]
+    pub news_sources: Vec<NewsSource>,
+}
+
+/// One project's release feed, for "What's new this month".
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct NewsSource {
+    pub id: String,
+    /// For example "Hyprland".
+    pub name: String,
+    pub category: NewsCategory,
+    pub kind: NewsSourceKind,
+    /// The feed itself.
+    pub url: String,
+    /// Where a release card leads when the feed has no link of its own.
+    pub link: String,
+    /// A bundled logo id, for example "linux".
+    pub logo: Option<String>,
+    /// Letters for the tile when there is no logo.
+    pub short: String,
+    pub color: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum NewsCategory {
+    Kernel,
+    Distro,
+    Desktop,
+    Compositor,
+}
+
+/// How to read a feed.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum NewsSourceKind {
+    /// kernel.org's `releases.json`.
+    KernelOrg,
+    /// The endoflife.date API, version 1.
+    Endoflife,
+    /// An Atom feed, like GitHub's or GitLab's release and tag feeds.
+    Atom,
+    /// An RSS 2.0 feed, like Codeberg's.
+    Rss,
 }
 
 /// Where a wallpaper collection lives, and how to read its live list.
