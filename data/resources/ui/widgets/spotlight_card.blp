@@ -71,17 +71,16 @@ template $SpotlightCard: Box {
         ]
 
         label: _("View Details");
-        action-name: "win.show-page";
+        action-name: "win.show-item";
       }
 
-      Button {
+      Button run_button {
         styles [
           "pill",
         ]
 
         label: _("Can I Run It?");
-        action-name: "win.show-page";
-        action-target: "'system'";
+        action-name: "win.can-i-run";
       }
     }
   }

@@ -332,8 +332,8 @@ pub struct SpotlightContent {
     pub accent: Accent,
     /// How the drawn scene arranges its windows.
     pub scene: SceneLayout,
-    /// The view stack page that "View details" opens.
-    pub page_name: &'static str,
+    /// The item "View Details" and "Can I Run It?" are about.
+    pub item: ItemRef,
 }
 
 /// Compositors show their own window layout; desktops and distros float windows.
@@ -369,7 +369,7 @@ impl SpotlightContent {
             chips: vec![distro.release.label(), distro.package_manager.clone()],
             accent: spotlight.accent,
             scene: SceneLayout::Floating,
-            page_name: "distros",
+            item: ItemRef::new(ItemKind::Distro, &distro.id),
         }
     }
 
@@ -381,8 +381,8 @@ impl SpotlightContent {
             tagline: spotlight.tagline.clone(),
             chips: vec![desktop.compositor.clone(), desktop.toolkit.clone()],
             accent: spotlight.accent,
-            scene: SceneLayout::Floating,
-            page_name: "desktops",
+            scene: scene_for_desktop(desktop.layout),
+            item: ItemRef::new(ItemKind::Desktop, &desktop.id),
         }
     }
 
@@ -399,7 +399,7 @@ impl SpotlightContent {
             ],
             accent: spotlight.accent,
             scene: scene_for_compositor(compositor.kind),
-            page_name: "compositors",
+            item: ItemRef::new(ItemKind::Compositor, &compositor.id),
         }
     }
 }

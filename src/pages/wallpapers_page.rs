@@ -11,7 +11,7 @@ use gtk::glib::clone;
 
 use crate::catalog::{Catalog, WallpaperSource};
 use crate::system::SystemInfo;
-use crate::wallpapers::{fetch_source, new_session, Wallpaper};
+use crate::wallpapers::{fetch_source, new_session, portal_hint, remove_blocked, Wallpaper};
 use crate::widgets::{WallpaperCard, WallpaperDialog, WallpaperDialogContext};
 
 /// Thumbnails load in pages, so opening the section stays light on the network.
@@ -19,7 +19,6 @@ const PAGE_SIZE: usize = 48;
 /// At most this many thumbnails download at once; the rest wait in grid order.
 const PARALLEL_THUMBNAILS: usize = 4;
 const SHOW_ALL: &str = "all";
-const WALLPAPER_PORTAL: &str = "Wallpaper";
 
 mod imp {
     use super::*;
@@ -324,25 +323,4 @@ impl WallpapersPage {
 
         WallpaperDialog::new(&wallpaper, card.thumbnail().as_ref(), context).present(Some(self));
     }
-}
-
-fn remove_blocked(wallpapers: Vec<Wallpaper>, blocklist: &[String]) -> Vec<Wallpaper> {
-    wallpapers
-        .into_iter()
-        .filter(|wallpaper| !blocklist.contains(&wallpaper.full_url))
-        .collect()
-}
-
-/// When the user's compositor is known and its portal backend has no Wallpaper
-/// portal (Hyprland, sway and others), Save is the way to go.
-fn portal_hint(catalog: &Catalog, system: &SystemInfo) -> Option<String> {
-    let compositor = system.current_compositor(catalog)?;
-    if compositor.has_portal(WALLPAPER_PORTAL) {
-        return None;
-    }
-
-    Some(
-        gettext("{} usually cannot set wallpapers from apps. Save the image, then set it with your wallpaper tool, like hyprpaper, swaybg or awww.")
-            .replace("{}", &compositor.name),
-    )
 }

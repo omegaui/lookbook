@@ -53,18 +53,29 @@
   ],
   "spotlights": [
     {
-      "kind": "compositor",
-      "id": "niri",
-      "tagline": "Scrollable tiling. Windows open in columns on an endless strip, so a new window never squeezes the ones you already have.",
-      "accent": "orange"
+      "kind": "distro",
+      "id": "bazzite",
+      "tagline": "A Fedora Atomic image built for games: Steam, HDR and handheld support come ready, and an update that breaks something rolls back.",
+      "accent": "purple"
     },
     {
       "kind": "desktop",
       "id": "gnome",
       "tagline": "A calm, focused desktop built around search and the Activities overview. Make it your own with Shell extensions.",
       "accent": "blue"
+    },
+    {
+      "kind": "compositor",
+      "id": "niri",
+      "tagline": "Scrollable tiling. Windows open in columns on an endless strip, so a new window never squeezes the ones you already have.",
+      "accent": "orange"
     }
   ],
+  "wallpaper_spotlight": {
+    "source_id": "orangc",
+    "tagline": "A fresh pick from orangc's walls every time you open the app. Set it as your background in one click.",
+    "accent": "green"
+  },
   "screenshots": [
     {
       "title": "Hyprland + Catppuccin",

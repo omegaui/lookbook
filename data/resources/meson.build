@@ -17,6 +17,7 @@ blueprints = custom_target(
     'ui/widgets/spotlight_card.blp',
     'ui/widgets/wallpaper_card.blp',
     'ui/widgets/wallpaper_dialog.blp',
+    'ui/widgets/wallpaper_spotlight.blp',
     'ui/window.blp',
   ),
   output: '.',

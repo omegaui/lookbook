@@ -1,0 +1,109 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $WallpaperSpotlight: Box {
+  styles [
+    "spotlight",
+  ]
+
+  homogeneous: false;
+  overflow: hidden;
+  height-request: 340;
+  hexpand: true;
+
+  Box {
+    orientation: vertical;
+    spacing: 14;
+    valign: center;
+    margin-top: 40;
+    margin-bottom: 40;
+    margin-start: 72;
+    margin-end: 16;
+
+    Box {
+      spacing: 16;
+
+      $LogoTile tile {
+        valign: center;
+      }
+
+      Box {
+        orientation: vertical;
+        spacing: 2;
+        valign: center;
+
+        Label {
+          styles [
+            "kicker",
+          ]
+
+          label: _("Wallpaper spotlight");
+          xalign: 0;
+        }
+
+        Label title_label {
+          styles [
+            "title-1",
+          ]
+
+          xalign: 0;
+          wrap: true;
+          lines: 2;
+          ellipsize: end;
+          max-width-chars: 24;
+        }
+      }
+    }
+
+    Label tagline_label {
+      xalign: 0;
+      wrap: true;
+      max-width-chars: 44;
+    }
+
+    Box chips_box {
+      spacing: 6;
+    }
+
+    Box {
+      spacing: 10;
+      margin-top: 6;
+
+      Button view_button {
+        styles [
+          "pill",
+          "suggested-action",
+        ]
+
+        label: _("View Wallpaper");
+        sensitive: false;
+        clicked => $on_view_clicked() swapped;
+      }
+
+      Button {
+        styles [
+          "pill",
+        ]
+
+        label: _("Browse Wallpapers");
+        action-name: "win.show-page";
+        action-target: "'wallpapers'";
+      }
+    }
+  }
+
+  // The wallpaper itself, laid on the floor like a thick tile.
+  Overlay {
+    hexpand: true;
+
+    child: $IsoPicture picture {};
+
+    [overlay]
+    Adw.Spinner spinner {
+      width-request: 32;
+      height-request: 32;
+      halign: center;
+      valign: center;
+    }
+  }
+}

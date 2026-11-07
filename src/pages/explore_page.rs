@@ -11,7 +11,7 @@ use crate::catalog::{Catalog, DistroFamily};
 use crate::system::SystemInfo;
 use crate::widgets::{
     fill_wall_grid, open_details_on_activate, CardContent, CatalogCard, CollectionCard,
-    CollectionContent, SpotlightCard, SpotlightContent,
+    CollectionContent, SpotlightCard, SpotlightContent, WallpaperSpotlight,
 };
 
 /// How many desktops and compositors the home page shows. "See all" opens the rest.
@@ -67,6 +67,7 @@ mod imp {
             let page = self.obj();
 
             page.setup_distro_filter();
+            page.load_wallpaper_spotlight_when_shown();
             open_details_on_activate(&self.distros_flowbox);
             open_details_on_activate(&self.desktops_flowbox);
             open_details_on_activate(&self.compositors_flowbox);
@@ -100,6 +101,7 @@ impl ExplorePage {
     pub fn show_catalog(&self, catalog: &Catalog, system: &SystemInfo) {
         self.show_collections(catalog);
         self.show_spotlights(catalog);
+        self.show_wallpaper_spotlight(catalog, system);
         self.show_wall_of_fame(catalog);
         self.show_distros(catalog, system);
         self.show_desktops(catalog, system);
@@ -120,6 +122,28 @@ impl ExplorePage {
                 self.imp().spotlight_carousel.append(&SpotlightCard::new(&content));
             }
         }
+    }
+
+    /// The wallpaper spotlight comes last, after the distro, desktop and compositor.
+    fn show_wallpaper_spotlight(&self, catalog: &Catalog, system: &SystemInfo) {
+        let Some(spotlight) = &catalog.wallpaper_spotlight else {
+            return;
+        };
+        if let Some(card) = WallpaperSpotlight::new(spotlight, catalog, system) {
+            self.imp().spotlight_carousel.append(&card);
+        }
+    }
+
+    /// The wallpaper is read from its source only once the carousel reaches it,
+    /// so opening the app does not download anything the user never sees.
+    fn load_wallpaper_spotlight_when_shown(&self) {
+        let carousel = &self.imp().spotlight_carousel;
+        carousel.connect_page_changed(|carousel, index| {
+            let page = carousel.nth_page(index);
+            if let Some(card) = page.downcast_ref::<WallpaperSpotlight>() {
+                card.load();
+            }
+        });
     }
 
     fn show_wall_of_fame(&self, catalog: &Catalog) {
@@ -194,6 +218,15 @@ impl ExplorePage {
             Some(family) => family.id() == active.as_str(),
             None => true,
         }
+    }
+
+    /// Turns the carousel straight to page `index`, if it exists.
+    pub fn show_spotlight(&self, index: i32) {
+        let carousel = &self.imp().spotlight_carousel;
+        if index < 0 || index as u32 >= carousel.n_pages() {
+            return;
+        }
+        carousel.scroll_to(&carousel.nth_page(index as u32), false);
     }
 
     /// Moves the spotlight carousel by `step` pages, wrapping around at the ends.

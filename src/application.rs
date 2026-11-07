@@ -77,7 +77,11 @@ impl LinuxAndYouApplication {
                 .parameter_type(Some(glib::VariantTy::DOUBLE))
                 .activate(|app: &Self, _, parameter| app.forward_to_window("scroll-to", parameter))
                 .build();
-            self.add_action_entries([scroll_to]);
+            let show_spotlight = gio::ActionEntry::builder("show-spotlight")
+                .parameter_type(Some(glib::VariantTy::INT32))
+                .activate(|app: &Self, _, parameter| app.forward_to_window("show-spotlight", parameter))
+                .build();
+            self.add_action_entries([scroll_to, show_spotlight]);
         }
     }
 

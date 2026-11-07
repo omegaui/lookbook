@@ -59,6 +59,7 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Open the app on a page | `.agentic-coding/scripts/open-page.sh wallpapers` | |
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
 | Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |
+| Turn the Explore spotlight carousel (development builds only) | `.agentic-coding/scripts/show-spotlight.sh 3` (counts from 0) | |
 | Screenshot only the app window | `.agentic-coding/scripts/screenshot-window.sh /tmp/shot.png` (Hyprland + grim) | |
 
 A full build must pass "Ok: 4, Fail: 0" (cargo tests, desktop file, GSettings schema, metainfo). Keep the build free of compiler warnings.
@@ -90,7 +91,7 @@ Not yet confirmed by clicking (the agent cannot click; ask the user):
 
 ## Open work, in priority order
 
-1. **Four spotlights** on Explore, in this order: Distro, Desktop, Compositor, Wallpaper. The wallpaper spotlight shows a live wallpaper (tilted `IsoPicture`) with View Wallpaper and Browse Wallpapers. "View Details" opens the item, not the gallery.
+1. ~~Four spotlights~~ done: Distro (Bazzite), Desktop (GNOME), Compositor (niri), then a wallpaper picked at random from orangc's walls when the carousel reaches it (`WallpaperSpotlight`, tilted `IsoPicture`). "View Details" opens the item. "Can I Run It?" fires `win.can-i-run`, which for now only opens Your System.
 2. **"Can I Run It?" must answer something.** A sheet per item: is it packaged for the user's distro (Repology, at most 1 request a second, User-Agent with a contact link; map os-release `ID`/`ID_LIKE` to a Repology repo), install command, which ideas the user gains or loses against the current setup, GPU notes (NVIDIA on wlroots), and how to try it (VM, live USB).
 3. **"What's new this month in Linux"** on Explore: release cards from the last 31 days, read live. Checked feeds (all 200 on 2026-11-07): kernel.org `releases.json`; endoflife.date API v1 for distros and `kde-plasma` (no `gnome` product there); KDE `announcements/index.xml` (items have empty titles, the version is in the link); GitHub `releases.atom` for Hyprland, niri (`niri-wm/niri`), sway, labwc, Wayfire, COSMIC (`pop-os/cosmic-epoch`); Codeberg RSS for river. GNOME Discourse announcements carry no release posts, so GNOME needs another source.
 4. **Gallery card art** still to do: layout drawings on compositor cards, tinted capsules on distro cards.

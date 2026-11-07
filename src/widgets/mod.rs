@@ -5,6 +5,7 @@ mod desktop_card;
 mod extension_card;
 mod idea_card;
 mod iso;
+mod iso_picture;
 mod iso_scene;
 mod iso_stack;
 mod iso_tile;
@@ -18,6 +19,7 @@ mod spotlight_card;
 mod wall;
 mod wallpaper_card;
 mod wallpaper_dialog;
+mod wallpaper_spotlight;
 
 pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
@@ -28,6 +30,7 @@ pub use content::{
 pub use desktop_card::DesktopCard;
 pub use extension_card::extension_card;
 pub use idea_card::IdeaCard;
+pub use iso_picture::IsoPicture;
 pub use iso_scene::{IsoScene, SceneLayout};
 pub use iso_stack::{IsoStack, StackLayer};
 pub use iso_tile::IsoTile;
@@ -41,6 +44,7 @@ pub use spotlight_card::SpotlightCard;
 pub use wall::fill_wall_grid;
 pub use wallpaper_card::WallpaperCard;
 pub use wallpaper_dialog::{WallpaperDialog, WallpaperDialogContext};
+pub use wallpaper_spotlight::WallpaperSpotlight;
 
 use gtk::prelude::*;
 

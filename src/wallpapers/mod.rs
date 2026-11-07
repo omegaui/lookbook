@@ -8,9 +8,14 @@ mod http;
 mod portal;
 mod wordpress;
 
+use gettextrs::gettext;
 use gtk::{gdk, glib};
 
-use crate::catalog::{WallpaperSource, WallpaperSourceKind};
+use crate::catalog::{Catalog, WallpaperSource, WallpaperSourceKind};
+use crate::system::SystemInfo;
+
+/// The portal interface apps use to set the background.
+const WALLPAPER_PORTAL: &str = "Wallpaper";
 
 pub use http::new_session;
 pub use portal::{file_name_from_url, set_wallpaper};
@@ -40,6 +45,28 @@ pub async fn fetch_source(
             Ok(wordpress::parse_page(&String::from_utf8_lossy(&body), source))
         }
     }
+}
+
+/// Drops the wallpapers whose owners asked to be left out.
+pub fn remove_blocked(wallpapers: Vec<Wallpaper>, blocklist: &[String]) -> Vec<Wallpaper> {
+    wallpapers
+        .into_iter()
+        .filter(|wallpaper| !blocklist.contains(&wallpaper.full_url))
+        .collect()
+}
+
+/// A note for users whose compositor has no wallpaper portal, so Set as Wallpaper
+/// may do nothing there.
+pub fn portal_hint(catalog: &Catalog, system: &SystemInfo) -> Option<String> {
+    let compositor = system.current_compositor(catalog)?;
+    if compositor.has_portal(WALLPAPER_PORTAL) {
+        return None;
+    }
+
+    Some(
+        gettext("{} usually cannot set wallpapers from apps. Save the image, then set it with your wallpaper tool, like hyprpaper, swaybg or awww.")
+            .replace("{}", &compositor.name),
+    )
 }
 
 /// Downloads an image and decodes it for display.

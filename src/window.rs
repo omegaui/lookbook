@@ -179,7 +179,13 @@ impl LinuxAndYouWindow {
             })
             .build();
 
-        self.add_action_entries([show_page, show_item]);
+        // Until the Can I Run It sheet exists, the question leads to Your System.
+        let can_i_run = gio::ActionEntry::builder("can-i-run")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .activate(|window: &Self, _, _| window.show_page("system"))
+            .build();
+
+        self.add_action_entries([show_page, show_item, can_i_run]);
 
         if PROFILE == "Devel" {
             self.add_scroll_action();
@@ -198,7 +204,16 @@ impl LinuxAndYouWindow {
                 }
             })
             .build();
-        self.add_action_entries([scroll_to]);
+        // Turns the Explore spotlight carousel to a page, counting from 0.
+        let show_spotlight = gio::ActionEntry::builder("show-spotlight")
+            .parameter_type(Some(glib::VariantTy::INT32))
+            .activate(|window: &Self, _, parameter| {
+                if let Some(index) = parameter.and_then(|value| value.get::<i32>()) {
+                    window.imp().explore_page.show_spotlight(index);
+                }
+            })
+            .build();
+        self.add_action_entries([scroll_to, show_spotlight]);
     }
 
     fn scroll_to(&self, fraction: f64) {

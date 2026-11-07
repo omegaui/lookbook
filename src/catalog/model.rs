@@ -7,6 +7,9 @@ pub struct Catalog {
     pub generated_at: String,
     pub collections: Vec<Collection>,
     pub spotlights: Vec<Spotlight>,
+    /// The last spotlight: a wallpaper picked live from one source.
+    #[serde(default)]
+    pub wallpaper_spotlight: Option<WallpaperSpotlight>,
     pub screenshots: Vec<Screenshot>,
     pub distros: Vec<Distro>,
     pub desktops: Vec<Desktop>,
@@ -150,6 +153,14 @@ pub struct Collection {
 pub struct Spotlight {
     pub kind: ItemKind,
     pub id: String,
+    pub tagline: String,
+    pub accent: Accent,
+}
+
+/// The wallpaper spotlight: which source to pick from, and what to say about it.
+#[derive(Debug, Clone, Deserialize)]
+pub struct WallpaperSpotlight {
+    pub source_id: String,
     pub tagline: String,
     pub accent: Accent,
 }

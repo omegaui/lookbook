@@ -23,6 +23,8 @@ mod imp {
         #[template_child]
         pub details_button: gtk::TemplateChild<gtk::Button>,
         #[template_child]
+        pub run_button: gtk::TemplateChild<gtk::Button>,
+        #[template_child]
         pub scene: gtk::TemplateChild<IsoScene>,
     }
 
@@ -69,8 +71,9 @@ impl SpotlightCard {
         imp.kicker_label.set_label(&content.kicker);
         imp.name_label.set_label(&content.name);
         imp.tagline_label.set_label(&content.tagline);
-        imp.details_button
-            .set_action_target_value(Some(&content.page_name.to_variant()));
+        let target = content.item.to_action_target().to_variant();
+        imp.details_button.set_action_target_value(Some(&target));
+        imp.run_button.set_action_target_value(Some(&target));
         imp.scene.set_scene(content.scene, content.accent);
 
         for chip in &content.chips {
