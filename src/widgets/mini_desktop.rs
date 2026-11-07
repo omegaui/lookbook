@@ -1,5 +1,5 @@
-//! A small isometric drawing of a desktop for the Desktops gallery: a wallpaper
-//! slab in the desktop's color, one window, and the bars it shows by default.
+//! A small flat drawing of a desktop for the Desktops gallery: a screen in the
+//! desktop's color, one window, and the bars it shows by default.
 
 use std::cell::{Cell, RefCell};
 
@@ -7,22 +7,20 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gdk, glib, graphene, gsk};
 
-use super::iso::{apply_floor_transform, floor_to_screen, screen_drop_in_floor};
+use super::edge::drop_shadow;
 use crate::catalog::DesktopBar;
 
-const SLAB_WIDTH: f32 = 176.0;
-const SLAB_HEIGHT: f32 = 110.0;
-const SLAB_RADIUS: f32 = 12.0;
-const SLAB_THICKNESS: f32 = 8.0;
+const SCREEN_WIDTH: f32 = 176.0;
+const SCREEN_HEIGHT: f32 = 110.0;
+const SCREEN_RADIUS: f32 = 12.0;
 const AREA_HEIGHT: i32 = 150;
 const AREA_WIDTH: i32 = 240;
-/// How strongly the desktop's color tints the area behind the slab.
+/// How strongly the desktop's color tints the area behind the screen.
 const TINT_ALPHA: f32 = 0.16;
 
 const BAR: gdk::RGBA = gdk::RGBA::new(0.14, 0.12, 0.19, 1.0);
 const WINDOW_FACE: gdk::RGBA = gdk::RGBA::new(0.98, 0.98, 0.98, 1.0);
 const WINDOW_TITLE: gdk::RGBA = gdk::RGBA::new(0.92, 0.92, 0.93, 1.0);
-const WINDOW_EDGE: gdk::RGBA = gdk::RGBA::new(0.69, 0.69, 0.71, 1.0);
 const DOCK: gdk::RGBA = gdk::RGBA::new(1.0, 1.0, 1.0, 0.75);
 
 mod imp {
@@ -72,9 +70,8 @@ mod imp {
             draw_tint(snapshot, color, width, height);
 
             snapshot.save();
-            snapshot.translate(&slab_origin(width, height));
-            apply_floor_transform(snapshot);
-            draw_slab(snapshot, color);
+            snapshot.translate(&screen_origin(width, height));
+            draw_screen(snapshot, color);
             draw_window(snapshot);
             draw_bars(snapshot, &self.bars.borrow());
             snapshot.restore();
@@ -104,41 +101,36 @@ impl MiniDesktop {
     }
 }
 
-/// A soft wash of the desktop's color behind the slab, readable in light and dark styles.
+/// A soft wash of the desktop's color behind the screen, readable in light and dark styles.
 fn draw_tint(snapshot: &gtk::Snapshot, color: gdk::RGBA, width: f32, height: f32) {
     let tint = gdk::RGBA::new(color.red(), color.green(), color.blue(), TINT_ALPHA);
     snapshot.append_color(&tint, &graphene::Rect::new(0.0, 0.0, width, height));
 }
 
-/// Where the slab's top-left corner goes so the tilted slab sits in the middle.
-fn slab_origin(width: f32, height: f32) -> graphene::Point {
-    let corners = [
-        floor_to_screen(0.0, 0.0),
-        floor_to_screen(SLAB_WIDTH, 0.0),
-        floor_to_screen(0.0, SLAB_HEIGHT),
-        floor_to_screen(SLAB_WIDTH, SLAB_HEIGHT),
-    ];
-    let left = corners.iter().map(|point| point.x()).fold(f32::MAX, f32::min);
-    let right = corners.iter().map(|point| point.x()).fold(f32::MIN, f32::max);
-    let top = corners.iter().map(|point| point.y()).fold(f32::MAX, f32::min);
-    let bottom = corners.iter().map(|point| point.y()).fold(f32::MIN, f32::max);
-
-    let x = (width - (right - left)) / 2.0 - left;
-    let y = (height - (bottom - top)) / 2.0 - top - SLAB_THICKNESS / 2.0;
-    graphene::Point::new(x, y)
+/// Where the screen's top-left corner goes so it sits in the middle.
+fn screen_origin(width: f32, height: f32) -> graphene::Point {
+    graphene::Point::new((width - SCREEN_WIDTH) / 2.0, (height - SCREEN_HEIGHT) / 2.0)
 }
 
-fn draw_slab(snapshot: &gtk::Snapshot, color: gdk::RGBA) {
-    let slab = graphene::Rect::new(0.0, 0.0, SLAB_WIDTH, SLAB_HEIGHT);
-    let (dx, dy) = screen_drop_in_floor(SLAB_THICKNESS);
-    fill_rounded(snapshot, offset(slab, dx, dy), SLAB_RADIUS, &shade(color, 0.0, 0.35));
-    fill_rounded(snapshot, slab, SLAB_RADIUS, &shade(color, 0.25, 0.0));
+fn draw_screen(snapshot: &gtk::Snapshot, color: gdk::RGBA) {
+    let screen = graphene::Rect::new(0.0, 0.0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    drop_shadow(snapshot, &screen, SCREEN_RADIUS, 4.0);
+    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(screen, SCREEN_RADIUS));
+    snapshot.append_linear_gradient(
+        &screen,
+        &graphene::Point::new(0.0, 0.0),
+        &graphene::Point::new(0.0, SCREEN_HEIGHT),
+        &[
+            gsk::ColorStop::new(0.0, shade(color, 0.35, 0.0)),
+            gsk::ColorStop::new(1.0, shade(color, 0.05, 0.1)),
+        ],
+    );
+    snapshot.pop();
 }
 
 fn draw_window(snapshot: &gtk::Snapshot) {
     let window = graphene::Rect::new(28.0, 24.0, 92.0, 58.0);
-    let (dx, dy) = screen_drop_in_floor(4.0);
-    fill_rounded(snapshot, offset(window, dx, dy), 7.0, &WINDOW_EDGE);
+    drop_shadow(snapshot, &window, 7.0, 2.0);
     fill_rounded(snapshot, window, 7.0, &WINDOW_FACE);
 
     let title = graphene::Rect::new(window.x(), window.y(), window.width(), 12.0);
@@ -148,19 +140,19 @@ fn draw_window(snapshot: &gtk::Snapshot) {
 }
 
 fn draw_bars(snapshot: &gtk::Snapshot, bars: &[DesktopBar]) {
-    let slab = graphene::Rect::new(0.0, 0.0, SLAB_WIDTH, SLAB_HEIGHT);
-    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(slab, SLAB_RADIUS));
+    let screen = graphene::Rect::new(0.0, 0.0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(screen, SCREEN_RADIUS));
     for bar in bars {
         match bar {
             DesktopBar::Top => {
-                snapshot.append_color(&BAR, &graphene::Rect::new(0.0, 0.0, SLAB_WIDTH, 12.0));
+                snapshot.append_color(&BAR, &graphene::Rect::new(0.0, 0.0, SCREEN_WIDTH, 12.0));
             }
             DesktopBar::Bottom => {
-                let top = SLAB_HEIGHT - 16.0;
-                snapshot.append_color(&BAR, &graphene::Rect::new(0.0, top, SLAB_WIDTH, 16.0));
+                let top = SCREEN_HEIGHT - 16.0;
+                snapshot.append_color(&BAR, &graphene::Rect::new(0.0, top, SCREEN_WIDTH, 16.0));
             }
             DesktopBar::Dock => {
-                let dock = graphene::Rect::new((SLAB_WIDTH - 70.0) / 2.0, SLAB_HEIGHT - 21.0, 70.0, 13.0);
+                let dock = graphene::Rect::new((SCREEN_WIDTH - 70.0) / 2.0, SCREEN_HEIGHT - 21.0, 70.0, 13.0);
                 fill_rounded(snapshot, dock, 6.0, &DOCK);
             }
         }
@@ -181,8 +173,4 @@ fn fill_rounded(snapshot: &gtk::Snapshot, rect: graphene::Rect, radius: f32, col
     snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(rect, radius));
     snapshot.append_color(color, &rect);
     snapshot.pop();
-}
-
-fn offset(rect: graphene::Rect, dx: f32, dy: f32) -> graphene::Rect {
-    graphene::Rect::new(rect.x() + dx, rect.y() + dy, rect.width(), rect.height())
 }

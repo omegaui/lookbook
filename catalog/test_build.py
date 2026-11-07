@@ -48,6 +48,11 @@ class ValidateTests(unittest.TestCase):
         data["distros"][0]["logo"] = "no-such-logo"
         self.assertTrue(any("no-such-logo" in problem for problem in build.validate(data)))
 
+    def test_gallery_image_without_credit(self):
+        data = catalog()
+        compositor(data, "sway")["gallery"] = [{"url": "https://example.org/a.png", "page": "https://example.org/a", "credit": "", "license": "CC0"}]
+        self.assertTrue(any("gallery" in problem for problem in build.validate(data)))
+
     def test_other_schema_version(self):
         data = catalog()
         data["schema_version"] = 2
@@ -102,6 +107,112 @@ class ProtocolTests(unittest.TestCase):
         self.assertTrue(report.warnings)
 
 
+RICES_TS = """
+type Contest = { name: string; number: number }
+
+export const contests: Contest[] = [
+	{
+		name: 'Moon',
+		number: 5,
+		date: 'June 2026',
+		color: colors.indigo[500],
+		rices: [
+			{
+				name: 'Astroland',
+				creator: 'zacoons',
+				pretitel: '#1',
+				dotfilesLink: 'https://codeberg.org/zacoons/astroland_dots',
+				thumbnail: '/ricing_competitions/5/zacoons.webp',
+				video: 'https://dl.hypr.land/contest-videos/astroland_zacoons.webm'
+			},
+			{
+				name: 'It\\'s Unnamed',
+				creator: 'Lyasm',
+				pretitel: '#2 (ex aequo)',
+				dotfilesLink: '#',
+				thumbnail: '/ricing_competitions/5/lyasm.webp'
+			}
+		]
+	},
+	{
+		name: 'Winter',
+		number: 1,
+		date: 'December 2022',
+		color: colors.sky[500],
+		rices: [
+			{
+				name: 'Aurora',
+				creator: 'flick0',
+				pretitel: '#1',
+				dotfilesLink: 'https://github.com/flick0/dotfiles/tree/aurora',
+				thumbnail: '/ricing_competitions/1/flicko.webp'
+			}
+		]
+	}
+]
+"""
+PAGE = "https://hypr.land/hall_of_fame/"
+
+
+class HallOfFameTests(unittest.TestCase):
+    def parse(self):
+        return build.parse_hall_of_fame(RICES_TS, "https://hypr.land", PAGE)
+
+    def test_reads_contests_newest_first(self):
+        contests = self.parse()
+        self.assertEqual([contest["name"] for contest in contests], ["Moon", "Winter"])
+        self.assertEqual(contests[0]["number"], 5)
+        self.assertEqual(contests[0]["date"], "June 2026")
+
+    def test_reads_each_rice(self):
+        astroland = self.parse()[0]["rices"][0]
+        self.assertEqual(
+            astroland,
+            {
+                "name": "Astroland",
+                "author": "zacoons",
+                "place": "#1",
+                "image": "https://hypr.land/ricing_competitions/5/zacoons.webp",
+                "link": "https://codeberg.org/zacoons/astroland_dots",
+            },
+        )
+
+    def test_unescapes_quotes_and_links_missing_dotfiles_to_the_page(self):
+        unnamed = self.parse()[0]["rices"][1]
+        self.assertEqual(unnamed["name"], "It's Unnamed")
+        self.assertEqual(unnamed["link"], PAGE)
+
+    def test_a_file_without_contests_is_an_error(self):
+        with self.assertRaises(ValueError):
+            build.parse_hall_of_fame("export const nothing = []", "https://hypr.land", PAGE)
+
+    def test_fewer_contests_keep_the_old_list(self):
+        data = catalog()
+        before = copy.deepcopy(data["hall_of_fame"])
+        report = build.Report()
+        build.apply_hall_of_fame(data["hall_of_fame"], self.parse()[:1], report)
+        self.assertEqual(data["hall_of_fame"], before)
+        self.assertTrue(report.warnings)
+
+    def test_a_failed_download_keeps_the_old_data(self):
+        data = catalog()
+        before = copy.deepcopy(data["hall_of_fame"])
+
+        def failing_fetch(url):
+            raise OSError("offline")
+
+        report = build.Report()
+        build.refresh_hall_of_fame(data, json.loads(build.SOURCES_CONFIG.read_text()), report, fetch=failing_fetch)
+        self.assertEqual(data["hall_of_fame"], before)
+        self.assertTrue(report.warnings)
+
+    def test_a_gone_screenshot_drops_the_rice(self):
+        data = catalog()
+        first = data["hall_of_fame"]["contests"][0]["rices"][0]
+        build.check_hosted_media(data, build.Report(), status_of=lambda url: "gone" if url == first["image"] else "ok")
+        self.assertNotIn(first, data["hall_of_fame"]["contests"][0]["rices"])
+
+
 class MediaTests(unittest.TestCase):
     def test_a_gone_screenshot_is_dropped(self):
         data = catalog()
@@ -113,6 +224,15 @@ class MediaTests(unittest.TestCase):
         data = catalog()
         build.check_hosted_media(data, build.Report(), status_of=lambda url: "unknown")
         self.assertIn("screenshot", compositor(data, "sway"))
+
+    def test_a_gone_gallery_image_is_dropped(self):
+        data = catalog()
+        sway = compositor(data, "sway")
+        kept = {"url": "https://example.org/kept.png", "page": "https://example.org/kept", "credit": "A", "license": "CC0"}
+        gone = {"url": "https://example.org/gone.png", "page": "https://example.org/gone", "credit": "B", "license": "CC0"}
+        sway["gallery"] = [kept, gone]
+        build.check_hosted_media(data, build.Report(), status_of=lambda url: "gone" if url == gone["url"] else "ok")
+        self.assertEqual(sway["gallery"], [kept])
 
     def test_too_many_gone_stops_the_build(self):
         with self.assertRaises(SystemExit):

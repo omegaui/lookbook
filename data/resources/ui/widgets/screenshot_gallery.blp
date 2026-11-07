@@ -1,0 +1,80 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ScreenshotGallery: Box {
+  orientation: vertical;
+  spacing: 12;
+
+  Overlay {
+    Adw.Carousel carousel {
+      spacing: 16;
+      allow-scroll-wheel: false;
+      page-changed => $on_page_changed() swapped;
+    }
+
+    [overlay]
+    Button previous_button {
+      styles [
+        "circular",
+        "osd",
+      ]
+
+      icon-name: "go-previous-symbolic";
+      tooltip-text: _("Previous Screenshot");
+      halign: start;
+      valign: center;
+      margin-start: 12;
+      clicked => $on_previous() swapped;
+    }
+
+    [overlay]
+    Button next_button {
+      styles [
+        "circular",
+        "osd",
+      ]
+
+      icon-name: "go-next-symbolic";
+      tooltip-text: _("Next Screenshot");
+      halign: end;
+      valign: center;
+      margin-end: 12;
+      clicked => $on_next() swapped;
+    }
+  }
+
+  Box {
+    spacing: 12;
+
+    Box {
+      orientation: vertical;
+      spacing: 2;
+      hexpand: true;
+
+      Label caption_label {
+        styles [
+          "heading",
+        ]
+
+        xalign: 0;
+        wrap: true;
+      }
+
+      Label credit_label {
+        styles [
+          "caption",
+          "dim-label",
+        ]
+
+        xalign: 0;
+        wrap: true;
+        use-markup: true;
+      }
+    }
+
+    Adw.CarouselIndicatorDots dots {
+      carousel: carousel;
+      valign: center;
+    }
+  }
+}

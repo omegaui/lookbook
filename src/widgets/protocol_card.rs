@@ -2,7 +2,7 @@ use adw::subclass::prelude::*;
 use gtk::glib;
 use gtk::prelude::*;
 
-use super::IsoTile;
+use super::IconTile;
 use crate::catalog::ProtocolInfo;
 
 mod imp {
@@ -12,7 +12,7 @@ mod imp {
     #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/protocol_card.ui")]
     pub struct ProtocolCard {
         #[template_child]
-        pub art: gtk::TemplateChild<IsoTile>,
+        pub art: gtk::TemplateChild<IconTile>,
         #[template_child]
         pub name_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
@@ -32,7 +32,7 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
-            IsoTile::ensure_type();
+            IconTile::ensure_type();
             klass.bind_template();
         }
 

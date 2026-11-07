@@ -20,9 +20,15 @@ the Actions tab. It:
      [wayland-explorer](https://github.com/vially/wayland-explorer) (MIT) when
      it has newer data, never moving a compositor back to older data, and
      ignoring a dump that loses more than half the protocols;
-   - checks every hosted screenshot and rice preview, drops screenshots that
-     are clearly gone, and stops if more than a quarter look gone (the network
-     is more likely at fault);
+   - refreshes the Hall of Fame from the Hyprland website's list of ricing
+     contest winners (`src/routes/hall_of_fame/rices.ts` in
+     [hyprland-website](https://github.com/hyprwm/hyprland-website),
+     BSD-3-Clause), keeping the old list if the new one has fewer contests or
+     cannot be read. The screenshots stay on hypr.land;
+   - checks every hosted screenshot, gallery image, Hall of Fame screenshot and
+     rice preview, drops screenshots and Hall of Fame entries that are clearly
+     gone, and stops if more than a quarter look gone (the network is more
+     likely at fault);
    - checks that every reference points at something real and every logo file
      exists;
    - writes `v1/catalog.json`, `v1/manifest.json` (hash, size, date) and the

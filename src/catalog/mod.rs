@@ -38,14 +38,6 @@ impl Catalog {
         self.compositors.iter().find(|compositor| compositor.id == id)
     }
 
-    /// The Hall of fame entries that show `subject`, for example "gnome".
-    pub fn screenshots_of(&self, subject: &str) -> Vec<&Screenshot> {
-        self.screenshots
-            .iter()
-            .filter(|screenshot| screenshot.subject == subject)
-            .collect()
-    }
-
     /// The real screenshot of an item, if the catalog has one.
     pub fn hosted_screenshot(&self, kind: ItemKind, id: &str) -> Option<&HostedScreenshot> {
         match kind {
@@ -55,16 +47,18 @@ impl Catalog {
         }
     }
 
-    /// The real screenshot and name of a Hall of fame subject, for example "hyprland".
-    /// Subjects are desktop or compositor ids.
-    pub fn subject_screenshot(&self, subject: &str) -> Option<(&str, &HostedScreenshot)> {
-        let desktop = self
-            .find_desktop(subject)
-            .and_then(|desktop| Some((desktop.name.as_str(), desktop.screenshot.as_ref()?)));
-        desktop.or_else(|| {
-            let compositor = self.find_compositor(subject)?;
-            Some((compositor.name.as_str(), compositor.screenshot.as_ref()?))
-        })
+    /// The screenshots for an item's gallery: its gallery, or else its one
+    /// real screenshot. Empty when it has neither.
+    pub fn gallery(&self, kind: ItemKind, id: &str) -> Vec<HostedScreenshot> {
+        let gallery = match kind {
+            ItemKind::Distro => self.find_distro(id).map(|item| &item.gallery),
+            ItemKind::Desktop => self.find_desktop(id).map(|item| &item.gallery),
+            ItemKind::Compositor => self.find_compositor(id).map(|item| &item.gallery),
+        };
+        match gallery {
+            Some(gallery) if !gallery.is_empty() => gallery.clone(),
+            _ => self.hosted_screenshot(kind, id).into_iter().cloned().collect(),
+        }
     }
 
     pub fn summary(&self, kind: ItemKind, id: &str) -> Option<ItemSummary<'_>> {

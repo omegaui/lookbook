@@ -13,8 +13,8 @@ use crate::http::shared_session;
 use crate::system::SystemInfo;
 use crate::wallpapers::fetch_texture;
 use crate::widgets::{
-    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, IsoPicture,
-    IsoScene, LogoTile, ShowcaseCard, ShowcaseContent, TileContent,
+    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, EdgePicture,
+    DesktopScene, LogoTile, ShowcaseCard, ShowcaseContent, TileContent,
 };
 
 const FEATURED_DESKTOP: &str = "gnome";
@@ -39,9 +39,9 @@ mod imp {
         #[template_child]
         pub featured_art: gtk::TemplateChild<gtk::Stack>,
         #[template_child]
-        pub featured_scene: gtk::TemplateChild<IsoScene>,
+        pub featured_scene: gtk::TemplateChild<DesktopScene>,
         #[template_child]
-        pub featured_picture: gtk::TemplateChild<IsoPicture>,
+        pub featured_picture: gtk::TemplateChild<EdgePicture>,
         #[template_child]
         pub toolkit_filter: gtk::TemplateChild<adw::ToggleGroup>,
         #[template_child]
@@ -58,8 +58,8 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
-            IsoScene::ensure_type();
-            IsoPicture::ensure_type();
+            DesktopScene::ensure_type();
+            EdgePicture::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }

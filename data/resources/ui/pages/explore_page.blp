@@ -16,7 +16,7 @@ template $ExplorePage: Adw.Bin {
         margin-bottom: 40;
         margin-start: 16;
         margin-end: 16;
-        // Hero: a short pitch next to a tilted strip of collection cards.
+        // Hero: a short pitch next to a strip of collection cards that runs off the edge.
         Box {
           styles [
             "hero",
@@ -100,16 +100,12 @@ template $ExplorePage: Adw.Bin {
             hexpand: true;
 
             child: Box collections_box {
-              styles [
-                "iso-plane",
-              ]
-
-              spacing: 28;
+              spacing: 20;
               halign: start;
               valign: center;
-              margin-top: 150;
-              margin-bottom: 10;
-              margin-start: 70;
+              margin-top: 40;
+              margin-bottom: 40;
+              margin-start: 16;
             };
           }
         }
@@ -220,31 +216,46 @@ template $ExplorePage: Adw.Bin {
         }
 
         // Hall of fame.
-        Box {
+        Box hall_of_fame_section {
           orientation: vertical;
           spacing: 16;
 
           Box {
-            orientation: vertical;
-            spacing: 4;
+            spacing: 12;
 
-            Label {
-              styles [
-                "title-2",
-              ]
+            Box {
+              orientation: vertical;
+              spacing: 4;
+              hexpand: true;
 
-              label: _("Hall of Fame");
-              xalign: 0;
+              Label {
+                styles [
+                  "title-2",
+                ]
+
+                label: _("Hall of Fame");
+                xalign: 0;
+              }
+
+              Label {
+                styles [
+                  "dim-label",
+                ]
+
+                label: _("Winners of Hyprland's ricing contests.");
+                xalign: 0;
+                wrap: true;
+              }
             }
 
-            Label {
+            Button hall_of_fame_button {
               styles [
-                "dim-label",
+                "flat",
               ]
 
-              label: _("Setups people are proud of.");
-              xalign: 0;
-              wrap: true;
+              label: _("See All");
+              tooltip-text: _("Open Hyprland's Hall of Fame in your browser");
+              valign: end;
             }
           }
 

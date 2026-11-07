@@ -115,19 +115,19 @@ template $ItemDetailPage: Adw.NavigationPage {
               StackPage {
                 name: "drawing";
 
-                child: $IsoScene scene {};
+                child: $DesktopScene scene {};
               }
 
               StackPage {
                 name: "screenshot";
 
-                child: $IsoPicture banner_picture {};
+                child: $EdgePicture banner_picture {};
               }
             }
           }
 
           // Screenshots first: looks are what people notice before features.
-          Box wall_section {
+          Box gallery_section {
             orientation: vertical;
             spacing: 16;
             visible: false;
@@ -137,15 +137,11 @@ template $ItemDetailPage: Adw.NavigationPage {
                 "title-2",
               ]
 
-              label: _("Hall of Fame");
+              label: _("Screenshots");
               xalign: 0;
             }
 
-            Grid wall_grid {
-              column-spacing: 12;
-              row-spacing: 12;
-              column-homogeneous: true;
-            }
+            $ScreenshotGallery gallery {}
           }
 
           Box {

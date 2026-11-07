@@ -14,7 +14,7 @@ use gtk::{gdk, glib};
 use crate::catalog::Catalog;
 use crate::ideas::{evaluate, CurrentSetup, IdeaStatus};
 use crate::system::SystemInfo;
-use crate::widgets::{fact_tile, fill_protocol_lists, Fact, IdeaCard, IsoStack, StackLayer};
+use crate::widgets::{fact_tile, fill_protocol_lists, Fact, IdeaCard, LayerStack, StackLayer};
 
 const SHOW_ALL: &str = "all";
 const SHOW_READY: &str = "ready";
@@ -42,7 +42,7 @@ mod imp {
         #[template_child]
         pub copy_button: gtk::TemplateChild<gtk::Button>,
         #[template_child]
-        pub stack: gtk::TemplateChild<IsoStack>,
+        pub stack: gtk::TemplateChild<LayerStack>,
         #[template_child]
         pub facts_flowbox: gtk::TemplateChild<gtk::FlowBox>,
         #[template_child]
@@ -73,7 +73,7 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
-            IsoStack::ensure_type();
+            LayerStack::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -175,8 +175,12 @@ impl SystemPage {
     fn show_stack(&self, catalog: &Catalog, system: &SystemInfo, setup: &CurrentSetup<'_>) {
         let distro = system.current_distro(catalog);
         let mut layers = vec![
-            layer(gettext("Hardware"), HARDWARE_COLOR, None),
-            layer(kernel_label(&system.hardware.kernel), KERNEL_COLOR, None),
+            layer(gettext("Hardware"), HARDWARE_COLOR, Some("computer-symbolic".to_owned())),
+            layer(
+                kernel_label(&system.hardware.kernel),
+                KERNEL_COLOR,
+                Some("lay-logo-linux-symbolic".to_owned()),
+            ),
             layer(
                 system.distro_name(),
                 distro.map_or(FALLBACK_COLOR, |distro| distro.color.as_str()),

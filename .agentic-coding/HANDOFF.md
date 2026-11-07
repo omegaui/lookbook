@@ -6,14 +6,15 @@ The app was called **Linux & You** until 2026-11-07, when the user renamed it **
 
 ## What the app is
 
-Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.Lookbook`, development ID `…Lookbook.Devel`). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors, a Hall of Fame of setups, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
+Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.Lookbook`, development ID `…Lookbook.Devel`, shown as "Lookbook (Devel)" in launchers). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors (each details page has a Screenshots gallery), a Hall of Fame of Hyprland's ricing contest winners, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
 
 ### Product rules from the user
 
 - **Free software. No ads, no paywall.** Never word ideas as "locked/unlocked"; use **Ready here** / **Works elsewhere**.
 - **GNOME is the primary target.** Follow GNOME HIG and libadwaita patterns.
 - **Looks first.** Screenshots and appearance attract people before features. Keep info short, not text-heavy.
-- **Game-like, isometric style** for artwork (tilted cards, slabs, drawn scenes).
+- **Flat, no isometric art** (changed 2026-11-07; the user found tilted cards and screenshots unappealing). Banner screenshots sit straight on and run off the banner's right and bottom edges, like GNOME Software's featured banners (`EdgePicture`, `edge.rs`). Drawn art is flat too.
+- **Screenshots, not a Hall of Fame, on details pages.** Every distro, desktop and compositor details page has a Screenshots gallery of real, good-looking screenshots. Explore's Hall of Fame shows the real winners of Hyprland's ricing contests.
 - **Data stays current without app releases.** App releases are for features only. The app reads the online catalog published by the Catalog workflow (see `catalog/README.md`).
 - **Wayland only.** No X11 fallback.
 - **Wallpapers are never redistributed.** They are read live from their sources (see Decisions).
@@ -41,8 +42,8 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 | `src/http.rs` | The libsoup session (User-Agent with a contact link), a shared session, GET helpers |
 | `src/wallpapers/` | Live wallpaper sources: libsoup HTTP, copyparty and WordPress adapters, the Wallpaper portal call |
 | `src/pages/` | Explore, Distros, Desktops, Compositors, Wallpapers, Your System, and the shared item details page |
-| `src/widgets/` | Cards (`CatalogCard`, `ShowcaseCard` for the Distros and Desktops galleries, `RiceCard`, release card, extension card, `IdeaCard`), `LogoTile`, isometric art (`IsoScene`, `IsoPicture`, `IsoStack`, `IsoTile`, `MiniDesktop`), `ScreenshotMock` (Hall of Fame; draws a real screenshot once loaded), `CoverPicture` (fixed-height cover image or video), spotlight cards (`SpotlightCard`, `WallpaperSpotlight`), dialogs (`RunCheckDialog`, `WallpaperDialog`), `NaturalWidthCap`, `content.rs` (catalog item → card text) |
-| `data/resources/catalog/catalog.json` | The catalog: distros, desktops, compositors (with protocol lists and screenshots), collections, spotlights, Hall of Fame, ideas (with `built_into`), protocols, wallpaper sources, release feeds (`news_sources`), rices. Bundled in the app and published online |
+| `src/widgets/` | Cards (`CatalogCard`, `ShowcaseCard` for the Distros and Desktops galleries, `RiceCard`, release card, extension card, `IdeaCard`, `ScreenshotCard` for Hall of Fame winners), `LogoTile`, `IconTile` (protocol cards), banner art (`EdgePicture`, `DesktopScene` drawn fallback, both placed by `edge.rs`), `MiniDesktop`, `LayerStack` (Your System), `ScreenshotGallery` (details pages), `ScreenshotPicture` (16:10 frame, cover or whole image), `CoverPicture` (fixed-height cover image or video), spotlight cards (`SpotlightCard`, `WallpaperSpotlight`), dialogs (`RunCheckDialog`, `WallpaperDialog`), `NaturalWidthCap`, `content.rs` (catalog item → card text) |
+| `data/resources/catalog/catalog.json` | The catalog: distros, desktops, compositors (with protocol lists, a main screenshot and a `gallery`), collections, spotlights, Hall of Fame (`hall_of_fame`, refreshed from the Hyprland website), ideas (with `built_into`), protocols, wallpaper sources, release feeds (`news_sources`), rices. Bundled in the app and published online |
 | `catalog/` | The publishing pipeline: `build.py` (refresh, check, publish), `test_build.py`, `sources.json`, `README.md` |
 | `.github/workflows/catalog.yml` | Builds and deploys the catalog to GitHub Pages daily, on catalog changes and by hand |
 | `data/icons/` | The app icon as PNGs in `hicolor/<size>/apps/` (a penguin coding at a desk), its Devel variant and the symbolic SVG, all generated by `.agentic-coding/design/icon/make_icon.py` from `source/penguin-at-desk.png` |
@@ -141,13 +142,14 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 
 - **Template callbacks need `swapped`.** In Blueprint, write `clicked => $handler() swapped;` for callbacks defined on the template class, or GTK passes the button as `self` and the app aborts.
 - **A Button inside a FlowBox gets the click**; `FlowBox::child-activated` never fires. Connect the button's own `clicked`.
-- **No `rotateX()` in GTK CSS for the isometric look.** It forces an offscreen pass that clips text. Use the flat equivalent `scale(1, 0.64) rotate(-28deg)`.
-- **A widget transform's `translate` happens inside the tilted plane.** To move a tilted card straight up on screen by 12px, use `translate(9px, -16px)`.
+- **No `rotateX()` in GTK CSS.** It forces an offscreen pass that clips text (only matters if tilted art ever comes back).
 - **AspectFrame inside a FlowBox collapses** to almost no height; use a fixed `height-request` with `content-fit: cover`.
 - **Six header tabs need about 980px**; the breakpoint at 1020sp moves them to the bottom bar. Adding a seventh tab means raising it.
 - **Hyprland and restored maximize**: GTK drew the window wider than its tile. Maximize is now restored only on stacking desktops.
 - **zsh**: `LINES` is a reserved variable; don't use it in shell scripts run through zsh. zsh also does not split an unquoted `$files` into words, so `sed -i … $files` gets one long name; pipe `git grep -lz` into `xargs -0` instead.
-- **gdk-pixbuf may not decode WebP**; ask copyparty for JPEG thumbnails (`th=j`).
+- **WebP decodes inside the app's sandbox** (glycin, GNOME 51), so hypr.land's `.webp` Hall of Fame shots load. It fails in a bare `flatpak run org.gnome.Sdk` shell, which is not a sign it fails in the app. Copyparty thumbnails still ask for JPEG (`th=j`).
+- **A newer downloaded catalog wins over the bundled one** (`online.rs` compares `generated_at`). After changing the catalog's shape, bump `generated_at` in the bundled file or a local build keeps showing the old online data until the workflow republishes.
+- **`git mv` and `git rm` stage at once**: a later `git commit` of other files takes them along. Commit only the paths you mean with `git commit -- <paths>`, or unstage first.
 - Rust's `Variant` boxes itself as `v` in tuples; build portal parameters with `glib::Variant::tuple_from_iter`.
 - **A FlowBox fits children by their natural width**, and a `Picture`'s natural width is its image's full width, so big screenshots give one card per row. Wrap the card in `NaturalWidthCap`.
 - **Widgets with a layout manager (like `adw::Bin`) never call their own `measure`.** Subclass `gtk::Widget` and lay out the child yourself when you need to change measuring.

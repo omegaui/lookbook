@@ -7,8 +7,8 @@ use gtk::{gio, glib};
 
 use gtk::glib::clone;
 
-use super::{screenshot_credit, ScreenshotMock};
-use crate::catalog::{HostedScreenshot, Screenshot};
+use super::ScreenshotPicture;
+use crate::catalog::{Contest, FamedRice};
 use crate::http::shared_session;
 use crate::wallpapers::fetch_texture;
 
@@ -19,14 +19,16 @@ mod imp {
     #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/screenshot_card.ui")]
     pub struct ScreenshotCard {
         #[template_child]
-        pub mock: gtk::TemplateChild<ScreenshotMock>,
+        pub picture: gtk::TemplateChild<ScreenshotPicture>,
+        #[template_child]
+        pub place_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub title_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub author_label: gtk::TemplateChild<gtk::Label>,
         pub link: RefCell<String>,
-        /// The real screenshot to load the first time the card is on screen.
-        pub hosted: RefCell<Option<HostedScreenshot>>,
+        /// The screenshot to load the first time the card is on screen.
+        pub image_url: RefCell<Option<String>>,
     }
 
     #[glib::object_subclass]
@@ -36,7 +38,7 @@ mod imp {
         type ParentType = gtk::Button;
 
         fn class_init(klass: &mut Self::Class) {
-            ScreenshotMock::ensure_type();
+            ScreenshotPicture::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -51,7 +53,7 @@ mod imp {
     impl WidgetImpl for ScreenshotCard {
         fn map(&self) {
             self.parent_map();
-            self.obj().load_hosted_screenshot();
+            self.obj().load_screenshot();
         }
     }
     impl ButtonImpl for ScreenshotCard {}
@@ -66,64 +68,48 @@ mod imp {
 }
 
 glib::wrapper! {
-    /// A Hall of fame entry. Clicking it opens the place with the best real
-    /// screenshots of that look, such as Hyprland's Hall of Fame.
+    /// A Hall of fame winner: its screenshot, place and author. Clicking it
+    /// opens the rice's dotfiles.
     pub struct ScreenshotCard(ObjectSubclass<imp::ScreenshotCard>)
         @extends gtk::Widget, gtk::Button,
         @implements gtk::Accessible, gtk::Actionable, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl ScreenshotCard {
-    pub fn new(screenshot: &Screenshot) -> Self {
+    pub fn new(contest: &Contest, rice: &FamedRice) -> Self {
         let card: Self = glib::Object::new();
-        card.show_screenshot(screenshot);
+        card.show_rice(contest, rice);
         card
     }
 
-    /// A Hall of fame entry with a real screenshot of `name`. The drawn look,
-    /// if any, shows until the image arrives; the caption credits the image.
-    pub fn with_hosted(screenshot: Option<&Screenshot>, name: &str, hosted: &HostedScreenshot, link: &str) -> Self {
-        let card: Self = glib::Object::new();
-        if let Some(screenshot) = screenshot {
-            card.show_screenshot(screenshot);
-        }
-        let imp = card.imp();
-        imp.title_label.set_label(name);
+    fn show_rice(&self, contest: &Contest, rice: &FamedRice) {
+        let imp = self.imp();
+        imp.title_label.set_label(&rice.name);
         imp.author_label
-            .set_label(&gettext("by {}").replace("{}", &hosted.credit));
-        imp.link.replace(link.to_owned());
-        imp.hosted.replace(Some(hosted.clone()));
-        card.set_tooltip_text(Some(&screenshot_credit(hosted)));
-        card.update_property(&[gtk::accessible::Property::Label(name)]);
-        card
+            .set_label(&gettext("by {}").replace("{}", &rice.author));
+        imp.place_label.set_label(&place_text(contest, rice));
+        imp.link.replace(rice.link.clone());
+        imp.image_url.replace(Some(rice.image.clone()));
+
+        self.set_tooltip_text(Some(&credit_text(contest, rice)));
+        self.update_property(&[gtk::accessible::Property::Label(&rice.name)]);
     }
 
-    /// Takes the screenshot out of the card, so it loads only once.
-    fn load_hosted_screenshot(&self) {
-        let Some(hosted) = self.imp().hosted.take() else {
+    /// Takes the address out of the card, so the screenshot loads only once.
+    fn load_screenshot(&self) {
+        let Some(url) = self.imp().image_url.take() else {
             return;
         };
         glib::spawn_future_local(clone!(
             #[weak(rename_to = card)]
             self,
             async move {
-                match fetch_texture(&shared_session(), &hosted.url).await {
-                    Ok(texture) => card.imp().mock.set_texture(&texture),
+                match fetch_texture(&shared_session(), &url).await {
+                    Ok(texture) => card.imp().picture.set_texture(&texture),
                     Err(error) => tracing::warn!("Could not load a Hall of Fame screenshot: {error:#}"),
                 }
             }
         ));
-    }
-
-    fn show_screenshot(&self, screenshot: &Screenshot) {
-        let imp = self.imp();
-        imp.mock.set_look(&screenshot.mock);
-        imp.title_label.set_label(&screenshot.title);
-        imp.author_label.set_label(&screenshot.author);
-        imp.link.replace(screenshot.link.clone());
-
-        self.set_tooltip_text(Some(&gettext("See more setups like this")));
-        self.update_property(&[gtk::accessible::Property::Label(&screenshot.title)]);
     }
 
     fn open_link(&self) {
@@ -135,5 +121,35 @@ impl ScreenshotCard {
                 tracing::warn!("Could not open the Hall of fame link: {error}");
             }
         });
+    }
+}
+
+/// For example "#1 · Moon, June 2026".
+fn place_text(contest: &Contest, rice: &FamedRice) -> String {
+    gettext("{place} · {contest}, {date}")
+        .replace("{place}", short_place(&rice.place))
+        .replace("{contest}", &contest.name)
+        .replace("{date}", &contest.date)
+}
+
+/// "#2 (ex aequo)" becomes "#2"; the pill has little room.
+fn short_place(place: &str) -> &str {
+    place.split_whitespace().next().unwrap_or(place)
+}
+
+fn credit_text(contest: &Contest, rice: &FamedRice) -> String {
+    gettext("Screenshot by {author}, from Hyprland's {contest} ricing contest. Click to see the dotfiles.")
+        .replace("{author}", &rice.author)
+        .replace("{contest}", &contest.name)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ties_drop_the_note() {
+        assert_eq!(short_place("#2 (ex aequo)"), "#2");
+        assert_eq!(short_place("#1"), "#1");
     }
 }

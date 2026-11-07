@@ -5,7 +5,8 @@ The hand-written catalog lives in data/resources/catalog/catalog.json; the app
 bundles that file as its fallback. This script:
 
 1. refreshes data that changes upstream (each compositor's Wayland protocols,
-   from wayland-explorer), never moving a compositor back to older data;
+   from wayland-explorer, and the Hall of Fame, from the Hyprland website's
+   list of ricing contest winners), never moving back to older data;
 2. checks that every hosted screenshot still loads, and drops the ones that
    are gone;
 3. checks that every reference in the catalog points at something real;
@@ -24,6 +25,7 @@ import datetime
 import hashlib
 import json
 import os
+import re
 import string
 import sys
 import urllib.error
@@ -80,6 +82,12 @@ def fetch_json(url):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
         return json.load(response)
+
+
+def fetch_text(url):
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+        return response.read().decode("utf-8")
 
 
 def media_status(url):
@@ -145,14 +153,115 @@ def day_from_milliseconds(milliseconds):
     return moment.date().isoformat()
 
 
+# Step 1b: Hall of Fame
+
+
+def refresh_hall_of_fame(catalog, config, report, fetch=fetch_text):
+    """Updates the Hall of Fame from the Hyprland website's list of contest winners."""
+    source = config["hyprland_hall_of_fame"]
+    try:
+        contests = parse_hall_of_fame(fetch(source["url"]), source["image_base"], source["page"])
+    except Exception as error:  # noqa: BLE001 - any failure keeps the old data
+        report.warn(f"Hall of Fame: could not read the Hyprland website's contests ({error})")
+        return
+    apply_hall_of_fame(catalog["hall_of_fame"], contests, report)
+
+
+def apply_hall_of_fame(hall_of_fame, contests, report):
+    current = hall_of_fame["contests"]
+    if len(contests) < len(current):
+        report.warn(f"Hall of Fame: the Hyprland website lists {len(contests)} contests, down from {len(current)}; kept the old list")
+        return
+    if contests == current:
+        return
+    rice_count = sum(len(contest["rices"]) for contest in contests)
+    report.change(f"Hall of Fame: {len(contests)} contests, {rice_count} rices")
+    hall_of_fame["contests"] = contests
+
+
+def parse_hall_of_fame(source, image_base, page):
+    """Reads the contests from the website's rices.ts, newest first.
+
+    The file is a TypeScript list of contest objects, each with a name, number,
+    date and a `rices: [...]` list of flat objects. Splitting at each `rices: [`
+    gives one contest's header, then its rices followed by the next header.
+    """
+    start = source.find("export const contests")
+    if start < 0:
+        raise ValueError("no contests list in the file")
+    parts = re.split(r"\brices:\s*\[", source[start:])
+
+    contests = []
+    header = parts[0]
+    for part in parts[1:]:
+        rices_text, next_header = split_at_list_end(part)
+        contests.append(contest_from(header, rices_text, image_base, page))
+        header = next_header
+
+    if not contests:
+        raise ValueError("no contests found")
+    return sorted(contests, key=lambda contest: contest["number"], reverse=True)
+
+
+def split_at_list_end(text):
+    """Splits "rice objects ] } , next contest..." where the rices list ends."""
+    end = re.search(r"\]\s*\}", text)
+    if not end:
+        raise ValueError("a rices list never ends")
+    return text[: end.start()], text[end.end() :]
+
+
+def contest_from(header, rices_text, image_base, page):
+    rices = [rice_from(body, image_base, page) for body in re.findall(r"\{([^{}]*)\}", rices_text)]
+    if not rices:
+        raise ValueError("a contest has no rices")
+    return {
+        "name": text_field(header, "name"),
+        "number": int(number_field(header, "number")),
+        "date": text_field(header, "date"),
+        "rices": rices,
+    }
+
+
+def rice_from(body, image_base, page):
+    thumbnail = text_field(body, "thumbnail")
+    link = text_field(body, "dotfilesLink")
+    return {
+        "name": text_field(body, "name"),
+        "author": text_field(body, "creator"),
+        "place": text_field(body, "pretitel"),
+        "image": image_base + thumbnail if thumbnail.startswith("/") else thumbnail,
+        # Some winners never shared their dotfiles ("#"); link to the Hall of Fame then.
+        "link": link if link.startswith(("https://", "http://")) else page,
+    }
+
+
+def text_field(text, key):
+    match = re.search(rf"\b{key}:\s*(['\"`])((?:\\.|(?!\1).)*)\1", text, re.S)
+    if not match:
+        raise ValueError(f"no {key} field")
+    return re.sub(r"\\(.)", r"\1", match.group(2)).strip()
+
+
+def number_field(text, key):
+    match = re.search(rf"\b{key}:\s*(\d+)", text)
+    if not match:
+        raise ValueError(f"no {key} field")
+    return match.group(1)
+
+
 # Step 2: hosted media
 
 
 def check_hosted_media(catalog, report, status_of=media_status):
-    """Drops screenshots that are gone. Rice previews only warn: the card still works."""
+    """Drops screenshots, gallery images and Hall of Fame rices that are gone.
+    Rice previews only warn: the card still works."""
     screenshots = list(hosted_screenshots(catalog))
+    gallery = [shot["url"] for item in catalog_items(catalog) for shot in item.get("gallery", [])]
     previews = [(rice["name"], rice["preview"]["url"]) for rice in catalog.get("rices", [])]
-    statuses = {url: status_of(url) for url in {url for _, _, url in screenshots} | {url for _, url in previews}}
+    famed = [rice["image"] for contest in catalog["hall_of_fame"]["contests"] for rice in contest["rices"]]
+    urls = {url for _, _, url in screenshots} | set(gallery) | {url for _, url in previews} | set(famed)
+    statuses = {url: status_of(url) for url in urls}
 
     gone = [url for url, status in statuses.items() if status == "gone"]
     if statuses and len(gone) / len(statuses) > MAX_MISSING_MEDIA_SHARE:
@@ -165,13 +274,39 @@ def check_hosted_media(catalog, report, status_of=media_status):
     for name, url in previews:
         if statuses[url] == "gone":
             report.warn(f"rice {name}: preview is gone ({url})")
+    drop_gone_gallery_images(catalog, statuses, report)
+    drop_gone_famed_rices(catalog["hall_of_fame"], statuses, report)
+
+
+def drop_gone_gallery_images(catalog, statuses, report):
+    for item in catalog_items(catalog):
+        for shot in item.get("gallery", []):
+            if statuses[shot["url"]] == "gone":
+                report.change(f"{item['name']}: dropped a gallery image, which is gone ({shot['url']})")
+        if "gallery" in item:
+            item["gallery"] = [shot for shot in item["gallery"] if statuses[shot["url"]] != "gone"]
+
+
+def drop_gone_famed_rices(hall_of_fame, statuses, report):
+    for contest in hall_of_fame["contests"]:
+        kept = [rice for rice in contest["rices"] if statuses.get(rice["image"]) != "gone"]
+        for rice in contest["rices"]:
+            if rice not in kept:
+                report.change(f"Hall of Fame: dropped {rice['name']}, whose screenshot is gone ({rice['image']})")
+        contest["rices"] = kept
+    hall_of_fame["contests"] = [contest for contest in hall_of_fame["contests"] if contest["rices"]]
 
 
 def hosted_screenshots(catalog):
+    for item in catalog_items(catalog):
+        if "screenshot" in item:
+            yield item, item["name"], item["screenshot"]["url"]
+
+
+def catalog_items(catalog):
+    """Every distro, desktop and compositor."""
     for kind in ("distros", "desktops", "compositors"):
-        for item in catalog[kind]:
-            if "screenshot" in item:
-                yield item, item["name"], item["screenshot"]["url"]
+        yield from catalog[kind]
 
 
 # Step 3: checks
@@ -191,10 +326,11 @@ def validate(catalog):
 
     check_spotlights(catalog, ids, wallpaper_sources, problems)
     check_collections(catalog, ids, problems)
-    check_hall_of_fame(catalog, ids, problems)
+    check_hall_of_fame(catalog, problems)
     check_ideas(catalog, ids, problems)
     check_rices(catalog, ids, problems)
     check_logos(catalog, problems)
+    check_galleries(catalog, problems)
     return problems
 
 
@@ -228,10 +364,15 @@ def check_collections(catalog, ids, problems):
                 problems.append(f"collection {collection['title']} lists unknown {collection['kind']} {member}")
 
 
-def check_hall_of_fame(catalog, ids, problems):
-    for screenshot in catalog["screenshots"]:
-        if screenshot["subject"] not in ids["desktops"] | ids["compositors"]:
-            problems.append(f"Hall of Fame entry {screenshot['title']} shows unknown {screenshot['subject']}")
+def check_hall_of_fame(catalog, problems):
+    contests = catalog.get("hall_of_fame", {}).get("contests", [])
+    if not contests:
+        problems.append("the Hall of Fame has no contests")
+    for contest in contests:
+        for rice in contest["rices"]:
+            for key in ("image", "link"):
+                if not rice[key].startswith("https://"):
+                    problems.append(f"Hall of Fame rice {rice['name']}: {key} is not an https link")
 
 
 def check_ideas(catalog, ids, problems):
@@ -253,6 +394,19 @@ def check_rices(catalog, ids, problems):
         for compositor in rice["compositors"]:
             if compositor not in ids["compositors"]:
                 problems.append(f"rice {rice['id']} runs on unknown compositor {compositor}")
+
+
+def check_galleries(catalog, problems):
+    """Gallery images load live from their hosts, so each needs an https link,
+    the page that holds its license, and a credit."""
+    for item in catalog_items(catalog):
+        for shot in item.get("gallery", []):
+            for key in ("url", "page"):
+                if not shot.get(key, "").startswith("https://"):
+                    problems.append(f"{item['id']}: a gallery image has no https {key}")
+            for key in ("credit", "license"):
+                if not shot.get(key):
+                    problems.append(f"{item['id']}: a gallery image has no {key}")
 
 
 def check_logos(catalog, problems):
@@ -321,6 +475,7 @@ def main():
 
     if not args.offline:
         refresh_protocols(catalog, config, report)
+        refresh_hall_of_fame(catalog, config, report)
         check_hosted_media(catalog, report)
 
     problems = validate(catalog)

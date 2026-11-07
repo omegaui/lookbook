@@ -16,6 +16,7 @@ blueprints = custom_target(
     'ui/widgets/rice_card.blp',
     'ui/widgets/run_check_dialog.blp',
     'ui/widgets/screenshot_card.blp',
+    'ui/widgets/screenshot_gallery.blp',
     'ui/widgets/spotlight_card.blp',
     'ui/widgets/wallpaper_card.blp',
     'ui/widgets/wallpaper_dialog.blp',

@@ -92,11 +92,11 @@ template $WallpaperSpotlight: Box {
     }
   }
 
-  // The wallpaper itself, laid on the floor like a thick tile.
+  // The wallpaper itself, running off the right and bottom edges.
   Overlay {
     hexpand: true;
 
-    child: $IsoPicture picture {};
+    child: $EdgePicture picture {};
 
     [overlay]
     Adw.Spinner spinner {

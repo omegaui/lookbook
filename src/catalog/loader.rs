@@ -79,6 +79,18 @@ mod tests {
         }
     }
 
+    #[test]
+    fn hall_of_fame_starts_with_the_newest_winner() {
+        let catalog = bundled_catalog();
+        let newest = catalog.hall_of_fame.newest(5);
+        assert_eq!(newest.len(), 5);
+
+        let (contest, rice) = newest[0];
+        let latest = catalog.hall_of_fame.contests.iter().map(|contest| contest.number).max();
+        assert_eq!(Some(contest.number), latest);
+        assert_eq!(rice.place, "#1");
+    }
+
     fn catalog_logos(catalog: &Catalog) -> Vec<&str> {
         let distros = catalog.distros.iter().filter_map(|item| item.logo.as_deref());
         let desktops = catalog.desktops.iter().filter_map(|item| item.logo.as_deref());

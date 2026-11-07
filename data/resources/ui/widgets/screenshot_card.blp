@@ -12,8 +12,24 @@ template $ScreenshotCard: Button {
     orientation: vertical;
     spacing: 8;
 
-    $ScreenshotMock mock {
+    Overlay {
       vexpand: true;
+
+      $ScreenshotPicture picture {
+        vexpand: true;
+      }
+
+      [overlay]
+      Label place_label {
+        styles [
+          "place-pill",
+        ]
+
+        halign: start;
+        valign: start;
+        margin-start: 10;
+        margin-top: 10;
+      }
     }
 
     Box {

@@ -10,7 +10,9 @@ pub struct Catalog {
     /// The last spotlight: a wallpaper picked live from one source.
     #[serde(default)]
     pub wallpaper_spotlight: Option<WallpaperSpotlight>,
-    pub screenshots: Vec<Screenshot>,
+    /// Winners of Hyprland's ricing contests, newest contest first.
+    #[serde(default)]
+    pub hall_of_fame: HallOfFame,
     pub distros: Vec<Distro>,
     pub desktops: Vec<Desktop>,
     pub compositors: Vec<Compositor>,
@@ -232,7 +234,7 @@ impl Accent {
     }
 }
 
-/// A themed group of items, shown on the tilted cards at the top of Explore.
+/// A themed group of items, shown on the cards at the top of Explore.
 #[derive(Debug, Clone, Deserialize)]
 pub struct Collection {
     pub title: String,
@@ -258,40 +260,46 @@ pub struct WallpaperSpotlight {
     pub accent: Accent,
 }
 
-/// A Hall of fame entry. Until real screenshots are in the catalog, each one
-/// carries the colors for a drawn mock-up.
+/// The Hall of fame: winners of Hyprland's ricing contests, read from the
+/// Hyprland website. Their screenshots stay on hypr.land.
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct HallOfFame {
+    /// Hyprland's Hall of Fame page, with every contest.
+    pub page: String,
+    pub contests: Vec<Contest>,
+}
+
+/// One ricing contest, for example "Moon" in June 2026.
 #[derive(Debug, Clone, Deserialize)]
-pub struct Screenshot {
-    pub title: String,
+pub struct Contest {
+    pub name: String,
+    pub number: u32,
+    pub date: String,
+    pub rices: Vec<FamedRice>,
+}
+
+/// A winning rice: its screenshot, author, place and dotfiles.
+#[derive(Debug, Clone, Deserialize)]
+pub struct FamedRice {
+    pub name: String,
     pub author: String,
-    pub subject: String,
-    /// Where the best real screenshots of this look live, for example
-    /// Hyprland's Hall of Fame page.
+    /// For example "#1" or "#2 (ex aequo)".
+    pub place: String,
+    pub image: String,
+    /// The rice's dotfiles, or the Hall of Fame page when they were never shared.
     pub link: String,
-    pub mock: MockLook,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum MockLayout {
-    /// Tiled windows under a top bar, like Hyprland or sway.
-    Tiled,
-    /// Floating windows, a top bar and a dock, like GNOME.
-    Floating,
-    /// Floating windows over a full-width bottom panel, like KDE Plasma.
-    Panel,
-}
-
-#[derive(Debug, Clone, Deserialize)]
-pub struct MockLook {
-    pub layout: MockLayout,
-    pub wallpaper: String,
-    pub glow: String,
-    pub bar: String,
-    pub window: String,
-    pub title_bar: String,
-    pub accent: String,
-    pub text: String,
+impl HallOfFame {
+    /// The first `count` winners, newest contest first and best place first,
+    /// each with its contest.
+    pub fn newest(&self, count: usize) -> Vec<(&Contest, &FamedRice)> {
+        self.contests
+            .iter()
+            .flat_map(|contest| contest.rices.iter().map(move |rice| (contest, rice)))
+            .take(count)
+            .collect()
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
@@ -377,6 +385,9 @@ pub struct Distro {
     pub nvidia_note: Option<String>,
     /// A real screenshot, loaded live from where it is hosted.
     pub screenshot: Option<HostedScreenshot>,
+    /// Screenshots for the details page's gallery, best first.
+    #[serde(default)]
+    pub gallery: Vec<HostedScreenshot>,
 }
 
 /// One of a distro's package repositories as Repology names it.
@@ -420,6 +431,9 @@ pub struct Desktop {
     pub repology: Option<String>,
     /// A real screenshot, loaded live from where it is hosted.
     pub screenshot: Option<HostedScreenshot>,
+    /// Screenshots for the details page's gallery, best first.
+    #[serde(default)]
+    pub gallery: Vec<HostedScreenshot>,
 }
 
 /// A screenshot the app shows from its host, never bundled, with its credit.
@@ -431,6 +445,9 @@ pub struct HostedScreenshot {
     pub page: String,
     pub credit: String,
     pub license: String,
+    /// What the screenshot shows, for example "Activities overview".
+    #[serde(default)]
+    pub caption: Option<String>,
 }
 
 /// A bar a desktop shows by default.
@@ -526,6 +543,9 @@ pub struct Compositor {
     pub nvidia_note: Option<String>,
     /// A real screenshot, loaded live from where it is hosted.
     pub screenshot: Option<HostedScreenshot>,
+    /// Screenshots for the details page's gallery, best first.
+    #[serde(default)]
+    pub gallery: Vec<HostedScreenshot>,
 }
 
 impl Compositor {

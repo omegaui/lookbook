@@ -5,7 +5,7 @@ use gtk::glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
-use super::{chip_label, screenshot_credit, IsoPicture, IsoScene, LogoTile, SpotlightContent};
+use super::{chip_label, screenshot_credit, EdgePicture, DesktopScene, LogoTile, SpotlightContent};
 use crate::catalog::HostedScreenshot;
 use crate::http::shared_session;
 use crate::wallpapers::fetch_texture;
@@ -33,9 +33,9 @@ mod imp {
         #[template_child]
         pub art_stack: gtk::TemplateChild<gtk::Stack>,
         #[template_child]
-        pub scene: gtk::TemplateChild<IsoScene>,
+        pub scene: gtk::TemplateChild<DesktopScene>,
         #[template_child]
-        pub picture: gtk::TemplateChild<IsoPicture>,
+        pub picture: gtk::TemplateChild<EdgePicture>,
         /// Taken out when it starts loading, so it loads only once.
         pub screenshot: RefCell<Option<HostedScreenshot>>,
     }
@@ -48,8 +48,8 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
-            IsoScene::ensure_type();
-            IsoPicture::ensure_type();
+            DesktopScene::ensure_type();
+            EdgePicture::ensure_type();
             klass.bind_template();
         }
 

@@ -16,10 +16,10 @@ use crate::system::SystemInfo;
 use crate::http::shared_session;
 use crate::wallpapers::{fetch_texture, new_session};
 use crate::widgets::{
-    chip_label, extension_card, fact_tile, feature_check, fill_protocol_lists, fill_wall_grid,
-    fill_with_cards, open_details_on_activate, screenshot_credit, CardBadge, CardContent,
-    CatalogCard, DetailContent, IdeaCard, IsoPicture, IsoScene, LogoTile, ProtocolSummary,
-    RiceCard, ScreenshotCard,
+    chip_label, extension_card, fact_tile, feature_check, fill_protocol_lists,
+    open_details_on_activate, screenshot_credit, CardBadge, CardContent, CatalogCard,
+    DetailContent, IdeaCard, EdgePicture, DesktopScene, LogoTile, ProtocolSummary, RiceCard,
+    ScreenshotGallery,
 };
 
 const TILE_SIZE: i32 = 96;
@@ -48,7 +48,7 @@ mod imp {
         #[template_child]
         pub banner_art: gtk::TemplateChild<gtk::Stack>,
         #[template_child]
-        pub banner_picture: gtk::TemplateChild<IsoPicture>,
+        pub banner_picture: gtk::TemplateChild<EdgePicture>,
         #[template_child]
         pub badge_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
@@ -56,11 +56,11 @@ mod imp {
         #[template_child]
         pub chips_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
-        pub scene: gtk::TemplateChild<IsoScene>,
+        pub scene: gtk::TemplateChild<DesktopScene>,
         #[template_child]
-        pub wall_section: gtk::TemplateChild<gtk::Box>,
+        pub gallery_section: gtk::TemplateChild<gtk::Box>,
         #[template_child]
-        pub wall_grid: gtk::TemplateChild<gtk::Grid>,
+        pub gallery: gtk::TemplateChild<ScreenshotGallery>,
         #[template_child]
         pub facts_title_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
@@ -112,8 +112,9 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
-            IsoScene::ensure_type();
-            IsoPicture::ensure_type();
+            DesktopScene::ensure_type();
+            EdgePicture::ensure_type();
+            ScreenshotGallery::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -194,25 +195,16 @@ impl ItemDetailPage {
         label.set_visible(true);
     }
 
-    /// The Hall of fame: the catalog's entries for this item, or else its real
-    /// screenshot on its own. Hidden when there is neither.
+    /// The Screenshots gallery. Hidden when the item has no screenshot.
     fn show_screenshots(&self, content: &DetailContent, catalog: &Catalog) {
         let imp = self.imp();
-        let screenshots = catalog.screenshots_of(&content.item.id);
-        let hosted = catalog.hosted_screenshot(content.item.kind, &content.item.id);
-
-        if !screenshots.is_empty() {
-            fill_wall_grid(&imp.wall_grid, &screenshots, catalog);
-        } else if let Some(hosted) = hosted {
-            let card = ScreenshotCard::with_hosted(None, &content.title, hosted, &content.website);
-            fill_with_cards(&imp.wall_grid, &[card]);
-        }
-        imp.wall_section
-            .set_visible(!screenshots.is_empty() || hosted.is_some());
+        let screenshots = catalog.gallery(content.item.kind, &content.item.id);
+        imp.gallery.set_screenshots(&screenshots);
+        imp.gallery_section.set_visible(!screenshots.is_empty());
     }
 
-    /// Swaps the banner's drawn scene for the item's real screenshot, laid on
-    /// the same floor, once it loads.
+    /// Swaps the banner's drawn scene for the item's real screenshot, in the
+    /// same place, once it loads.
     fn load_banner_screenshot(&self, hosted: Option<&HostedScreenshot>) {
         let Some(hosted) = hosted.cloned() else {
             return;

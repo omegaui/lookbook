@@ -1,8 +1,7 @@
-//! An isometric desktop scene for the spotlight carousel: a floor slab with
-//! app windows standing on it, laid out the way the featured item arranges them.
-//!
-//! The scene is drawn on a floor seen from above: turned by -28° and flattened
-//! to 64% height. That is a flat 2D transform, so text-free shapes stay sharp.
+//! A drawn desktop for banners whose item has no real screenshot yet: a
+//! wallpaper in the item's color with app windows on it, laid out the way the
+//! item arranges them. Seen straight on, it runs off the right and bottom edges
+//! like the real screenshots do.
 
 use std::cell::Cell;
 
@@ -10,10 +9,10 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gdk, glib, graphene, gsk};
 
-use super::iso::{apply_floor_transform, screen_drop_in_floor};
+use super::edge::{design_width, drop_shadow, screen_rect};
 use crate::catalog::Accent;
 
-/// How the windows sit on the floor.
+/// How the windows sit on the desktop.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum SceneLayout {
     /// Columns on an endless strip, like niri.
@@ -27,17 +26,14 @@ pub enum SceneLayout {
     Panel,
 }
 
-const FLOOR_THICKNESS: f32 = 14.0;
-const WINDOW_THICKNESS: f32 = 8.0;
 const WINDOW_RADIUS: f32 = 12.0;
+const FLOOR_RADIUS: f32 = 16.0;
 const TITLE_BAR_HEIGHT: f32 = 18.0;
 
 const LIGHT_FACE: gdk::RGBA = rgb(0xfa, 0xfa, 0xfb);
 const LIGHT_TITLE: gdk::RGBA = rgb(0xeb, 0xeb, 0xed);
-const LIGHT_EDGE: gdk::RGBA = rgb(0xb0, 0xaf, 0xb5);
 const DARK_FACE: gdk::RGBA = rgb(0x24, 0x1f, 0x31);
 const DARK_TITLE: gdk::RGBA = rgb(0x3d, 0x38, 0x46);
-const DARK_EDGE: gdk::RGBA = rgb(0x0d, 0x0b, 0x12);
 const GRAY_LINE: gdk::RGBA = rgb(0xde, 0xdd, 0xda);
 const SOFT_GRAY: gdk::RGBA = rgb(0xf0, 0xf0, 0xf3);
 const TERMINAL_GREEN: gdk::RGBA = rgb(0x57, 0xe3, 0x89);
@@ -66,36 +62,35 @@ const fn rgb(red: u8, green: u8, blue: u8) -> gdk::RGBA {
     gdk::RGBA::new(red as f32 / 255.0, green as f32 / 255.0, blue as f32 / 255.0, 1.0)
 }
 
-/// Colors from the GNOME palette for one accent: the accent itself, the floor, the floor's edge.
+/// Colors from the GNOME palette for one accent: the accent itself and a
+/// lighter tint for the top of the wallpaper.
 #[derive(Debug, Clone, Copy)]
 struct ScenePalette {
     accent: gdk::RGBA,
     floor: gdk::RGBA,
-    floor_edge: gdk::RGBA,
 }
 
 impl ScenePalette {
-    /// Builds the floor from any brand color: a lighter top and a darker edge.
+    /// Builds the wallpaper from any brand color: lighter at the top.
     fn from_color(color: gdk::RGBA) -> Self {
         Self {
             accent: color,
             floor: mix(color, gdk::RGBA::WHITE, 0.45),
-            floor_edge: mix(color, gdk::RGBA::BLACK, 0.3),
         }
     }
 
     fn for_accent(accent: Accent) -> Self {
-        let (accent, floor, floor_edge) = match accent {
-            Accent::Blue => (rgb(0x35, 0x84, 0xe4), rgb(0x62, 0xa0, 0xea), rgb(0x1a, 0x5f, 0xb4)),
-            Accent::Green => (rgb(0x2e, 0xc2, 0x7e), rgb(0x8f, 0xf0, 0xa4), rgb(0x26, 0xa2, 0x69)),
-            Accent::Yellow => (rgb(0xe5, 0xa5, 0x0a), rgb(0xf9, 0xf0, 0x6b), rgb(0xc8, 0x88, 0x00)),
-            Accent::Orange => (rgb(0xe6, 0x61, 0x00), rgb(0xff, 0xa3, 0x48), rgb(0xc6, 0x46, 0x00)),
-            Accent::Red => (rgb(0xe0, 0x1b, 0x24), rgb(0xf6, 0x61, 0x51), rgb(0xa5, 0x1d, 0x2d)),
-            Accent::Purple => (rgb(0x81, 0x3d, 0x9c), rgb(0xc0, 0x61, 0xcb), rgb(0x61, 0x35, 0x83)),
-            Accent::Brown => (rgb(0x86, 0x5e, 0x3c), rgb(0xcd, 0xab, 0x8f), rgb(0x63, 0x45, 0x2c)),
-            Accent::Dark => (rgb(0x3d, 0x38, 0x46), rgb(0x77, 0x76, 0x7b), rgb(0x24, 0x1f, 0x31)),
+        let (accent, floor) = match accent {
+            Accent::Blue => (rgb(0x35, 0x84, 0xe4), rgb(0x62, 0xa0, 0xea)),
+            Accent::Green => (rgb(0x2e, 0xc2, 0x7e), rgb(0x8f, 0xf0, 0xa4)),
+            Accent::Yellow => (rgb(0xe5, 0xa5, 0x0a), rgb(0xf9, 0xf0, 0x6b)),
+            Accent::Orange => (rgb(0xe6, 0x61, 0x00), rgb(0xff, 0xa3, 0x48)),
+            Accent::Red => (rgb(0xe0, 0x1b, 0x24), rgb(0xf6, 0x61, 0x51)),
+            Accent::Purple => (rgb(0x81, 0x3d, 0x9c), rgb(0xc0, 0x61, 0xcb)),
+            Accent::Brown => (rgb(0x86, 0x5e, 0x3c), rgb(0xcd, 0xab, 0x8f)),
+            Accent::Dark => (rgb(0x3d, 0x38, 0x46), rgb(0x77, 0x76, 0x7b)),
         };
-        Self { accent, floor, floor_edge }
+        Self { accent, floor }
     }
 }
 
@@ -109,7 +104,7 @@ enum WindowKind {
     Music,
 }
 
-/// One window on the floor, in floor coordinates.
+/// One window on the desktop, in scene units.
 #[derive(Debug, Clone, Copy)]
 struct WindowSpec {
     rect: graphene::Rect,
@@ -133,31 +128,31 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default)]
-    pub struct IsoScene {
+    pub struct DesktopScene {
         pub layout: Cell<SceneLayout>,
         pub(super) palette: Cell<Option<ScenePalette>>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for IsoScene {
-        const NAME: &'static str = "IsoScene";
-        type Type = super::IsoScene;
+    impl ObjectSubclass for DesktopScene {
+        const NAME: &'static str = "DesktopScene";
+        type Type = super::DesktopScene;
         type ParentType = gtk::Widget;
 
         fn class_init(klass: &mut Self::Class) {
-            klass.set_css_name("isoscene");
+            klass.set_css_name("desktopscene");
             klass.set_accessible_role(gtk::AccessibleRole::Presentation);
         }
     }
 
-    impl ObjectImpl for IsoScene {
+    impl ObjectImpl for DesktopScene {
         fn constructed(&self) {
             self.parent_constructed();
             self.obj().set_overflow(gtk::Overflow::Hidden);
         }
     }
 
-    impl WidgetImpl for IsoScene {
+    impl WidgetImpl for DesktopScene {
         /// It can shrink to nothing; the scene is cropped, never squeezed.
         fn measure(&self, orientation: gtk::Orientation, _for_size: i32) -> (i32, i32, i32, i32) {
             match orientation {
@@ -171,15 +166,12 @@ mod imp {
                 .palette
                 .get()
                 .unwrap_or_else(|| ScenePalette::for_accent(Accent::Blue));
-            let widget = self.obj();
-            let width = widget.width() as f32;
-            let height = widget.height() as f32;
+            let layout = self.layout.get();
 
             snapshot.save();
-            snapshot.translate(&graphene::Point::new(width * 0.06, height * 0.58));
-            apply_floor_transform(snapshot);
+            place_on_screen(snapshot, layout, self.obj().width() as f32);
 
-            match self.layout.get() {
+            match layout {
                 SceneLayout::Scrolling => draw_scrolling_scene(snapshot, &palette),
                 SceneLayout::Tiling => draw_tiling_scene(snapshot, &palette),
                 SceneLayout::Floating => draw_floating_scene(snapshot, &palette),
@@ -192,12 +184,12 @@ mod imp {
 }
 
 glib::wrapper! {
-    pub struct IsoScene(ObjectSubclass<imp::IsoScene>)
+    pub struct DesktopScene(ObjectSubclass<imp::DesktopScene>)
         @extends gtk::Widget,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl IsoScene {
+impl DesktopScene {
     pub fn set_scene(&self, layout: SceneLayout, accent: Accent) {
         self.show(layout, ScenePalette::for_accent(accent));
     }
@@ -216,9 +208,31 @@ impl IsoScene {
     }
 }
 
+/// The wallpaper each layout draws its windows on, in scene units.
+fn floor_rect(layout: SceneLayout) -> graphene::Rect {
+    match layout {
+        // A long strip that runs off the edge.
+        SceneLayout::Scrolling => graphene::Rect::new(-160.0, -30.0, 1200.0, 300.0),
+        SceneLayout::Tiling => graphene::Rect::new(0.0, -40.0, 640.0, 400.0),
+        SceneLayout::Floating | SceneLayout::Panel => graphene::Rect::new(0.0, -60.0, 640.0, 400.0),
+    }
+}
+
+/// Moves and scales scene units so the wallpaper lands where real screenshots go.
+fn place_on_screen(snapshot: &gtk::Snapshot, layout: SceneLayout, width: f32) {
+    let screen = screen_rect(width);
+    let floor = floor_rect(layout);
+    let scale = screen.width() / design_width();
+    snapshot.translate(&graphene::Point::new(
+        screen.x() - floor.x() * scale,
+        screen.y() - floor.y() * scale,
+    ));
+    snapshot.scale(scale, scale);
+}
+
 /// niri: windows in columns along a long strip that runs off the edge.
 fn draw_scrolling_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
-    draw_floor(snapshot, palette, graphene::Rect::new(-160.0, -30.0, 1200.0, 300.0));
+    draw_floor(snapshot, palette, floor_rect(SceneLayout::Scrolling));
 
     let windows = [
         window(-120.0, 0.0, 150.0, 240.0, WindowKind::Files),
@@ -233,7 +247,7 @@ fn draw_scrolling_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
 
 /// Tiling: one large window and two stacked beside it.
 fn draw_tiling_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
-    draw_floor(snapshot, palette, graphene::Rect::new(0.0, -40.0, 620.0, 380.0));
+    draw_floor(snapshot, palette, floor_rect(SceneLayout::Tiling));
 
     let windows = [
         focused(window(20.0, -20.0, 300.0, 340.0, WindowKind::Terminal)),
@@ -245,7 +259,7 @@ fn draw_tiling_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
 
 /// Floating: a top bar, two overlapping windows and a dock.
 fn draw_floating_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
-    let floor = graphene::Rect::new(0.0, -60.0, 640.0, 400.0);
+    let floor = floor_rect(SceneLayout::Floating);
     draw_floor(snapshot, palette, floor);
 
     let top_bar = graphene::Rect::new(floor.x() + 14.0, floor.y() + 12.0, floor.width() - 28.0, 16.0);
@@ -262,7 +276,7 @@ fn draw_floating_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
 
 /// KDE Plasma and similar: overlapping windows and a full-width bottom panel.
 fn draw_panel_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
-    let floor = graphene::Rect::new(0.0, -60.0, 640.0, 400.0);
+    let floor = floor_rect(SceneLayout::Panel);
     draw_floor(snapshot, palette, floor);
 
     let windows = [
@@ -284,11 +298,20 @@ fn draw_panel_scene(snapshot: &gtk::Snapshot, palette: &ScenePalette) {
     fill_rounded(snapshot, clock, 5.0, &DOCK);
 }
 
-/// The ground the windows stand on, with a visible edge and a dot grid.
+/// The wallpaper: the item's color, lighter at the top, with a dot grid.
 fn draw_floor(snapshot: &gtk::Snapshot, palette: &ScenePalette, rect: graphene::Rect) {
-    let (dx, dy) = screen_drop_in_floor(FLOOR_THICKNESS);
-    fill_rounded(snapshot, offset(rect, dx, dy), 28.0, &palette.floor_edge);
-    fill_rounded(snapshot, rect, 28.0, &palette.floor);
+    drop_shadow(snapshot, &rect, FLOOR_RADIUS, 8.0);
+    snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(rect, FLOOR_RADIUS));
+    snapshot.append_linear_gradient(
+        &rect,
+        &graphene::Point::new(rect.x(), rect.y()),
+        &graphene::Point::new(rect.x(), rect.y() + rect.height()),
+        &[
+            gsk::ColorStop::new(0.0, palette.floor),
+            gsk::ColorStop::new(1.0, palette.accent),
+        ],
+    );
+    snapshot.pop();
 
     let spacing = 40.0;
     let mut y = rect.y() + spacing / 2.0;
@@ -310,16 +333,14 @@ fn draw_windows(snapshot: &gtk::Snapshot, palette: &ScenePalette, windows: &[Win
 
 fn draw_window(snapshot: &gtk::Snapshot, palette: &ScenePalette, spec: &WindowSpec) {
     let is_dark = matches!(spec.kind, WindowKind::Terminal);
-    let (face, title, edge) = if is_dark {
-        (DARK_FACE, DARK_TITLE, DARK_EDGE)
+    let (face, title) = if is_dark {
+        (DARK_FACE, DARK_TITLE)
     } else {
-        (LIGHT_FACE, LIGHT_TITLE, LIGHT_EDGE)
+        (LIGHT_FACE, LIGHT_TITLE)
     };
     let rect = spec.rect;
 
-    // The edge below the face makes the window look like a thick tile.
-    let (dx, dy) = screen_drop_in_floor(WINDOW_THICKNESS);
-    fill_rounded(snapshot, offset(rect, dx, dy), WINDOW_RADIUS, &edge);
+    drop_shadow(snapshot, &rect, WINDOW_RADIUS, 5.0);
 
     let outline = gsk::RoundedRect::from_rect(rect, WINDOW_RADIUS);
     snapshot.push_rounded_clip(&outline);
@@ -466,8 +487,4 @@ fn fill_rounded(snapshot: &gtk::Snapshot, rect: graphene::Rect, radius: f32, col
     snapshot.push_rounded_clip(&gsk::RoundedRect::from_rect(rect, radius));
     snapshot.append_color(color, &rect);
     snapshot.pop();
-}
-
-fn offset(rect: graphene::Rect, dx: f32, dy: f32) -> graphene::Rect {
-    graphene::Rect::new(rect.x() + dx, rect.y() + dy, rect.width(), rect.height())
 }

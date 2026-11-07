@@ -85,8 +85,8 @@ template $SpotlightCard: Box {
     }
   }
 
-  // A drawn isometric desktop, laid out the way the featured item arranges
-  // windows, until the item's real screenshot arrives on the same floor.
+  // A drawn desktop, laid out the way the featured item arranges windows,
+  // until the item's real screenshot arrives in the same place.
   Stack art_stack {
     transition-type: crossfade;
     hexpand: true;
@@ -94,13 +94,13 @@ template $SpotlightCard: Box {
     StackPage {
       name: "drawing";
 
-      child: $IsoScene scene {};
+      child: $DesktopScene scene {};
     }
 
     StackPage {
       name: "screenshot";
 
-      child: $IsoPicture picture {};
+      child: $EdgePicture picture {};
     }
   }
 }

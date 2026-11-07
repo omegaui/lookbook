@@ -41,7 +41,7 @@ mod imp {
 }
 
 glib::wrapper! {
-    /// One of the tilted cards at the top of Explore, for example "Rolling releases".
+    /// One of the cards at the top of Explore, for example "Rolling releases".
     pub struct CollectionCard(ObjectSubclass<imp::CollectionCard>)
         @extends gtk::Widget, gtk::Box,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Orientable;

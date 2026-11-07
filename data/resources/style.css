@@ -33,17 +33,6 @@
   background-color: color-mix(in srgb, var(--success-bg-color) 15%, transparent);
 }
 
-/* Isometric look: content laid on a tilted floor */
-
-/* Content laid on a floor seen from above: turn it, then flatten it vertically
-   (0.64 is cos 50°). This flat 2D transform looks the same as rotateX(50deg)
-   rotateZ(-28deg), but GTK draws it directly, so text stays sharp and unclipped.
-   Turning around the left end keeps the first cards in view. */
-.iso-plane {
-  transform-origin: 0 50%;
-  transform: scale(1, 0.64) rotate(-28deg);
-}
-
 /* Hero */
 
 .hero {
@@ -65,16 +54,15 @@
 .collection-card {
   padding: 20px;
   border-radius: 24px;
-  box-shadow: 14px 20px 0 rgba(0, 0, 6, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 6, 0.18);
   color: rgba(0, 0, 6, 0.85);
   transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 }
 
-/* Lift the card off the floor. Inside the tilted plane, translate(9px, -16px)
-   moves it about 12px straight up on screen, and the shadow falls further away. */
+/* Lift the card on hover; its shadow grows softer and further away. */
 .collection-card:hover {
-  transform: translate(9px, -16px);
-  box-shadow: 24px 36px 0 rgba(0, 0, 6, 0.18);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 6, 0.26);
 }
 
 .collection-tag {
@@ -163,6 +151,15 @@
 }
 
 /* Hall of fame: each screenshot is a button that lifts on hover. */
+
+.place-pill {
+  font-size: 0.85em;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  color: white;
+  background-color: rgba(0, 0, 6, 0.6);
+}
 
 .screenshot-card {
   padding: 0;

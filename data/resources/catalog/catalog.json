@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-07T00:00:00Z",
+  "generated_at": "2026-11-07T16:24:17Z",
   "collections": [
     {
       "title": "Rolling releases",
@@ -76,88 +76,165 @@
     "tagline": "A fresh pick from orangc's walls every time you open the app. Set it as your background in one click.",
     "accent": "green"
   },
-  "screenshots": [
-    {
-      "title": "Hyprland + Catppuccin",
-      "author": "Sample",
-      "subject": "hyprland",
-      "mock": {
-        "layout": "tiled",
-        "wallpaper": "#1e1e2e",
-        "glow": "#cba6f7",
-        "bar": "#11111b",
-        "window": "#313244",
-        "title_bar": "#45475a",
-        "accent": "#f5c2e7",
-        "text": "#a6adc8"
+  "hall_of_fame": {
+    "page": "https://hypr.land/hall_of_fame/",
+    "contests": [
+      {
+        "name": "Moon",
+        "number": 5,
+        "date": "June 2026",
+        "rices": [
+          {
+            "name": "Astroland",
+            "author": "zacoons",
+            "place": "#1",
+            "image": "https://hypr.land/ricing_competitions/5/zacoons.webp",
+            "link": "https://codeberg.org/zacoons/astroland_dots"
+          },
+          {
+            "name": "Moon Rice",
+            "author": "Flafy",
+            "place": "#2",
+            "image": "https://hypr.land/ricing_competitions/5/flafy.webp",
+            "link": "https://github.com/FlafyDev/hyprland_moon_rice_public"
+          },
+          {
+            "name": "SPACE",
+            "author": "Ilyamiro",
+            "place": "#3",
+            "image": "https://hypr.land/ricing_competitions/5/ilyamiro.webp",
+            "link": "https://github.com/ilyamiro/hypr-comp"
+          }
+        ]
       },
-      "link": "https://hypr.land/hall_of_fame/"
-    },
-    {
-      "title": "GNOME default",
-      "author": "Official",
-      "subject": "gnome",
-      "mock": {
-        "layout": "floating",
-        "wallpaper": "#3584e4",
-        "glow": "#62a0ea",
-        "bar": "#000000",
-        "window": "#fafafb",
-        "title_bar": "#ebebed",
-        "accent": "#3584e4",
-        "text": "#deddda"
+      {
+        "name": "Fantasy",
+        "number": 4,
+        "date": "May 2025",
+        "rices": [
+          {
+            "name": "𝕽𝖎𝖛𝖊𝖓𝖉𝖊𝖑𝖑",
+            "author": "zacoons",
+            "place": "#1",
+            "image": "https://hypr.land/ricing_competitions/4/zacoons.webp",
+            "link": "https://codeberg.org/zacoons/rivendell-hyprdots"
+          },
+          {
+            "name": "𝕯𝖎𝖘𝖓𝖆𝖞 𝖙𝖞𝖕𝖊 𝖘𝖍𝖎",
+            "author": "VDawg",
+            "place": "#2",
+            "image": "https://hypr.land/ricing_competitions/4/vdawg.webp",
+            "link": "https://github.com/vdawg-git/fantasy-rice"
+          },
+          {
+            "name": "Duskhide",
+            "author": "Flafy",
+            "place": "#3",
+            "image": "https://hypr.land/ricing_competitions/4/flafy.webp",
+            "link": "https://github.com/flafydev/fantasy_rice"
+          }
+        ]
       },
-      "link": "https://www.gnome.org"
-    },
-    {
-      "title": "niri + Nord",
-      "author": "Sample",
-      "subject": "niri",
-      "mock": {
-        "layout": "tiled",
-        "wallpaper": "#2e3440",
-        "glow": "#5e81ac",
-        "bar": "#3b4252",
-        "window": "#3b4252",
-        "title_bar": "#434c5e",
-        "accent": "#88c0d0",
-        "text": "#d8dee9"
+      {
+        "name": "Space",
+        "number": 3,
+        "date": "November 2023",
+        "rices": [
+          {
+            "name": "Celestial",
+            "author": "Flafy",
+            "place": "#1",
+            "image": "https://hypr.land/ricing_competitions/3/flafy.webp",
+            "link": "https://github.com/flafydev/nixos-config/"
+          },
+          {
+            "name": "Globes",
+            "author": "Aylur",
+            "place": "#2",
+            "image": "https://hypr.land/ricing_competitions/3/aylur.webp",
+            "link": "https://github.com/Aylur/dotfiles/tree/ags-pre-ts"
+          },
+          {
+            "name": "Golden Era",
+            "author": "VDawg",
+            "place": "#3",
+            "image": "https://hypr.land/ricing_competitions/3/vdawg.webp",
+            "link": "https://github.com/vdawg-git/space_dots"
+          }
+        ]
       },
-      "link": "https://github.com/niri-wm/niri"
-    },
-    {
-      "title": "KDE Plasma",
-      "author": "Sample",
-      "subject": "kde-plasma",
-      "mock": {
-        "layout": "panel",
-        "wallpaper": "#1d99f3",
-        "glow": "#7ec4f8",
-        "bar": "#202326",
-        "window": "#fcfcfc",
-        "title_bar": "#dee0e2",
-        "accent": "#1d99f3",
-        "text": "#dee0e2"
+      {
+        "name": "Summer",
+        "number": 2,
+        "date": "May 2023",
+        "rices": [
+          {
+            "name": "Hybrid Summer",
+            "author": "end_4",
+            "place": "#1",
+            "image": "https://hypr.land/ricing_competitions/2/end_4.webp",
+            "link": "https://github.com/end-4/dots-hyprland/tree/archive/hybrid-summer"
+          },
+          {
+            "name": "Unnamed",
+            "author": "Flafy",
+            "place": "#2",
+            "image": "https://hypr.land/ricing_competitions/2/flafy.webp",
+            "link": "https://github.com/FlafyDev/flutter_background_bar"
+          },
+          {
+            "name": "Day and Night",
+            "author": "Mathisbuilder",
+            "place": "#3",
+            "image": "https://hypr.land/ricing_competitions/2/day-night.webp",
+            "link": "https://github.com/MathisP75/summer-day-and-night"
+          }
+        ]
       },
-      "link": "https://kde.org/plasma-desktop/"
-    },
-    {
-      "title": "sway + Gruvbox",
-      "author": "Sample",
-      "subject": "sway",
-      "mock": {
-        "layout": "tiled",
-        "wallpaper": "#282828",
-        "glow": "#d79921",
-        "bar": "#3c3836",
-        "window": "#3c3836",
-        "title_bar": "#504945",
-        "accent": "#fabd2f",
-        "text": "#ebdbb2"
-      },
-      "link": "https://swaywm.org"
-    }
-  ],
+      {
+        "name": "Winter",
+        "number": 1,
+        "date": "December 2022",
+        "rices": [
+          {
+            "name": "Unnamed",
+            "author": "Flafy",
+            "place": "#1",
+            "image": "https://hypr.land/ricing_competitions/1/flafy.webp",
+            "link": "https://github.com/FlafyDev/flutter_workspaces_2"
+          },
+          {
+            "name": "Aurora",
+            "author": "flick0",
+            "place": "#2 (ex aequo)",
+            "image": "https://hypr.land/ricing_competitions/1/flicko.webp",
+            "link": "https://github.com/flick0/dotfiles/tree/aurora"
+          },
+          {
+            "name": "Hyprland Winter",
+            "author": "amadeus",
+            "place": "#2 (ex aequo)",
+            "image": "https://hypr.land/ricing_competitions/1/amadeus.webp",
+            "link": "https://github.com/AmadeusWM/hyprland-winter"
+          },
+          {
+            "name": "Unnamed",
+            "author": "Lyasm",
+            "place": "#3 (ex aequo)",
+            "image": "https://hypr.land/ricing_competitions/1/lyasm.webp",
+            "link": "https://hypr.land/hall_of_fame/"
+          },
+          {
+            "name": "Unnamed",
+            "author": "lauroro",
+            "place": "#3 (ex aequo)",
+            "image": "https://hypr.land/ricing_competitions/1/lauroro.webp",
+            "link": "https://github.com/lauroro/hyprland-dotfiles"
+          }
+        ]
+      }
+    ]
+  },
   "distros": [
     {
       "id": "fedora",

@@ -9,7 +9,7 @@ use gtk::glib::clone;
 use adw::prelude::*;
 use gtk::subclass::prelude::*;
 
-use super::{chip_label, IsoPicture, LogoTile, TileContent, WallpaperDialog, WallpaperDialogContext};
+use super::{chip_label, EdgePicture, LogoTile, TileContent, WallpaperDialog, WallpaperDialogContext};
 use crate::catalog::{Catalog, WallpaperSource, WallpaperSpotlight as SpotlightData};
 use crate::system::SystemInfo;
 use crate::wallpapers::{fetch_source, fetch_texture, new_session, portal_hint, remove_blocked, Wallpaper};
@@ -34,7 +34,7 @@ mod imp {
         #[template_child]
         pub view_button: gtk::TemplateChild<gtk::Button>,
         #[template_child]
-        pub picture: gtk::TemplateChild<IsoPicture>,
+        pub picture: gtk::TemplateChild<EdgePicture>,
         #[template_child]
         pub spinner: gtk::TemplateChild<adw::Spinner>,
         pub source: RefCell<Option<WallpaperSource>>,
@@ -54,7 +54,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LogoTile::ensure_type();
-            IsoPicture::ensure_type();
+            EdgePicture::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }

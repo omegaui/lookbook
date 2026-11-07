@@ -13,5 +13,11 @@
       "wayfire": "wayfire",
       "labwc": "labwc"
     }
+  },
+  "hyprland_hall_of_fame": {
+    "about": "Winners of Hyprland's ricing contests, from the Hyprland website's source (https://github.com/hyprwm/hyprland-website, BSD-3-Clause). Screenshots stay on hypr.land and belong to each rice's author.",
+    "url": "https://raw.githubusercontent.com/hyprwm/hyprland-website/main/src/routes/hall_of_fame/rices.ts",
+    "image_base": "https://hypr.land",
+    "page": "https://hypr.land/hall_of_fame/"
   }
 }

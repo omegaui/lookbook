@@ -4,7 +4,7 @@ use std::cell::{Cell, RefCell};
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use gtk::glib;
+use gtk::{gio, glib};
 use gtk::glib::clone;
 
 use gettextrs::gettext;
@@ -24,6 +24,8 @@ const HOME_COMPOSITOR_COUNT: usize = 4;
 const ALL_FAMILIES: &str = "all";
 /// "What's new" shows at most three rows of four.
 const NEWS_COUNT: usize = 12;
+/// One large winner and four small ones beside it.
+const HALL_OF_FAME_COUNT: usize = 5;
 
 mod imp {
     use super::*;
@@ -43,6 +45,10 @@ mod imp {
         pub news_status_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub wall_grid: gtk::TemplateChild<gtk::Grid>,
+        #[template_child]
+        pub hall_of_fame_section: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
+        pub hall_of_fame_button: gtk::TemplateChild<gtk::Button>,
         #[template_child]
         pub family_toggles: gtk::TemplateChild<adw::ToggleGroup>,
         #[template_child]
@@ -219,8 +225,12 @@ impl ExplorePage {
     }
 
     fn show_wall_of_fame(&self, catalog: &Catalog) {
-        let screenshots: Vec<_> = catalog.screenshots.iter().collect();
-        fill_wall_grid(&self.imp().wall_grid, &screenshots, catalog);
+        let imp = self.imp();
+        let hall_of_fame = &catalog.hall_of_fame;
+        // An older downloaded catalog may have no Hall of Fame yet.
+        imp.hall_of_fame_section.set_visible(!hall_of_fame.contests.is_empty());
+        fill_wall_grid(&imp.wall_grid, hall_of_fame, HALL_OF_FAME_COUNT);
+        open_on_click(&imp.hall_of_fame_button, &hall_of_fame.page);
     }
 
     fn show_distros(&self, catalog: &Catalog, system: &SystemInfo) {
@@ -323,4 +333,17 @@ fn today() -> Day {
         month: now.month() as u32,
         day: now.day_of_month() as u32,
     }
+}
+
+/// Opens `link` in the browser when `button` is clicked.
+fn open_on_click(button: &gtk::Button, link: &str) {
+    let link = link.to_owned();
+    button.connect_clicked(move |button| {
+        let window = button.root().and_downcast::<gtk::Window>();
+        gtk::UriLauncher::new(&link).launch(window.as_ref(), gio::Cancellable::NONE, |result| {
+            if let Err(error) = result {
+                tracing::warn!("Could not open the Hall of Fame: {error}");
+            }
+        });
+    });
 }
