@@ -17,14 +17,37 @@ template $WallpaperDialog: Adw.Dialog {
         margin-end: 24;
         margin-bottom: 24;
 
-        Picture picture {
-          styles [
-            "wallpaper-preview",
-          ]
-
-          content-fit: contain;
+        Overlay {
           vexpand: true;
-          overflow: hidden;
+          // Shows the blurred thumbnail first, then the full image.
+          child: Picture picture {
+            styles [
+              "wallpaper-preview",
+            ]
+
+            content-fit: contain;
+            overflow: hidden;
+          };
+
+          [overlay]
+          Box loading_indicator {
+            styles [
+              "osd",
+              "loading-pill",
+            ]
+
+            spacing: 10;
+            halign: center;
+            valign: end;
+            margin-bottom: 20;
+            visible: false;
+
+            Adw.Spinner {}
+
+            Label {
+              label: _("Loading full quality…");
+            }
+          }
         }
 
         Box {

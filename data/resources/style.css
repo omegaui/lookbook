@@ -149,6 +149,17 @@
 
 .wallpaper-preview {
   border-radius: 16px;
+  transition: filter 300ms ease-out;
+}
+
+/* The small thumbnail stands in until the full image arrives; blur hides its pixels. */
+.wallpaper-preview.loading {
+  filter: blur(8px);
+}
+
+.loading-pill {
+  padding: 8px 16px;
+  border-radius: 99px;
 }
 
 /* Hall of fame: each screenshot is a button that lifts on hover. */

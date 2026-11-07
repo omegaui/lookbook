@@ -32,6 +32,8 @@ mod imp {
         #[template_child]
         pub picture: gtk::TemplateChild<gtk::Picture>,
         #[template_child]
+        pub loading_indicator: gtk::TemplateChild<gtk::Box>,
+        #[template_child]
         pub title_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub credit_label: gtk::TemplateChild<gtk::Label>,
@@ -176,11 +178,19 @@ impl WallpaperDialog {
         imp.image.replace(Some(bytes.clone()));
     }
 
-    /// The buttons wait until the full image has downloaded.
+    /// While the full image downloads, the thumbnail is blurred under a loading
+    /// pill, and the buttons wait.
     fn set_busy(&self, busy: bool) {
         let imp = self.imp();
+        imp.loading_indicator.set_visible(busy);
         imp.set_button.set_sensitive(!busy);
         imp.save_button.set_sensitive(!busy);
+
+        if busy {
+            imp.picture.add_css_class("loading");
+        } else {
+            imp.picture.remove_css_class("loading");
+        }
     }
 
     fn image_and_file_name(&self) -> Option<(glib::Bytes, String)> {

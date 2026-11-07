@@ -74,10 +74,11 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `d1d30d9` | Your System: detection, 16 ideas with routes, visible Wayland globals |
 | `f22f520` | Isometric spotlight scenes, Hall of Fame (renamed) with app icons and links, hover lift, yellow feature ticks, portal-based screen capture |
 | `ace644f` | Wallpapers tab (live from orangc + LinuxH2O), preview with Set as Wallpaper / Save / Source, maximize and layout fixes, KDE Plasma panel mock |
+| (next) | Wallpaper preview: blurred thumbnail and a "Loading full quality…" pill until the full image arrives |
 
 Not yet confirmed by clicking (the agent cannot click; ask the user):
 
-- Clicking a wallpaper opens the preview (fixed in `ace644f`: the card is a button, so it now listens to its own `clicked`).
+- ~~Clicking a wallpaper opens the preview~~: confirmed working by the user on 2026-11-07.
 - The Website button and spotlight arrows (crash fixed in `83158ca` with `swapped` handlers).
 - Set as Wallpaper on GNOME/KDE, and Save.
 
