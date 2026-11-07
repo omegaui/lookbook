@@ -22,3 +22,6 @@
 
 # Quick cargo checks in the SDK (.agentic-coding/scripts/cargo-sdk.sh)
 /.cargo-sdk/
+
+# Python caches (catalog/build.py tests)
+__pycache__/

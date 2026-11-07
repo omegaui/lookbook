@@ -1,0 +1,80 @@
+# Builds the catalog the app downloads and publishes it to GitHub Pages:
+# https://omegaui.github.io/linux_and_you/v1/catalog.json
+#
+# Runs daily to pick up upstream changes (Wayland protocol data, screenshots
+# that disappeared), whenever the hand-written catalog changes, and by hand.
+# Refreshed data is committed back, so the snapshot bundled in the app stays
+# current too. If a check fails, nothing is published and the last good
+# catalog stays online.
+name: Catalog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/resources/catalog/**
+      - data/resources/icons/**
+      - catalog/**
+      - .github/workflows/catalog.yml
+  pull_request:
+    paths:
+      - data/resources/catalog/**
+      - catalog/**
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalog-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Test the builder
+        run: python3 -m unittest discover -s catalog -p 'test_*.py' -v
+
+      - name: Build the catalog
+        run: python3 catalog/build.py --out _site --write-source
+
+      - name: Commit refreshed data
+        if: github.event_name != 'pull_request'
+        run: |
+          if git diff --quiet -- data/resources/catalog/catalog.json; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/resources/catalog/catalog.json
+          git commit -m "Refresh catalog data"
+          git pull --rebase
+          git push
+
+      - name: Prepare the site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

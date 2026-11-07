@@ -1,18 +1,20 @@
 //! The catalog of distros, desktops and compositors.
 //!
-//! Today it is loaded from a snapshot bundled in the app's resources. Later it
-//! is downloaded from the published catalog, with the snapshot as a fallback.
+//! The app ships a snapshot in its resources, and `online` keeps a newer copy
+//! downloaded from the catalog the Catalog workflow publishes.
 
 mod features;
 mod item_ref;
 mod loader;
 mod model;
+mod online;
 mod protocols;
 
 pub use features::{key_features, FeatureSupport};
 pub use item_ref::ItemRef;
 pub use protocols::{ProtocolInfo, ProtocolOverview};
 pub use model::*;
+pub use online::refresh_downloaded;
 
 /// The few fields every catalog item has, used for small tiles and lists.
 #[derive(Debug, Clone, Copy)]

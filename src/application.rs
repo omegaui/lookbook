@@ -100,6 +100,12 @@ impl LinuxAndYouApplication {
         }
     }
 
+    fn catalog_date(&self) -> Option<String> {
+        self.active_window()
+            .and_downcast::<LinuxAndYouWindow>()
+            .and_then(|window| window.catalog_date())
+    }
+
     fn setup_accels(&self) {
         self.set_accels_for_action("app.quit", &["<Control>q"]);
         self.set_accels_for_action("window.close", &["<Control>w"]);
@@ -115,6 +121,10 @@ impl LinuxAndYouApplication {
             .issue_url("https://github.com/omegaui/linux_and_you/issues")
             .version(VERSION)
             .build();
+
+        if let Some(date) = self.catalog_date() {
+            dialog.set_comments(&gettext("Catalog data from {}").replace("{}", &date));
+        }
 
         dialog.add_legal_section(
             &gettext("Logos"),

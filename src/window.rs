@@ -30,6 +30,16 @@ fn runs_on_stacking_desktop() -> bool {
     })
 }
 
+/// Checks for a newer published catalog in the background, for the next launch.
+fn refresh_downloaded_catalog() {
+    glib::spawn_future_local(async {
+        match crate::catalog::refresh_downloaded(&crate::http::shared_session()).await {
+            Ok(outcome) => tracing::debug!("Catalog check: {outcome:?}"),
+            Err(error) => tracing::warn!("Could not check for a newer catalog: {error:#}"),
+        }
+    });
+}
+
 /// Finds the first scrolled window inside a widget, searching depth first.
 fn find_scrolled_window(widget: &gtk::Widget) -> Option<gtk::ScrolledWindow> {
     if let Some(scrolled) = widget.downcast_ref::<gtk::ScrolledWindow>() {
@@ -301,13 +311,14 @@ impl LinuxAndYouWindow {
         let imp = self.imp();
         let system = Rc::new(SystemInfo::detect());
 
-        let catalog = match Catalog::load_bundled() {
+        let catalog = match Catalog::load() {
             Ok(catalog) => Rc::new(catalog),
             Err(error) => {
                 tracing::error!("Could not load the bundled catalog: {error:#}");
                 return;
             }
         };
+        refresh_downloaded_catalog();
 
         imp.explore_page.show_catalog(&catalog, &system);
         imp.distros_page.show_catalog(&catalog, &system);
@@ -318,6 +329,14 @@ impl LinuxAndYouWindow {
 
         imp.catalog.replace(Some(catalog));
         imp.system.replace(Some(system));
+    }
+
+    /// The date of the catalog in use, for example "2026-11-07".
+    pub fn catalog_date(&self) -> Option<String> {
+        let catalog = self.imp().catalog.borrow();
+        catalog
+            .as_ref()
+            .map(|catalog| catalog.generated_at.chars().take(10).collect())
     }
 
     fn load_window_state(&self) {

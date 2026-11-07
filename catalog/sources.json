@@ -1,0 +1,17 @@
+{
+  "wayland_explorer": {
+    "about": "Wayland protocol support per compositor, from https://github.com/vially/wayland-explorer (MIT). Keys are our compositor ids, values are wayland-explorer's file names.",
+    "url": "https://raw.githubusercontent.com/vially/wayland-explorer/main/src/data/compositors/{id}.json",
+    "compositors": {
+      "hyprland": "hyprland",
+      "niri": "niri",
+      "sway": "sway",
+      "kwin": "kwin",
+      "river": "river",
+      "cosmic-comp": "cosmic",
+      "mutter": "mutter",
+      "wayfire": "wayfire",
+      "labwc": "labwc"
+    }
+  }
+}
