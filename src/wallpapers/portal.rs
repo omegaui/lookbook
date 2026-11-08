@@ -116,9 +116,23 @@ fn save_to_cache(image: &glib::Bytes, file_name: &str) -> anyhow::Result<PathBuf
     let folder = glib::user_cache_dir().join("wallpapers");
     std::fs::create_dir_all(&folder)?;
 
+    remove_older_wallpapers(&folder, file_name);
     let path = folder.join(file_name);
     std::fs::write(&path, image.as_ref())?;
     Ok(path)
+}
+
+/// The desktop keeps its own copy of the background, so the cache needs
+/// only the one being set; without this the folder only grows.
+fn remove_older_wallpapers(folder: &Path, keep: &str) {
+    let Ok(entries) = std::fs::read_dir(folder) else {
+        return;
+    };
+    for entry in entries.filter_map(Result::ok) {
+        if entry.file_name() != keep {
+            let _ = std::fs::remove_file(entry.path());
+        }
+    }
 }
 
 /// The last part of an image address, without a query, for example "sea.png".

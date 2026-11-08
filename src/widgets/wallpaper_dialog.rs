@@ -146,16 +146,36 @@ impl WallpaperDialog {
             #[weak(rename_to = dialog)]
             self,
             async move {
-                match dialog.download_image().await {
+                let result = dialog.download_image().await;
+                dialog.set_busy(false);
+                match result {
                     Ok(bytes) => dialog.show_full_image(&bytes),
                     Err(error) => {
                         tracing::warn!("Could not download the wallpaper: {error:#}");
-                        dialog.toast(&gettext("Could not download the full image"));
+                        dialog.offer_retry();
                     }
                 }
-                dialog.set_busy(false);
             }
         ));
+    }
+
+    /// Set and Save need the full image, so they stay off until a retry brings it.
+    fn offer_retry(&self) {
+        let imp = self.imp();
+        imp.set_button.set_sensitive(false);
+        imp.save_button.set_sensitive(false);
+
+        let toast = adw::Toast::builder()
+            .title(gettext("Could not download the full image"))
+            .button_label(gettext("Retry"))
+            .timeout(0)
+            .build();
+        toast.connect_button_clicked(clone!(
+            #[weak(rename_to = dialog)]
+            self,
+            move |_| dialog.load_full_image()
+        ));
+        imp.toast_overlay.add_toast(toast);
     }
 
     async fn download_image(&self) -> anyhow::Result<glib::Bytes> {

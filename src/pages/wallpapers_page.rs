@@ -151,6 +151,17 @@ impl WallpapersPage {
         ));
     }
 
+    /// A source that could not be read would only show an empty grid.
+    fn remove_source_toggle(&self, source_id: &str) {
+        let toggles = &self.imp().source_toggles;
+        if toggles.active_name().as_deref() == Some(source_id) {
+            toggles.set_active_name(Some(SHOW_ALL));
+        }
+        if let Some(toggle) = toggles.toggle_by_name(source_id) {
+            toggles.remove(&toggle);
+        }
+    }
+
     fn add_source_toggles(&self) {
         let toggles = &self.imp().source_toggles;
         toggles.add(adw::Toggle::builder().name(SHOW_ALL).label(gettext("All")).build());
@@ -202,7 +213,10 @@ impl WallpapersPage {
         for source in &sources {
             match fetch_source(&imp.session, source).await {
                 Ok(found) => wallpapers.extend(found),
-                Err(error) => tracing::warn!("Could not read {}: {error:#}", source.name),
+                Err(error) => {
+                    tracing::warn!("Could not read {}: {error:#}", source.name);
+                    self.remove_source_toggle(&source.id);
+                }
             }
         }
 

@@ -48,10 +48,17 @@ pub async fn fetch_source(
 
 /// Drops the wallpapers whose owners asked to be left out.
 pub fn remove_blocked(wallpapers: Vec<Wallpaper>, blocklist: &[String]) -> Vec<Wallpaper> {
+    let blocked: Vec<&str> = blocklist.iter().map(|url| without_query(url)).collect();
     wallpapers
         .into_iter()
-        .filter(|wallpaper| !blocklist.contains(&wallpaper.full_url))
+        .filter(|wallpaper| !blocked.contains(&without_query(&wallpaper.full_url)))
         .collect()
+}
+
+/// Copyparty adds an access key ("?k=…") that can change; the takedown
+/// list must match the image, not the key.
+fn without_query(url: &str) -> &str {
+    url.split('?').next().unwrap_or(url)
 }
 
 /// A note for users whose compositor has no wallpaper portal, so Set as Wallpaper
@@ -89,6 +96,18 @@ fn title_from_file_name(file_name: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn takedowns_match_whatever_the_access_key() {
+        let wallpaper = Wallpaper {
+            title: "Sea".to_owned(),
+            source_id: "orangc".to_owned(),
+            thumbnail_url: String::new(),
+            full_url: "https://e/walls/sea.png?k=NEW".to_owned(),
+        };
+        let kept = remove_blocked(vec![wallpaper], &["https://e/walls/sea.png?k=OLD".to_owned()]);
+        assert!(kept.is_empty());
+    }
 
     #[test]
     fn titles_read_like_words() {
