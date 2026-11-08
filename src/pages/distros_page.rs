@@ -4,7 +4,7 @@ use std::cell::RefCell;
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use gettextrs::ngettext;
+use gettextrs::{gettext, ngettext};
 use gtk::glib;
 use gtk::glib::clone;
 
@@ -12,6 +12,9 @@ use crate::catalog::{Catalog, Distro, DistroFamily, ReleaseModel};
 use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
 use crate::widgets::{add_family_toggles, open_details_on_activate, IntroBanner, ShowcaseCard, ShowcaseContent};
+
+/// Opens a new issue on the project, titled for a distro suggestion.
+const SUGGEST_DISTRO_URL: &str = "https://github.com/omegaui/lookbook/issues/new?title=Suggest%20a%20distro%3A%20";
 
 /// The toggle name that turns a filter off.
 const SHOW_ALL: &str = "all";
@@ -49,6 +52,8 @@ mod imp {
         pub intro: gtk::TemplateChild<IntroBanner>,
         #[template_child]
         pub count_label: gtk::TemplateChild<gtk::Label>,
+        #[template_child]
+        pub suggest_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub search_entry: gtk::TemplateChild<gtk::SearchEntry>,
         #[template_child]
@@ -110,6 +115,7 @@ impl DistrosPage {
         let entries = catalog.distros.iter().map(FilterEntry::new).collect();
         imp.entries.replace(entries);
         self.update_results();
+        self.show_suggest_note();
     }
 
     fn setup_filters(&self) {
@@ -139,6 +145,14 @@ impl DistrosPage {
         }
     }
 
+    /// Says the list is a selection, with a link to suggest a missing distro.
+    fn show_suggest_note(&self) {
+        let link = glib::markup_escape_text(SUGGEST_DISTRO_URL);
+        let note = gettext("There are hundreds of distros; Lookbook shows a hand-picked few. Missing one you like? <a href=\"{link}\">Suggest it</a>, and it can join the list without an app update.")
+            .replace("{link}", &link);
+        self.imp().suggest_label.set_markup(&note);
+    }
+
     /// Re-applies the filters and updates the count and the empty state.
     fn update_results(&self) {
         let imp = self.imp();
@@ -151,8 +165,7 @@ impl DistrosPage {
             .filter(|entry| self.entry_matches(entry))
             .count();
 
-        imp.count_label
-            .set_label(&ngettext("{} distro", "{} distros", count as u32).replace("{}", &count.to_string()));
+        imp.count_label.set_label(&count_text(count, imp.entries.borrow().len()));
         imp.distros_flowbox.set_visible(count > 0);
         imp.empty_page.set_visible(count == 0);
     }
@@ -188,5 +201,28 @@ impl DistrosPage {
     fn matches_search(&self, entry: &FilterEntry) -> bool {
         let query = self.imp().search_entry.text().trim().to_lowercase();
         query.is_empty() || entry.search_text.contains(&query)
+    }
+}
+
+/// "16 hand-picked distros" with no filter, "3 of 16 hand-picked distros"
+/// with one, so the count never reads as every distro there is.
+fn count_text(shown: usize, total: usize) -> String {
+    if shown == total {
+        return ngettext("{} hand-picked distro", "{} hand-picked distros", total as u32)
+            .replace("{}", &total.to_string());
+    }
+    ngettext("{shown} of {total} hand-picked distro", "{shown} of {total} hand-picked distros", total as u32)
+        .replace("{shown}", &shown.to_string())
+        .replace("{total}", &total.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_count_says_the_list_is_a_selection() {
+        assert_eq!(count_text(16, 16), "16 hand-picked distros");
+        assert_eq!(count_text(3, 16), "3 of 16 hand-picked distros");
     }
 }

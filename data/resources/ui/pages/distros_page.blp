@@ -137,8 +137,20 @@ template $DistrosPage: Adw.Bin {
         Adw.StatusPage empty_page {
           icon-name: "edit-find-symbolic";
           title: _("No Distros Found");
-          description: _("Try another search or filter.");
+          description: _("Try another search or filter. Lookbook shows a hand-picked selection, so the distro you want may not be here yet.");
           visible: false;
+        }
+
+        // The catalog is a selection, not every distro there is.
+        Label suggest_label {
+          styles [
+            "dim-label",
+          ]
+
+          use-markup: true;
+          wrap: true;
+          justify: center;
+          margin-top: 12;
         }
       };
     };
