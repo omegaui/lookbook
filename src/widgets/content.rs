@@ -3,6 +3,7 @@
 use gettextrs::gettext;
 
 use gtk::glib;
+use gtk::prelude::*;
 
 use super::{SceneLayout, TileContent};
 use crate::catalog::{
@@ -136,6 +137,17 @@ impl CardBadge {
             Self::YouAreHere => "here",
             Self::RunningNow => "running",
         }
+    }
+
+    /// Shows the badge on `label`, or hides the label when there is none.
+    pub fn show_on(badge: Option<Self>, label: &gtk::Label) {
+        let Some(badge) = badge else {
+            label.set_visible(false);
+            return;
+        };
+        label.set_label(&badge.label());
+        label.add_css_class(badge.css_class());
+        label.set_visible(true);
     }
 }
 
@@ -386,6 +398,8 @@ pub struct CollectionContent {
     pub names: String,
     pub tiles: Vec<TileContent>,
     pub accent: Accent,
+    /// The page that lists the collection's kind, for example "distros".
+    pub page: String,
 }
 
 impl CollectionContent {
@@ -407,7 +421,17 @@ impl CollectionContent {
             names: names.join(" · "),
             tiles,
             accent: collection.accent,
+            page: page_for(collection.kind).to_owned(),
         }
+    }
+}
+
+/// The page that lists items of a kind; its name is the page's in the window.
+fn page_for(kind: ItemKind) -> &'static str {
+    match kind {
+        ItemKind::Distro => "distros",
+        ItemKind::Desktop => "desktops",
+        ItemKind::Compositor => "compositors",
     }
 }
 

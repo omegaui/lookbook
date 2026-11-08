@@ -14,6 +14,29 @@ thread_local! {
     static TEXTURES: RefCell<HashMap<TextureKey, glib::WeakRef<gdk::Texture>>> = RefCell::default();
 }
 
+/// Loads a picture in the background and hands it to `show` with `owner`,
+/// unless `owner` is gone by then. Only a weak reference is held while it
+/// downloads, so a closed page is never kept alive by its pictures.
+/// `max_width` 0 means full size; `what` names the picture in the log.
+pub fn load_texture_for<W, F>(owner: &W, url: &str, max_width: i32, what: &'static str, show: F)
+where
+    W: IsA<glib::Object>,
+    F: FnOnce(&W, gdk::Texture) + 'static,
+{
+    let owner = owner.downgrade();
+    let url = url.to_owned();
+    glib::spawn_future_local(async move {
+        let result = fetch(&crate::http::shared_session(), &url, max_width).await;
+        let Some(owner) = owner.upgrade() else {
+            return;
+        };
+        match result {
+            Ok(texture) => show(&owner, texture),
+            Err(error) => tracing::warn!("Could not load {what}: {error:#}"),
+        }
+    });
+}
+
 /// The picture at full size.
 pub async fn fetch_texture(session: &soup::Session, url: &str) -> anyhow::Result<gdk::Texture> {
     fetch(session, url, 0).await

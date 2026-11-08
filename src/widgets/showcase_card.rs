@@ -7,13 +7,11 @@ use std::cell::RefCell;
 use adw::subclass::prelude::*;
 use gettextrs::gettext;
 use gtk::glib;
-use gtk::glib::clone;
 use gtk::prelude::*;
 
 use super::{chip_label, CardBadge, CoverPicture, LogoTile, MiniDesktop, ShowcaseContent};
+use crate::images::load_texture_for;
 use crate::catalog::{HostedScreenshot, ItemRef};
-use crate::http::shared_session;
-use crate::images::fetch_texture_scaled;
 
 const TILE_SIZE: i32 = 44;
 /// Matches the drawn placeholder, so the card keeps its height when the image arrives.
@@ -132,16 +130,9 @@ impl ShowcaseCard {
             return;
         };
 
-        glib::spawn_future_local(clone!(
-            #[weak(rename_to = card)]
-            self,
-            async move {
-                match fetch_texture_scaled(&shared_session(), &screenshot.url, CARD_IMAGE_WIDTH).await {
-                    Ok(texture) => card.show_screenshot(&texture, &screenshot),
-                    Err(error) => tracing::warn!("Could not load a screenshot: {error:#}"),
-                }
-            }
-        ));
+        load_texture_for(self, &screenshot.url.clone(), CARD_IMAGE_WIDTH, "a screenshot", move |card, texture| {
+            card.show_screenshot(&texture, &screenshot);
+        });
     }
 
     /// Swaps the drawing for the real screenshot, credited in its tooltip.
@@ -156,13 +147,7 @@ impl ShowcaseCard {
     }
 
     fn show_badge(&self, badge: Option<CardBadge>) {
-        let Some(badge) = badge else {
-            return;
-        };
-        let label = &self.imp().badge_label;
-        label.set_label(&badge.label());
-        label.add_css_class(badge.css_class());
-        label.set_visible(true);
+        CardBadge::show_on(badge, &self.imp().badge_label);
     }
 
     fn show_chips(&self, chips: &[String]) {

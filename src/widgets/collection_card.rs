@@ -24,7 +24,7 @@ mod imp {
     impl ObjectSubclass for CollectionCard {
         const NAME: &'static str = "CollectionCard";
         type Type = super::CollectionCard;
-        type ParentType = gtk::Box;
+        type ParentType = gtk::Button;
 
         fn class_init(klass: &mut Self::Class) {
             klass.bind_template();
@@ -37,14 +37,14 @@ mod imp {
 
     impl ObjectImpl for CollectionCard {}
     impl WidgetImpl for CollectionCard {}
-    impl BoxImpl for CollectionCard {}
+    impl ButtonImpl for CollectionCard {}
 }
 
 glib::wrapper! {
     /// One of the cards at the top of Explore, for example "Rolling releases".
     pub struct CollectionCard(ObjectSubclass<imp::CollectionCard>)
-        @extends gtk::Widget, gtk::Box,
-        @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Orientable;
+        @extends gtk::Widget, gtk::Button,
+        @implements gtk::Accessible, gtk::Actionable, gtk::Buildable, gtk::ConstraintTarget;
 }
 
 impl CollectionCard {
@@ -59,6 +59,8 @@ impl CollectionCard {
         self.add_css_class(content.accent.css_class());
         imp.title_label.set_label(&content.title);
         imp.names_label.set_label(&content.names);
+        self.set_action_target_value(Some(&content.page.to_variant()));
+        self.update_property(&[gtk::accessible::Property::Label(&content.title)]);
 
         for tile in &content.tiles {
             imp.tiles_box.append(&LogoTile::new(tile, TILE_SIZE));

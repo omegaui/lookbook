@@ -168,11 +168,7 @@ impl SystemPage {
         let total = statuses.len();
         let share = if total == 0 { 0.0 } else { ready as f64 / total as f64 };
 
-        imp.title_label.set_label(&format!(
-            "{} + {}",
-            system.distro_name(),
-            system.desktop_name(catalog)
-        ));
+        imp.title_label.set_label(&system.setup_title(catalog));
         imp.session_label.set_label(&session_text(&system.session.session_type));
         imp.ready_label.set_label(
             &gettext("{ready} of {total}")

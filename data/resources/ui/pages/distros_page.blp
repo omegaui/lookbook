@@ -72,37 +72,11 @@ template $DistrosPage: Adw.Bin {
             propagate-natural-width: true;
             halign: start;
 
+            // Filled from the distro families in code, the same on Explore and Distros.
             child: Adw.ToggleGroup family_toggles {
               styles [
                 "round",
               ]
-
-              active-name: "all";
-
-              Adw.Toggle {
-                name: "all";
-                label: _("All");
-              }
-
-              Adw.Toggle {
-                name: "independent";
-                label: _("Independent");
-              }
-
-              Adw.Toggle {
-                name: "arch";
-                label: _("Arch-based");
-              }
-
-              Adw.Toggle {
-                name: "debian";
-                label: _("Debian-based");
-              }
-
-              Adw.Toggle {
-                name: "fedora";
-                label: _("Fedora-based");
-              }
             };
           }
         }

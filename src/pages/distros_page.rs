@@ -11,7 +11,7 @@ use gtk::glib::clone;
 use crate::catalog::{Catalog, Distro, DistroFamily, ReleaseModel};
 use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
-use crate::widgets::{open_details_on_activate, IntroBanner, ShowcaseCard, ShowcaseContent};
+use crate::widgets::{add_family_toggles, open_details_on_activate, IntroBanner, ShowcaseCard, ShowcaseContent};
 
 /// The toggle name that turns a filter off.
 const SHOW_ALL: &str = "all";
@@ -114,6 +114,7 @@ impl DistrosPage {
 
     fn setup_filters(&self) {
         let imp = self.imp();
+        add_family_toggles(&imp.family_toggles);
 
         imp.distros_flowbox.set_filter_func(clone!(
             #[weak(rename_to = page)]

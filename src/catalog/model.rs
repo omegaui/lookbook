@@ -315,6 +315,9 @@ pub enum DistroFamily {
 }
 
 impl DistroFamily {
+    /// Every family, in the order the filters show them.
+    pub const ALL: [Self; 4] = [Self::Independent, Self::Arch, Self::Debian, Self::Fedora];
+
     /// Matches the toggle names in the family filters.
     pub fn id(self) -> &'static str {
         match self {

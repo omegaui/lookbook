@@ -3,14 +3,12 @@ use std::cell::RefCell;
 use gettextrs::gettext;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib};
+use gtk::glib;
 
-use gtk::glib::clone;
 
-use super::ScreenshotPicture;
+use super::{open_link, ScreenshotPicture};
+use crate::images::load_texture_for;
 use crate::catalog::{Contest, FamedRice};
-use crate::http::shared_session;
-use crate::images::fetch_texture_scaled;
 
 /// The large Hall of Fame card is about 600 pixels wide; twice that stays
 /// sharp on HiDPI.
@@ -104,27 +102,14 @@ impl ScreenshotCard {
         let Some(url) = self.imp().image_url.take() else {
             return;
         };
-        glib::spawn_future_local(clone!(
-            #[weak(rename_to = card)]
-            self,
-            async move {
-                match fetch_texture_scaled(&shared_session(), &url, CARD_IMAGE_WIDTH).await {
-                    Ok(texture) => card.imp().picture.set_texture(&texture),
-                    Err(error) => tracing::warn!("Could not load a Hall of Fame screenshot: {error:#}"),
-                }
-            }
-        ));
+        load_texture_for(self, &url, CARD_IMAGE_WIDTH, "a Hall of Fame screenshot", |card, texture| {
+            card.imp().picture.set_texture(&texture);
+        });
     }
 
     fn open_link(&self) {
         let link = self.imp().link.borrow().clone();
-        let window = self.root().and_downcast::<gtk::Window>();
-
-        gtk::UriLauncher::new(&link).launch(window.as_ref(), gio::Cancellable::NONE, |result| {
-            if let Err(error) = result {
-                tracing::warn!("Could not open the Hall of fame link: {error}");
-            }
-        });
+        open_link(self, &link);
     }
 }
 

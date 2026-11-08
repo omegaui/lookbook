@@ -1,14 +1,12 @@
 use std::cell::RefCell;
 
 use gtk::glib;
-use gtk::glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
 use super::{chip_label, EdgePicture, DesktopScene, LogoTile, SpotlightContent};
+use crate::images::load_texture_for;
 use crate::catalog::HostedScreenshot;
-use crate::http::shared_session;
-use crate::wallpapers::fetch_texture;
 
 mod imp {
     use super::*;
@@ -106,20 +104,11 @@ impl SpotlightCard {
         let Some(screenshot) = self.imp().screenshot.take() else {
             return;
         };
-        glib::spawn_future_local(clone!(
-            #[weak(rename_to = card)]
-            self,
-            async move {
-                match fetch_texture(&shared_session(), &screenshot.url).await {
-                    Ok(texture) => {
-                        let imp = card.imp();
-                        let name = imp.name_label.label();
-                        imp.picture.show_screenshot(&texture, &name, &screenshot);
-                        imp.art_stack.set_visible_child_name("screenshot");
-                    }
-                    Err(error) => tracing::warn!("Could not load a spotlight screenshot: {error:#}"),
-                }
-            }
-        ));
+        load_texture_for(self, &screenshot.url.clone(), 0, "a spotlight screenshot", move |card, texture| {
+            let imp = card.imp();
+            let name = imp.name_label.label();
+            imp.picture.show_screenshot(&texture, &name, &screenshot);
+            imp.art_stack.set_visible_child_name("screenshot");
+        });
     }
 }

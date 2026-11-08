@@ -28,11 +28,26 @@ pub struct Wallpaper {
     pub full_url: String,
 }
 
-/// Reads one source's current list of wallpapers.
+/// A source's wallpapers, read once per launch: the Explore spotlight and
+/// the Wallpapers page share the list instead of each downloading it.
 pub async fn fetch_source(
     session: &soup::Session,
     source: &WallpaperSource,
 ) -> anyhow::Result<Vec<Wallpaper>> {
+    if let Some(wallpapers) = SOURCE_LISTS.with(|lists| lists.borrow().get(&source.id).cloned()) {
+        return Ok(wallpapers);
+    }
+    let wallpapers = read_source(session, source).await?;
+    SOURCE_LISTS.with(|lists| lists.borrow_mut().insert(source.id.clone(), wallpapers.clone()));
+    Ok(wallpapers)
+}
+
+thread_local! {
+    static SOURCE_LISTS: std::cell::RefCell<std::collections::HashMap<String, Vec<Wallpaper>>> =
+        std::cell::RefCell::default();
+}
+
+async fn read_source(session: &soup::Session, source: &WallpaperSource) -> anyhow::Result<Vec<Wallpaper>> {
     match source.kind {
         WallpaperSourceKind::Copyparty => {
             let listing_url = format!("{}?ls", source.index_url);

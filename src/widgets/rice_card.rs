@@ -55,8 +55,13 @@ mod imp {
         pub link: RefCell<String>,
         /// Taken out when it starts loading, so it loads only once.
         pub preview: RefCell<Option<RicePreview>>,
-        /// The playing clip, paused while the card is off screen.
+        /// The playing clip, paused while the card is scrolled out of view.
         pub clip: RefCell<Option<gtk::MediaFile>>,
+        /// The clip's address, kept so Play can bring it back after the page
+        /// was left and the clip freed.
+        pub clip_preview: RefCell<Option<RicePreview>>,
+        /// Watches the page's scrolling while the card is on screen.
+        pub scroll_watch: RefCell<Option<(gtk::Adjustment, glib::SignalHandlerId)>>,
     }
 
     #[glib::object_subclass]
@@ -81,16 +86,16 @@ mod imp {
         /// Pictures load the first time the card is on screen.
         fn map(&self) {
             self.parent_map();
-            self.obj().load_picture();
-            if let Some(clip) = self.clip.borrow().as_ref() {
-                clip.play();
-            }
+            let card = self.obj();
+            card.load_picture();
+            card.watch_scrolling();
         }
 
+        /// Leaving the page frees the clip; Play loads it again.
         fn unmap(&self) {
-            if let Some(clip) = self.clip.borrow().as_ref() {
-                clip.pause();
-            }
+            let card = self.obj();
+            card.stop_watching_scrolling();
+            card.release_clip();
             self.parent_unmap();
         }
     }
@@ -194,6 +199,7 @@ impl RiceCard {
         let Some(preview) = imp.preview.take() else {
             return;
         };
+        imp.clip_preview.replace(Some(preview.clone()));
         imp.play_button.set_visible(false);
         imp.spinner.set_visible(true);
 
@@ -223,6 +229,63 @@ impl RiceCard {
         media.play();
         self.show_preview(&media);
         self.imp().clip.replace(Some(media));
+    }
+
+    /// Plays the clip only while the card is in view.
+    fn watch_scrolling(&self) {
+        let Some(scrolled) = self.ancestor(gtk::ScrolledWindow::static_type()).and_downcast::<gtk::ScrolledWindow>() else {
+            return;
+        };
+        let adjustment = scrolled.vadjustment();
+        let handler = adjustment.connect_value_changed(clone!(
+            #[weak(rename_to = card)]
+            self,
+            move |_| card.play_when_in_view()
+        ));
+        self.imp().scroll_watch.replace(Some((adjustment, handler)));
+        self.play_when_in_view();
+    }
+
+    fn stop_watching_scrolling(&self) {
+        if let Some((adjustment, handler)) = self.imp().scroll_watch.take() {
+            adjustment.disconnect(handler);
+        }
+    }
+
+    fn play_when_in_view(&self) {
+        let Some(clip) = self.imp().clip.borrow().clone() else {
+            return;
+        };
+        if self.is_in_view() {
+            clip.play();
+        } else {
+            clip.pause();
+        }
+    }
+
+    fn is_in_view(&self) -> bool {
+        let Some(scrolled) = self.ancestor(gtk::ScrolledWindow::static_type()) else {
+            return true;
+        };
+        let Some(bounds) = self.compute_bounds(&scrolled) else {
+            return false;
+        };
+        bounds.y() + bounds.height() > 0.0 && bounds.y() < scrolled.height() as f32
+    }
+
+    /// Drops the decoded clip and its bytes, and shows Play again.
+    fn release_clip(&self) {
+        let imp = self.imp();
+        let Some(clip) = imp.clip.take() else {
+            return;
+        };
+        clip.pause();
+        if let Some(stale) = imp.preview_stack.child_by_name(PREVIEW_PAGE) {
+            imp.preview_stack.remove(&stale);
+        }
+        imp.preview_stack.set_visible_child_name("placeholder");
+        imp.preview.replace(imp.clip_preview.take());
+        imp.play_button.set_visible(true);
     }
 
     fn show_preview(&self, paintable: &impl IsA<gtk::gdk::Paintable>) {

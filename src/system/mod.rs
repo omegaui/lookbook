@@ -123,6 +123,11 @@ impl SystemInfo {
         })
     }
 
+    /// For example "CachyOS Linux + Hyprland", the title of Your System.
+    pub fn setup_title(&self, catalog: &Catalog) -> String {
+        format!("{} + {}", self.distro_name(), self.desktop_name(catalog))
+    }
+
     pub fn distro_name(&self) -> String {
         if !self.os_release.name.is_empty() {
             return self.os_release.name.clone();

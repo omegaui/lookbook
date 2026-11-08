@@ -203,3 +203,16 @@ pub fn append_to_grid(flowbox: &gtk::FlowBox, card: &impl IsA<gtk::Widget>) {
         cell.set_focusable(false);
     }
 }
+
+/// The toggle name that shows every family.
+pub const ALL_FAMILIES: &str = "all";
+
+/// Fills a distro family filter: All, then one toggle per family. Explore
+/// and Distros share it, so the two filters never drift apart.
+pub fn add_family_toggles(toggles: &adw::ToggleGroup) {
+    toggles.add(adw::Toggle::builder().name(ALL_FAMILIES).label(gettextrs::gettext("All")).build());
+    for family in crate::catalog::DistroFamily::ALL {
+        toggles.add(adw::Toggle::builder().name(family.id()).label(family.label()).build());
+    }
+    toggles.set_active_name(Some(ALL_FAMILIES));
+}

@@ -1,14 +1,18 @@
 using Gtk 4.0;
 
-template $CollectionCard: Box {
+// A button: it opens the page that lists what the collection holds.
+template $CollectionCard: Button {
   styles [
     "collection-card",
   ]
 
-  orientation: vertical;
-  spacing: 12;
   width-request: 210;
   height-request: 290;
+  action-name: "win.show-page";
+
+  child: Box {
+  orientation: vertical;
+  spacing: 12;
 
   Label {
     styles [
@@ -42,4 +46,5 @@ template $CollectionCard: Box {
     xalign: 0;
     wrap: true;
   }
+  };
 }

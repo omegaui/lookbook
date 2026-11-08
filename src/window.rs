@@ -20,17 +20,17 @@ use crate::run_check;
 use crate::widgets::{DetailContent, FitsTogetherDialog, RunCheckDialog, TileContent, WhatIsLookbookDialog};
 
 const MAIN_PAGE_TAG: &str = "main";
-/// Desktops that place windows freely. Tiling compositors size windows themselves
-/// and may ignore a maximize request, which leaves the app drawn wider than its tile.
-const STACKING_DESKTOPS: [&str; 7] = ["GNOME", "KDE", "X-Cinnamon", "XFCE", "MATE", "Pantheon", "Budgie"];
 
-fn runs_on_stacking_desktop() -> bool {
-    let session = crate::system::Session::detect();
-    session.desktop_names.iter().any(|running| {
-        STACKING_DESKTOPS
-            .iter()
-            .any(|desktop| desktop.eq_ignore_ascii_case(running))
-    })
+/// Whether windows are placed freely, as on every desktop and on stacking
+/// compositors. Tiling compositors size windows themselves and may ignore a
+/// maximize request, which leaves the app drawn wider than its tile.
+fn places_windows_freely(catalog: &Catalog, system: &SystemInfo) -> bool {
+    if system.current_desktop(catalog).is_some() {
+        return true;
+    }
+    system
+        .current_compositor(catalog)
+        .is_some_and(|compositor| compositor.kind == crate::catalog::CompositorKind::Stacking)
 }
 
 /// Checks for a newer published catalog in the background, for the next launch.
@@ -133,10 +133,10 @@ mod imp {
             let window = self.obj();
 
             window.mark_development_build();
-            window.load_window_state();
             window.setup_actions();
             window.remember_last_page();
             window.load_catalog();
+            window.load_window_state();
         }
     }
 
@@ -484,8 +484,16 @@ impl LookbookWindow {
 
         self.set_default_size(width, height);
 
-        if settings.boolean("is-maximized") && runs_on_stacking_desktop() {
+        if settings.boolean("is-maximized") && self.places_windows_freely() {
             self.maximize();
+        }
+    }
+
+    fn places_windows_freely(&self) -> bool {
+        let imp = self.imp();
+        match (imp.catalog.borrow().as_ref(), imp.system.borrow().as_ref()) {
+            (Some(catalog), Some(system)) => places_windows_freely(catalog, system),
+            _ => false,
         }
     }
 

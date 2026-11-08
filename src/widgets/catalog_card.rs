@@ -88,15 +88,7 @@ impl CatalogCard {
     }
 
     fn show_badge(&self, badge: Option<CardBadge>) {
-        let label = &self.imp().badge_label;
-        let Some(badge) = badge else {
-            label.set_visible(false);
-            return;
-        };
-
-        label.set_label(&badge.label());
-        label.add_css_class(badge.css_class());
-        label.set_visible(true);
+        CardBadge::show_on(badge, &self.imp().badge_label);
     }
 
     fn show_chips(&self, chips: &[String]) {

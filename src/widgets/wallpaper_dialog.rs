@@ -280,13 +280,7 @@ impl WallpaperDialog {
 
     fn open_source(&self) {
         let link = self.imp().source_link.borrow().clone();
-        let window = self.root().and_downcast::<gtk::Window>();
-
-        gtk::UriLauncher::new(&link).launch(window.as_ref(), gio::Cancellable::NONE, |result| {
-            if let Err(error) = result {
-                tracing::warn!("Could not open the wallpaper source: {error}");
-            }
-        });
+        super::open_link(self, &link);
     }
 
     fn toast(&self, message: &str) {

@@ -8,11 +8,10 @@ use std::cell::RefCell;
 
 use gtk::glib::clone;
 
+use crate::images::load_texture_for;
 use crate::catalog::{Catalog, Desktop, HostedScreenshot};
-use crate::http::shared_session;
 use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
-use crate::wallpapers::fetch_texture;
 use crate::widgets::{
     chip_label, open_details_on_activate, scene_for_desktop, EdgePicture, IntroBanner,
     DesktopScene, LogoTile, ShowcaseCard, ShowcaseContent, TileContent,
@@ -142,16 +141,9 @@ impl DesktopsPage {
         let Some(screenshot) = self.imp().featured_screenshot.take() else {
             return;
         };
-        glib::spawn_future_local(clone!(
-            #[weak(rename_to = page)]
-            self,
-            async move {
-                match fetch_texture(&shared_session(), &screenshot.url).await {
-                    Ok(texture) => page.show_featured_screenshot(&texture, &screenshot),
-                    Err(error) => tracing::warn!("Could not load GNOME's screenshot: {error:#}"),
-                }
-            }
-        ));
+        load_texture_for(self, &screenshot.url.clone(), 0, "GNOME's screenshot", move |page, texture| {
+            page.show_featured_screenshot(&texture, &screenshot);
+        });
     }
 
     fn show_featured_screenshot(&self, texture: &gtk::gdk::Texture, screenshot: &HostedScreenshot) {

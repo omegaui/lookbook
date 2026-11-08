@@ -4,7 +4,7 @@ use std::cell::{Cell, RefCell};
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use gtk::{gio, glib};
+use gtk::glib;
 use gtk::glib::clone;
 
 use gettextrs::gettext;
@@ -14,15 +14,17 @@ use crate::http::shared_session;
 use crate::news::{fetch_releases, recent_releases, Day, Release};
 use crate::system::SystemInfo;
 use crate::widgets::{
-    append_to_grid,
+    add_family_toggles, ALL_FAMILIES,
+    append_to_grid, open_link,
     fill_wall_grid, open_details_on_activate, release_card, CardContent, CatalogCard,
     CollectionCard, CollectionContent, SpotlightCard, SpotlightContent, WallpaperSpotlight,
 };
 
 /// How many desktops and compositors the home page shows. "See all" opens the rest.
 const HOME_DESKTOP_COUNT: usize = 4;
+/// Distros have a family filter, so a few more fit; See All shows the rest.
+const HOME_DISTRO_COUNT: usize = 6;
 const HOME_COMPOSITOR_COUNT: usize = 4;
-const ALL_FAMILIES: &str = "all";
 /// "What's new" shows at most three rows of four.
 const NEWS_COUNT: usize = 12;
 /// One large winner and four small ones beside it.
@@ -64,6 +66,8 @@ mod imp {
         pub distro_families: RefCell<Vec<DistroFamily>>,
         /// Releases found so far, and how many feeds have not answered yet.
         pub releases: RefCell<Vec<Release>>,
+        /// The links of the release cards on screen, in order.
+        pub shown_news: RefCell<Vec<String>>,
         pub feeds_pending: Cell<usize>,
     }
 
@@ -202,16 +206,47 @@ impl ExplorePage {
         self.show_news_status();
     }
 
-    /// Newest first, so the order settles as slower feeds answer.
+    /// Newest first, so the order settles as slower feeds answer. The grid is
+    /// rebuilt only when what it shows changes, and keyboard focus stays on
+    /// the same release.
     fn show_newest_releases(&self) {
         let imp = self.imp();
         let mut releases = imp.releases.borrow().clone();
         releases.sort_by(|first, second| second.day.cmp(&first.day));
+        releases.truncate(NEWS_COUNT);
+
+        let links: Vec<String> = releases.iter().map(|release| release.link.clone()).collect();
+        if *imp.shown_news.borrow() == links {
+            return;
+        }
+        let focused = self.focused_release();
 
         imp.news_flowbox.remove_all();
-        for release in releases.iter().take(NEWS_COUNT) {
-            append_to_grid(&imp.news_flowbox, &release_card(release));
+        for release in &releases {
+            let card = release_card(release);
+            append_to_grid(&imp.news_flowbox, &card);
+            if focused.as_deref() == Some(release.link.as_str()) {
+                card.grab_focus();
+            }
         }
+        imp.shown_news.replace(links);
+    }
+
+    /// The link of the release card that has keyboard focus, if any.
+    fn focused_release(&self) -> Option<String> {
+        let imp = self.imp();
+        let focus = self.root()?.focus()?;
+        let shown = imp.shown_news.borrow();
+        let mut child = imp.news_flowbox.first_child();
+        let mut index = 0;
+        while let Some(cell) = child {
+            if focus.is_ancestor(&cell) || focus == cell {
+                return shown.get(index).cloned();
+            }
+            child = cell.next_sibling();
+            index += 1;
+        }
+        None
     }
 
     fn show_news_status(&self) {
@@ -244,6 +279,8 @@ impl ExplorePage {
 
         let families = catalog.distros.iter().map(|distro| distro.family).collect();
         imp.distro_families.replace(families);
+        // The filter ran as each card arrived, before the families were known.
+        imp.distros_flowbox.invalidate_filter();
     }
 
     fn show_desktops(&self, catalog: &Catalog, system: &SystemInfo) {
@@ -262,15 +299,12 @@ impl ExplorePage {
 
     /// Shows "<distro> + <desktop>" in the Your system banner.
     fn show_system_summary(&self, catalog: &Catalog, system: &SystemInfo) {
-        let distro = system.distro_name();
-        let desktop = system.desktop_name(catalog);
-        self.imp()
-            .system_title_label
-            .set_label(&format!("{distro} + {desktop}"));
+        self.imp().system_title_label.set_label(&system.setup_title(catalog));
     }
 
     fn setup_distro_filter(&self) {
         let imp = self.imp();
+        add_family_toggles(&imp.family_toggles);
 
         imp.distros_flowbox.set_filter_func(clone!(
             #[weak(rename_to = page)]
@@ -287,20 +321,22 @@ impl ExplorePage {
         ));
     }
 
+    /// The first few distros of the chosen family.
     fn distro_matches_filter(&self, child: &gtk::FlowBoxChild) -> bool {
         let imp = self.imp();
-        let Some(active) = imp.family_toggles.active_name() else {
-            return true;
+        let active = imp.family_toggles.active_name();
+        let in_family = |family: &DistroFamily| match active.as_deref() {
+            None | Some(ALL_FAMILIES) => true,
+            Some(active) => family.id() == active,
         };
-        if active.as_str() == ALL_FAMILIES {
-            return true;
-        }
 
         let families = imp.distro_families.borrow();
-        match families.get(child.index() as usize) {
-            Some(family) => family.id() == active.as_str(),
-            None => true,
-        }
+        let index = child.index() as usize;
+        let Some(family) = families.get(index) else {
+            return true;
+        };
+        let shown_before = families[..index].iter().filter(|family| in_family(family)).count();
+        in_family(family) && shown_before < HOME_DISTRO_COUNT
     }
 
     /// Turns the carousel straight to page `index`, if it exists.
@@ -339,12 +375,5 @@ fn today() -> Day {
 /// Opens `link` in the browser when `button` is clicked.
 fn open_on_click(button: &gtk::Button, link: &str) {
     let link = link.to_owned();
-    button.connect_clicked(move |button| {
-        let window = button.root().and_downcast::<gtk::Window>();
-        gtk::UriLauncher::new(&link).launch(window.as_ref(), gio::Cancellable::NONE, |result| {
-            if let Err(error) = result {
-                tracing::warn!("Could not open the Hall of Fame: {error}");
-            }
-        });
-    });
+    button.connect_clicked(move |button| open_link(button, &link));
 }

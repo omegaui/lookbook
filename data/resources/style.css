@@ -59,8 +59,9 @@
   transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 }
 
-/* Lift the card on hover; its shadow grows softer and further away. */
-.collection-card:hover {
+/* Lift the card on hover or keyboard focus; its shadow grows softer and further away. */
+.collection-card:hover,
+.collection-card:focus-visible {
   transform: translateY(-6px);
   box-shadow: 0 14px 30px rgba(0, 0, 6, 0.26);
 }
@@ -176,11 +177,6 @@
 
 .rice-card {
   padding: 0;
-  transition: transform 200ms ease-out;
-}
-
-flowboxchild:hover .rice-card {
-  transform: translateY(-4px);
 }
 
 .rice-placeholder {

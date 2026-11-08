@@ -35,7 +35,7 @@ pub fn release_card(release: &Release) -> gtk::Button {
     let button = gtk::Button::builder()
         .child(&content)
         .css_classes(["card", "release-card"])
-        .tooltip_text(&release.link)
+        .tooltip_text(gettext("Read the release notes in your browser"))
         .build();
     let link = release.link.clone();
     button.connect_clicked(move |button| open_link(button, &link));

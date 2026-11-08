@@ -6,17 +6,17 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gettextrs::gettext;
 use gtk::glib::clone;
-use gtk::{gio, glib};
+use gtk::glib;
 
+use crate::images::load_texture_for;
 use crate::catalog::{Catalog, HostedScreenshot, ItemKind, ItemRef};
 use crate::details::{compare, setup_for, similar_items, Comparison};
 use crate::extensions::fetch_popular;
 use crate::ideas::evaluate;
 use crate::system::SystemInfo;
 use crate::http::shared_session;
-use crate::wallpapers::fetch_texture;
 use crate::widgets::{
-    append_to_grid,
+    append_to_grid, open_link,
     chip_label, extension_card, fact_tile, feature_check,
     open_details_on_activate, CardBadge, CardContent, CatalogCard,
     DetailContent, IdeaCard, ProtocolBrowser, EdgePicture, DesktopScene, LogoTile, ProtocolSummary, RiceCard,
@@ -184,13 +184,7 @@ impl ItemDetailPage {
     }
 
     fn show_badge(&self, badge: Option<CardBadge>) {
-        let Some(badge) = badge else {
-            return;
-        };
-        let label = &self.imp().badge_label;
-        label.set_label(&badge.label());
-        label.add_css_class(badge.css_class());
-        label.set_visible(true);
+        CardBadge::show_on(badge, &self.imp().badge_label);
     }
 
     /// The Screenshots gallery. Hidden when the item has no screenshot.
@@ -207,21 +201,12 @@ impl ItemDetailPage {
         let Some(hosted) = hosted.cloned() else {
             return;
         };
-        glib::spawn_future_local(clone!(
-            #[weak(rename_to = page)]
-            self,
-            async move {
-                match fetch_texture(&shared_session(), &hosted.url).await {
-                    Ok(texture) => {
-                        let imp = page.imp();
-                        let name = imp.name_label.label();
-                        imp.banner_picture.show_screenshot(&texture, &name, &hosted);
-                        imp.banner_art.set_visible_child_name("screenshot");
-                    }
-                    Err(error) => tracing::warn!("Could not load the banner screenshot: {error:#}"),
-                }
-            }
-        ));
+        load_texture_for(self, &hosted.url.clone(), 0, "the banner screenshot", move |page, texture| {
+            let imp = page.imp();
+            let name = imp.name_label.label();
+            imp.banner_picture.show_screenshot(&texture, &name, &hosted);
+            imp.banner_art.set_visible_child_name("screenshot");
+        });
     }
 
     /// Compositors only: the rices that run on it. Hidden when there are none.
@@ -369,13 +354,7 @@ impl ItemDetailPage {
 
     fn open_website(&self) {
         let website = self.imp().website.borrow().clone();
-        let window = self.root().and_downcast::<gtk::Window>();
-
-        gtk::UriLauncher::new(&website).launch(window.as_ref(), gio::Cancellable::NONE, |result| {
-            if let Err(error) = result {
-                tracing::warn!("Could not open the website: {error}");
-            }
-        });
+        open_link(self, &website);
     }
 }
 

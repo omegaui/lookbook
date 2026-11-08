@@ -4,7 +4,7 @@
 use gettextrs::ngettext;
 use gtk::glib::clone;
 use gtk::prelude::*;
-use gtk::{gio, glib};
+use gtk::glib;
 
 use super::NaturalWidthCap;
 use crate::extensions::{compact_count, Extension};
@@ -96,12 +96,7 @@ fn load_screenshot(picture: &gtk::Picture, placeholder: &gtk::Image, session: &s
 }
 
 fn open_page(button: &gtk::Button, url: &str) {
-    let window = button.root().and_downcast::<gtk::Window>();
-    gtk::UriLauncher::new(url).launch(window.as_ref(), gio::Cancellable::NONE, |result| {
-        if let Err(error) = result {
-            tracing::warn!("Could not open the extension page: {error}");
-        }
-    });
+    super::open_link(button, url);
 }
 
 /// Plural rules need a whole number; counts this large all use the plural.
