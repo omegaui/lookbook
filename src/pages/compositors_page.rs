@@ -12,7 +12,8 @@ use gettextrs::gettext;
 use crate::catalog::{Catalog, CompositorKind};
 use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
-use crate::widgets::{open_details_on_activate, CardContent, CatalogCard, IntroBanner, RiceCard};
+use crate::widgets::{
+    append_to_grid,open_details_on_activate, CardContent, CatalogCard, IntroBanner, RiceCard};
 
 /// The toggle name that turns the filter off.
 const SHOW_ALL: &str = "all";
@@ -99,7 +100,7 @@ impl CompositorsPage {
         }
 
         for rice in &catalog.rices {
-            imp.rices_flowbox.append(&RiceCard::new(rice, catalog));
+            append_to_grid(&imp.rices_flowbox, &RiceCard::new(rice, catalog));
         }
         let compositors = catalog.rices.iter().map(|rice| rice.compositors.clone()).collect();
         imp.rice_compositors.replace(compositors);

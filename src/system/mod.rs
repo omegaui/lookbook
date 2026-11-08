@@ -14,7 +14,7 @@ pub use session::Session;
 
 use crate::catalog::{Catalog, Compositor, Desktop, Distro};
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct SystemInfo {
     pub os_release: OsRelease,
     pub session: Session,

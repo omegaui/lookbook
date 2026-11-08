@@ -8,6 +8,9 @@ use gtk::subclass::prelude::*;
 use gtk::{gdk, glib, graphene, gsk};
 
 use super::edge::{drop_shadow, screen_rect, SCREEN_RADIUS};
+use super::screenshot_credit;
+use crate::catalog::HostedScreenshot;
+use gettextrs::gettext;
 
 const PLACEHOLDER_TOP: gdk::RGBA = gdk::RGBA::new(0.6, 0.6, 0.65, 0.5);
 const PLACEHOLDER_BOTTOM: gdk::RGBA = gdk::RGBA::new(0.4, 0.4, 0.45, 0.5);
@@ -78,6 +81,18 @@ impl EdgePicture {
     pub fn set_texture(&self, texture: Option<&gdk::Texture>) {
         self.imp().texture.replace(texture.cloned());
         self.queue_draw();
+    }
+
+    /// Shows an item's screenshot, credited in the tooltip and named for
+    /// screen readers.
+    pub fn show_screenshot(&self, texture: &gdk::Texture, item_name: &str, screenshot: &HostedScreenshot) {
+        self.set_texture(Some(texture));
+        let credit = screenshot_credit(screenshot);
+        self.set_tooltip_text(Some(&credit));
+        let description = gettext("Screenshot of {item}. {credit}")
+            .replace("{item}", item_name)
+            .replace("{credit}", &credit);
+        self.update_property(&[gtk::accessible::Property::Label(&description)]);
     }
 }
 

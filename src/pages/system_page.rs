@@ -15,6 +15,7 @@ use crate::catalog::Catalog;
 use crate::ideas::{evaluate, CurrentSetup, IdeaStatus};
 use crate::system::{kernel_label, SystemInfo};
 use crate::widgets::{
+    append_to_grid,
     fact_tile, icon_tile, logo_tile, Fact, FitsTogetherDialog, IdeaCard, LayerStack,
     ProtocolBrowser, StackLayer,
 };
@@ -106,11 +107,6 @@ mod imp {
     #[gtk::template_callbacks]
     impl SystemPage {
         #[template_callback]
-        fn on_scan_clicked(&self, _button: &gtk::Button) {
-            self.obj().scan_again();
-        }
-
-        #[template_callback]
         fn on_copy_clicked(&self, _button: &gtk::Button) {
             self.obj().copy_report();
         }
@@ -157,14 +153,6 @@ impl SystemPage {
         let dialog = FitsTogetherDialog::new(&catalog, &system);
         dialog.present(Some(self));
         Some(dialog)
-    }
-
-    fn scan_again(&self) {
-        let catalog = self.imp().catalog.borrow().clone();
-        if let Some(catalog) = catalog {
-            let system = SystemInfo::detect_with(&catalog);
-            self.show_system(catalog, &system);
-        }
     }
 
     fn clear(&self) {
@@ -237,7 +225,7 @@ impl SystemPage {
             graphics_fact(system),
         ];
         for fact in &facts {
-            self.imp().facts_flowbox.append(&fact_tile(fact));
+            append_to_grid(&self.imp().facts_flowbox, &fact_tile(fact));
         }
     }
 
@@ -245,7 +233,7 @@ impl SystemPage {
         let imp = self.imp();
 
         for (idea, status) in catalog.ideas.iter().zip(statuses) {
-            imp.ideas_flowbox.append(&IdeaCard::new(idea, status));
+            append_to_grid(&imp.ideas_flowbox, &IdeaCard::new(idea, status));
         }
         imp.ready_flags
             .replace(statuses.iter().map(IdeaStatus::is_available).collect());

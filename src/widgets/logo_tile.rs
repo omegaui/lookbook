@@ -158,6 +158,18 @@ impl Default for LogoTile {
 }
 
 impl LogoTile {
+    /// A tile screen readers name, for tiles that carry meaning on their own,
+    /// like the compositors a rice runs on. Plain tiles are decoration.
+    pub fn labelled(content: &TileContent, size: i32, label: &str) -> Self {
+        let tile: Self = glib::Object::builder()
+            .property("accessible-role", gtk::AccessibleRole::Img)
+            .build();
+        tile.set_tile_size(size);
+        tile.set_content(content);
+        tile.update_property(&[gtk::accessible::Property::Label(label)]);
+        tile
+    }
+
     pub fn new(content: &TileContent, size: i32) -> Self {
         let tile = Self::default();
         tile.set_tile_size(size);

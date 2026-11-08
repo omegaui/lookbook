@@ -147,7 +147,7 @@ impl RiceCard {
     /// A small logo per compositor, named in its tooltip.
     fn show_compositors(&self, rice: &Rice, catalog: &Catalog) {
         for compositor in rice.compositors.iter().filter_map(|id| catalog.find_compositor(id)) {
-            let tile = LogoTile::new(
+            let tile = LogoTile::labelled(
                 &TileContent {
                     short: compositor.short.clone(),
                     color: compositor.color.clone(),
@@ -155,9 +155,9 @@ impl RiceCard {
                     icon_name: None,
                 },
                 COMPOSITOR_TILE_SIZE,
+                &compositor.name,
             );
             tile.set_tooltip_text(Some(&compositor.name));
-            tile.update_property(&[gtk::accessible::Property::Label(&compositor.name)]);
             self.imp().compositors_box.append(&tile);
         }
     }
@@ -227,6 +227,10 @@ impl RiceCard {
 
     fn show_preview(&self, paintable: &impl IsA<gtk::gdk::Paintable>) {
         let picture = CoverPicture::new(paintable, PREVIEW_HEIGHT);
+        let name = self.imp().name_label.label();
+        picture.update_property(&[gtk::accessible::Property::Label(
+            &gettext("Preview of {}").replace("{}", &name),
+        )]);
         let stack = &self.imp().preview_stack;
         stack.add_named(&picture, Some(PREVIEW_PAGE));
         stack.set_visible_child_name(PREVIEW_PAGE);

@@ -14,6 +14,7 @@ use crate::http::shared_session;
 use crate::news::{fetch_releases, recent_releases, Day, Release};
 use crate::system::SystemInfo;
 use crate::widgets::{
+    append_to_grid,
     fill_wall_grid, open_details_on_activate, release_card, CardContent, CatalogCard,
     CollectionCard, CollectionContent, SpotlightCard, SpotlightContent, WallpaperSpotlight,
 };
@@ -209,7 +210,7 @@ impl ExplorePage {
 
         imp.news_flowbox.remove_all();
         for release in releases.iter().take(NEWS_COUNT) {
-            imp.news_flowbox.append(&release_card(release));
+            append_to_grid(&imp.news_flowbox, &release_card(release));
         }
     }
 

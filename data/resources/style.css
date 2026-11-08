@@ -509,3 +509,12 @@ flowboxchild:hover .showcase-card {
 .category-chip:checked .dim-label {
   opacity: 0.8;
 }
+
+/* A badge that opens an explanation: keep the badge look, drop the button chrome. */
+.badge-button > button {
+  min-height: 0;
+  padding: 0 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+}

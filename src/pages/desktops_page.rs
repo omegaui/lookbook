@@ -14,7 +14,7 @@ use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
 use crate::wallpapers::fetch_texture;
 use crate::widgets::{
-    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, EdgePicture, IntroBanner,
+    chip_label, open_details_on_activate, scene_for_desktop, EdgePicture, IntroBanner,
     DesktopScene, LogoTile, ShowcaseCard, ShowcaseContent, TileContent,
 };
 
@@ -156,9 +156,7 @@ impl DesktopsPage {
 
     fn show_featured_screenshot(&self, texture: &gtk::gdk::Texture, screenshot: &HostedScreenshot) {
         let imp = self.imp();
-        imp.featured_picture.set_texture(Some(texture));
-        imp.featured_picture
-            .set_tooltip_text(Some(&screenshot_credit(screenshot)));
+        imp.featured_picture.show_screenshot(texture, "GNOME", screenshot);
         imp.featured_art.set_visible_child_name("screenshot");
     }
 

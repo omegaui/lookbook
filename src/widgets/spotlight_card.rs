@@ -5,7 +5,7 @@ use gtk::glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
-use super::{chip_label, screenshot_credit, EdgePicture, DesktopScene, LogoTile, SpotlightContent};
+use super::{chip_label, EdgePicture, DesktopScene, LogoTile, SpotlightContent};
 use crate::catalog::HostedScreenshot;
 use crate::http::shared_session;
 use crate::wallpapers::fetch_texture;
@@ -113,8 +113,8 @@ impl SpotlightCard {
                 match fetch_texture(&shared_session(), &screenshot.url).await {
                     Ok(texture) => {
                         let imp = card.imp();
-                        imp.picture.set_texture(Some(&texture));
-                        imp.picture.set_tooltip_text(Some(&screenshot_credit(&screenshot)));
+                        let name = imp.name_label.label();
+                        imp.picture.show_screenshot(&texture, &name, &screenshot);
                         imp.art_stack.set_visible_child_name("screenshot");
                     }
                     Err(error) => tracing::warn!("Could not load a spotlight screenshot: {error:#}"),

@@ -9,6 +9,7 @@ use gtk::glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 
+use super::append_to_grid;
 use super::protocol_card::ProtocolCard;
 use crate::catalog::{ProtocolCategory, ProtocolInfo, ProtocolOverview};
 
@@ -112,7 +113,7 @@ impl ProtocolBrowser {
         let mut entries = Vec::new();
         for info in &overview.described {
             let hidden = visible.is_some_and(|visible| !visible.contains(&info.interface));
-            imp.cards_flowbox.append(&ProtocolCard::new(info, hidden));
+            append_to_grid(&imp.cards_flowbox, &ProtocolCard::new(info, hidden));
             entries.push(entry_for(info));
         }
         imp.entries.replace(entries);
@@ -123,7 +124,7 @@ impl ProtocolBrowser {
         for global in others {
             let chip = gtk::Label::new(Some(global));
             chip.add_css_class("protocol-chip");
-            imp.others_flowbox.append(&chip);
+            append_to_grid(&imp.others_flowbox, &chip);
         }
         imp.others.replace(others.to_vec());
     }

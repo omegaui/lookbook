@@ -193,3 +193,13 @@ pub fn open_details_on_activate(flowbox: &gtk::FlowBox) {
         }
     });
 }
+
+/// Adds a card to a grid when the card's own buttons take the clicks, or it
+/// has none. The grid's cell stays out of the Tab order, so each card is one
+/// Tab stop and Enter presses its button, not a cell that does nothing.
+pub fn append_to_grid(flowbox: &gtk::FlowBox, card: &impl IsA<gtk::Widget>) {
+    flowbox.append(card);
+    if let Some(cell) = card.parent().and_downcast::<gtk::FlowBoxChild>() {
+        cell.set_focusable(false);
+    }
+}

@@ -16,7 +16,7 @@ mod imp {
         #[template_child]
         pub name_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
-        pub hidden_label: gtk::TemplateChild<gtk::Label>,
+        pub hidden_label: gtk::TemplateChild<gtk::MenuButton>,
         #[template_child]
         pub interface_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]

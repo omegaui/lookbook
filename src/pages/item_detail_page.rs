@@ -16,8 +16,9 @@ use crate::system::SystemInfo;
 use crate::http::shared_session;
 use crate::wallpapers::fetch_texture;
 use crate::widgets::{
+    append_to_grid,
     chip_label, extension_card, fact_tile, feature_check,
-    open_details_on_activate, screenshot_credit, CardBadge, CardContent, CatalogCard,
+    open_details_on_activate, CardBadge, CardContent, CatalogCard,
     DetailContent, IdeaCard, ProtocolBrowser, EdgePicture, DesktopScene, LogoTile, ProtocolSummary, RiceCard,
     ScreenshotGallery,
 };
@@ -213,8 +214,8 @@ impl ItemDetailPage {
                 match fetch_texture(&shared_session(), &hosted.url).await {
                     Ok(texture) => {
                         let imp = page.imp();
-                        imp.banner_picture.set_texture(Some(&texture));
-                        imp.banner_picture.set_tooltip_text(Some(&screenshot_credit(&hosted)));
+                        let name = imp.name_label.label();
+                        imp.banner_picture.show_screenshot(&texture, &name, &hosted);
                         imp.banner_art.set_visible_child_name("screenshot");
                     }
                     Err(error) => tracing::warn!("Could not load the banner screenshot: {error:#}"),
@@ -241,7 +242,7 @@ impl ItemDetailPage {
         imp.rices_title_label
             .set_label(&gettext("Rices for {}").replace("{}", &content.title));
         for rice in rices {
-            imp.rices_flowbox.append(&RiceCard::new(rice, catalog));
+            append_to_grid(&imp.rices_flowbox, &RiceCard::new(rice, catalog));
         }
         imp.rices_section.set_visible(true);
     }
@@ -250,7 +251,7 @@ impl ItemDetailPage {
         let imp = self.imp();
         imp.facts_title_label.set_label(&content.facts_title);
         for fact in &content.facts {
-            imp.facts_flowbox.append(&fact_tile(fact));
+            append_to_grid(&imp.facts_flowbox, &fact_tile(fact));
         }
     }
 
@@ -270,7 +271,7 @@ impl ItemDetailPage {
                     Ok(extensions) => {
                         let imp = page.imp();
                         for extension in &extensions {
-                            imp.extensions_flowbox.append(&extension_card(extension, &session));
+                            append_to_grid(&imp.extensions_flowbox, &extension_card(extension, &session));
                         }
                         imp.extensions_section.set_visible(!extensions.is_empty());
                     }
@@ -292,7 +293,7 @@ impl ItemDetailPage {
             let status = evaluate(idea, &setup, catalog);
             if status.is_available() {
                 ready_count += 1;
-                imp.ideas_flowbox.append(&IdeaCard::new(idea, &status));
+                append_to_grid(&imp.ideas_flowbox, &IdeaCard::new(idea, &status));
             }
         }
 

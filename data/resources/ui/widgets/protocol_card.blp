@@ -33,18 +33,33 @@ template $ProtocolCard: Adw.Bin {
           max-width-chars: 22;
         }
 
-        Label hidden_label {
+        // A button, so keyboard and screen reader users can reach the reason too.
+        MenuButton hidden_label {
           styles [
             "badge",
             "elsewhere",
+            "badge-button",
           ]
 
-          label: _("Hidden in Flatpak");
-          tooltip-text: _(
-            "The compositor hides this protocol from sandboxed apps, so Lookbook cannot see it. Programs outside the sandbox can."
-          );
+          tooltip-text: _("Why is it hidden?");
           valign: center;
           visible: false;
+
+          child: Label {
+            label: _("Hidden in Flatpak");
+          };
+
+          popover: Popover {
+            child: Label {
+              label: _("The compositor hides this protocol from sandboxed apps, so Lookbook cannot see it. Programs outside the sandbox can.");
+              wrap: true;
+              max-width-chars: 36;
+              margin-start: 6;
+              margin-end: 6;
+              margin-top: 6;
+              margin-bottom: 6;
+            };
+          };
         }
       }
 

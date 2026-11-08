@@ -125,6 +125,7 @@ impl WallpaperDialog {
     ) {
         let imp = self.imp();
         imp.picture.set_paintable(thumbnail);
+        imp.picture.set_alternative_text(Some(&wallpaper.title));
         imp.title_label.set_label(&wallpaper.title);
         imp.credit_label.set_label(&context.credit);
         imp.hint_label.set_label(context.hint.as_deref().unwrap_or_default());

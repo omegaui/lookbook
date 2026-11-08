@@ -13,7 +13,8 @@ use crate::catalog::{Catalog, WallpaperSource};
 use crate::system::SystemInfo;
 use crate::http::shared_session;
 use crate::wallpapers::{fetch_source, portal_hint, remove_blocked, Wallpaper};
-use crate::widgets::{WallpaperCard, WallpaperDialog, WallpaperDialogContext};
+use crate::widgets::{
+    append_to_grid,WallpaperCard, WallpaperDialog, WallpaperDialogContext};
 
 /// Thumbnails load in pages, so opening the section stays light on the network.
 const PAGE_SIZE: usize = 48;
@@ -287,7 +288,7 @@ impl WallpapersPage {
                 self,
                 move |card| page.open_preview(card)
             ));
-            imp.wallpapers_flowbox.append(&card);
+            append_to_grid(&imp.wallpapers_flowbox, &card);
             imp.thumbnail_queue.borrow_mut().push_back(card.downgrade());
         }
 

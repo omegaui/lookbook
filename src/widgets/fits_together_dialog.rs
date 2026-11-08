@@ -9,7 +9,7 @@ use adw::subclass::prelude::*;
 use gtk::glib;
 use gtk::glib::clone;
 
-use super::{LogoTile, TileContent};
+use super::{append_to_grid, LogoTile, TileContent};
 use crate::catalog::{Catalog, ItemRef};
 use crate::fits_together::{
     compositor_scene, explain, full_desktop_scene, your_scene, Explanation, Layer, LayerKind, Scene,
@@ -223,7 +223,7 @@ impl FitsTogetherDialog {
         let imp = self.imp();
         imp.examples_flowbox.remove_all();
         for example in examples {
-            imp.examples_flowbox.append(&self.example_button(example));
+            append_to_grid(&imp.examples_flowbox, &self.example_button(example));
         }
         imp.examples_title.set_visible(!examples.is_empty());
         imp.examples_flowbox.set_visible(!examples.is_empty());

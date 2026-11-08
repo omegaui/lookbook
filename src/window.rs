@@ -219,6 +219,10 @@ impl LookbookWindow {
             })
             .build();
 
+        let scan_again = gio::ActionEntry::builder("scan-again")
+            .activate(|window: &Self, _, _| window.scan_again())
+            .build();
+
         // Opens "How Linux Fits Together" on a setup and layer, for example
         // "desktop:3" (counting from the top), from the page intros.
         let explain_layers = gio::ActionEntry::builder("explain-layers")
@@ -238,6 +242,7 @@ impl LookbookWindow {
             what_is_lookbook,
             fits_together,
             explain_layers,
+            scan_again,
         ]);
 
         if PROFILE == "Devel" {
@@ -320,7 +325,7 @@ impl LookbookWindow {
 
     fn finish_refresh(&self, outcome: anyhow::Result<RefreshOutcome>) {
         match outcome {
-            Ok(_) if self.newer_catalog_saved() => self.reopen_with_new_catalog(),
+            Ok(_) if self.newer_catalog_saved() => self.reopen_with_toast(ReopenReason::CatalogUpdated),
             Ok(_) => self.show_toast(&up_to_date_text(self.catalog_date())),
             Err(error) => {
                 tracing::warn!("Could not refresh the catalog: {error:#}");
@@ -338,16 +343,46 @@ impl LookbookWindow {
         }
     }
 
-    fn reopen_with_new_catalog(&self) {
+    /// Detects the system again. Every page shows what the window detected,
+    /// so a change opens a fresh window; otherwise a toast says so.
+    fn scan_again(&self) {
+        let imp = self.imp();
+        let Some(catalog) = imp.catalog.borrow().clone() else {
+            return;
+        };
+        let fresh = SystemInfo::detect_with(&catalog);
+        let unchanged = imp.system.borrow().as_deref() == Some(&fresh);
+        if unchanged {
+            self.show_toast(&gettext("Nothing changed since the last scan"));
+        } else {
+            self.reopen_with_toast(ReopenReason::SystemRescanned);
+        }
+    }
+
+    /// Opens a fresh window, which loads the catalog and detects the system
+    /// again, so every page agrees; then closes this one.
+    fn reopen_with_toast(&self, reason: ReopenReason) {
         let Some(app) = self.application().and_downcast::<LookbookApplication>() else {
             return;
         };
         let window = LookbookWindow::new(&app);
         window.present();
-        if let Some(date) = window.catalog_date() {
-            window.show_toast(&gettext("Catalog updated to {date}").replace("{date}", &date));
-        }
+        window.show_toast(&reopen_text(reason, window.catalog_date()));
         self.close();
+    }
+
+    /// Without a catalog every page would be empty, so say what happened.
+    fn show_catalog_error(&self) {
+        let status = adw::StatusPage::builder()
+            .icon_name("dialog-error-symbolic")
+            .title(gettext("Lookbook Could Not Start"))
+            .description(gettext("Its catalog of distros, desktops and compositors could not be read. Reinstalling Lookbook should fix this."))
+            .vexpand(true)
+            .build();
+        let view = adw::ToolbarView::new();
+        view.add_top_bar(&adw::HeaderBar::new());
+        view.set_content(Some(&status));
+        self.set_content(Some(&view));
     }
 
     pub fn show_toast(&self, text: &str) {
@@ -416,6 +451,7 @@ impl LookbookWindow {
             Ok(catalog) => Rc::new(catalog),
             Err(error) => {
                 tracing::error!("Could not load the bundled catalog: {error:#}");
+                self.show_catalog_error();
                 return;
             }
         };
@@ -470,5 +506,20 @@ fn up_to_date_text(date: Option<String>) -> String {
     match date {
         Some(date) => gettext("The catalog is up to date ({date})").replace("{date}", &date),
         None => gettext("The catalog is up to date"),
+    }
+}
+
+/// Why the window reopened, for the toast the new one shows.
+#[derive(Debug, Clone, Copy)]
+enum ReopenReason {
+    CatalogUpdated,
+    SystemRescanned,
+}
+
+fn reopen_text(reason: ReopenReason, catalog_date: Option<String>) -> String {
+    match (reason, catalog_date) {
+        (ReopenReason::CatalogUpdated, Some(date)) => gettext("Catalog updated to {date}").replace("{date}", &date),
+        (ReopenReason::CatalogUpdated, None) => gettext("Catalog updated"),
+        (ReopenReason::SystemRescanned, _) => gettext("Your system changed; every page now shows it"),
     }
 }
