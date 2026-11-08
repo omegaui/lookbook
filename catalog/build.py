@@ -401,6 +401,8 @@ def check_ideas(catalog, ids, problems):
             if item not in sessions:
                 problems.append(f"idea {idea['id']} is built into unknown {item}")
         for route in idea["routes"]:
+            if route["kind"] == "portal" and not route.get("portal"):
+                problems.append(f"idea {idea['id']} has a portal route that names no portal")
             for desktop in route.get("desktops", []):
                 if desktop not in ids["desktops"]:
                     problems.append(f"idea {idea['id']} has a route for unknown desktop {desktop}")

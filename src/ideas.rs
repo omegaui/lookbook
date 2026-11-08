@@ -78,7 +78,17 @@ fn route_works(route: &IdeaRoute, setup: &CurrentSetup<'_>) -> bool {
         RouteKind::Desktop => setup
             .desktop
             .is_some_and(|desktop| route.desktops.contains(&desktop.id)),
-        RouteKind::Portal => true,
+        RouteKind::Portal => portal_works(route, setup),
+    }
+}
+
+/// A portal route works when the compositor's portal backend provides that
+/// portal. With no compositor known, or an older catalog that names no
+/// portal, the app cannot tell, so it counts as working.
+fn portal_works(route: &IdeaRoute, setup: &CurrentSetup<'_>) -> bool {
+    match (&route.portal, setup.compositor) {
+        (Some(portal), Some(compositor)) => compositor.has_portal(portal),
+        _ => true,
     }
 }
 
@@ -93,6 +103,18 @@ fn first_route_label(idea: &Idea) -> String {
         .unwrap_or_default()
 }
 
+fn compositors_with_portal<'a>(route: &IdeaRoute, catalog: &'a Catalog) -> Vec<&'a str> {
+    let Some(portal) = &route.portal else {
+        return Vec::new();
+    };
+    catalog
+        .compositors
+        .iter()
+        .filter(|compositor| compositor.has_portal(portal))
+        .map(|compositor| compositor.name.as_str())
+        .collect()
+}
+
 /// Compositors that offer a protocol route, then desktops named in desktop routes.
 fn places_where_it_works(idea: &Idea, catalog: &Catalog) -> Vec<String> {
     let mut places: Vec<String> = Vec::new();
@@ -101,7 +123,7 @@ fn places_where_it_works(idea: &Idea, catalog: &Catalog) -> Vec<String> {
         let names: Vec<&str> = match route.kind {
             RouteKind::Protocol => compositors_supporting(route, catalog),
             RouteKind::Desktop => desktops_named(route, catalog),
-            RouteKind::Portal => Vec::new(),
+            RouteKind::Portal => compositors_with_portal(route, catalog),
         };
 
         for name in names {
@@ -206,8 +228,26 @@ mod tests {
     }
 
     #[test]
-    fn screenshots_always_work_through_the_portal() {
+    fn screenshots_need_the_screenshot_portal() {
         assert!(status_of("screenshot", &["GNOME"]).is_available());
+
+        // A compositor whose portal backend has ScreenCast but no Screenshot,
+        // and no capture protocols: only the portal route is left to judge.
+        let catalog = bundled_catalog();
+        let mut compositor = catalog.find_compositor("sway").unwrap().clone();
+        compositor.protocols.globals.clear();
+        compositor.portals = vec!["ScreenCast".to_owned()];
+        let setup = CurrentSetup {
+            desktop: None,
+            compositor: Some(&compositor),
+        };
+        let idea = |id: &str| catalog.ideas.iter().find(|idea| idea.id == id).unwrap();
+        assert!(!evaluate(idea("screenshot"), &setup, &catalog).is_available());
+        assert!(evaluate(idea("recorder"), &setup, &catalog).is_available());
+    }
+
+    #[test]
+    fn an_unknown_compositor_cannot_rule_a_portal_out() {
         assert!(status_of("screenshot", &[]).is_available());
     }
 }

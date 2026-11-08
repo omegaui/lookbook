@@ -169,7 +169,9 @@ impl RunCheckDialog {
     fn show_pending_package(&self, lookup: &PackageLookup) -> adw::ActionRow {
         let group = &self.imp().package_group;
         let row = adw::ActionRow::builder()
-            .title(gettext("Looking in {}'s repositories…").replace("{}", &lookup.distro_name))
+            .title(glib::markup_escape_text(
+                &gettext("Looking in {}'s repositories…").replace("{}", &lookup.distro_name),
+            ))
             .build();
         row.add_suffix(&adw::Spinner::new());
         group.add(&row);
@@ -192,7 +194,7 @@ impl RunCheckDialog {
         match found {
             Ok(Some(package)) => self.show_found_package(lookup, &package, is_running),
             Ok(None) => self.show_missing_package(lookup, is_running),
-            Err(()) => self.show_package_error(),
+            Err(()) => self.show_package_error(is_running),
         }
     }
 
@@ -230,7 +232,9 @@ impl RunCheckDialog {
     fn show_missing_package(&self, lookup: &PackageLookup, is_running: bool) {
         let imp = self.imp();
         let row = adw::ActionRow::builder()
-            .title(gettext("Not in {}'s repositories").replace("{}", &lookup.distro_name))
+            .title(glib::markup_escape_text(
+                &gettext("Not in {}'s repositories").replace("{}", &lookup.distro_name),
+            ))
             .subtitle(gettext("It may still build from source, or come from a community repository. See How to Try It."))
             .build();
         row.add_prefix(&state_icon(CheckState::Note));
@@ -241,7 +245,7 @@ impl RunCheckDialog {
         }
     }
 
-    fn show_package_error(&self) {
+    fn show_package_error(&self, is_running: bool) {
         let imp = self.imp();
         let row = adw::ActionRow::builder()
             .title(gettext("Repology could not be reached"))
@@ -249,7 +253,10 @@ impl RunCheckDialog {
             .build();
         row.add_prefix(&state_icon(CheckState::Problem));
         imp.package_group.add(&row);
-        imp.verdict_label.set_label(&gettext("Could not check your distro's packages."));
+        // "You are running it right now" stays true whatever Repology says.
+        if !is_running {
+            imp.verdict_label.set_label(&gettext("Could not check your distro's packages."));
+        }
     }
 }
 
@@ -288,6 +295,17 @@ fn copy_button(text: &str) -> gtk::Button {
     button.connect_clicked(move |button| {
         button.clipboard().set_text(&text);
         button.set_icon_name("object-select-symbolic");
+        // Back to the copy icon, so a second copy looks like one too.
+        glib::timeout_add_local_once(
+            COPIED_RESET,
+            clone!(
+                #[weak]
+                button,
+                move || button.set_icon_name("edit-copy-symbolic")
+            ),
+        );
     });
     button
 }
+
+const COPIED_RESET: std::time::Duration = std::time::Duration::from_secs(2);

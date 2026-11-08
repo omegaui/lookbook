@@ -7,7 +7,7 @@ use std::time::Duration;
 
 use adw::prelude::*;
 use adw::subclass::prelude::*;
-use gettextrs::gettext;
+use gettextrs::{gettext, ngettext};
 use gtk::glib::clone;
 use gtk::{gdk, glib};
 
@@ -443,7 +443,11 @@ fn kernel_fact(system: &SystemInfo) -> Fact {
 fn processor_fact(system: &SystemInfo) -> Fact {
     let hardware = &system.hardware;
     let unknown = gettext("Unknown");
-    let detail = gettext("{threads} threads · {verdict}")
+    let detail = ngettext(
+        "{threads} thread · {verdict}",
+        "{threads} threads · {verdict}",
+        hardware.cpu_threads as u32,
+    )
         .replace("{threads}", &hardware.cpu_threads.to_string())
         .replace("{verdict}", &processor_verdict(hardware.cpu_threads));
     Fact::with_detail(gettext("Processor"), non_empty(&hardware.cpu_model, &unknown), &detail)

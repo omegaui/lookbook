@@ -176,6 +176,9 @@ pub struct IdeaRoute {
     pub requires: Vec<String>,
     #[serde(default)]
     pub desktops: Vec<String>,
+    /// For portal routes: the portal it needs, for example "Screenshot".
+    #[serde(default)]
+    pub portal: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]

@@ -1,7 +1,7 @@
 //! A GNOME Shell extension from extensions.gnome.org: its screenshot first,
 //! then its name, creator and downloads. Clicking it opens the extension's page.
 
-use gettextrs::gettext;
+use gettextrs::ngettext;
 use gtk::glib::clone;
 use gtk::prelude::*;
 use gtk::{gio, glib};
@@ -32,8 +32,12 @@ pub fn extension_card(extension: &Extension, session: &soup::Session) -> gtk::Bu
 
     let byline = gtk::Label::builder()
         .label(
-            gettext("by {creator} · {downloads} downloads")
-                .replace("{creator}", &extension.creator.display_name)
+            ngettext(
+                "by {creator} · {downloads} download",
+                "by {creator} · {downloads} downloads",
+                plural_count(extension.downloads),
+            )
+            .replace("{creator}", &extension.creator.display_name)
                 .replace("{downloads}", &compact_count(extension.downloads)),
         )
         .xalign(0.0)
@@ -98,4 +102,9 @@ fn open_page(button: &gtk::Button, url: &str) {
             tracing::warn!("Could not open the extension page: {error}");
         }
     });
+}
+
+/// Plural rules need a whole number; counts this large all use the plural.
+fn plural_count(count: u64) -> u32 {
+    u32::try_from(count).unwrap_or(u32::MAX)
 }

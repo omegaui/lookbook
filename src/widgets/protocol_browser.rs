@@ -3,7 +3,7 @@
 
 use std::cell::{Cell, RefCell};
 
-use gettextrs::gettext;
+use gettextrs::{gettext, ngettext};
 use gtk::glib;
 use gtk::glib::clone;
 use gtk::prelude::*;
@@ -246,7 +246,12 @@ impl ProtocolBrowser {
         let count = self.matching_others();
         imp.others_expander.set_visible(count > 0);
         imp.others_expander.set_label(Some(
-            &gettext("{} more protocols, without a description yet").replace("{}", &count.to_string()),
+            &ngettext(
+                "{} more protocol, without a description yet",
+                "{} more protocols, without a description yet",
+                count as u32,
+            )
+            .replace("{}", &count.to_string()),
         ));
         // A search through the undescribed ones opens them, so matches show.
         if !self.query().is_empty() && count > 0 {

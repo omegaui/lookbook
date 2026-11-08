@@ -82,7 +82,9 @@ fn category_label(category: NewsCategory) -> String {
 /// "Nov 3" in the user's language.
 fn short_date(day: Day) -> String {
     glib::DateTime::from_utc(day.year, day.month as i32, day.day as i32, 0, 0, 0.0)
-        .and_then(|date| date.format("%b %-d"))
+        // Translators: a short date in strftime format, for example "Nov 3".
+        // Reorder it as your language writes dates, for example "%-d %b".
+        .and_then(|date| date.format(&gettext("%b %-d")))
         .map(|text| text.to_string())
         .unwrap_or_default()
 }

@@ -1943,7 +1943,8 @@
       },
       "portals": [
         "Screenshot",
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "repology": "hyprland",
       "nvidia_note": "Works on NVIDIA with a recent driver; the Hyprland wiki's NVIDIA page lists the settings.",
@@ -2067,7 +2068,8 @@
         ]
       },
       "portals": [
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "repology": "niri",
       "screenshot": {
@@ -2197,7 +2199,8 @@
       },
       "portals": [
         "Screenshot",
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "repology": "sway",
       "nvidia_note": "On the NVIDIA driver, start sway with --unsupported-gpu.",
@@ -2337,7 +2340,8 @@
       "portals": [
         "Screenshot",
         "ScreenCast",
-        "Wallpaper"
+        "Wallpaper",
+        "Inhibit"
       ],
       "repology": "kwin",
       "screenshot": {
@@ -2467,7 +2471,8 @@
       },
       "portals": [
         "Screenshot",
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "repology": "river",
       "nvidia_note": "wlroots does not officially support the NVIDIA driver; expect rough edges.",
@@ -2587,7 +2592,8 @@
       },
       "portals": [
         "Screenshot",
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "repology": "cosmic-comp",
       "screenshot": {
@@ -2700,7 +2706,8 @@
       "portals": [
         "Screenshot",
         "ScreenCast",
-        "Wallpaper"
+        "Wallpaper",
+        "Inhibit"
       ],
       "repology": "mutter",
       "screenshot": {
@@ -2814,7 +2821,8 @@
       },
       "portals": [
         "Screenshot",
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "logo": "wayfire",
       "repology": "wayfire",
@@ -2942,7 +2950,8 @@
       },
       "portals": [
         "Screenshot",
-        "ScreenCast"
+        "ScreenCast",
+        "Inhibit"
       ],
       "logo": "labwc",
       "repology": "labwc",
@@ -3240,7 +3249,8 @@
         },
         {
           "kind": "portal",
-          "label": "Screenshot portal"
+          "label": "Screenshot portal",
+          "portal": "Screenshot"
         }
       ],
       "icon": "camera-photo-symbolic",
@@ -3264,7 +3274,8 @@
         },
         {
           "kind": "portal",
-          "label": "ScreenCast portal + PipeWire"
+          "label": "ScreenCast portal + PipeWire",
+          "portal": "ScreenCast"
         }
       ],
       "icon": "media-record-symbolic",
@@ -3344,7 +3355,8 @@
         },
         {
           "kind": "portal",
-          "label": "Inhibit portal"
+          "label": "Inhibit portal",
+          "portal": "Inhibit"
         }
       ],
       "icon": "display-brightness-symbolic",
