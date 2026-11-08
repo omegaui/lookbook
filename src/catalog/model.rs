@@ -378,6 +378,9 @@ pub struct Distro {
     pub os_release_variant: Option<String>,
     /// For example "GNOME", or "Your choice" when the installer asks.
     pub default_desktop: String,
+    /// The catalog id of that desktop, when it is one desktop the catalog has.
+    #[serde(default)]
+    pub default_desktop_id: Option<String>,
     /// Where Repology lists this distro's packages, in the order to look.
     #[serde(default)]
     pub repology_repos: Vec<RepologyRepo>,
@@ -410,7 +413,11 @@ pub struct Desktop {
     pub short: String,
     pub color: String,
     pub tagline: String,
+    /// The compositor's name as people know it, for example "Mutter".
     pub compositor: String,
+    /// Its catalog id, when the catalog has it, for example "mutter".
+    #[serde(default)]
+    pub compositor_id: Option<String>,
     pub toolkit: String,
     pub website: String,
     pub logo: Option<String>,

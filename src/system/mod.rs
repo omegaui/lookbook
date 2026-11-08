@@ -112,10 +112,7 @@ impl SystemInfo {
     /// `XDG_CURRENT_DESKTOP`, then globals only one compositor offers.
     pub fn current_compositor<'a>(&self, catalog: &'a Catalog) -> Option<&'a Compositor> {
         if let Some(desktop) = self.current_desktop(catalog) {
-            return catalog
-                .compositors
-                .iter()
-                .find(|compositor| compositor.name == desktop.compositor);
+            return catalog.compositor_of(desktop);
         }
         let by_session = self.first_running(&catalog.compositors, |compositor| &compositor.session_names);
         by_session.or_else(|| {

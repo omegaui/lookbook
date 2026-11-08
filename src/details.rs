@@ -158,10 +158,7 @@ pub fn setup_for<'a>(item: &ItemRef, catalog: &'a Catalog) -> Option<CurrentSetu
 fn setup_for_desktop<'a>(desktop: &'a Desktop, catalog: &'a Catalog) -> CurrentSetup<'a> {
     CurrentSetup {
         desktop: Some(desktop),
-        compositor: catalog
-            .compositors
-            .iter()
-            .find(|compositor| compositor.name == desktop.compositor),
+        compositor: catalog.compositor_of(desktop),
     }
 }
 

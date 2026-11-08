@@ -17,7 +17,6 @@ pub struct OsRelease {
     pub version_codename: Option<String>,
     /// The distros this one builds on, for example ["arch"] on CachyOS.
     pub id_like: Vec<String>,
-    pub logo: Option<String>,
 }
 
 impl OsRelease {
@@ -42,7 +41,6 @@ impl OsRelease {
                 "VERSION_ID" => release.version_id = Some(value),
                 "VERSION_CODENAME" => release.version_codename = Some(value),
                 "ID_LIKE" => release.id_like = value.split_whitespace().map(str::to_owned).collect(),
-                "LOGO" => release.logo = Some(value),
                 _ => {}
             }
         }
@@ -92,7 +90,6 @@ mod tests {
         assert_eq!(release.name, "Fedora Linux");
         assert_eq!(release.id, "fedora");
         assert_eq!(release.variant_id.as_deref(), Some("workstation"));
-        assert_eq!(release.logo.as_deref(), Some("fedora-logo-icon"));
     }
 
     #[test]

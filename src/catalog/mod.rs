@@ -47,6 +47,29 @@ impl Catalog {
         }
     }
 
+    /// The compositor a desktop runs on: by id, or else by name for an
+    /// older catalog.
+    pub fn compositor_of(&self, desktop: &Desktop) -> Option<&Compositor> {
+        match &desktop.compositor_id {
+            Some(id) => self.find_compositor(id),
+            None => self
+                .compositors
+                .iter()
+                .find(|compositor| compositor.name == desktop.compositor),
+        }
+    }
+
+    /// The desktop a distro starts on, when it is one the catalog has.
+    pub fn default_desktop_of(&self, distro: &Distro) -> Option<&Desktop> {
+        match &distro.default_desktop_id {
+            Some(id) => self.find_desktop(id),
+            None => self
+                .desktops
+                .iter()
+                .find(|desktop| desktop.name == distro.default_desktop),
+        }
+    }
+
     /// The screenshots for an item's gallery: its gallery, or else its one
     /// real screenshot. Empty when it has neither.
     pub fn gallery(&self, kind: ItemKind, id: &str) -> Vec<HostedScreenshot> {

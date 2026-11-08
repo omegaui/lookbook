@@ -9,7 +9,7 @@
 //! used from the next launch.
 
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use gtk::glib;
@@ -18,7 +18,8 @@ use soup::prelude::*;
 
 use super::Catalog;
 
-const CATALOG_URL: &str = "https://omegaui.github.io/lookbook/v1/catalog.json";
+/// The catalog site; each schema version is published in its own folder.
+const CATALOG_SITE: &str = "https://omegaui.github.io/lookbook";
 /// The catalog schema this version of the app reads. The workflow publishes
 /// other schema versions under other paths, and the app ignores them.
 pub const SCHEMA_VERSION: u32 = 1;
@@ -96,7 +97,8 @@ pub async fn download_now(session: &soup::Session) -> anyhow::Result<RefreshOutc
 /// Asks for the published catalog, sending the last ETag so an unchanged
 /// catalog costs almost nothing, and saves a new one.
 async fn download(session: &soup::Session, state: RefreshState) -> anyhow::Result<RefreshOutcome> {
-    let message = soup::Message::new("GET", CATALOG_URL)?;
+    let url = catalog_url();
+    let message = soup::Message::new("GET", &url)?;
     if let (Some(etag), Some(headers)) = (&state.etag, message.request_headers()) {
         headers.append("If-None-Match", etag);
     }
@@ -123,7 +125,7 @@ async fn download(session: &soup::Session, state: RefreshState) -> anyhow::Resul
             save_state(&RefreshState { etag, checked_at: now_seconds() })?;
             Ok(RefreshOutcome::Saved)
         }
-        status => anyhow::bail!("{CATALOG_URL} answered {status:?}"),
+        status => anyhow::bail!("{url} answered {status:?}"),
     }
 }
 
@@ -133,14 +135,23 @@ fn is_due(state: &RefreshState, now: u64) -> bool {
 
 /// Saves the catalog only if this app can read it, writing a temporary file
 /// first so a half-written catalog is never left behind.
+/// For example "https://omegaui.github.io/lookbook/v1/catalog.json". It
+/// follows the schema version, so the two never drift apart.
+fn catalog_url() -> String {
+    format!("{CATALOG_SITE}/v{SCHEMA_VERSION}/catalog.json")
+}
+
 fn save_catalog(body: &[u8]) -> anyhow::Result<()> {
+    save_catalog_in(&cache_folder(), body)
+}
+
+fn save_catalog_in(folder: &Path, body: &[u8]) -> anyhow::Result<()> {
     let catalog = Catalog::from_json(body)?;
     if catalog.schema_version != SCHEMA_VERSION {
         anyhow::bail!("the published catalog has schema {}", catalog.schema_version);
     }
 
-    let folder = cache_folder();
-    fs::create_dir_all(&folder)?;
+    fs::create_dir_all(folder)?;
     let temporary = folder.join(format!("{CATALOG_FILE}.part"));
     fs::write(&temporary, body)?;
     fs::rename(&temporary, folder.join(CATALOG_FILE))?;
@@ -179,6 +190,42 @@ mod tests {
     fn bundled() -> Catalog {
         let json = include_bytes!("../../data/resources/catalog/catalog.json");
         Catalog::from_json(json).expect("the bundled catalog should parse")
+    }
+
+    /// A temporary folder, removed when the test ends.
+    struct TestFolder(PathBuf);
+
+    impl TestFolder {
+        fn new(name: &str) -> Self {
+            let path = std::env::temp_dir().join(format!("lookbook-test-{name}-{}", std::process::id()));
+            let _ = fs::remove_dir_all(&path);
+            Self(path)
+        }
+    }
+
+    impl Drop for TestFolder {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.0);
+        }
+    }
+
+    #[test]
+    fn a_bad_download_never_replaces_the_good_copy() {
+        let folder = TestFolder::new("bad-download");
+        let good = include_bytes!("../../data/resources/catalog/catalog.json");
+        save_catalog_in(&folder.0, good).expect("the bundled catalog saves");
+
+        assert!(save_catalog_in(&folder.0, b"<html>Not found</html>").is_err());
+        let other_schema = String::from_utf8_lossy(good).replacen("\"schema_version\": 1", "\"schema_version\": 99", 1);
+        assert!(save_catalog_in(&folder.0, other_schema.as_bytes()).is_err());
+
+        let kept = fs::read(folder.0.join(CATALOG_FILE)).unwrap();
+        assert_eq!(kept, good);
+    }
+
+    #[test]
+    fn the_url_follows_the_schema_version() {
+        assert!(catalog_url().ends_with(&format!("/v{SCHEMA_VERSION}/catalog.json")));
     }
 
     #[test]

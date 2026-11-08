@@ -29,10 +29,19 @@ the Actions tab. It:
      rice preview, drops screenshots and Hall of Fame entries that are clearly
      gone, and stops if more than a quarter look gone (the network is more
      likely at fault);
-   - checks that every reference points at something real and every logo file
-     exists;
-   - writes `v1/catalog.json`, `v1/manifest.json` (hash, size, date) and the
-     landing page from `catalog/index.html`;
+   - checks that every reference points at something real (including
+     desktop-to-compositor and distro-to-desktop ids), that no compositor's
+     fingerprint is offered by another one, and that every logo file exists;
+   - writes `v1/catalog.json`, `v1/manifest.json` (hash, size, date, for
+     people and tools checking the site; the app reads only the catalog) and
+     the landing page from `catalog/index.html`. When nothing but the date
+     changed, it keeps the live catalog's date, so the file stays the same and
+     apps get "not modified";
+   - after a schema bump, copies every older version's live files into the
+     new site, so apps that still read them keep working;
+2b. parses the published catalog with the app's own model
+   (`catalog/model-check`), so a value the app would reject is never
+   published;
 3. commits refreshed data back to `main` as "Refresh catalog data", so the
    snapshot in the next app release is current too;
 4. deploys to GitHub Pages.
@@ -63,8 +72,9 @@ New fields must be optional (`#[serde(default)]` or `Option`) so apps already
 installed can still read the catalog. Anything an older app cannot read — a
 removed or renamed field, a new value in an enum such as a compositor `kind` —
 needs `SCHEMA_VERSION` raised in both `catalog/build.py` and
-`src/catalog/online.rs`, and publishing under `v2/`. Older apps then keep
-reading `v1/`, so leave the last `v1` build in place.
+`src/catalog/online.rs`; both build the folder name (`v2/`) from it. Older
+apps keep reading `v1/`, which `build.py` copies from the live site into
+every later build.
 
 Logos in the catalog must exist in `data/resources/icons/scalable/apps/`. An
 app release that does not bundle a new logo shows the item's letters instead.

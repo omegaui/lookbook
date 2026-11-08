@@ -190,9 +190,7 @@ fn desktop_layers(catalog: &Catalog, desktop_id: &str) -> Vec<Layer> {
         return Vec::new();
     };
     let compositor_logo = catalog
-        .compositors
-        .iter()
-        .find(|compositor| compositor.name == desktop.compositor)
+        .compositor_of(desktop)
         .and_then(|compositor| compositor.logo.as_deref());
     let mut built_in = Layer::new(LayerKind::Compositor, &desktop.compositor, compositor_logo);
     built_in.built_into = Some(desktop.name.clone());

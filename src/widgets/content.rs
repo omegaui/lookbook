@@ -72,9 +72,7 @@ fn with_bold_value(template: &str, value: &str) -> String {
 /// The bars of the distro's default desktop, so the drawing looks like it.
 fn default_desktop_bars(distro: &Distro, catalog: &Catalog) -> Vec<DesktopBar> {
     catalog
-        .desktops
-        .iter()
-        .find(|desktop| desktop.name == distro.default_desktop)
+        .default_desktop_of(distro)
         .map_or_else(|| PLAIN_BARS.to_vec(), |desktop| desktop.bars.clone())
 }
 

@@ -250,6 +250,7 @@
       "os_release_id": "fedora",
       "os_release_variant": "workstation",
       "default_desktop": "GNOME",
+      "default_desktop_id": "gnome",
       "repology_repos": [
         {
           "repo": "fedora_{version}",
@@ -376,6 +377,7 @@
       "logo": "debian",
       "os_release_id": "debian",
       "default_desktop": "GNOME",
+      "default_desktop_id": "gnome",
       "repology_repos": [
         {
           "repo": "debian_{version}",
@@ -445,6 +447,7 @@
       "logo": "ubuntu",
       "os_release_id": "ubuntu",
       "default_desktop": "GNOME",
+      "default_desktop_id": "gnome",
       "repology_repos": [
         {
           "repo": "ubuntu_{version}",
@@ -509,6 +512,7 @@
       "logo": "linuxmint",
       "os_release_id": "linuxmint",
       "default_desktop": "Cinnamon",
+      "default_desktop_id": "cinnamon",
       "repology_repos": [
         {
           "repo": "ubuntu_24_04",
@@ -559,6 +563,7 @@
       "logo": "opensuse",
       "os_release_id": "opensuse-tumbleweed",
       "default_desktop": "KDE Plasma",
+      "default_desktop_id": "kde-plasma",
       "repology_repos": [
         {
           "repo": "opensuse_tumbleweed",
@@ -732,6 +737,7 @@
       "website": "https://bazzite.gg",
       "os_release_id": "bazzite",
       "default_desktop": "KDE Plasma or GNOME",
+      "default_desktop_id": "kde-plasma",
       "logo": "bazzite",
       "repology_repos": [
         {
@@ -798,6 +804,7 @@
       "os_release_id": "fedora",
       "os_release_variant": "silverblue",
       "default_desktop": "GNOME",
+      "default_desktop_id": "gnome",
       "repology_repos": [
         {
           "repo": "fedora_{version}",
@@ -855,6 +862,7 @@
       "logo": "popos",
       "os_release_id": "pop",
       "default_desktop": "COSMIC",
+      "default_desktop_id": "cosmic",
       "repology_repos": [
         {
           "repo": "ubuntu_{version}",
@@ -926,6 +934,7 @@
       "logo": "elementary",
       "os_release_id": "elementary",
       "default_desktop": "Pantheon",
+      "default_desktop_id": "pantheon",
       "repology_repos": [
         {
           "repo": "ubuntu_24_04",
@@ -996,6 +1005,7 @@
       "logo": "endeavouros",
       "os_release_id": "endeavouros",
       "default_desktop": "KDE Plasma",
+      "default_desktop_id": "kde-plasma",
       "repology_repos": [
         {
           "repo": "arch",
@@ -1227,6 +1237,7 @@
       "color": "#1c71d8",
       "tagline": "Calm, focused desktop built around search and the Activities overview.",
       "compositor": "Mutter",
+      "compositor_id": "mutter",
       "toolkit": "GTK 4",
       "website": "https://www.gnome.org",
       "logo": "gnome",
@@ -1300,6 +1311,7 @@
       "color": "#1d6fc4",
       "tagline": "Deeply customizable desktop with a widget for almost everything.",
       "compositor": "KWin",
+      "compositor_id": "kwin",
       "toolkit": "Qt",
       "website": "https://kde.org/plasma-desktop/",
       "logo": "kdeplasma",
@@ -1373,6 +1385,7 @@
       "color": "#2a7f8a",
       "tagline": "Rust desktop from System76 with built-in tiling.",
       "compositor": "cosmic-comp",
+      "compositor_id": "cosmic-comp",
       "toolkit": "iced",
       "website": "https://system76.com/cosmic",
       "session_names": [
@@ -1580,6 +1593,7 @@
       "color": "#3d3846",
       "tagline": "Simple, elegant desktop with the Raven side panel.",
       "compositor": "labwc",
+      "compositor_id": "labwc",
       "toolkit": "GTK 3",
       "website": "https://buddiesofbudgie.org",
       "logo": "budgie",
@@ -2634,9 +2648,7 @@
       "session_names": [
         "GNOME"
       ],
-      "fingerprints": [
-        "gtk_shell1"
-      ],
+      "fingerprints": [],
       "protocols": {
         "version": "51",
         "checked_on": "2026-09-06",

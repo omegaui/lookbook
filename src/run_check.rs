@@ -186,9 +186,7 @@ fn session_verdict_detail(is_running: bool) -> String {
 /// A desktop's NVIDIA note comes from the compositor it runs on.
 fn theirs_nvidia_note<'a>(desktop: &Desktop, catalog: &'a Catalog) -> Option<&'a str> {
     catalog
-        .compositors
-        .iter()
-        .find(|compositor| compositor.name == desktop.compositor)
+        .compositor_of(desktop)
         .and_then(|compositor| compositor.nvidia_note.as_deref())
 }
 
@@ -246,10 +244,7 @@ fn graphics_check(system: &SystemInfo, nvidia_note: Option<&str>) -> Option<Chec
 
 /// The setup a distro starts with, for example Fedora Workstation → GNOME on Mutter.
 fn default_desktop_setup<'a>(distro: &Distro, catalog: &'a Catalog) -> Option<CurrentSetup<'a>> {
-    let desktop = catalog
-        .desktops
-        .iter()
-        .find(|desktop| desktop.name == distro.default_desktop)?;
+    let desktop = catalog.default_desktop_of(distro)?;
     crate::details::setup_for(&ItemRef::new(ItemKind::Desktop, &desktop.id), catalog)
 }
 

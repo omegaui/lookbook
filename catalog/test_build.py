@@ -249,6 +249,23 @@ class SniffTests(unittest.TestCase):
         self.assertFalse(build.looks_like_media(b"<!DOCTYPE html>"))
 
 
+class LinkTests(unittest.TestCase):
+    def test_a_fingerprint_another_compositor_offers(self):
+        data = catalog()
+        compositor(data, "wayfire")["fingerprints"] = ["xdg_wm_base"]
+        self.assertTrue(any("fingerprint" in problem for problem in build.validate(data)))
+
+    def test_an_unknown_compositor_id(self):
+        data = catalog()
+        data["desktops"][0]["compositor_id"] = "not-a-compositor"
+        self.assertTrue(any("unknown compositor" in problem for problem in build.validate(data)))
+
+    def test_an_unknown_default_desktop_id(self):
+        data = catalog()
+        data["distros"][0]["default_desktop_id"] = "not-a-desktop"
+        self.assertTrue(any("unknown desktop" in problem for problem in build.validate(data)))
+
+
 class PublishTests(unittest.TestCase):
     def test_writes_catalog_manifest_and_index(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -260,6 +277,53 @@ class PublishTests(unittest.TestCase):
             self.assertEqual(published["generated_at"], "2026-11-07T04:17:00Z")
             self.assertEqual(manifest["schema_version"], build.SCHEMA_VERSION)
             self.assertTrue((out / "index.html").exists())
+
+    def test_an_unchanged_catalog_keeps_its_date(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            live = dict(catalog(), generated_at="2026-11-01T04:17:00Z")
+            build.publish(catalog(), out, "2026-11-08T04:17:00Z", live)
+            published = json.loads((out / "v1/catalog.json").read_text())
+            self.assertEqual(published["generated_at"], "2026-11-01T04:17:00Z")
+
+    def test_a_changed_catalog_gets_a_new_date(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            live = dict(catalog(), generated_at="2026-11-01T04:17:00Z", rices=[])
+            build.publish(catalog(), out, "2026-11-08T04:17:00Z", live)
+            published = json.loads((out / "v1/catalog.json").read_text())
+            self.assertEqual(published["generated_at"], "2026-11-08T04:17:00Z")
+
+    def test_older_versions_stay_published(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            fetched = []
+
+            def fetch(url):
+                fetched.append(url)
+                return {"url": url}
+
+            original = build.SCHEMA_VERSION
+            build.SCHEMA_VERSION = 3
+            try:
+                build.keep_older_versions(out, fetch=fetch)
+            finally:
+                build.SCHEMA_VERSION = original
+            self.assertTrue((out / "v1/catalog.json").exists())
+            self.assertTrue((out / "v2/manifest.json").exists())
+            self.assertEqual(len(fetched), 4)
+
+    def test_a_missing_older_version_stops_the_build(self):
+        def failing_fetch(url):
+            raise OSError("gone")
+
+        original = build.SCHEMA_VERSION
+        build.SCHEMA_VERSION = 2
+        try:
+            with tempfile.TemporaryDirectory() as folder, self.assertRaises(SystemExit):
+                build.keep_older_versions(Path(folder), fetch=failing_fetch)
+        finally:
+            build.SCHEMA_VERSION = original
 
 
 if __name__ == "__main__":

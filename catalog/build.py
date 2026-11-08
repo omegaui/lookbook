@@ -41,7 +41,8 @@ INDEX_TEMPLATE = Path(__file__).resolve().parent / "index.html"
 # The app reads v1/catalog.json and ignores a catalog with another schema
 # version. Bump both, and publish under v2/, for changes old apps cannot read.
 SCHEMA_VERSION = 1
-PUBLISH_DIR = "v1"
+PUBLISH_DIR = f"v{SCHEMA_VERSION}"
+SITE_URL = "https://omegaui.github.io/lookbook"
 USER_AGENT = "Lookbook-catalog/1 (+https://github.com/omegaui/lookbook)"
 TIMEOUT_SECONDS = 30
 # If more media than this fails, the network is more likely at fault than the
@@ -347,6 +348,8 @@ def validate(catalog):
     check_rices(catalog, ids, problems)
     check_logos(catalog, problems)
     check_galleries(catalog, problems)
+    check_fingerprints(catalog, problems)
+    check_id_links(catalog, ids, problems)
     return problems
 
 
@@ -412,6 +415,29 @@ def check_rices(catalog, ids, problems):
                 problems.append(f"rice {rice['id']} runs on unknown compositor {compositor}")
 
 
+def check_fingerprints(catalog, problems):
+    """The app picks the first compositor whose fingerprint it sees, so a
+    fingerprint another compositor also offers would name the wrong one."""
+    for compositor in catalog["compositors"]:
+        for fingerprint in compositor.get("fingerprints", []):
+            for other in catalog["compositors"]:
+                if other is compositor:
+                    continue
+                if any(glob.startswith(fingerprint) for glob in other["protocols"]["globals"]):
+                    problems.append(f"{compositor['id']}: fingerprint {fingerprint} is also offered by {other['id']}")
+
+
+def check_id_links(catalog, ids, problems):
+    for desktop in catalog["desktops"]:
+        link = desktop.get("compositor_id")
+        if link and link not in ids["compositors"]:
+            problems.append(f"desktop {desktop['id']} runs on unknown compositor {link}")
+    for distro in catalog["distros"]:
+        link = distro.get("default_desktop_id")
+        if link and link not in ids["desktops"]:
+            problems.append(f"distro {distro['id']} starts on unknown desktop {link}")
+
+
 def check_galleries(catalog, problems):
     """Gallery images load live from their hosts, so each needs an https link,
     the page that holds its license, and a credit."""
@@ -437,9 +463,15 @@ def check_logos(catalog, problems):
 # Step 4: output
 
 
-def publish(catalog, out_dir, now):
-    """Writes v1/catalog.json, v1/manifest.json and index.html under out_dir."""
-    published = dict(catalog, generated_at=now)
+def publish(catalog, out_dir, now, live=None):
+    """Writes v1/catalog.json, v1/manifest.json and index.html under out_dir.
+
+    `live` is the catalog online now. When nothing but the date would change,
+    its date is kept, so the file stays byte for byte the same: apps then get
+    "not modified" and About keeps the date the data really changed.
+    """
+    generated_at = live["generated_at"] if live and same_content(live, catalog) else now
+    published = dict(catalog, generated_at=generated_at)
     body = json.dumps(published, ensure_ascii=False, separators=(",", ":")).encode()
 
     version_dir = out_dir / PUBLISH_DIR
@@ -454,6 +486,39 @@ def publish(catalog, out_dir, now):
     }
     (version_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     (out_dir / "index.html").write_text(index_page(now))
+
+
+def same_content(first, second):
+    """Whether two catalogs differ only in their date."""
+    def without_date(catalog):
+        return {key: value for key, value in catalog.items() if key != "generated_at"}
+
+    return without_date(first) == without_date(second)
+
+
+def fetch_live_catalog(fetch=fetch_json):
+    """The catalog online now, or None when it cannot be read."""
+    try:
+        return fetch(f"{SITE_URL}/{PUBLISH_DIR}/catalog.json")
+    except Exception:  # noqa: BLE001 - without it, the date simply moves on
+        return None
+
+
+def keep_older_versions(out_dir, fetch=fetch_json):
+    """Pages replaces the whole site on each deploy. Apps from before a schema
+    bump still read their own folder, so copy every older version's live
+    files into the new site, or stop: publishing without them would leave
+    those apps on old data for good."""
+    for version in range(1, SCHEMA_VERSION):
+        folder = out_dir / f"v{version}"
+        folder.mkdir(parents=True, exist_ok=True)
+        for name in ("catalog.json", "manifest.json"):
+            url = f"{SITE_URL}/v{version}/{name}"
+            try:
+                data = fetch(url)
+            except Exception as error:  # noqa: BLE001
+                raise SystemExit(f"could not keep {url} ({error}); refusing to publish without it") from error
+            (folder / name).write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
 
 
 def index_page(now):
@@ -502,7 +567,10 @@ def main():
     now = utc_now()
     if args.write_source and report.changes:
         save_source(catalog, now)
-    publish(catalog, args.out, now)
+    live = None if args.offline else fetch_live_catalog()
+    publish(catalog, args.out, now, live)
+    if not args.offline:
+        keep_older_versions(args.out)
     write_job_summary(report)
     print(f"Published {args.out / PUBLISH_DIR / 'catalog.json'}")
     return 0
