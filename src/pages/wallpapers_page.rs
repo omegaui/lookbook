@@ -11,7 +11,7 @@ use gtk::glib::clone;
 
 use crate::catalog::{Catalog, WallpaperSource};
 use crate::system::SystemInfo;
-use crate::http::shared_session;
+use crate::http::wallpaper_session;
 use crate::wallpapers::{fetch_source, portal_hint, remove_blocked, Wallpaper};
 use crate::widgets::{
     append_to_grid,WallpaperCard, WallpaperDialog, WallpaperDialogContext};
@@ -63,7 +63,7 @@ mod imp {
                 wallpapers_flowbox: gtk::TemplateChild::default(),
                 show_more_button: gtk::TemplateChild::default(),
                 credits_box: gtk::TemplateChild::default(),
-                session: shared_session(),
+                session: wallpaper_session(),
                 sources: RefCell::default(),
                 blocklist: RefCell::default(),
                 portal_hint: RefCell::default(),

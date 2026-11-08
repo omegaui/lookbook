@@ -15,6 +15,7 @@ const DISK_CACHE_BYTES: u32 = 200 * 1024 * 1024;
 
 thread_local! {
     static SHARED_SESSION: soup::Session = cached_session();
+    static WALLPAPER_SESSION: soup::Session = plain_session();
     static DISK_CACHE: RefCell<Option<soup::Cache>> = const { RefCell::new(None) };
 }
 
@@ -22,6 +23,13 @@ thread_local! {
 /// are shared.
 pub fn shared_session() -> soup::Session {
     SHARED_SESSION.with(Clone::clone)
+}
+
+/// The session for wallpapers, with no disk cache: wallpapers are never
+/// kept beyond the app's own run, since their sources gave no license to
+/// store or redistribute them.
+pub fn wallpaper_session() -> soup::Session {
+    WALLPAPER_SESSION.with(Clone::clone)
 }
 
 /// Writes the disk cache's index, so the next launch finds what is cached.
@@ -39,10 +47,15 @@ fn user_agent() -> String {
     format!("Syspedia/{VERSION} (+https://github.com/omegaui/syspedia)")
 }
 
-fn cached_session() -> soup::Session {
+fn plain_session() -> soup::Session {
     let session = soup::Session::new();
     session.set_user_agent(&user_agent());
     session.set_timeout(TIMEOUT_SECONDS);
+    session
+}
+
+fn cached_session() -> soup::Session {
+    let session = plain_session();
 
     let folder = glib::user_cache_dir().join("syspedia").join("http");
     let cache = soup::Cache::new(folder.to_str(), soup::CacheType::SingleUser);
