@@ -3,7 +3,7 @@ use adw::subclass::prelude::*;
 use gettextrs::gettext;
 use gtk::{gio, glib};
 
-use crate::config::{APP_ID, PROFILE, VERSION};
+use crate::config::{APP_ID, VERSION};
 use crate::window::SyspediaWindow;
 
 /// Alt and a number open each page, in the order of the tabs.
@@ -95,7 +95,7 @@ impl SyspediaApplication {
 
         self.add_action_entries([quit, about, shortcuts, show_item, can_i_run]);
 
-        if PROFILE == "Devel" {
+        if crate::scripting::enabled() {
             // Lets scripts check the lower sections of a page without the mouse.
             let scroll_to = gio::ActionEntry::builder("scroll-to")
                 .parameter_type(Some(glib::VariantTy::DOUBLE))
@@ -117,7 +117,19 @@ impl SyspediaApplication {
             let refresh_catalog = gio::ActionEntry::builder("refresh-catalog")
                 .activate(|app: &Self, _, _| app.forward_to_window("refresh-catalog", None))
                 .build();
-            self.add_action_entries([scroll_to, show_spotlight, explain_layers, what_is_syspedia, refresh_catalog]);
+            // Opens the preview of the wallpaper at a position in the grid, counting from 0.
+            let preview_wallpaper = gio::ActionEntry::builder("preview-wallpaper")
+                .parameter_type(Some(glib::VariantTy::INT32))
+                .activate(|app: &Self, _, parameter| app.forward_to_window("preview-wallpaper", parameter))
+                .build();
+            self.add_action_entries([
+                scroll_to,
+                show_spotlight,
+                explain_layers,
+                what_is_syspedia,
+                refresh_catalog,
+                preview_wallpaper,
+            ]);
         }
     }
 

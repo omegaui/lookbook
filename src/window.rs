@@ -245,7 +245,7 @@ impl SyspediaWindow {
             scan_again,
         ]);
 
-        if PROFILE == "Devel" {
+        if crate::scripting::enabled() {
             self.add_scroll_action();
         }
     }
@@ -271,7 +271,16 @@ impl SyspediaWindow {
                 }
             })
             .build();
-        self.add_action_entries([scroll_to, show_spotlight]);
+        let preview_wallpaper = gio::ActionEntry::builder("preview-wallpaper")
+            .parameter_type(Some(glib::VariantTy::INT32))
+            .activate(|window: &Self, _, parameter| {
+                if let Some(index) = parameter.and_then(|value| value.get::<i32>()) {
+                    window.show_page("wallpapers");
+                    window.imp().wallpapers_page.preview_wallpaper(index);
+                }
+            })
+            .build();
+        self.add_action_entries([scroll_to, show_spotlight, preview_wallpaper]);
     }
 
     /// Opens the dialog over the page in view, on the setup and layer named.

@@ -333,6 +333,19 @@ impl WallpapersPage {
         None
     }
 
+    /// Opens the preview of the wallpaper at `index` in the grid, for scripts.
+    pub fn preview_wallpaper(&self, index: i32) {
+        let card = self
+            .imp()
+            .wallpapers_flowbox
+            .child_at_index(index)
+            .and_then(|cell| cell.child())
+            .and_downcast::<WallpaperCard>();
+        if let Some(card) = card {
+            self.open_preview(&card);
+        }
+    }
+
     fn open_preview(&self, card: &WallpaperCard) {
         let Some(wallpaper) = card.wallpaper() else {
             return;

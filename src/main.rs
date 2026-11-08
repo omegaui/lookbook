@@ -12,6 +12,7 @@ mod news;
 mod pages;
 mod repology;
 mod run_check;
+mod scripting;
 mod system;
 mod wallpapers;
 mod widgets;

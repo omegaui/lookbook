@@ -68,6 +68,7 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Format Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 format -f $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Full build, install and Meson tests | `.agentic-coding/scripts/build-flatpak.sh` | 2 to 4 minutes; run in the background |
 | Build and install the optimized release app (`io.github.omegaui.Syspedia`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
+| Retake the app page screenshots (`data/screenshots/`) from the release app | `.agentic-coding/scripts/take-page-screenshots.sh` (starts it with `SYSPEDIA_SCRIPTING=1`, which turns on the scripting actions in a release build; check every picture after, and ask the user to park the mouse elsewhere, since Hyprland draws the cursor into captures) | About 2 minutes |
 | Build the release bundle for GitHub (`syspedia-x86_64.flatpak`) | `build-aux/make-bundle.sh` | About 5 minutes |
 | Refresh `docs/screenshot-credits.md` from the catalog (before a release) | `python3 catalog/write_credits.py` | Seconds |
 | Build the Flathub manifest offline, from HEAD (not installed) | `.agentic-coding/scripts/build-flathub.sh` | About 10 minutes the first time (downloads crates) |
