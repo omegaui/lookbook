@@ -5,6 +5,9 @@ use std::fs;
 
 const DRM_FOLDER: &str = "/sys/class/drm";
 const PCI_DATABASE: &str = "/usr/share/hwdata/pci.ids";
+/// Vendors the app must recognise even for a card newer than the database,
+/// so an NVIDIA card is never mistaken for one that needs no extra driver.
+const KNOWN_VENDORS: [(&str, &str); 3] = [("10de", "NVIDIA"), ("1002", "AMD"), ("8086", "Intel")];
 
 /// Returns names like "NVIDIA GeForce RTX 5050 Max-Q / Mobile", one per card.
 pub fn detect_gpus() -> Vec<String> {
@@ -52,7 +55,7 @@ fn parse_pci_id(uevent: &str) -> Option<(String, String)> {
 /// Builds a short name from the database's vendor and device lines.
 fn gpu_name(database: &str, vendor_id: &str, device_id: &str) -> String {
     let Some((vendor, device)) = lookup(database, vendor_id, device_id) else {
-        return format!("{vendor_id}:{device_id}");
+        return unknown_card_name(vendor_id, device_id);
     };
 
     let vendor = short_name(&vendor);
@@ -61,6 +64,18 @@ fn gpu_name(database: &str, vendor_id: &str, device_id: &str) -> String {
         return device;
     }
     format!("{vendor} {device}")
+}
+
+/// A card the database does not know yet, for example "NVIDIA card 10de:2f04".
+fn unknown_card_name(vendor_id: &str, device_id: &str) -> String {
+    let vendor = KNOWN_VENDORS
+        .iter()
+        .find(|(id, _)| *id == vendor_id)
+        .map(|(_, name)| *name);
+    match vendor {
+        Some(vendor) => format!("{vendor} card {vendor_id}:{device_id}"),
+        None => format!("{vendor_id}:{device_id}"),
+    }
 }
 
 /// Finds "10de  NVIDIA Corporation" and, below it, "\t2dd8  GB207M [GeForce …]".
@@ -125,7 +140,13 @@ mod tests {
 
     #[test]
     fn falls_back_to_the_ids() {
-        assert_eq!(gpu_name(DATABASE, "10de", "ffff"), "10de:ffff");
+        assert_eq!(gpu_name(DATABASE, "abcd", "ffff"), "abcd:ffff");
+    }
+
+    #[test]
+    fn a_card_newer_than_the_database_keeps_its_vendor() {
+        assert_eq!(gpu_name(DATABASE, "10de", "ffff"), "NVIDIA card 10de:ffff");
+        assert_eq!(gpu_name("", "10de", "2dd8"), "NVIDIA card 10de:2dd8");
     }
 
     #[test]

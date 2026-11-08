@@ -54,6 +54,8 @@ mod imp {
         #[template_child]
         pub ideas_flowbox: gtk::TemplateChild<gtk::FlowBox>,
         #[template_child]
+        pub ideas_empty: gtk::TemplateChild<adw::StatusPage>,
+        #[template_child]
         pub protocols_note_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
@@ -158,7 +160,8 @@ impl SystemPage {
     fn scan_again(&self) {
         let catalog = self.imp().catalog.borrow().clone();
         if let Some(catalog) = catalog {
-            self.show_system(catalog, &SystemInfo::detect());
+            let system = SystemInfo::detect_with(&catalog);
+            self.show_system(catalog, &system);
         }
     }
 
@@ -260,6 +263,7 @@ impl SystemPage {
         }
         imp.ready_flags
             .replace(statuses.iter().map(IdeaStatus::is_available).collect());
+        self.show_ideas_empty_state();
 
         let note = match setup.compositor {
             Some(compositor) => gettext("Built in means your desktop or compositor already includes it. An idea is ready to build when {compositor} {version} offers what it needs, from wayland-explorer data.")
@@ -369,8 +373,43 @@ impl SystemPage {
         imp.status_toggles.connect_active_name_notify(clone!(
             #[weak(rename_to = page)]
             self,
-            move |_| page.imp().ideas_flowbox.invalidate_filter()
+            move |_| page.filter_ideas()
         ));
+    }
+
+    fn filter_ideas(&self) {
+        self.imp().ideas_flowbox.invalidate_filter();
+        self.show_ideas_empty_state();
+    }
+
+    /// When the filter leaves no idea, says why instead of showing nothing.
+    fn show_ideas_empty_state(&self) {
+        let imp = self.imp();
+        let count = imp.ready_flags.borrow().len() as i32;
+        let any_shown = (0..count).any(|index| self.card_matches(index));
+        imp.ideas_empty.set_visible(!any_shown);
+        if any_shown {
+            return;
+        }
+
+        let session = imp.title_label.label();
+        match imp.status_toggles.active_name().as_deref() {
+            Some(SHOW_READY) => {
+                imp.ideas_empty.set_icon_name(Some("dialog-information-symbolic"));
+                imp.ideas_empty.set_title(&gettext("Nothing Is Ready Here Yet"));
+                imp.ideas_empty.set_description(Some(&gettext(
+                    "Every idea needs something your setup does not offer. Works Elsewhere shows where each one runs.",
+                )));
+            }
+            _ => {
+                imp.ideas_empty.set_icon_name(Some("object-select-symbolic"));
+                imp.ideas_empty.set_title(&gettext("Everything Works Here"));
+                imp.ideas_empty.set_description(Some(
+                    &gettext("Every idea is built in or ready to build on {setup}. Nothing needs another desktop.")
+                        .replace("{setup}", &session),
+                ));
+            }
+        }
     }
 
     fn card_matches(&self, index: i32) -> bool {

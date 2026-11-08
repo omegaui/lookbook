@@ -84,7 +84,7 @@ fn compare_desktop(desktop: &Desktop, catalog: &Catalog, system: &SystemInfo) ->
             row(gettext("Toolkit"), &your_toolkit(&yours), &desktop.toolkit),
             row(gettext("Ideas you have"), &ready_count(&yours, catalog), &ready_count(&theirs, catalog)),
         ],
-        is_yours: system.is_running(&desktop.session_names),
+        is_yours: system.runs_desktop(&desktop.id),
     }
 }
 
@@ -123,7 +123,7 @@ fn compare_compositor(compositor: &Compositor, catalog: &Catalog, system: &Syste
             ),
             row(gettext("Ideas you have"), &ready_count(&yours, catalog), &ready_count(&theirs, catalog)),
         ],
-        is_yours: system.is_running(&compositor.session_names),
+        is_yours: system.runs_compositor(&compositor.id),
     }
 }
 
@@ -226,13 +226,47 @@ mod tests {
     }
 
     fn system_running(desktop_names: &[&str]) -> SystemInfo {
-        SystemInfo {
+        let mut system = SystemInfo {
             session: Session {
                 desktop_names: desktop_names.iter().map(|name| name.to_string()).collect(),
                 session_type: "wayland".to_owned(),
             },
             ..SystemInfo::default()
-        }
+        };
+        system.recognise(&bundled_catalog());
+        system
+    }
+
+    #[test]
+    fn budgie_wins_over_the_gnome_it_names_after_itself() {
+        let catalog = bundled_catalog();
+        let system = system_running(&["Budgie", "GNOME"]);
+
+        assert_eq!(system.current_desktop(&catalog).map(|desktop| desktop.id.as_str()), Some("budgie"));
+        assert_eq!(system.current_compositor(&catalog).map(|compositor| compositor.id.as_str()), Some("labwc"));
+        assert!(!system.runs_desktop("gnome"));
+        assert!(!system.runs_compositor("mutter"));
+    }
+
+    #[test]
+    fn a_fedora_edition_the_catalog_lacks_still_counts_as_fedora() {
+        let catalog = bundled_catalog();
+        let system = SystemInfo {
+            os_release: crate::system::OsRelease {
+                id: "fedora".to_owned(),
+                variant_id: Some("kde".to_owned()),
+                ..Default::default()
+            },
+            ..SystemInfo::default()
+        };
+        assert_eq!(system.current_distro(&catalog).map(|distro| distro.id.as_str()), Some("fedora"));
+    }
+
+    #[test]
+    fn ubuntu_runs_gnome() {
+        let system = system_running(&["ubuntu", "GNOME"]);
+        assert!(system.runs_desktop("gnome"));
+        assert!(system.runs_compositor("mutter"));
     }
 
     #[test]

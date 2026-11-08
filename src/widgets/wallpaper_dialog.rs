@@ -8,7 +8,7 @@ use gettextrs::gettext;
 use gtk::glib::clone;
 use gtk::{gdk, gio, glib};
 
-use crate::wallpapers::{fetch_bytes, file_name_from_url, set_wallpaper, Wallpaper};
+use crate::wallpapers::{fetch_bytes, file_name_from_url, set_wallpaper, Wallpaper, WallpaperOutcome};
 
 /// What the dialog needs besides the wallpaper itself.
 pub struct WallpaperDialogContext {
@@ -214,7 +214,8 @@ impl WallpaperDialog {
             self,
             async move {
                 match set_wallpaper(&image, &file_name).await {
-                    Ok(()) => dialog.toast(&gettext("Wallpaper set")),
+                    Ok(WallpaperOutcome::Set) => dialog.toast(&gettext("Wallpaper set")),
+                    Ok(WallpaperOutcome::Cancelled) => dialog.toast(&gettext("Wallpaper not changed")),
                     Err(error) => {
                         tracing::warn!("Could not set the wallpaper: {error:#}");
                         dialog.toast(&gettext("Your desktop could not set it. Try Save instead."));

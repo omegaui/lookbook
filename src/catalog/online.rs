@@ -110,7 +110,12 @@ async fn download(session: &soup::Session, state: RefreshState) -> anyhow::Resul
             Ok(RefreshOutcome::Unchanged)
         }
         soup::Status::Ok => {
-            save_catalog(&body)?;
+            if let Err(error) = save_catalog(&body) {
+                // Wait a day before trying again, instead of downloading the
+                // same unreadable file on every launch.
+                save_state(&RefreshState { checked_at: now_seconds(), ..state })?;
+                return Err(error);
+            }
             let etag = message
                 .response_headers()
                 .and_then(|headers| headers.one("ETag"))

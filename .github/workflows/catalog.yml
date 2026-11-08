@@ -15,11 +15,15 @@ on:
       - data/resources/catalog/**
       - data/resources/icons/**
       - catalog/**
+      - src/catalog/model.rs
+      - src/catalog/protocols.rs
       - .github/workflows/catalog.yml
   pull_request:
     paths:
       - data/resources/catalog/**
       - catalog/**
+      - src/catalog/model.rs
+      - src/catalog/protocols.rs
   schedule:
     - cron: "17 4 * * *"
   workflow_dispatch:
@@ -44,6 +48,11 @@ jobs:
 
       - name: Build the catalog
         run: python3 catalog/build.py --out _site --write-source
+
+      # build.py checks references; this parses the file with the app's own
+      # model, so a typo in an enum or a missing field never reaches users.
+      - name: Check that the app can read the catalog
+        run: cargo run --quiet --locked --manifest-path catalog/model-check/Cargo.toml -- _site/v1/catalog.json
 
       - name: Commit refreshed data
         if: github.event_name != 'pull_request'

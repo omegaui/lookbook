@@ -214,6 +214,15 @@ template $SystemPage: Adw.Bin {
             column-spacing: 12;
             row-spacing: 12;
           }
+
+          // Shown when the filter leaves no idea, so the section never looks broken.
+          Adw.StatusPage ideas_empty {
+            styles [
+              "compact",
+            ]
+
+            visible: false;
+          }
         }
 
         // Protocols, grouped by job.

@@ -1,0 +1,6 @@
+# Stands in for gettext-rs: the check only parses, it never shows text.
+[package]
+name = "gettext-shim"
+version = "0.1.0"
+edition = "2021"
+publish = false

@@ -110,44 +110,46 @@ fn check_distro(distro: &Distro, catalog: &Catalog, system: &SystemInfo) -> RunC
 }
 
 fn check_desktop(desktop: &Desktop, catalog: &Catalog, system: &SystemInfo) -> RunCheck {
-    let is_running = system.is_running(&desktop.session_names);
+    let is_running = system.runs_desktop(&desktop.id);
     let theirs = crate::details::setup_for(&ItemRef::new(ItemKind::Desktop, &desktop.id), catalog);
     let (gained, lost) = match theirs {
         Some(theirs) => idea_changes(&CurrentSetup::detect(catalog, system), &theirs, catalog),
         None => (Vec::new(), Vec::new()),
     };
     let nvidia_note = theirs_nvidia_note(desktop, catalog);
+    let package = package_lookup(desktop.repology.as_deref(), true, catalog, system);
 
     RunCheck {
         name: desktop.name.clone(),
-        verdict: session_verdict(is_running),
+        verdict: session_verdict(is_running, package.is_some()),
         verdict_detail: session_verdict_detail(is_running),
         is_running,
         checks: hardware_checks(system, nvidia_note),
         gained,
         lost,
-        package: package_lookup(desktop.repology.as_deref(), true, catalog, system),
+        package,
         try_steps: session_try_steps(&desktop.name, &desktop.website),
     }
 }
 
 fn check_compositor(compositor: &Compositor, catalog: &Catalog, system: &SystemInfo) -> RunCheck {
-    let is_running = system.is_running(&compositor.session_names);
+    let is_running = system.runs_compositor(&compositor.id);
     let theirs = CurrentSetup {
         desktop: None,
         compositor: Some(compositor),
     };
     let (gained, lost) = idea_changes(&CurrentSetup::detect(catalog, system), &theirs, catalog);
+    let package = package_lookup(compositor.repology.as_deref(), false, catalog, system);
 
     RunCheck {
         name: compositor.name.clone(),
-        verdict: session_verdict(is_running),
+        verdict: session_verdict(is_running, package.is_some()),
         verdict_detail: session_verdict_detail(is_running),
         is_running,
         checks: hardware_checks(system, compositor.nvidia_note.as_deref()),
         gained,
         lost,
-        package: package_lookup(compositor.repology.as_deref(), false, catalog, system),
+        package,
         try_steps: session_try_steps(&compositor.name, &compositor.website),
     }
 }
@@ -162,11 +164,14 @@ fn distro_verdict(is_running: bool, system: &SystemInfo) -> String {
     gettext("Yes, your computer can run it.")
 }
 
-fn session_verdict(is_running: bool) -> String {
+/// "Checking…" only when a package lookup will follow and settle the answer.
+fn session_verdict(is_running: bool, will_look_up_package: bool) -> String {
     if is_running {
         gettext("You are running it right now.")
-    } else {
+    } else if will_look_up_package {
         gettext("Checking your distro's packages…")
+    } else {
+        gettext("Most likely. Lookbook can't check your distro's packages, so see How to Try It.")
     }
 }
 
@@ -269,11 +274,17 @@ fn idea_changes(yours: &CurrentSetup<'_>, theirs: &CurrentSetup<'_>, catalog: &C
 fn package_lookup(project: Option<&str>, is_desktop: bool, catalog: &Catalog, system: &SystemInfo) -> Option<PackageLookup> {
     let project = project?;
     let distro = distro_for_packages(catalog, system)?;
+    let repos = resolve_repos(distro, &system.os_release);
+    // No repository to ask (Debian testing has no version, for example): a
+    // lookup would only ever say "not found", so say nothing instead.
+    if repos.is_empty() {
+        return None;
+    }
 
     Some(PackageLookup {
         project: project.to_owned(),
         distro_name: system.distro_name(),
-        repos: resolve_repos(distro, &system.os_release),
+        repos,
         is_desktop,
     })
 }
@@ -341,10 +352,10 @@ fn session_try_steps(name: &str, website: &str) -> Vec<TryStep> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::system::{Hardware, OsRelease, Session};
+    use crate::system::{Hardware, OsRelease, RunningSession, Session};
 
     fn system(memory_gib: u64, gpus: &[&str], desktop: &str) -> SystemInfo {
-        SystemInfo {
+        let mut system = SystemInfo {
             os_release: OsRelease {
                 id: "cachyos".to_owned(),
                 id_like: vec!["arch".to_owned()],
@@ -360,7 +371,10 @@ mod tests {
                 ..Hardware::default()
             },
             visible_globals: Vec::new(),
-        }
+            running: RunningSession::default(),
+        };
+        system.recognise(&catalog());
+        system
     }
 
     fn catalog() -> Catalog {
@@ -379,6 +393,21 @@ mod tests {
         let line = graphics_check(&system(16, &["NVIDIA GeForce RTX 5050"], "Hyprland"), Some("Use the open modules.")).unwrap();
         assert_eq!(line.state, CheckState::Note);
         assert_eq!(line.detail, "Use the open modules.");
+    }
+
+    #[test]
+    fn a_distro_lookbook_does_not_know_never_waits_on_packages() {
+        let catalog = catalog();
+        let mut system = system(16, &[], "Hyprland");
+        system.os_release = OsRelease {
+            id: "solus".to_owned(),
+            ..OsRelease::default()
+        };
+        system.recognise(&catalog);
+        let result = check(&ItemRef::new(ItemKind::Compositor, "niri"), &catalog, &system).unwrap();
+
+        assert!(result.package.is_none());
+        assert!(!result.verdict.contains("Checking"));
     }
 
     #[test]

@@ -17,7 +17,7 @@ use crate::system::SystemInfo;
 const WALLPAPER_PORTAL: &str = "Wallpaper";
 
 pub use crate::http::new_session;
-pub use portal::{file_name_from_url, set_wallpaper};
+pub use portal::{file_name_from_url, set_wallpaper, WallpaperOutcome};
 
 /// One wallpaper, with addresses on its source's server.
 #[derive(Debug, Clone, PartialEq, Eq)]

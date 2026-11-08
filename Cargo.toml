@@ -12,6 +12,7 @@ codegen-units = 1
 [dependencies]
 adw = { package = "libadwaita", version = "0.8", features = ["v1_8"] }
 anyhow = "1"
+futures-channel = "0.3"
 gettext-rs = { version = "0.7", features = ["gettext-system"] }
 gtk = { package = "gtk4", version = "0.10", features = ["v4_18"] }
 serde = { version = "1", features = ["derive"] }

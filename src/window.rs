@@ -397,8 +397,6 @@ impl LookbookWindow {
 
     fn load_catalog(&self) {
         let imp = self.imp();
-        let system = Rc::new(SystemInfo::detect());
-
         let catalog = match Catalog::load() {
             Ok(catalog) => Rc::new(catalog),
             Err(error) => {
@@ -406,6 +404,7 @@ impl LookbookWindow {
                 return;
             }
         };
+        let system = Rc::new(SystemInfo::detect_with(&catalog));
         refresh_downloaded_catalog();
 
         imp.explore_page.show_catalog(&catalog, &system);

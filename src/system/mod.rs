@@ -21,15 +21,49 @@ pub struct SystemInfo {
     pub hardware: Hardware,
     /// The Wayland globals visible from inside the sandbox.
     pub visible_globals: Vec<String>,
+    /// The desktop and compositor the catalog recognised, set by `recognise`.
+    pub running: RunningSession,
+}
+
+/// Catalog ids of the desktop and compositor the user runs, when known.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct RunningSession {
+    pub desktop: Option<String>,
+    pub compositor: Option<String>,
 }
 
 impl SystemInfo {
-    pub fn detect() -> Self {
+    /// Detects the system and recognises its desktop and compositor.
+    pub fn detect_with(catalog: &Catalog) -> Self {
+        let mut system = Self::detect();
+        system.recognise(catalog);
+        system
+    }
+
+    /// Remembers which catalog desktop and compositor are running, so cards
+    /// can mark them without the catalog at hand.
+    pub fn recognise(&mut self, catalog: &Catalog) {
+        self.running = RunningSession {
+            desktop: self.current_desktop(catalog).map(|desktop| desktop.id.clone()),
+            compositor: self.current_compositor(catalog).map(|compositor| compositor.id.clone()),
+        };
+    }
+
+    pub fn runs_desktop(&self, id: &str) -> bool {
+        self.running.desktop.as_deref() == Some(id)
+    }
+
+    pub fn runs_compositor(&self, id: &str) -> bool {
+        self.running.compositor.as_deref() == Some(id)
+    }
+
+    fn detect() -> Self {
         Self {
             os_release: OsRelease::load(),
             session: Session::detect(),
             hardware: Hardware::detect(),
             visible_globals: wayland::visible_globals(),
+            running: RunningSession::default(),
         }
     }
 
@@ -43,36 +77,47 @@ impl SystemInfo {
         same_id && same_variant
     }
 
-    /// Whether one of `session_names` is in the user's `XDG_CURRENT_DESKTOP`.
-    pub fn is_running(&self, session_names: &[String]) -> bool {
-        self.session.desktop_names.iter().any(|running| {
-            session_names
-                .iter()
-                .any(|name| name.eq_ignore_ascii_case(running))
+    /// The first entry of `XDG_CURRENT_DESKTOP` that one of `items` answers to.
+    /// The order matters: Budgie sets "Budgie:GNOME", and Budgie must win.
+    fn first_running<'a, T>(&self, items: &'a [T], session_names: impl Fn(&T) -> &[String]) -> Option<&'a T> {
+        self.session.desktop_names.iter().find_map(|running| {
+            items.iter().find(|item| {
+                session_names(item)
+                    .iter()
+                    .any(|name| name.eq_ignore_ascii_case(running))
+            })
         })
     }
 
+    /// The exact edition when the catalog has it; otherwise the first distro
+    /// with the same ID, so Fedora KDE still counts as Fedora.
     pub fn current_distro<'a>(&self, catalog: &'a Catalog) -> Option<&'a Distro> {
-        catalog
+        let exact = catalog
             .distros
             .iter()
-            .find(|distro| self.is_current_distro(distro))
+            .find(|distro| self.is_current_distro(distro));
+        exact.or_else(|| {
+            catalog
+                .distros
+                .iter()
+                .find(|distro| distro.os_release_id == self.os_release.id)
+        })
     }
 
     pub fn current_desktop<'a>(&self, catalog: &'a Catalog) -> Option<&'a Desktop> {
-        catalog
-            .desktops
-            .iter()
-            .find(|desktop| self.is_running(&desktop.session_names))
+        self.first_running(&catalog.desktops, |desktop| &desktop.session_names)
     }
 
-    /// Checks `XDG_CURRENT_DESKTOP` first, then globals only one compositor offers.
+    /// A desktop's own compositor when a desktop runs; otherwise checks
+    /// `XDG_CURRENT_DESKTOP`, then globals only one compositor offers.
     pub fn current_compositor<'a>(&self, catalog: &'a Catalog) -> Option<&'a Compositor> {
-        let by_session = catalog
-            .compositors
-            .iter()
-            .find(|compositor| self.is_running(&compositor.session_names));
-
+        if let Some(desktop) = self.current_desktop(catalog) {
+            return catalog
+                .compositors
+                .iter()
+                .find(|compositor| compositor.name == desktop.compositor);
+        }
+        let by_session = self.first_running(&catalog.compositors, |compositor| &compositor.session_names);
         by_session.or_else(|| {
             catalog
                 .compositors

@@ -186,7 +186,7 @@ impl CardContent {
             description: desktop.tagline.clone(),
             chips: vec![desktop.compositor.clone(), desktop.toolkit.clone()],
             badge: system
-                .is_running(&desktop.session_names)
+                .runs_desktop(&desktop.id)
                 .then_some(CardBadge::RunningNow),
             checks: Vec::new(),
         }
@@ -200,7 +200,7 @@ impl CardContent {
             description: compositor.tagline.clone(),
             chips: vec![compositor.kind.label(), compositor.base.clone()],
             badge: system
-                .is_running(&compositor.session_names)
+                .runs_compositor(&compositor.id)
                 .then_some(CardBadge::RunningNow),
             checks: feature_checks(compositor),
         }
@@ -306,7 +306,7 @@ impl DetailContent {
             tile: tile_content(&desktop.short, &desktop.color, desktop.logo.as_deref()),
             tagline: desktop.tagline.clone(),
             badge: system
-                .is_running(&desktop.session_names)
+                .runs_desktop(&desktop.id)
                 .then_some(CardBadge::RunningNow),
             chips: vec![desktop.wayland.clone(), desktop.toolkit.clone()],
             facts_title: gettext("Inside {}").replace("{}", &desktop.name),
@@ -331,7 +331,7 @@ impl DetailContent {
             tile: tile_content(&compositor.short, &compositor.color, compositor.logo.as_deref()),
             tagline: compositor.tagline.clone(),
             badge: system
-                .is_running(&compositor.session_names)
+                .runs_compositor(&compositor.id)
                 .then_some(CardBadge::RunningNow),
             chips: vec![compositor.kind.label(), compositor.base.clone()],
             facts_title: gettext("At a Glance"),
