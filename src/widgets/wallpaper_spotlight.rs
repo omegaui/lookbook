@@ -12,7 +12,8 @@ use gtk::subclass::prelude::*;
 use super::{chip_label, EdgePicture, LogoTile, TileContent, WallpaperDialog, WallpaperDialogContext};
 use crate::catalog::{Catalog, WallpaperSource, WallpaperSpotlight as SpotlightData};
 use crate::system::SystemInfo;
-use crate::wallpapers::{fetch_source, fetch_texture, new_session, portal_hint, remove_blocked, Wallpaper};
+use crate::http::shared_session;
+use crate::wallpapers::{fetch_source, fetch_texture, portal_hint, remove_blocked, Wallpaper};
 
 const TILE_ICON: &str = "lay-wallpapers-symbolic";
 const TILE_COLOR: &str = "#26a269";
@@ -134,7 +135,7 @@ impl WallpaperSpotlight {
     }
 
     async fn pick_and_show_wallpaper(&self) {
-        let session = new_session();
+        let session = shared_session();
         self.imp().session.replace(Some(session.clone()));
 
         let Some(wallpaper) = self.pick_wallpaper(&session).await else {

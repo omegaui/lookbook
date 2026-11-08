@@ -11,7 +11,8 @@ use gtk::glib::clone;
 
 use crate::catalog::{Catalog, WallpaperSource};
 use crate::system::SystemInfo;
-use crate::wallpapers::{fetch_source, new_session, portal_hint, remove_blocked, Wallpaper};
+use crate::http::shared_session;
+use crate::wallpapers::{fetch_source, portal_hint, remove_blocked, Wallpaper};
 use crate::widgets::{WallpaperCard, WallpaperDialog, WallpaperDialogContext};
 
 /// Thumbnails load in pages, so opening the section stays light on the network.
@@ -49,6 +50,8 @@ mod imp {
         /// Cards still waiting for their thumbnail, in grid order.
         pub thumbnail_queue: RefCell<VecDeque<glib::WeakRef<WallpaperCard>>>,
         pub thumbnails_loading: Cell<usize>,
+        /// Running thumbnail downloads. Aborting one drops its request.
+        pub thumbnail_tasks: RefCell<Vec<glib::JoinHandle<()>>>,
     }
 
     impl Default for WallpapersPage {
@@ -59,7 +62,7 @@ mod imp {
                 wallpapers_flowbox: gtk::TemplateChild::default(),
                 show_more_button: gtk::TemplateChild::default(),
                 credits_box: gtk::TemplateChild::default(),
-                session: new_session(),
+                session: shared_session(),
                 sources: RefCell::default(),
                 blocklist: RefCell::default(),
                 portal_hint: RefCell::default(),
@@ -68,6 +71,7 @@ mod imp {
                 has_loaded: Cell::new(false),
                 thumbnail_queue: RefCell::default(),
                 thumbnails_loading: Cell::new(0),
+                thumbnail_tasks: RefCell::default(),
             }
         }
     }
@@ -238,10 +242,21 @@ impl WallpapersPage {
 
     fn show_first_page(&self) {
         let imp = self.imp();
+        self.cancel_thumbnails();
         imp.wallpapers_flowbox.remove_all();
-        imp.thumbnail_queue.borrow_mut().clear();
         imp.shown_count.set(0);
         self.show_next_page();
+    }
+
+    /// The old cards are going away: stop their downloads, so the new
+    /// filter's thumbnails get all four download slots at once.
+    fn cancel_thumbnails(&self) {
+        let imp = self.imp();
+        for task in imp.thumbnail_tasks.take() {
+            task.abort();
+        }
+        imp.thumbnail_queue.borrow_mut().clear();
+        imp.thumbnails_loading.set(0);
     }
 
     fn show_next_page(&self) {
@@ -278,7 +293,7 @@ impl WallpapersPage {
             };
             imp.thumbnails_loading.set(imp.thumbnails_loading.get() + 1);
 
-            glib::spawn_future_local(clone!(
+            let task = glib::spawn_future_local(clone!(
                 #[weak(rename_to = page)]
                 self,
                 async move {
@@ -288,6 +303,7 @@ impl WallpapersPage {
                     page.load_queued_thumbnails();
                 }
             ));
+            imp.thumbnail_tasks.borrow_mut().push(task);
         }
     }
 

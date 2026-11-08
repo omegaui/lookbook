@@ -136,20 +136,42 @@ pub async fn fetch_project(session: &soup::Session, project: &str) -> anyhow::Re
     Ok(serde_json::from_slice(&body)?)
 }
 
-/// Keeps requests at least a second apart.
+/// Keeps requests at least a second apart. The slot is booked before
+/// waiting, so calls that overlap queue up instead of going out together.
 async fn wait_for_turn() {
-    let last = LAST_REQUEST.with(Cell::get);
-    if let Some(elapsed) = last.map(|instant| instant.elapsed()) {
-        if elapsed < MIN_GAP {
-            glib::timeout_future(MIN_GAP - elapsed).await;
-        }
+    let now = Instant::now();
+    let start = LAST_REQUEST.with(|cell| {
+        let start = next_slot(cell.get(), now);
+        cell.set(Some(start));
+        start
+    });
+    let wait = start.saturating_duration_since(now);
+    if !wait.is_zero() {
+        glib::timeout_future(wait).await;
     }
-    LAST_REQUEST.with(|cell| cell.set(Some(Instant::now())));
+}
+
+/// The earliest time the next request may go out.
+fn next_slot(last: Option<Instant>, now: Instant) -> Instant {
+    match last {
+        Some(last) => (last + MIN_GAP).max(now),
+        None => now,
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn overlapping_calls_get_slots_a_second_apart() {
+        let now = Instant::now();
+        let first = next_slot(None, now);
+        let second = next_slot(Some(first), now);
+        let third = next_slot(Some(second), now);
+        assert_eq!(second - first, MIN_GAP);
+        assert_eq!(third - second, MIN_GAP);
+    }
 
     fn package(repo: &str, binname: &str, version: &str) -> RepologyPackage {
         RepologyPackage {

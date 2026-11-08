@@ -13,12 +13,15 @@ use gtk::prelude::*;
 use super::{chip_label, CardBadge, CoverPicture, LogoTile, MiniDesktop, ShowcaseContent};
 use crate::catalog::{HostedScreenshot, ItemRef};
 use crate::http::shared_session;
-use crate::wallpapers::fetch_texture;
+use crate::images::fetch_texture_scaled;
 
 const TILE_SIZE: i32 = 44;
 /// Matches the drawn placeholder, so the card keeps its height when the image arrives.
 const ART_HEIGHT: i32 = 150;
 const SCREENSHOT_PAGE: &str = "screenshot";
+
+/// Gallery cards are about 450 pixels wide; twice that stays sharp on HiDPI.
+const CARD_IMAGE_WIDTH: i32 = 960;
 
 mod imp {
     use super::*;
@@ -133,7 +136,7 @@ impl ShowcaseCard {
             #[weak(rename_to = card)]
             self,
             async move {
-                match fetch_texture(&shared_session(), &screenshot.url).await {
+                match fetch_texture_scaled(&shared_session(), &screenshot.url, CARD_IMAGE_WIDTH).await {
                     Ok(texture) => card.show_screenshot(&texture, &screenshot),
                     Err(error) => tracing::warn!("Could not load a screenshot: {error:#}"),
                 }

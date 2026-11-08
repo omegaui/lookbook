@@ -6,6 +6,7 @@ mod details;
 mod extensions;
 mod fits_together;
 mod http;
+mod images;
 mod ideas;
 mod news;
 mod pages;

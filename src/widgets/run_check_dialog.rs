@@ -9,7 +9,7 @@ use gtk::glib;
 use gtk::glib::clone;
 
 use super::{open_link, LogoTile, TileContent};
-use crate::http::new_session;
+use crate::http::shared_session;
 use crate::repology::{fetch_project, find_package, PackageMatch};
 use crate::run_check::{CheckLine, CheckState, PackageLookup, RunCheck, TryStep};
 
@@ -178,7 +178,7 @@ impl RunCheckDialog {
     }
 
     async fn fetch_package(&self, lookup: &PackageLookup) -> Result<Option<PackageMatch>, ()> {
-        let session = new_session();
+        let session = shared_session();
         match fetch_project(&session, &lookup.project).await {
             Ok(packages) => Ok(find_package(&packages, &lookup.repos, &lookup.project)),
             Err(error) => {

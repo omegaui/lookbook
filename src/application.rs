@@ -32,6 +32,12 @@ mod imp {
     impl ObjectImpl for LookbookApplication {}
 
     impl ApplicationImpl for LookbookApplication {
+        /// Saves the HTTP cache's index, so the next launch reuses it.
+        fn shutdown(&self) {
+            crate::http::save_disk_cache();
+            self.parent_shutdown();
+        }
+
         fn activate(&self) {
             self.parent_activate();
             let app = self.obj();

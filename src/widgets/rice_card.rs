@@ -17,12 +17,16 @@ use gtk::{gio, glib};
 use super::{chip_label, open_link, CoverPicture, LogoTile, TileContent};
 use crate::catalog::{Catalog, Rice, RicePreview, RicePreviewKind};
 use crate::http::shared_session;
-use crate::wallpapers::{fetch_bytes, fetch_texture};
+use crate::images::fetch_texture_scaled;
+use crate::wallpapers::fetch_bytes;
 
 /// The same height as the placeholder, so the card keeps its size.
 const PREVIEW_HEIGHT: i32 = 190;
 const PREVIEW_PAGE: &str = "preview";
 const COMPOSITOR_TILE_SIZE: i32 = 22;
+
+/// Rice cards are about 380 pixels wide; README pictures are often 4K.
+const PREVIEW_IMAGE_WIDTH: i32 = 760;
 
 mod imp {
     use super::*;
@@ -176,7 +180,7 @@ impl RiceCard {
             #[weak(rename_to = card)]
             self,
             async move {
-                match fetch_texture(&shared_session(), &preview.url).await {
+                match fetch_texture_scaled(&shared_session(), &preview.url, PREVIEW_IMAGE_WIDTH).await {
                     Ok(texture) => card.show_preview(&texture),
                     Err(error) => tracing::warn!("Could not load a rice picture: {error:#}"),
                 }

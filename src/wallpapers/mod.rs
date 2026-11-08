@@ -8,7 +8,7 @@ mod portal;
 mod wordpress;
 
 use gettextrs::gettext;
-use gtk::{gdk, glib};
+use gtk::glib;
 
 use crate::catalog::{Catalog, WallpaperSource, WallpaperSourceKind};
 use crate::system::SystemInfo;
@@ -16,7 +16,7 @@ use crate::system::SystemInfo;
 /// The portal interface apps use to set the background.
 const WALLPAPER_PORTAL: &str = "Wallpaper";
 
-pub use crate::http::new_session;
+pub use crate::images::fetch_texture;
 pub use portal::{file_name_from_url, set_wallpaper, WallpaperOutcome};
 
 /// One wallpaper, with addresses on its source's server.
@@ -69,10 +69,6 @@ pub fn portal_hint(catalog: &Catalog, system: &SystemInfo) -> Option<String> {
 }
 
 /// Downloads an image and decodes it for display.
-pub async fn fetch_texture(session: &soup::Session, url: &str) -> anyhow::Result<gdk::Texture> {
-    let bytes = fetch_bytes(session, url).await?;
-    Ok(gdk::Texture::from_bytes(&bytes)?)
-}
 
 pub async fn fetch_bytes(session: &soup::Session, url: &str) -> anyhow::Result<glib::Bytes> {
     crate::http::get_bytes(session, url).await

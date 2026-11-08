@@ -10,7 +10,11 @@ use gtk::glib::clone;
 use super::ScreenshotPicture;
 use crate::catalog::{Contest, FamedRice};
 use crate::http::shared_session;
-use crate::wallpapers::fetch_texture;
+use crate::images::fetch_texture_scaled;
+
+/// The large Hall of Fame card is about 600 pixels wide; twice that stays
+/// sharp on HiDPI.
+const CARD_IMAGE_WIDTH: i32 = 1200;
 
 mod imp {
     use super::*;
@@ -104,7 +108,7 @@ impl ScreenshotCard {
             #[weak(rename_to = card)]
             self,
             async move {
-                match fetch_texture(&shared_session(), &url).await {
+                match fetch_texture_scaled(&shared_session(), &url, CARD_IMAGE_WIDTH).await {
                     Ok(texture) => card.imp().picture.set_texture(&texture),
                     Err(error) => tracing::warn!("Could not load a Hall of Fame screenshot: {error:#}"),
                 }

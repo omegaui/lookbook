@@ -14,7 +14,7 @@ use crate::extensions::fetch_popular;
 use crate::ideas::evaluate;
 use crate::system::SystemInfo;
 use crate::http::shared_session;
-use crate::wallpapers::{fetch_texture, new_session};
+use crate::wallpapers::fetch_texture;
 use crate::widgets::{
     chip_label, extension_card, fact_tile, feature_check,
     open_details_on_activate, screenshot_credit, CardBadge, CardContent, CatalogCard,
@@ -265,7 +265,7 @@ impl ItemDetailPage {
             #[weak(rename_to = page)]
             self,
             async move {
-                let session = new_session();
+                let session = shared_session();
                 match fetch_popular(&session, EXTENSION_COUNT).await {
                     Ok(extensions) => {
                         let imp = page.imp();
