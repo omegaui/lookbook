@@ -499,6 +499,7 @@ def publish_app_page(out_dir, now):
     install script people run with curl."""
     (out_dir / "index.html").write_text(index_page(now))
     shutil.copy(SITE_DIR / "install.sh", out_dir / "install.sh")
+    shutil.copy(SITE_DIR / "social-preview.jpg", out_dir / "social-preview.jpg")
     shutil.copy(APP_ICON, out_dir / "icon.png")
     screenshots = out_dir / "screenshots"
     screenshots.mkdir(exist_ok=True)
@@ -542,7 +543,7 @@ def keep_older_versions(out_dir, fetch=fetch_json):
 def index_page(now):
     """Fills in the app page template (catalog/site/index.html)."""
     template = string.Template(INDEX_TEMPLATE.read_text())
-    return template.substitute(publish_dir=PUBLISH_DIR, built=now[:10], version=app_version())
+    return template.substitute(publish_dir=PUBLISH_DIR, built=now[:10], version=app_version(), site_url=SITE_URL)
 
 
 def app_version():
