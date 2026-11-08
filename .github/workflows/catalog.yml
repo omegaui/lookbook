@@ -1,5 +1,5 @@
 # Builds the catalog the app downloads and publishes it to GitHub Pages:
-# https://omegaui.github.io/lookbook/v1/catalog.json
+# https://omegaui.github.io/syspedia/v1/catalog.json
 #
 # Runs daily to pick up upstream changes (Wayland protocol data, screenshots
 # that disappeared), whenever the hand-written catalog changes, and by hand.

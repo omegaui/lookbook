@@ -4,7 +4,7 @@ use gettextrs::gettext;
 use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE, VERSION};
-use crate::window::LookbookWindow;
+use crate::window::SyspediaWindow;
 
 /// Alt and a number open each page, in the order of the tabs.
 const PAGE_SHORTCUTS: [(&str, &str); 6] = [
@@ -20,18 +20,18 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default)]
-    pub struct LookbookApplication;
+    pub struct SyspediaApplication;
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LookbookApplication {
-        const NAME: &'static str = "LookbookApplication";
-        type Type = super::LookbookApplication;
+    impl ObjectSubclass for SyspediaApplication {
+        const NAME: &'static str = "SyspediaApplication";
+        type Type = super::SyspediaApplication;
         type ParentType = adw::Application;
     }
 
-    impl ObjectImpl for LookbookApplication {}
+    impl ObjectImpl for SyspediaApplication {}
 
-    impl ApplicationImpl for LookbookApplication {
+    impl ApplicationImpl for SyspediaApplication {
         /// Saves the HTTP cache's index, so the next launch reuses it.
         fn shutdown(&self) {
             crate::http::save_disk_cache();
@@ -47,7 +47,7 @@ mod imp {
                 return;
             }
 
-            LookbookWindow::new(&app).present();
+            SyspediaWindow::new(&app).present();
         }
 
         fn startup(&self) {
@@ -60,17 +60,17 @@ mod imp {
         }
     }
 
-    impl GtkApplicationImpl for LookbookApplication {}
-    impl AdwApplicationImpl for LookbookApplication {}
+    impl GtkApplicationImpl for SyspediaApplication {}
+    impl AdwApplicationImpl for SyspediaApplication {}
 }
 
 glib::wrapper! {
-    pub struct LookbookApplication(ObjectSubclass<imp::LookbookApplication>)
+    pub struct SyspediaApplication(ObjectSubclass<imp::SyspediaApplication>)
         @extends gio::Application, gtk::Application, adw::Application,
         @implements gio::ActionMap, gio::ActionGroup;
 }
 
-impl LookbookApplication {
+impl SyspediaApplication {
     fn setup_actions(&self) {
         let quit = gio::ActionEntry::builder("quit")
             .activate(|app: &Self, _, _| app.quit())
@@ -111,13 +111,13 @@ impl LookbookApplication {
                 .activate(|app: &Self, _, parameter| app.forward_to_window("explain-layers", parameter))
                 .build();
             // Main menu items, so scripts can open them without the mouse.
-            let what_is_lookbook = gio::ActionEntry::builder("what-is-lookbook")
-                .activate(|app: &Self, _, _| app.forward_to_window("what-is-lookbook", None))
+            let what_is_syspedia = gio::ActionEntry::builder("what-is-syspedia")
+                .activate(|app: &Self, _, _| app.forward_to_window("what-is-syspedia", None))
                 .build();
             let refresh_catalog = gio::ActionEntry::builder("refresh-catalog")
                 .activate(|app: &Self, _, _| app.forward_to_window("refresh-catalog", None))
                 .build();
-            self.add_action_entries([scroll_to, show_spotlight, explain_layers, what_is_lookbook, refresh_catalog]);
+            self.add_action_entries([scroll_to, show_spotlight, explain_layers, what_is_syspedia, refresh_catalog]);
         }
     }
 
@@ -133,7 +133,7 @@ impl LookbookApplication {
 
     fn catalog_date(&self) -> Option<String> {
         self.active_window()
-            .and_downcast::<LookbookWindow>()
+            .and_downcast::<SyspediaWindow>()
             .and_then(|window| window.catalog_date())
     }
 
@@ -141,7 +141,7 @@ impl LookbookApplication {
         self.set_accels_for_action("app.quit", &["<Control>q"]);
         self.set_accels_for_action("window.close", &["<Control>w"]);
         self.set_accels_for_action("app.shortcuts", &["<Control>question"]);
-        self.set_accels_for_action("win.what-is-lookbook", &["F1"]);
+        self.set_accels_for_action("win.what-is-syspedia", &["F1"]);
         self.set_accels_for_action("win.refresh-catalog", &["<Control>r"]);
         for (page, key) in PAGE_SHORTCUTS {
             self.set_accels_for_action(&format!("win.show-page('{page}')"), &[key]);
@@ -157,12 +157,12 @@ impl LookbookApplication {
 
     fn show_about_dialog(&self) {
         let dialog = adw::AboutDialog::builder()
-            .application_name("Lookbook")
+            .application_name("Syspedia")
             .application_icon(APP_ID)
             .developer_name("omegaui")
             .license_type(gtk::License::Gpl30)
-            .website("https://github.com/omegaui/lookbook")
-            .issue_url("https://github.com/omegaui/lookbook/issues")
+            .website("https://github.com/omegaui/syspedia")
+            .issue_url("https://github.com/omegaui/syspedia/issues")
             .version(VERSION)
             .build();
 
@@ -175,7 +175,7 @@ impl LookbookApplication {
             None,
             gtk::License::Custom,
             Some(&gettext(
-                "Distro, desktop and compositor logos are trademarks of their owners. Lookbook uses them only to identify each project.\n\nLogos come from <a href=\"https://simpleicons.org\">Simple Icons</a> (CC0 1.0, with these exceptions: Debian CC BY-SA 3.0, Gentoo CC BY-SA 2.5, NixOS CC BY 4.0, niri CC BY-SA 4.0, Fedora under the Fedora logo usage guidelines) and <a href=\"https://github.com/Lukas-W/font-logos\">font-logos</a> (Unlicense) for Budgie, LXQt, MATE and river. The Bazzite logo comes from its press kit (Apache-2.0), the labwc logo is by Johan Malm (CC BY-SA 4.0), and the Wayfire logo is traced from wf-shell's icon (MIT).",
+                "Distro, desktop and compositor logos are trademarks of their owners. Syspedia uses them only to identify each project.\n\nLogos come from <a href=\"https://simpleicons.org\">Simple Icons</a> (CC0 1.0, with these exceptions: Debian CC BY-SA 3.0, Gentoo CC BY-SA 2.5, NixOS CC BY 4.0, niri CC BY-SA 4.0, Fedora under the Fedora logo usage guidelines) and <a href=\"https://github.com/Lukas-W/font-logos\">font-logos</a> (Unlicense) for Budgie, LXQt, MATE and river. The Bazzite logo comes from its press kit (Apache-2.0), the labwc logo is by Johan Malm (CC BY-SA 4.0), and the Wayfire logo is traced from wf-shell's icon (MIT).",
             )),
         );
 
@@ -199,18 +199,18 @@ impl LookbookApplication {
     }
 }
 
-impl Default for LookbookApplication {
+impl Default for SyspediaApplication {
     fn default() -> Self {
         glib::Object::builder()
             .property("application-id", APP_ID)
-            .property("resource-base-path", "/io/github/omegaui/Lookbook/")
+            .property("resource-base-path", "/io/github/omegaui/Syspedia/")
             .build()
     }
 }
 
 fn general_shortcuts() -> adw::ShortcutsSection {
     let section = adw::ShortcutsSection::new(Some(&gettext("General")));
-    section.add(adw::ShortcutsItem::from_action(&gettext("What Is Lookbook?"), "win.what-is-lookbook"));
+    section.add(adw::ShortcutsItem::from_action(&gettext("What Is Syspedia?"), "win.what-is-syspedia"));
     section.add(adw::ShortcutsItem::from_action(&gettext("Refresh Catalog"), "win.refresh-catalog"));
     section.add(adw::ShortcutsItem::from_action(&gettext("Keyboard Shortcuts"), "app.shortcuts"));
     section.add(adw::ShortcutsItem::from_action(&gettext("Close Window"), "window.close"));

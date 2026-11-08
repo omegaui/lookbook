@@ -10,7 +10,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/wallpaper_card.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/wallpaper_card.ui")]
     pub struct WallpaperCard {
         #[template_child]
         pub picture: gtk::TemplateChild<gtk::Picture>,

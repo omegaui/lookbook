@@ -1,17 +1,17 @@
 {
-    "id": "io.github.omegaui.Lookbook.Devel",
+    "id": "io.github.omegaui.Syspedia.Devel",
     "runtime": "org.gnome.Platform",
     "runtime-version": "51",
     "sdk": "org.gnome.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
-    "command": "lookbook",
+    "command": "syspedia",
     "finish-args": [
         "--share=network",
         "--socket=wayland",
         "--device=dri",
-        "--env=RUST_LOG=lookbook=debug",
+        "--env=RUST_LOG=syspedia=debug",
         "--env=G_MESSAGES_DEBUG=none",
         "--env=RUST_BACKTRACE=1"
     ],
@@ -41,7 +41,7 @@
     ],
     "modules": [
         {
-            "name": "lookbook",
+            "name": "syspedia",
             "buildsystem": "meson",
             "run-tests": true,
             "config-opts": [
@@ -58,7 +58,8 @@
                         ".flatpak-builder-release",
                         ".cargo-sdk",
                         "_flatpak_build_flathub",
-                        ".flatpak-builder-flathub"
+                        ".flatpak-builder-flathub",
+                        "_flatpak_repo"
                     ]
                 }
             ]

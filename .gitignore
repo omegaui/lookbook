@@ -37,3 +37,5 @@ __pycache__/
 /_flatpak_build_flathub/
 /.flatpak-builder-flathub/
 /build-aux/flathub/local-test.json
+/_flatpak_repo/
+/syspedia-*.flatpak

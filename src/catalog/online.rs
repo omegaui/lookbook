@@ -19,12 +19,12 @@ use soup::prelude::*;
 use super::Catalog;
 
 /// The catalog site; each schema version is published in its own folder.
-const CATALOG_SITE: &str = "https://omegaui.github.io/lookbook";
+const CATALOG_SITE: &str = "https://omegaui.github.io/syspedia";
 /// The catalog schema this version of the app reads. The workflow publishes
 /// other schema versions under other paths, and the app ignores them.
 pub const SCHEMA_VERSION: u32 = 1;
 const REFRESH_INTERVAL: Duration = Duration::from_secs(24 * 60 * 60);
-const CACHE_FOLDER: &str = "lookbook";
+const CACHE_FOLDER: &str = "syspedia";
 const CATALOG_FILE: &str = "catalog.json";
 const STATE_FILE: &str = "catalog-state.json";
 
@@ -135,7 +135,7 @@ fn is_due(state: &RefreshState, now: u64) -> bool {
 
 /// Saves the catalog only if this app can read it, writing a temporary file
 /// first so a half-written catalog is never left behind.
-/// For example "https://omegaui.github.io/lookbook/v1/catalog.json". It
+/// For example "https://omegaui.github.io/syspedia/v1/catalog.json". It
 /// follows the schema version, so the two never drift apart.
 fn catalog_url() -> String {
     format!("{CATALOG_SITE}/v{SCHEMA_VERSION}/catalog.json")
@@ -197,7 +197,7 @@ mod tests {
 
     impl TestFolder {
         fn new(name: &str) -> Self {
-            let path = std::env::temp_dir().join(format!("lookbook-test-{name}-{}", std::process::id()));
+            let path = std::env::temp_dir().join(format!("syspedia-test-{name}-{}", std::process::id()));
             let _ = fs::remove_dir_all(&path);
             Self(path)
         }

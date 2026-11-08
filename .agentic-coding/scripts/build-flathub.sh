@@ -12,7 +12,7 @@ MANIFEST=build-aux/flathub/local-test.json
 
 python3 - "$MANIFEST" <<'PYTHON'
 import json, subprocess, sys
-manifest = json.load(open("build-aux/flathub/io.github.omegaui.Lookbook.json"))
+manifest = json.load(open("build-aux/flathub/io.github.omegaui.Syspedia.json"))
 head = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
 manifest["modules"][0]["sources"][0] = {"type": "git", "path": "../..", "commit": head}
 json.dump(manifest, open(sys.argv[1], "w"), indent=4)

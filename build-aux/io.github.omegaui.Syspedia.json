@@ -1,12 +1,12 @@
 {
-    "id": "io.github.omegaui.Lookbook",
+    "id": "io.github.omegaui.Syspedia",
     "runtime": "org.gnome.Platform",
     "runtime-version": "51",
     "sdk": "org.gnome.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
-    "command": "lookbook",
+    "command": "syspedia",
     "finish-args": [
         "--share=network",
         "--socket=wayland",
@@ -14,9 +14,16 @@
     ],
     "build-options": {
         "append-path": "/usr/lib/sdk/rust-stable/bin",
+        "build-args": [
+            "--share=network"
+        ],
         "env": {
-            "CARGO_NET_OFFLINE": "true"
-        }
+            "CARGO_REGISTRIES_CRATES_IO_PROTOCOL": "sparse",
+            "CARGO_BUILD_JOBS": "8"
+        },
+        "test-args": [
+            "--socket=wayland"
+        ]
     },
     "cleanup": [
         "/include",
@@ -31,7 +38,7 @@
     ],
     "modules": [
         {
-            "name": "lookbook",
+            "name": "syspedia",
             "buildsystem": "meson",
             "run-tests": true,
             "config-opts": [
@@ -39,11 +46,19 @@
             ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/omegaui/lookbook.git",
-                    "commit": "eb1b5d761e55faccc4b5b65536e6453c9b9f37b0"
-                },
-                "cargo-sources.json"
+                    "type": "dir",
+                    "path": "../",
+                    "skip": [
+                        "_flatpak_build",
+                        "_flatpak_build_release",
+                        ".flatpak-builder",
+                        ".flatpak-builder-release",
+                        ".cargo-sdk",
+                        "_flatpak_build_flathub",
+                        ".flatpak-builder-flathub",
+                        "_flatpak_repo"
+                    ]
+                }
             ]
         }
     ]

@@ -8,7 +8,7 @@
   <name>@name@</name>
   <summary>Find a Linux desktop that fits you</summary>
   <description>
-    <p>Lookbook is a friendly guide to the Linux desktop. Browse what people run, see how it looks, and find out what your own system can do. Nothing is sold or installed from it.</p>
+    <p>Syspedia is a friendly guide to the Linux desktop. Browse what people run, see how it looks, and find out what your own system can do. Nothing is sold or installed from it.</p>
     <ul>
       <li>Galleries of distributions, desktops and Wayland compositors, each with a page of real screenshots</li>
       <li>How Linux fits together: what a distribution, a desktop and a compositor each do</li>
@@ -24,9 +24,9 @@
     <name translate="no">omegaui</name>
   </developer>
 
-  <url type="homepage">https://github.com/omegaui/lookbook</url>
-  <url type="bugtracker">https://github.com/omegaui/lookbook/issues</url>
-  <url type="vcs-browser">https://github.com/omegaui/lookbook</url>
+  <url type="homepage">https://github.com/omegaui/syspedia</url>
+  <url type="bugtracker">https://github.com/omegaui/syspedia/issues</url>
+  <url type="vcs-browser">https://github.com/omegaui/syspedia</url>
 
   <launchable type="desktop-id">@app-id@.desktop</launchable>
   <translation type="gettext">@gettext-package@</translation>
@@ -48,7 +48,7 @@
   <releases>
     <release version="0.1.0" date="2026-11-08">
       <description>
-        <p>The first release of Lookbook, a guide to the Linux desktop.</p>
+        <p>The first release of Syspedia, a guide to the Linux desktop.</p>
         <ul>
           <li>Explore collections, spotlights, this month's releases and the Hall of Fame</li>
           <li>Browse 16 distributions, 9 desktops and 9 Wayland compositors, each with screenshots, facts and similar picks</li>

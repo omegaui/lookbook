@@ -2,7 +2,7 @@ use gtk::gio;
 
 use super::Catalog;
 
-const BUNDLED_CATALOG_PATH: &str = "/io/github/omegaui/Lookbook/catalog/catalog.json";
+const BUNDLED_CATALOG_PATH: &str = "/io/github/omegaui/Syspedia/catalog/catalog.json";
 
 impl Catalog {
     /// Loads the catalog snapshot that ships inside the app.

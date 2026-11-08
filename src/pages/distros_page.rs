@@ -14,7 +14,7 @@ use crate::system::SystemInfo;
 use crate::widgets::{add_family_toggles, open_details_on_activate, IntroBanner, ShowcaseCard, ShowcaseContent};
 
 /// Opens a new issue on the project, titled for a distro suggestion.
-const SUGGEST_DISTRO_URL: &str = "https://github.com/omegaui/lookbook/issues/new?title=Suggest%20a%20distro%3A%20";
+const SUGGEST_DISTRO_URL: &str = "https://github.com/omegaui/syspedia/issues/new?title=Suggest%20a%20distro%3A%20";
 
 /// The toggle name that turns a filter off.
 const SHOW_ALL: &str = "all";
@@ -46,7 +46,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/distros_page.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/pages/distros_page.ui")]
     pub struct DistrosPage {
         #[template_child]
         pub intro: gtk::TemplateChild<IntroBanner>,
@@ -148,7 +148,7 @@ impl DistrosPage {
     /// Says the list is a selection, with a link to suggest a missing distro.
     fn show_suggest_note(&self) {
         let link = glib::markup_escape_text(SUGGEST_DISTRO_URL);
-        let note = gettext("There are hundreds of distros; Lookbook shows a hand-picked few. Missing one you like? <a href=\"{link}\">Suggest it</a>, and it can join the list without an app update.")
+        let note = gettext("There are hundreds of distros; Syspedia shows a hand-picked few. Missing one you like? <a href=\"{link}\">Suggest it</a>, and it can join the list without an app update.")
             .replace("{link}", &link);
         self.imp().suggest_label.set_markup(&note);
     }

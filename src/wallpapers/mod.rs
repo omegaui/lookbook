@@ -1,6 +1,6 @@
 //! Reads wallpaper collections live from their sources.
 //!
-//! Lookbook never stores or re-hosts these images: it reads each source's
+//! Syspedia never stores or re-hosts these images: it reads each source's
 //! list when the Wallpapers page opens and loads images from the source itself.
 
 mod copyparty;

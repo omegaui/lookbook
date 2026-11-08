@@ -1,10 +1,10 @@
 # The catalog
 
-Lookbook's data — distros, desktops, compositors, rices, ideas, release
+Syspedia's data — distros, desktops, compositors, rices, ideas, release
 feeds — lives in one hand-written file, `data/resources/catalog/catalog.json`.
 The app bundles that file, and also downloads the copy published at:
 
-**https://omegaui.github.io/lookbook/v1/catalog.json**
+**https://omegaui.github.io/syspedia/v1/catalog.json**
 
 so data can change without an app release.
 
@@ -53,7 +53,7 @@ Pull requests that touch the catalog run steps 1 and 2 only.
 
 `src/catalog/online.rs` checks for a new copy at most once a day, with
 `If-None-Match`, and keeps it in the app's cache folder
-(`~/.var/app/io.github.omegaui.Lookbook/cache/lookbook/`). The next
+(`~/.var/app/io.github.omegaui.Syspedia/cache/syspedia/`). The next
 launch uses it if it parses, has the schema version the app reads, and is newer
 than the bundled snapshot; otherwise the app uses the bundled snapshot. The
 About dialog shows the date of the catalog in use.

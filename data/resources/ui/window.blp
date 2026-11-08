@@ -1,8 +1,8 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $LookbookWindow: Adw.ApplicationWindow {
-  title: _("Lookbook");
+template $SyspediaWindow: Adw.ApplicationWindow {
+  title: _("Syspedia");
   width-request: 360;
   height-request: 294;
 
@@ -19,7 +19,7 @@ template $LookbookWindow: Adw.ApplicationWindow {
   content: Adw.ToastOverlay toast_overlay {
     child: Adw.NavigationView navigation_view {
       Adw.NavigationPage {
-        title: _("Lookbook");
+        title: _("Syspedia");
         tag: "main";
 
         child: Adw.ToolbarView {
@@ -114,12 +114,12 @@ menu primary_menu {
     }
 
     item {
-      label: _("_What Is Lookbook?");
-      action: "win.what-is-lookbook";
+      label: _("_What Is Syspedia?");
+      action: "win.what-is-syspedia";
     }
 
     item {
-      label: _("_About Lookbook");
+      label: _("_About Syspedia");
       action: "app.about";
     }
   }

@@ -20,7 +20,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/screenshot_gallery.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/screenshot_gallery.ui")]
     pub struct ScreenshotGallery {
         #[template_child]
         pub carousel: gtk::TemplateChild<adw::Carousel>,

@@ -1,8 +1,8 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $WhatIsLookbookDialog: Adw.Dialog {
-  title: _("What Is Lookbook?");
+template $WhatIsSyspediaDialog: Adw.Dialog {
+  title: _("What Is Syspedia?");
   content-width: 560;
   content-height: 720;
 
@@ -43,7 +43,7 @@ template $WhatIsLookbookDialog: Adw.Dialog {
                 "title-1",
               ]
 
-              label: _("Lookbook");
+              label: _("Syspedia");
             }
 
             Label {
@@ -59,7 +59,7 @@ template $WhatIsLookbookDialog: Adw.Dialog {
 
           Label {
             label: _(
-              "Linux comes in many shapes. Lookbook shows what they look like and what they can do, so you can find one that fits you. It is a guide, not a store: nothing is sold or installed from here."
+              "Linux comes in many shapes. Syspedia shows what they look like and what they can do, so you can find one that fits you. It is a guide, not a store: nothing is sold or installed from here."
             );
             wrap: true;
             justify: center;
@@ -270,7 +270,7 @@ template $WhatIsLookbookDialog: Adw.Dialog {
 
             Adw.ActionRow {
               title: _("Free, with no catches");
-              subtitle: _("No ads, no accounts and no tracking. Lookbook is free software under the GPL.");
+              subtitle: _("No ads, no accounts and no tracking. Syspedia is free software under the GPL.");
 
               [prefix]
               Image {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the catalog Lookbook downloads at runtime.
+"""Builds the catalog Syspedia downloads at runtime.
 
 The hand-written catalog lives in data/resources/catalog/catalog.json; the app
 bundles that file as its fallback. This script:
@@ -42,8 +42,8 @@ INDEX_TEMPLATE = Path(__file__).resolve().parent / "index.html"
 # version. Bump both, and publish under v2/, for changes old apps cannot read.
 SCHEMA_VERSION = 1
 PUBLISH_DIR = f"v{SCHEMA_VERSION}"
-SITE_URL = "https://omegaui.github.io/lookbook"
-USER_AGENT = "Lookbook-catalog/1 (+https://github.com/omegaui/lookbook)"
+SITE_URL = "https://omegaui.github.io/syspedia"
+USER_AGENT = "Syspedia-catalog/1 (+https://github.com/omegaui/syspedia)"
 TIMEOUT_SECONDS = 30
 # If more media than this fails, the network is more likely at fault than the
 # images: stop, so the last good catalog stays published.

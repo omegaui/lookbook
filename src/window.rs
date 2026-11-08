@@ -7,7 +7,7 @@ use gettextrs::gettext;
 use gtk::glib::clone;
 use gtk::{gio, glib};
 
-use crate::application::LookbookApplication;
+use crate::application::SyspediaApplication;
 use crate::catalog::{download_now, Catalog, ItemRef, RefreshOutcome};
 use crate::fits_together::SceneKind;
 use crate::config::{APP_ID, PROFILE};
@@ -17,7 +17,7 @@ use crate::pages::{
 };
 use crate::system::SystemInfo;
 use crate::run_check;
-use crate::widgets::{DetailContent, FitsTogetherDialog, RunCheckDialog, TileContent, WhatIsLookbookDialog};
+use crate::widgets::{DetailContent, FitsTogetherDialog, RunCheckDialog, TileContent, WhatIsSyspediaDialog};
 
 const MAIN_PAGE_TAG: &str = "main";
 
@@ -62,8 +62,8 @@ mod imp {
     use super::*;
 
     #[derive(Debug, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/window.ui")]
-    pub struct LookbookWindow {
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/window.ui")]
+    pub struct SyspediaWindow {
         #[template_child]
         pub toast_overlay: gtk::TemplateChild<adw::ToastOverlay>,
         #[template_child]
@@ -87,7 +87,7 @@ mod imp {
         pub system: RefCell<Option<Rc<SystemInfo>>>,
     }
 
-    impl Default for LookbookWindow {
+    impl Default for SyspediaWindow {
         fn default() -> Self {
             Self {
                 toast_overlay: gtk::TemplateChild::default(),
@@ -107,9 +107,9 @@ mod imp {
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for LookbookWindow {
-        const NAME: &'static str = "LookbookWindow";
-        type Type = super::LookbookWindow;
+    impl ObjectSubclass for SyspediaWindow {
+        const NAME: &'static str = "SyspediaWindow";
+        type Type = super::SyspediaWindow;
         type ParentType = adw::ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
@@ -127,7 +127,7 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for LookbookWindow {
+    impl ObjectImpl for SyspediaWindow {
         fn constructed(&self) {
             self.parent_constructed();
             let window = self.obj();
@@ -140,9 +140,9 @@ mod imp {
         }
     }
 
-    impl WidgetImpl for LookbookWindow {}
+    impl WidgetImpl for SyspediaWindow {}
 
-    impl WindowImpl for LookbookWindow {
+    impl WindowImpl for SyspediaWindow {
         fn close_request(&self) -> glib::Propagation {
             if let Err(error) = self.obj().save_window_state() {
                 tracing::warn!("Could not save the window state: {error}");
@@ -151,19 +151,19 @@ mod imp {
         }
     }
 
-    impl ApplicationWindowImpl for LookbookWindow {}
-    impl AdwApplicationWindowImpl for LookbookWindow {}
+    impl ApplicationWindowImpl for SyspediaWindow {}
+    impl AdwApplicationWindowImpl for SyspediaWindow {}
 }
 
 glib::wrapper! {
-    pub struct LookbookWindow(ObjectSubclass<imp::LookbookWindow>)
+    pub struct SyspediaWindow(ObjectSubclass<imp::SyspediaWindow>)
         @extends gtk::Widget, gtk::Window, gtk::ApplicationWindow, adw::ApplicationWindow,
         @implements gio::ActionMap, gio::ActionGroup, gtk::Accessible, gtk::Buildable,
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
 }
 
-impl LookbookWindow {
-    pub fn new(app: &LookbookApplication) -> Self {
+impl SyspediaWindow {
+    pub fn new(app: &SyspediaApplication) -> Self {
         glib::Object::builder().property("application", app).build()
     }
 
@@ -210,8 +210,8 @@ impl LookbookWindow {
         let refresh_catalog = gio::ActionEntry::builder("refresh-catalog")
             .activate(|window: &Self, _, _| window.refresh_catalog())
             .build();
-        let what_is_lookbook = gio::ActionEntry::builder("what-is-lookbook")
-            .activate(|window: &Self, _, _| WhatIsLookbookDialog::default().present(Some(window)))
+        let what_is_syspedia = gio::ActionEntry::builder("what-is-syspedia")
+            .activate(|window: &Self, _, _| WhatIsSyspediaDialog::default().present(Some(window)))
             .build();
         let fits_together = gio::ActionEntry::builder("fits-together")
             .activate(|window: &Self, _, _| {
@@ -239,7 +239,7 @@ impl LookbookWindow {
             show_item,
             can_i_run,
             refresh_catalog,
-            what_is_lookbook,
+            what_is_syspedia,
             fits_together,
             explain_layers,
             scan_again,
@@ -362,10 +362,10 @@ impl LookbookWindow {
     /// Opens a fresh window, which loads the catalog and detects the system
     /// again, so every page agrees; then closes this one.
     fn reopen_with_toast(&self, reason: ReopenReason) {
-        let Some(app) = self.application().and_downcast::<LookbookApplication>() else {
+        let Some(app) = self.application().and_downcast::<SyspediaApplication>() else {
             return;
         };
-        let window = LookbookWindow::new(&app);
+        let window = SyspediaWindow::new(&app);
         window.present();
         window.show_toast(&reopen_text(reason, window.catalog_date()));
         self.close();
@@ -375,8 +375,8 @@ impl LookbookWindow {
     fn show_catalog_error(&self) {
         let status = adw::StatusPage::builder()
             .icon_name("dialog-error-symbolic")
-            .title(gettext("Lookbook Could Not Start"))
-            .description(gettext("Its catalog of distros, desktops and compositors could not be read. Reinstalling Lookbook should fix this."))
+            .title(gettext("Syspedia Could Not Start"))
+            .description(gettext("Its catalog of distros, desktops and compositors could not be read. Reinstalling Syspedia should fix this."))
             .vexpand(true)
             .build();
         let view = adw::ToolbarView::new();

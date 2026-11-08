@@ -1,6 +1,6 @@
 # Flathub manifest
 
-`io.github.omegaui.Lookbook.json` is the manifest for the Flathub submission.
+`io.github.omegaui.Syspedia.json` is the manifest for the Flathub submission.
 It builds with no network, as Flathub requires:
 
 - the app comes from a `git` source pinned to a commit (point it at the
@@ -9,7 +9,7 @@ It builds with no network, as Flathub requires:
   `build-aux/generate-cargo-sources.py` writes from `Cargo.lock`. Run it
   again whenever `Cargo.lock` changes.
 
-The manifests next to `build-aux/` (`io.github.omegaui.Lookbook.json` and
+The manifests next to `build-aux/` (`io.github.omegaui.Syspedia.json` and
 the Devel one) build from the working folder and may download crates; they
 are for local testing only.
 

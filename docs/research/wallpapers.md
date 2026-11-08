@@ -2,7 +2,7 @@
 
 Research date: 2026-11-07.
 
-The Wallpapers section pulls each source's live list when the user opens it, and loads images from the source's own servers. Lookbook never bundles, mirrors or re-hosts the images.
+The Wallpapers section pulls each source's live list when the user opens it, and loads images from the source's own servers. Syspedia never bundles, mirrors or re-hosts the images.
 
 ## Sources
 

@@ -9,7 +9,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/protocol_card.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/protocol_card.ui")]
     pub struct ProtocolCard {
         #[template_child]
         pub art: gtk::TemplateChild<IconTile>,

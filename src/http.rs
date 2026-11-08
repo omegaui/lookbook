@@ -36,7 +36,7 @@ pub fn save_disk_cache() {
 /// Names the app and its version and links to its repository, so source
 /// owners know who is asking.
 fn user_agent() -> String {
-    format!("Lookbook/{VERSION} (+https://github.com/omegaui/lookbook)")
+    format!("Syspedia/{VERSION} (+https://github.com/omegaui/syspedia)")
 }
 
 fn cached_session() -> soup::Session {
@@ -44,7 +44,7 @@ fn cached_session() -> soup::Session {
     session.set_user_agent(&user_agent());
     session.set_timeout(TIMEOUT_SECONDS);
 
-    let folder = glib::user_cache_dir().join("lookbook").join("http");
+    let folder = glib::user_cache_dir().join("syspedia").join("http");
     let cache = soup::Cache::new(folder.to_str(), soup::CacheType::SingleUser);
     cache.set_max_size(DISK_CACHE_BYTES);
     cache.load();

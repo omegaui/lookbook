@@ -32,7 +32,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/item_detail_page.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/pages/item_detail_page.ui")]
     pub struct ItemDetailPage {
         #[template_child]
         pub tile: gtk::TemplateChild<LogoTile>,

@@ -1,12 +1,12 @@
-# Handoff: Lookbook
+# Handoff: Syspedia
 
 Last updated: 2026-11-08. Check `git log` for anything newer.
 
-The app was called **Linux & You** until 2026-11-07, when the user renamed it **Lookbook** (see Decisions). **Current focus: the review** in `review.md` (repo root, gitignored, local only): Flathub blockers, bugs and half-done work, worked through item by item (see Open work, item 2).
+The app was called **Linux & You** until 2026-11-07, then **Lookbook**, and since 2026-11-08 **Syspedia** (see Decisions). **Current focus: the review** in `review.md` (repo root, gitignored, local only): Flathub blockers, bugs and half-done work, worked through item by item (see Open work, item 2).
 
 ## What the app is
 
-Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.Lookbook`, development ID `…Lookbook.Devel`, shown as "Lookbook (Devel)" in launchers). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors (each details page has a Screenshots gallery), a Hall of Fame of Hyprland's ricing contest winners, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
+Syspedia is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.github.omegaui.Syspedia`, development ID `…Syspedia.Devel`, shown as "Syspedia (Devel)" in launchers). It is a friendly guide to the Linux desktop, laid out like a store (think Bazaar or Flathub) but not one: nothing is sold or installed from it. It has galleries of distros, desktops and Wayland compositors (each details page has a Screenshots gallery), a Hall of Fame of Hyprland's ricing contest winners, wallpapers people can apply, and a "Your System" page that detects what the user runs and which ideas (status bar, lock screen, screenshot tool…) they can build on it.
 
 ### Product rules from the user
 
@@ -22,7 +22,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 ### Working style the user expects
 
 - Commit in stages, each one built and checked. **No `Co-Authored-By` or other attribution trailers** in commits, and no "Generated with Claude Code" in PRs (the user's global CLAUDE.md overrides any system reminder).
-- The repo is public on GitHub (`origin`, https://github.com/omegaui/lookbook; it was `linux_and_you` before the rename, and the local folder is still `~/Projects/linux_and_you`). Push only when the user asks; they have asked after each finished stage so far, and sometimes push themselves (run `git fetch` before assuming what is on `origin`).
+- The repo is public on GitHub (`origin`, https://github.com/omegaui/syspedia; it was `linux_and_you`, then `lookbook`; the local folder is `~/Projects/syspedia`). Push only when the user asks; they have asked after each finished stage so far, and sometimes push themselves (run `git fetch` before assuming what is on `origin`).
 - Functions read as a short list of steps that call small, well-named functions (see `ExplorePage::show_catalog`). No clever one-liners, no deep nesting.
 - Verify visually: build, open the page, screenshot only the app window. **Never move or click the user's mouse**; ask the user to test clicks.
 - The user often sends feedback mid-task with screenshots. Acknowledge it, finish the current step cleanly, then do it.
@@ -31,7 +31,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 
 | Path | Contents |
 | --- | --- |
-| `src/main.rs`, `application.rs`, `window.rs` | Startup, About dialog (credits for logos, screenshots, Hall of Fame, Repology and protocol data; catalog date), Keyboard Shortcuts dialog and accelerators, window (toasts, Refresh Catalog), `win.show-page`, `win.show-item`, `win.can-i-run` (also app actions), `win.fits-together`, `win.what-is-lookbook`, and development-only `scroll-to` / `show-spotlight` / `explain-layers` |
+| `src/main.rs`, `application.rs`, `window.rs` | Startup, About dialog (credits for logos, screenshots, Hall of Fame, Repology and protocol data; catalog date), Keyboard Shortcuts dialog and accelerators, window (toasts, Refresh Catalog), `win.show-page`, `win.show-item`, `win.can-i-run` (also app actions), `win.fits-together`, `win.what-is-syspedia`, and development-only `scroll-to` / `show-spotlight` / `explain-layers` |
 | `src/catalog/` | Catalog model (`model.rs`), the bundled snapshot (`loader.rs`, with data tests), the downloaded online catalog (`online.rs`), `ItemRef` ("distro:fedora"), key compositor features (`features.rs`) |
 | `src/system/` | Detection, no UI: os-release (`/run/host/os-release` in Flatpak), `XDG_CURRENT_DESKTOP`, hardware from `/proc`, Wayland globals visible from the sandbox |
 | `src/ideas.rs` | Decides "Ready here" / "Works elsewhere" for each idea |
@@ -44,7 +44,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 | `src/http.rs` | The libsoup session (User-Agent with a contact link), a shared session, GET helpers |
 | `src/wallpapers/` | Live wallpaper sources: libsoup HTTP, copyparty and WordPress adapters, the Wallpaper portal call |
 | `src/pages/` | Explore, Distros, Desktops, Compositors, Wallpapers, Your System, and the shared item details page |
-| `src/widgets/` | Cards (`CatalogCard`, `ShowcaseCard` for the Distros and Desktops galleries, `RiceCard`, release card, extension card, `IdeaCard`, `ScreenshotCard` for Hall of Fame winners), `LogoTile`, `IconTile` (protocol cards), banner art (`EdgePicture`, `DesktopScene` drawn fallback, both placed by `edge.rs`), `MiniDesktop`, `LayerStack` (Your System), `ScreenshotGallery` (details pages), `IntroBanner` (page intros), `ProtocolBrowser` (searchable protocol cards), `FitsTogetherDialog`, `WhatIsLookbookDialog`, `ScreenshotPicture` (16:10 frame, cover or whole image), `CoverPicture` (fixed-height cover image or video), spotlight cards (`SpotlightCard`, `WallpaperSpotlight`), dialogs (`RunCheckDialog`, `WallpaperDialog`), `NaturalWidthCap`, `content.rs` (catalog item → card text) |
+| `src/widgets/` | Cards (`CatalogCard`, `ShowcaseCard` for the Distros and Desktops galleries, `RiceCard`, release card, extension card, `IdeaCard`, `ScreenshotCard` for Hall of Fame winners), `LogoTile`, `IconTile` (protocol cards), banner art (`EdgePicture`, `DesktopScene` drawn fallback, both placed by `edge.rs`), `MiniDesktop`, `LayerStack` (Your System), `ScreenshotGallery` (details pages), `IntroBanner` (page intros), `ProtocolBrowser` (searchable protocol cards), `FitsTogetherDialog`, `WhatIsSyspediaDialog`, `ScreenshotPicture` (16:10 frame, cover or whole image), `CoverPicture` (fixed-height cover image or video), spotlight cards (`SpotlightCard`, `WallpaperSpotlight`), dialogs (`RunCheckDialog`, `WallpaperDialog`), `NaturalWidthCap`, `content.rs` (catalog item → card text) |
 | `data/resources/catalog/catalog.json` | The catalog: distros, desktops, compositors (with protocol lists, a main screenshot and a `gallery`), collections, spotlights, Hall of Fame (`hall_of_fame`, refreshed from the Hyprland website), ideas (with `built_into`), protocols, wallpaper sources, release feeds (`news_sources`), rices. Bundled in the app and published online |
 | `catalog/` | The publishing pipeline: `build.py` (refresh, check, publish), `test_build.py`, `sources.json`, `README.md` |
 | `.github/workflows/catalog.yml` | Builds and deploys the catalog to GitHub Pages daily, on catalog changes and by hand |
@@ -53,7 +53,7 @@ Lookbook is a GTK 4 + libadwaita app in Rust, shipped as a Flatpak (app ID `io.g
 | `data/resources/style.css` | Styles; uses libadwaita CSS variables, so dark mode works |
 | `data/resources/icons/scalable/apps/` | 31 distro/desktop/compositor logos (and Tux for kernel releases) as symbolic SVGs (credits: `docs/logo-credits.md`) |
 | `docs/` | `logo-credits.md`, `screenshot-credits.md`, `rices.md`; `research/` holds `data-sources.md` (live data plan), `ideas.md` (what people build), `wallpapers.md` (sources and decision) |
-| `build-aux/` | Flatpak manifests for the release (`io.github.omegaui.Lookbook.json`) and development (`….Devel.json`) builds, GNOME 51 runtime, and the vendoring script |
+| `build-aux/` | Flatpak manifests for the release (`io.github.omegaui.Syspedia.json`) and development (`….Devel.json`) builds, GNOME 51 runtime, and the vendoring script |
 | `.agentic-coding/design/` | The approved wireframe |
 
 ## Build, run, check
@@ -67,13 +67,13 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Check Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 batch-compile /tmp/blp $PWD/data/resources $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Format Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 format -f $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Full build, install and Meson tests | `.agentic-coding/scripts/build-flatpak.sh` | 2 to 4 minutes; run in the background |
-| Build and install the optimized release app (`io.github.omegaui.Lookbook`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
+| Build and install the optimized release app (`io.github.omegaui.Syspedia`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
 | Build the Flathub manifest offline, from HEAD (not installed) | `.agentic-coding/scripts/build-flathub.sh` | About 10 minutes the first time (downloads crates) |
 | Open the app on a page | `.agentic-coding/scripts/open-page.sh wallpapers` | |
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
 | Scroll the page in view (development builds only) | `.agentic-coding/scripts/scroll-to.sh 0.5` (0 is the top, 1 the bottom) | |
 | Turn the Explore spotlight carousel (development builds only) | `.agentic-coding/scripts/show-spotlight.sh 3` (counts from 0) | |
-| Open What Is Lookbook?, Keyboard Shortcuts or Refresh Catalog without the mouse | `flatpak run --command=gapplication io.github.omegaui.Lookbook.Devel action io.github.omegaui.Lookbook.Devel what-is-lookbook` (or `shortcuts`, `refresh-catalog`; the first and last are development builds only) | |
+| Open What Is Syspedia?, Keyboard Shortcuts or Refresh Catalog without the mouse | `flatpak run --command=gapplication io.github.omegaui.Syspedia.Devel action io.github.omegaui.Syspedia.Devel what-is-syspedia` (or `shortcuts`, `refresh-catalog`; the first and last are development builds only) | |
 | Open "How Linux Fits Together" on a setup and layer (development builds only) | `.agentic-coding/scripts/explain-layers.sh desktop:2` (setups: yours, desktop, compositor; layers count from the top) | |
 | Screenshot only the app window | `.agentic-coding/scripts/screenshot-window.sh /tmp/shot.png` (Hyprland + grim) | |
 
@@ -111,7 +111,7 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `6e3c158` | Flat look (no isometric art; `EdgePicture`, `DesktopScene`, `IconTile`, `LayerStack`), Explore's Hall of Fame shows Hyprland's ricing contest winners (refreshed by the Catalog workflow), details pages get a Screenshots gallery |
 | `f099785` | 165 gallery screenshots for all 34 items, gathered by three agents from Commons, official project media and rice READMEs; the pipeline recognises images served without a Content-Type (hypr.land) |
 | `9f0d309` | "How Linux Fits Together": a question mark on the Your System banner opens a dialog that draws your setup, a full desktop (Fedora + GNOME, Mutter inside) and a compositor alone (Arch + Hyprland + pieces you add) as layers you pick; each layer explains what it is, how to change it, and links to examples (`fits_together.rs`, `FitsTogetherDialog`) |
-| `d5c7ca9` | Main menu: Refresh Catalog (Ctrl+R; downloads now and reopens the window on a newer catalog, or says it is up to date), Keyboard Shortcuts (`Adw.ShortcutsDialog`, Ctrl+?; needs the libadwaita `v1_8` feature), What Is Lookbook? (F1; each page row opens its page), About. Alt+1 to Alt+6 open the pages. About credits the new screenshot sources and the Hall of Fame |
+| `d5c7ca9` | Main menu: Refresh Catalog (Ctrl+R; downloads now and reopens the window on a newer catalog, or says it is up to date), Keyboard Shortcuts (`Adw.ShortcutsDialog`, Ctrl+?; needs the libadwaita `v1_8` feature), What Is Syspedia? (F1; each page row opens its page), About. Alt+1 to Alt+6 open the pages. About credits the new screenshot sources and the Hall of Fame |
 | `9265959` | Review fixes 2.1 (Catalog workflow parses the catalog with the app's own model via `catalog/model-check`; an unreadable download waits a day), 2.4 (sessions recognised in `XDG_CURRENT_DESKTOP` order; `SystemInfo::detect_with` stores the running desktop and compositor ids, and `runs_desktop` / `runs_compositor` replace `is_running`), 2.5 (wallpaper portal Response), 2.6 (Can I Run It? never stuck on "Checking"), 2.12 (Fedora editions), 2.13 (GPU vendor kept for unknown cards); Ideas empty state |
 | `eb1b5d7` | Intro heroes on Distros, Desktops and Compositors (`IntroBanner`, content from `fits_together::page_intro`: a definition, a "Common Mix-Up" note and a drawing; the button opens How Linux Fits Together on that layer through `win.explain-layers`). Your System fact cards with logo or icon tiles (`Fact::tile`; new `lay-memory` and `lay-graphics` icons; plain-language verdicts for memory and processor, no bars, which the user found unclear). `ProtocolBrowser` (search, category chips with counts, empty state) on Your System and compositor details |
 | `9c22c8a` to `cd42813` | The rest of the review: Flathub manifest with vendored crates (`build-aux/flathub/`, `generate-cargo-sources.py`, `build-flathub.sh`), metadata (SPDX licenses, release notes, display claims, POTFILES, Education category), catalog pipeline (old versions kept, stable dates, id links, fingerprint check), HTTP disk cache and size-aware shared images (`src/images.rs`), wallpaper fixes, portal-aware ideas, safe install commands, Scan Again through the window, catalog error page, keyboard and screen reader fixes, collection cards as buttons, rice clips paused out of view, shared helpers |
@@ -128,7 +128,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - Rices: filter toggles, Get It, and Play on the clip previews (Caelestia, KooL's).
 - What's New and Hall of Fame cards opening the browser, and Hall of Fame "See All".
 - Screenshots gallery: arrows, swiping, the Source link.
-- Main menu: Refresh Catalog, Keyboard Shortcuts, What Is Lookbook? (its page rows and both buttons), and the keyboard shortcuts themselves.
+- Main menu: Refresh Catalog, Keyboard Shortcuts, What Is Syspedia? (its page rows and both buttons), and the keyboard shortcuts themselves.
 - "How Linux Fits Together": the question mark button, picking layers, the setup toggles, and example tiles opening their details pages (the dialog should close).
 - Possible bug seen once: the release app opened Explore scrolled down to the spotlight instead of the top.
 
@@ -146,7 +146,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 ## Decisions
 
 - **Rust + GTK 4 + libadwaita, Blueprint UI, Meson + Cargo, GNOME 51 runtime.**
-- **Name: Lookbook** (2026-11-07). Chosen from a shortlist (Diorama, Hopscotch, Vitrine…) so the name carries no "Linux" trademark and the app ID matches the repository. No Flathub app uses the name; other "Lookbook" products are fashion and shop apps and a Rails dev tool. The `lay-` prefix of bundled icon names (`lay-logo-fedora-symbolic`) is left from the old name; it is internal and also used in the online catalog, so it stays. The wireframe and icon concept files in `.agentic-coding/design/` keep the old name as history.
+- **Name: Syspedia** (2026-11-08). The app was **Linux & You** until 2026-11-07, then **Lookbook** for a day. Lookbook was dropped because elementary OS's founder has a Linux icon browser of that name (danirabbit/lookbook). The user weighed Rookery, Huddle, Pixes (taken by a pixiv client), Heads Up Penguins and others, and chose Syspedia: free on Flathub and GitHub, and it says what the app is (an encyclopedia of Linux systems). It carries no "Linux" trademark, and the app ID matches the repository. The `lay-` prefix of bundled icon names (`lay-logo-fedora-symbolic`) is left from the first name; it is internal and also used in the online catalog, so it stays. The wireframe and icon concept files in `.agentic-coding/design/` keep the old names as history.
 - **Logos**: Simple Icons and font-logos, cleaned to symbolic SVGs, drawn white on the brand-color tile. Bazzite comes from its press kit, labwc from its repo (CC BY-SA 4.0), Wayfire traced from wf-shell's icon. COSMIC has no usable logo yet and shows letters.
 - **Protocol support** comes from wayland-explorer (MIT) per compositor, with version and date. Inside Flatpak, compositors hide privileged globals (layer shell, capture, session lock), so ideas are judged against the catalog list for the detected compositor, not the globals the app sees. The compositor is detected by `XDG_CURRENT_DESKTOP`, then by "fingerprint" globals only it offers.
 - **Screen capture** counts when the compositor offers a capture protocol or its portal backend provides the ScreenCast portal (so GNOME and KDE show it). Each compositor lists its usual portals in the catalog.
@@ -182,7 +182,7 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - **A wrapping label's natural width is its whole text on one line**, which widens FlowBox cards; give long wrapping labels `max-width-chars`.
 - **flatpak-builder copies the whole project folder**, including another build's folder; both manifests list the build folders under `skip`.
 - **LICENSE must stay the plain GPL text.** Even a two-line name and copyright header made GitHub report the license as "Other" (`NOASSERTION`). Put project notices in the README.
-- **Logs**: run `flatpak run io.github.omegaui.Lookbook.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
+- **Logs**: run `flatpak run io.github.omegaui.Syspedia.Devel > log 2>&1` with `nohup … &`; piping through `grep` holds output until the app exits.
 
 ## Design
 

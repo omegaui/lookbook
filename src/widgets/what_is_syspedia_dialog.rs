@@ -1,4 +1,4 @@
-//! "What Is Lookbook?": what the app is for, what each page holds (each row
+//! "What Is Syspedia?": what the app is for, what each page holds (each row
 //! opens its page), and what to know about it. From the main menu.
 
 use adw::prelude::*;
@@ -11,16 +11,16 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/what_is_lookbook_dialog.ui")]
-    pub struct WhatIsLookbookDialog {
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/what_is_syspedia_dialog.ui")]
+    pub struct WhatIsSyspediaDialog {
         #[template_child]
         pub app_icon: gtk::TemplateChild<gtk::Image>,
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for WhatIsLookbookDialog {
-        const NAME: &'static str = "WhatIsLookbookDialog";
-        type Type = super::WhatIsLookbookDialog;
+    impl ObjectSubclass for WhatIsSyspediaDialog {
+        const NAME: &'static str = "WhatIsSyspediaDialog";
+        type Type = super::WhatIsSyspediaDialog;
         type ParentType = adw::Dialog;
 
         fn class_init(klass: &mut Self::Class) {
@@ -33,18 +33,18 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for WhatIsLookbookDialog {
+    impl ObjectImpl for WhatIsSyspediaDialog {
         fn constructed(&self) {
             self.parent_constructed();
             self.app_icon.set_icon_name(Some(APP_ID));
         }
     }
 
-    impl WidgetImpl for WhatIsLookbookDialog {}
-    impl AdwDialogImpl for WhatIsLookbookDialog {}
+    impl WidgetImpl for WhatIsSyspediaDialog {}
+    impl AdwDialogImpl for WhatIsSyspediaDialog {}
 
     #[gtk::template_callbacks]
-    impl WhatIsLookbookDialog {
+    impl WhatIsSyspediaDialog {
         /// A page row has opened its page; close, so the page shows.
         #[template_callback]
         fn on_page_activated(&self, _row: &gtk::ListBoxRow) {
@@ -59,12 +59,12 @@ mod imp {
 }
 
 glib::wrapper! {
-    pub struct WhatIsLookbookDialog(ObjectSubclass<imp::WhatIsLookbookDialog>)
+    pub struct WhatIsSyspediaDialog(ObjectSubclass<imp::WhatIsSyspediaDialog>)
         @extends gtk::Widget, adw::Dialog,
         @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl Default for WhatIsLookbookDialog {
+impl Default for WhatIsSyspediaDialog {
     fn default() -> Self {
         glib::Object::new()
     }

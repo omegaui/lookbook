@@ -1,5 +1,5 @@
 project(
-  'lookbook',
+  'syspedia',
   'rust',
   version: '0.1.0',
   meson_version: '>= 1.0',
@@ -9,7 +9,7 @@ project(
 i18n = import('i18n')
 gnome = import('gnome')
 
-base_id = 'io.github.omegaui.Lookbook'
+base_id = 'io.github.omegaui.Syspedia'
 
 dependency('glib-2.0', version: '>= 2.82')
 dependency('gio-2.0', version: '>= 2.82')
@@ -43,12 +43,12 @@ if get_option('profile') == 'development'
   endif
   application_id = '@0@.@1@'.format(base_id, profile)
   # The Devel build sits next to the release one; its own name tells them apart.
-  app_name = 'Lookbook (Devel)'
+  app_name = 'Syspedia (Devel)'
 else
   profile = ''
   version_suffix = ''
   application_id = base_id
-  app_name = 'Lookbook'
+  app_name = 'Syspedia'
 endif
 
 meson.add_dist_script(

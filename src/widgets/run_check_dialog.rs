@@ -19,7 +19,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/run_check_dialog.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/run_check_dialog.ui")]
     pub struct RunCheckDialog {
         #[template_child]
         pub tile: gtk::TemplateChild<LogoTile>,

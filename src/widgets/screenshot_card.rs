@@ -18,7 +18,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/screenshot_card.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/screenshot_card.ui")]
     pub struct ScreenshotCard {
         #[template_child]
         pub picture: gtk::TemplateChild<ScreenshotPicture>,

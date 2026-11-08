@@ -549,24 +549,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d15f86d12da44cd8d4ec3c73984537eb7f4cadcb9776a575a0a8a05ca11005c"
 
 [[package]]
-name = "lookbook"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "futures-channel",
- "gettext-rs",
- "gtk4",
- "libadwaita",
- "roxmltree",
- "serde",
- "serde_json",
- "soup3",
- "tracing",
- "tracing-subscriber",
- "wayland-client",
-]
-
-[[package]]
 name = "malloc_buf"
 version = "0.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -894,6 +876,24 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "syspedia"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "futures-channel",
+ "gettext-rs",
+ "gtk4",
+ "libadwaita",
+ "roxmltree",
+ "serde",
+ "serde_json",
+ "soup3",
+ "tracing",
+ "tracing-subscriber",
+ "wayland-client",
 ]
 
 [[package]]

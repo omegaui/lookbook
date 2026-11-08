@@ -22,7 +22,7 @@ mod imp {
     use super::*;
 
     #[derive(Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/wallpaper_spotlight.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/wallpaper_spotlight.ui")]
     pub struct WallpaperSpotlight {
         #[template_child]
         pub tile: gtk::TemplateChild<LogoTile>,

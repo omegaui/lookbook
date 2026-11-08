@@ -14,7 +14,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/intro_banner.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/intro_banner.ui")]
     pub struct IntroBanner {
         #[template_child]
         pub kicker_label: gtk::TemplateChild<gtk::Label>,

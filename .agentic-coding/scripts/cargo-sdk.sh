@@ -15,11 +15,11 @@ mkdir -p "$CACHE"
 
 if [ ! -f "$PROJECT/src/config.rs" ]; then
     cat > "$PROJECT/src/config.rs" <<'CONFIG'
-pub const APP_ID: &str = "io.github.omegaui.Lookbook.Devel";
-pub const GETTEXT_PACKAGE: &str = "lookbook";
+pub const APP_ID: &str = "io.github.omegaui.Syspedia.Devel";
+pub const GETTEXT_PACKAGE: &str = "syspedia";
 pub const LOCALEDIR: &str = "/app/share/locale";
 pub const PROFILE: &str = "Devel";
-pub const RESOURCES_FILE: &str = concat!("/app/share/lookbook", "/resources.gresource");
+pub const RESOURCES_FILE: &str = concat!("/app/share/syspedia", "/resources.gresource");
 pub const VERSION: &str = "0.1.0-devel";
 CONFIG
 fi

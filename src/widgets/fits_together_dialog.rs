@@ -52,7 +52,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/fits_together_dialog.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/fits_together_dialog.ui")]
     pub struct FitsTogetherDialog {
         #[template_child]
         pub scene_toggles: gtk::TemplateChild<adw::ToggleGroup>,

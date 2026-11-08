@@ -4,7 +4,7 @@ Research date: 2026-11-07. Every endpoint below was fetched with `curl` on that 
 
 ## Goal
 
-Lookbook shows current information about distros, desktops and compositors without shipping a new app release. App releases are for app features only.
+Syspedia shows current information about distros, desktops and compositors without shipping a new app release. App releases are for app features only.
 
 The app does not call third-party APIs. A separate data repository collects data on a schedule, checks it, and publishes one catalog. The app downloads that catalog, caches it, and falls back to a copy bundled with the app.
 
@@ -83,7 +83,7 @@ Flathub has no rule against `--share=network`, but permissions must be minimal. 
 
 ## Recommended architecture
 
-1. **Data repository** (`lookbook-data`):
+1. **Data repository** (`syspedia-data`):
    - One adapter per source.
    - One hand-written YAML file per distro, desktop and compositor, for what no API gives: our own short descriptions, release model, default desktop, and which release source to read.
    - An `icons/` folder of checked SVGs, each with its license and source recorded.

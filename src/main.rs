@@ -21,7 +21,7 @@ use gettextrs::{bind_textdomain_codeset, bindtextdomain, textdomain};
 use gtk::prelude::*;
 use gtk::{gio, glib};
 
-use self::application::LookbookApplication;
+use self::application::SyspediaApplication;
 use self::config::{GETTEXT_PACKAGE, LOCALEDIR, RESOURCES_FILE};
 
 fn main() -> glib::ExitCode {
@@ -29,9 +29,9 @@ fn main() -> glib::ExitCode {
 
     setup_translations();
     load_resources();
-    glib::set_application_name("Lookbook");
+    glib::set_application_name("Syspedia");
 
-    let app = LookbookApplication::default();
+    let app = SyspediaApplication::default();
     app.run()
 }
 

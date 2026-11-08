@@ -1,4 +1,4 @@
-/* Lookbook styles. GTK loads this file from the resource base path. */
+/* Syspedia styles. GTK loads this file from the resource base path. */
 
 /* Shared text styles */
 
@@ -444,7 +444,7 @@ flowboxchild:hover .showcase-card {
   border-radius: 12px;
 }
 
-/* What Is Lookbook?: a colored tile for each page. */
+/* What Is Syspedia?: a colored tile for each page. */
 
 .welcome-tile {
   min-width: 36px;

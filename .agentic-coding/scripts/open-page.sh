@@ -5,7 +5,7 @@
 #   .agentic-coding/scripts/open-page.sh wallpapers
 set -eu
 
-APP=io.github.omegaui.Lookbook.Devel
+APP=io.github.omegaui.Syspedia.Devel
 PAGE=${1:-explore}
 
 flatpak kill "$APP" 2>/dev/null || true

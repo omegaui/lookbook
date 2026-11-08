@@ -11,7 +11,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/catalog_card.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/catalog_card.ui")]
     pub struct CatalogCard {
         #[template_child]
         pub tile: gtk::TemplateChild<LogoTile>,

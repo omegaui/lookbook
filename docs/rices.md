@@ -4,7 +4,7 @@ The Compositors page and each compositor's details page list rices: complete set
 
 ## Previews
 
-Each preview is a picture or clip from the rice's own README, loaded live from where its author hosts it (GitHub or the project's site). Lookbook never bundles or mirrors them, and the cards credit the author. Pictures load when a card first appears on screen. Clips wait for the Play button, then download into memory and play muted on a loop, paused while the card is off screen.
+Each preview is a picture or clip from the rice's own README, loaded live from where its author hosts it (GitHub or the project's site). Syspedia never bundles or mirrors them, and the cards credit the author. Pictures load when a card first appears on screen. Clips wait for the Play button, then download into memory and play muted on a loop, paused while the card is off screen.
 
 If an author asks for their rice or preview to be removed, delete its entry from `rices` in `data/resources/catalog/catalog.json`.
 

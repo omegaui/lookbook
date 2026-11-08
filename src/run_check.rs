@@ -171,7 +171,7 @@ fn session_verdict(is_running: bool, will_look_up_package: bool) -> String {
     } else if will_look_up_package {
         gettext("Checking your distro's packages…")
     } else {
-        gettext("Most likely. Lookbook can't check your distro's packages, so see How to Try It.")
+        gettext("Most likely. Syspedia can't check your distro's packages, so see How to Try It.")
     }
 }
 
@@ -391,7 +391,7 @@ mod tests {
     }
 
     #[test]
-    fn a_distro_lookbook_does_not_know_never_waits_on_packages() {
+    fn a_distro_syspedia_does_not_know_never_waits_on_packages() {
         let catalog = catalog();
         let mut system = system(16, &[], "Hyprland");
         system.os_release = OsRelease {

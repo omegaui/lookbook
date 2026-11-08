@@ -26,7 +26,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/wallpapers_page.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/pages/wallpapers_page.ui")]
     pub struct WallpapersPage {
         #[template_child]
         pub source_toggles: gtk::TemplateChild<adw::ToggleGroup>,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/io/github/omegaui/Lookbook/">
+  <gresource prefix="/io/github/omegaui/Syspedia/">
     <file>style.css</file>
     <file compressed="true">catalog/catalog.json</file>
     <file preprocess="xml-stripblanks">ui/window.ui</file>
@@ -27,7 +27,7 @@
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_card.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_dialog.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/wallpaper_spotlight.ui</file>
-    <file preprocess="xml-stripblanks">ui/widgets/what_is_lookbook_dialog.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/what_is_syspedia_dialog.ui</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-explore-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-memory-symbolic.svg</file>
     <file preprocess="xml-stripblanks">icons/scalable/actions/lay-graphics-symbolic.svg</file>

@@ -25,7 +25,7 @@ mod imp {
     use super::*;
 
     #[derive(Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/widgets/wallpaper_dialog.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/widgets/wallpaper_dialog.ui")]
     pub struct WallpaperDialog {
         #[template_child]
         pub toast_overlay: gtk::TemplateChild<adw::ToastOverlay>,

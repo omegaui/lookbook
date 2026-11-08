@@ -24,7 +24,7 @@ blueprints = custom_target(
     'ui/widgets/wallpaper_card.blp',
     'ui/widgets/wallpaper_dialog.blp',
     'ui/widgets/wallpaper_spotlight.blp',
-    'ui/widgets/what_is_lookbook_dialog.blp',
+    'ui/widgets/what_is_syspedia_dialog.blp',
     'ui/window.blp',
   ),
   output: '.',

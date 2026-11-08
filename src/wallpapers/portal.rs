@@ -35,7 +35,7 @@ async fn call_set_wallpaper_file(path: &Path) -> anyhow::Result<WallpaperOutcome
     let fd_index = fd_list.append(&file)?;
 
     let connection = gio::bus_get_future(gio::BusType::Session).await?;
-    let token = format!("lookbook{}", glib::random_int());
+    let token = format!("syspedia{}", glib::random_int());
     let (answer, _subscription) = listen_for_response(&connection, &request_path(&connection, &token)?);
 
     let options = glib::VariantDict::new(None);

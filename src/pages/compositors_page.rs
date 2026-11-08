@@ -22,7 +22,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
-    #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/compositors_page.ui")]
+    #[template(resource = "/io/github/omegaui/Syspedia/ui/pages/compositors_page.ui")]
     pub struct CompositorsPage {
         #[template_child]
         pub intro: gtk::TemplateChild<IntroBanner>,
