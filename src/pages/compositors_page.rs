@@ -10,8 +10,9 @@ use gtk::glib::clone;
 use gettextrs::gettext;
 
 use crate::catalog::{Catalog, CompositorKind};
+use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
-use crate::widgets::{open_details_on_activate, CardContent, CatalogCard, RiceCard};
+use crate::widgets::{open_details_on_activate, CardContent, CatalogCard, IntroBanner, RiceCard};
 
 /// The toggle name that turns the filter off.
 const SHOW_ALL: &str = "all";
@@ -22,6 +23,8 @@ mod imp {
     #[derive(Debug, Default, gtk::CompositeTemplate)]
     #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/compositors_page.ui")]
     pub struct CompositorsPage {
+        #[template_child]
+        pub intro: gtk::TemplateChild<IntroBanner>,
         #[template_child]
         pub kind_toggles: gtk::TemplateChild<adw::ToggleGroup>,
         #[template_child]
@@ -45,6 +48,7 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
+            IntroBanner::ensure_type();
             klass.bind_template();
         }
 
@@ -74,6 +78,7 @@ glib::wrapper! {
 
 impl CompositorsPage {
     pub fn show_catalog(&self, catalog: &Catalog, system: &SystemInfo) {
+        self.imp().intro.show(&page_intro(IntroKind::Compositors, catalog));
         let imp = self.imp();
 
         for compositor in &catalog.compositors {

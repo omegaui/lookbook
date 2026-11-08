@@ -1,0 +1,51 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ProtocolBrowser: Box {
+  orientation: vertical;
+  spacing: 16;
+
+  SearchEntry search_entry {
+    placeholder-text: _("Search protocols");
+    halign: start;
+    width-request: 320;
+    search-changed => $on_search_changed() swapped;
+  }
+
+  // One chip per category, with its icon and how many protocols it holds.
+  Adw.WrapBox category_box {
+    child-spacing: 6;
+    line-spacing: 6;
+  }
+
+  FlowBox cards_flowbox {
+    selection-mode: none;
+    homogeneous: true;
+    min-children-per-line: 1;
+    max-children-per-line: 2;
+    column-spacing: 12;
+    row-spacing: 12;
+  }
+
+  Adw.StatusPage empty_page {
+    styles [
+      "compact",
+    ]
+
+    icon-name: "edit-find-symbolic";
+    title: _("No Matching Protocols");
+    description: _("Try another word or category.");
+    visible: false;
+  }
+
+  Expander others_expander {
+    child: FlowBox others_flowbox {
+      selection-mode: none;
+      min-children-per-line: 1;
+      max-children-per-line: 6;
+      column-spacing: 6;
+      row-spacing: 6;
+      margin-top: 12;
+    };
+  }
+}

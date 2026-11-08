@@ -292,7 +292,7 @@ fn layers_drawing(layers: &[LayerView]) -> gtk::Box {
 }
 
 /// A desktop's panel, with its compositor as a smaller block inside it.
-fn desktop_row(desktop: &gtk::Button, compositor: &gtk::Button) -> gtk::Widget {
+pub fn desktop_row(desktop: &impl IsA<gtk::Widget>, compositor: &impl IsA<gtk::Widget>) -> gtk::Widget {
     let row = gtk::Box::new(gtk::Orientation::Vertical, 6);
     row.add_css_class("fit-desktop-row");
     row.append(desktop);
@@ -313,6 +313,27 @@ fn narrow_toward_the_top(drawing: &gtk::Box) {
 
 /// A layer's button: its logo or icon, what kind of layer it is, and its name.
 fn layer_button(layer: &Layer) -> gtk::Button {
+    let button = gtk::Button::builder()
+        .child(&layer_content(layer))
+        .css_classes(["fit-layer", layer.kind.css_class()])
+        .build();
+    button.update_property(&[gtk::accessible::Property::Label(&format!(
+        "{}: {}",
+        layer.kind.title(),
+        layer.name
+    ))]);
+    button
+}
+
+/// The same layer as a plain block, for drawings nobody clicks.
+pub fn layer_block(layer: &Layer) -> gtk::Box {
+    let block = gtk::Box::new(gtk::Orientation::Horizontal, 0);
+    block.append(&layer_content(layer));
+    block.set_css_classes(&["fit-layer", layer.kind.css_class()]);
+    block
+}
+
+fn layer_content(layer: &Layer) -> gtk::Box {
     let icon = gtk::Image::from_icon_name(&layer_icon(layer));
     icon.set_pixel_size(LAYER_ICON_SIZE);
 
@@ -332,17 +353,7 @@ fn layer_button(layer: &Layer) -> gtk::Button {
     let content = gtk::Box::new(gtk::Orientation::Horizontal, 12);
     content.append(&icon);
     content.append(&texts);
-
-    let button = gtk::Button::builder()
-        .child(&content)
-        .css_classes(["fit-layer", layer.kind.css_class()])
-        .build();
-    button.update_property(&[gtk::accessible::Property::Label(&format!(
-        "{}: {}",
-        layer.kind.title(),
-        layer.name
-    ))]);
-    button
+    content
 }
 
 fn layer_icon(layer: &Layer) -> String {

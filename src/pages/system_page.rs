@@ -15,7 +15,8 @@ use crate::catalog::Catalog;
 use crate::ideas::{evaluate, CurrentSetup, IdeaStatus};
 use crate::system::{kernel_label, SystemInfo};
 use crate::widgets::{
-    fact_tile, fill_protocol_lists, Fact, FitsTogetherDialog, IdeaCard, LayerStack, StackLayer,
+    fact_tile, icon_tile, logo_tile, Fact, FitsTogetherDialog, IdeaCard, LayerStack,
+    ProtocolBrowser, StackLayer,
 };
 
 const SHOW_ALL: &str = "all";
@@ -26,6 +27,10 @@ const APPS_COLOR: &str = "#f6f5f4";
 const FALLBACK_COLOR: &str = "#5e5c64";
 const GLOW_COLOR: &str = "#3584e4";
 const COPIED_RESET: Duration = Duration::from_secs(2);
+const KERNEL_TILE_COLOR: &str = "#c88800";
+const PROCESSOR_COLOR: &str = "#1c71d8";
+const MEMORY_COLOR: &str = "#26a269";
+const GIB: f64 = 1024.0 * 1024.0 * 1024.0;
 
 mod imp {
     use super::*;
@@ -58,11 +63,7 @@ mod imp {
         #[template_child]
         pub protocols_note_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
-        pub protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
-        #[template_child]
-        pub more_protocols_expander: gtk::TemplateChild<gtk::Expander>,
-        #[template_child]
-        pub more_protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        pub protocol_browser: gtk::TemplateChild<ProtocolBrowser>,
         pub catalog: RefCell<Option<Rc<Catalog>>>,
         /// What the last scan found, for the "How Linux Fits Together" dialog.
         pub system: RefCell<Option<SystemInfo>>,
@@ -80,6 +81,7 @@ mod imp {
 
         fn class_init(klass: &mut Self::Class) {
             LayerStack::ensure_type();
+            ProtocolBrowser::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -169,8 +171,6 @@ impl SystemPage {
         let imp = self.imp();
         imp.facts_flowbox.remove_all();
         imp.ideas_flowbox.remove_all();
-        imp.protocols_flowbox.remove_all();
-        imp.more_protocols_flowbox.remove_all();
         imp.ready_flags.borrow_mut().clear();
     }
 
@@ -224,32 +224,18 @@ impl SystemPage {
         self.imp().stack.set_layers(layers, parse_color(GLOW_COLOR));
     }
 
+    /// Six cards, each with a colored tile: brand logos for the distro and
+    /// session, vendor colors for graphics, and plain words for what the
+    /// processor and memory are good for.
     fn show_facts(&self, catalog: &Catalog, system: &SystemInfo, setup: &CurrentSetup<'_>) {
-        let hardware = &system.hardware;
-        let unknown = gettext("Unknown");
-        let distro_detail = system
-            .current_distro(catalog)
-            .map(|distro| format!("{} · {}", distro.release.label(), distro.package_manager))
-            .unwrap_or_default();
-        let compositor_name = setup
-            .compositor
-            .map_or(unknown.clone(), |compositor| compositor.name.clone());
-        let graphics = hardware.gpus.first().cloned().unwrap_or_else(|| unknown.clone());
-        let other_graphics = hardware.gpus.iter().skip(1).cloned().collect::<Vec<_>>().join(", ");
-
         let facts = [
-            Fact::with_detail(gettext("Distro"), non_empty(&system.os_release.pretty_name, &unknown), &distro_detail),
-            Fact::with_detail(gettext("Session"), &session_name(&system.session.session_type), &compositor_name),
-            Fact::with_detail(gettext("Kernel"), non_empty(&hardware.kernel, &unknown), std::env::consts::ARCH),
-            Fact::with_detail(
-                gettext("Processor"),
-                non_empty(&hardware.cpu_model, &unknown),
-                &gettext("{} threads").replace("{}", &hardware.cpu_threads.to_string()),
-            ),
-            Fact::new(gettext("Memory"), &glib::format_size(hardware.memory_bytes)),
-            Fact::with_detail(gettext("Graphics"), &graphics, &other_graphics),
+            distro_fact(catalog, system),
+            session_fact(system, setup),
+            kernel_fact(system),
+            processor_fact(system),
+            memory_fact(system),
+            graphics_fact(system),
         ];
-
         for fact in &facts {
             self.imp().facts_flowbox.append(&fact_tile(fact));
         }
@@ -284,12 +270,7 @@ impl SystemPage {
         };
         let overview = catalog.protocol_overview(&globals);
 
-        fill_protocol_lists(
-            &imp.protocols_flowbox,
-            &imp.more_protocols_flowbox,
-            &overview,
-            Some(&system.visible_globals),
-        );
+        imp.protocol_browser.show(&overview, Some(&system.visible_globals));
 
         let compositor_name = setup
             .compositor
@@ -300,11 +281,6 @@ impl SystemPage {
                 .replace("{total}", &globals.len().to_string())
                 .replace("{visible}", &system.visible_globals.len().to_string()),
         );
-        imp.more_protocols_expander.set_label(Some(
-            &gettext("{} more protocols").replace("{}", &overview.others.len().to_string()),
-        ));
-        imp.more_protocols_expander
-            .set_visible(!overview.others.is_empty());
     }
 
     /// A plain-text summary someone can paste into a bug report or a forum post.
@@ -428,6 +404,104 @@ impl SystemPage {
     }
 }
 
+fn distro_fact(catalog: &Catalog, system: &SystemInfo) -> Fact {
+    let unknown = gettext("Unknown");
+    let distro = system.current_distro(catalog);
+    let detail = distro
+        .map(|distro| format!("{} · {}", distro.release.label(), distro.package_manager))
+        .unwrap_or_default();
+    let tile = match distro {
+        Some(distro) => logo_tile(&distro.short, &distro.color, distro.logo.as_deref()),
+        None => icon_tile("lay-distros-symbolic", FALLBACK_COLOR),
+    };
+    Fact::with_detail(gettext("Distro"), non_empty(&system.os_release.pretty_name, &unknown), &detail).tile(tile)
+}
+
+/// Wayland or X11, with the desktop or compositor's own logo.
+fn session_fact(system: &SystemInfo, setup: &CurrentSetup<'_>) -> Fact {
+    let unknown = gettext("Unknown");
+    let tile = match (setup.desktop, setup.compositor) {
+        (Some(desktop), _) => logo_tile(&desktop.short, &desktop.color, desktop.logo.as_deref()),
+        (None, Some(compositor)) => logo_tile(&compositor.short, &compositor.color, compositor.logo.as_deref()),
+        (None, None) => icon_tile("lay-desktops-symbolic", FALLBACK_COLOR),
+    };
+    let running = match (setup.desktop, setup.compositor) {
+        (Some(desktop), _) => desktop.name.clone(),
+        (None, Some(compositor)) => compositor.name.clone(),
+        (None, None) => unknown,
+    };
+    Fact::with_detail(gettext("Session"), &session_name(&system.session.session_type), &running).tile(tile)
+}
+
+fn kernel_fact(system: &SystemInfo) -> Fact {
+    let unknown = gettext("Unknown");
+    Fact::with_detail(gettext("Kernel"), non_empty(&system.hardware.kernel, &unknown), std::env::consts::ARCH)
+        .tile(icon_tile("lay-logo-linux-symbolic", KERNEL_TILE_COLOR))
+}
+
+/// For example "28 threads · fast for any desktop".
+fn processor_fact(system: &SystemInfo) -> Fact {
+    let hardware = &system.hardware;
+    let unknown = gettext("Unknown");
+    let detail = gettext("{threads} threads · {verdict}")
+        .replace("{threads}", &hardware.cpu_threads.to_string())
+        .replace("{verdict}", &processor_verdict(hardware.cpu_threads));
+    Fact::with_detail(gettext("Processor"), non_empty(&hardware.cpu_model, &unknown), &detail)
+        .tile(icon_tile("lay-system-symbolic", PROCESSOR_COLOR))
+}
+
+fn processor_verdict(threads: usize) -> String {
+    if threads >= 8 {
+        gettext("fast for any desktop")
+    } else if threads >= 4 {
+        gettext("enough for any desktop")
+    } else {
+        gettext("best with a light desktop")
+    }
+}
+
+/// The amount, and in words what it is good for.
+fn memory_fact(system: &SystemInfo) -> Fact {
+    let bytes = system.hardware.memory_bytes;
+    let gib = bytes as f64 / GIB;
+    Fact::with_detail(gettext("Memory"), &glib::format_size(bytes), &memory_verdict(gib))
+        .tile(icon_tile("lay-memory-symbolic", MEMORY_COLOR))
+}
+
+fn memory_verdict(gib: f64) -> String {
+    if gib >= 15.0 {
+        gettext("Plenty for any desktop")
+    } else if gib >= 7.5 {
+        gettext("Enough for any desktop")
+    } else if gib >= 3.5 {
+        gettext("Enough for a light desktop")
+    } else {
+        gettext("Tight for a modern desktop")
+    }
+}
+
+/// The first card names the tile's color: NVIDIA green, AMD red, Intel blue.
+fn graphics_fact(system: &SystemInfo) -> Fact {
+    let gpus = &system.hardware.gpus;
+    let unknown = gettext("Unknown");
+    let first = gpus.first().cloned().unwrap_or(unknown);
+    let others = gpus.iter().skip(1).cloned().collect::<Vec<_>>().join(", ");
+    Fact::with_detail(gettext("Graphics"), &first, &others).tile(icon_tile("lay-graphics-symbolic", vendor_color(&first)))
+}
+
+fn vendor_color(gpu: &str) -> &'static str {
+    let name = gpu.to_lowercase();
+    if name.contains("nvidia") {
+        "#5e9c00"
+    } else if name.contains("amd") {
+        "#c01c28"
+    } else if name.contains("intel") {
+        "#1c71d8"
+    } else {
+        "#813d9c"
+    }
+}
+
 fn layer(label: String, color: &str, icon_name: Option<String>) -> StackLayer {
     StackLayer {
         label,
@@ -468,4 +542,28 @@ fn session_text(session_type: &str) -> String {
     };
     gettext("{session}. Lookbook read your os-release file, your session variables and the protocols your compositor offers.")
         .replace("{session}", &session)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn memory_verdicts_follow_the_amount() {
+        assert_eq!(memory_verdict(16.0), "Plenty for any desktop");
+        assert_eq!(memory_verdict(4.0), "Enough for a light desktop");
+        assert_eq!(memory_verdict(2.0), "Tight for a modern desktop");
+    }
+
+    #[test]
+    fn processor_verdicts_follow_the_threads() {
+        assert_eq!(processor_verdict(28), "fast for any desktop");
+        assert_eq!(processor_verdict(2), "best with a light desktop");
+    }
+
+    #[test]
+    fn graphics_tiles_take_the_vendor_color() {
+        assert_eq!(vendor_color("NVIDIA GeForce RTX 5050"), "#5e9c00");
+        assert_eq!(vendor_color("Intel Raptor Lake-S UHD Graphics"), "#1c71d8");
+    }
 }

@@ -18,6 +18,17 @@ pub enum ProtocolCategory {
 }
 
 impl ProtocolCategory {
+    /// Every category, in the order the app shows them.
+    pub const ALL: [Self; 7] = [
+        Self::Shell,
+        Self::Capture,
+        Self::Windows,
+        Self::Security,
+        Self::Input,
+        Self::Outputs,
+        Self::Core,
+    ];
+
     pub fn label(self) -> String {
         match self {
             Self::Shell => gettext("Shell"),

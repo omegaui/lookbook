@@ -1,0 +1,97 @@
+using Gtk 4.0;
+using Adw 1;
+// The words and the drawing sit side by side; on a narrow window the
+// drawing wraps below the words.
+template $IntroBanner: Adw.Bin {
+  child: Adw.WrapBox {
+    styles [
+      "intro-banner",
+    ]
+
+    child-spacing: 32;
+    line-spacing: 24;
+    justify: fill;
+
+    Box {
+      orientation: vertical;
+      spacing: 10;
+      valign: center;
+
+      Label kicker_label {
+        styles [
+          "kicker",
+        ]
+
+        xalign: 0;
+      }
+
+      Label title_label {
+        styles [
+          "title-1",
+        ]
+
+        xalign: 0;
+        wrap: true;
+      }
+
+      Label body_label {
+        xalign: 0;
+        wrap: true;
+        max-width-chars: 42;
+      }
+
+      Box {
+        styles [
+          "intro-mix-up",
+        ]
+
+        spacing: 12;
+        margin-top: 4;
+
+        Image {
+          icon-name: "dialog-information-symbolic";
+          valign: start;
+          margin-top: 2;
+        }
+
+        Box {
+          orientation: vertical;
+          spacing: 2;
+
+          Label {
+            styles [
+              "heading",
+            ]
+
+            label: _("Common Mix-Up");
+            xalign: 0;
+          }
+
+          Label mix_up_label {
+            xalign: 0;
+            wrap: true;
+            max-width-chars: 42;
+          }
+        }
+      }
+
+      Button explain_button {
+        styles [
+          "pill",
+        ]
+
+        label: _("How Linux Fits Together");
+        halign: start;
+        margin-top: 4;
+        action-name: "win.explain-layers";
+      }
+    }
+
+    Box diagram_box {
+      orientation: vertical;
+      spacing: 8;
+      valign: center;
+      width-request: 320;
+    }
+  };
+}

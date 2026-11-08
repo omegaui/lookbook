@@ -280,6 +280,103 @@ fn explain_kernel() -> Explanation {
     }
 }
 
+/// The pages that open with an intro.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IntroKind {
+    Distros,
+    Desktops,
+    Compositors,
+}
+
+/// The hero at the top of the Distros, Desktops and Compositors pages: what
+/// the thing is, the mix-up people make about it, and a small drawing.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PageIntro {
+    pub kicker: String,
+    pub title: String,
+    pub body: String,
+    pub mix_up: String,
+    pub diagram: IntroDiagram,
+    /// Where "How Linux Fits Together" opens, for example "desktop:3".
+    pub explain_target: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum IntroDiagram {
+    /// One distro under several desktops: the distro is not the look.
+    OneDistroManyLooks { desktops: Vec<Layer>, distro: Layer },
+    /// A desktop with its compositor inside, on top of any distro.
+    DesktopBringsCompositor { desktop: Layer, compositor: Layer, distro: Layer },
+    /// A compositor inside a desktop, next to one on its own.
+    InsideOrAlone { desktop: Layer, built_in: Layer, pieces: Layer, alone: Layer },
+}
+
+pub fn page_intro(kind: IntroKind, catalog: &Catalog) -> PageIntro {
+    match kind {
+        IntroKind::Distros => distros_intro(catalog),
+        IntroKind::Desktops => desktops_intro(catalog),
+        IntroKind::Compositors => compositors_intro(catalog),
+    }
+}
+
+fn distros_intro(catalog: &Catalog) -> PageIntro {
+    let desktops = ["gnome", "kde-plasma", "xfce"]
+        .iter()
+        .filter_map(|id| catalog.find_desktop(id))
+        .map(|desktop| Layer::new(LayerKind::Desktop, &desktop.name, desktop.logo.as_deref()))
+        .collect();
+    PageIntro {
+        kicker: gettext("What is a distro?"),
+        title: gettext("The Linux you install"),
+        body: gettext("A distro bundles the Linux kernel with apps, drivers and a way to get updates, and starts you on a desktop."),
+        mix_up: gettext("A distro is not the look. Most distros offer several desktops, so two Fedora computers can look nothing alike."),
+        diagram: IntroDiagram::OneDistroManyLooks {
+            desktops,
+            distro: distro_layer(catalog, "fedora"),
+        },
+        explain_target: "desktop:3".to_owned(),
+    }
+}
+
+fn desktops_intro(catalog: &Catalog) -> PageIntro {
+    let mut layers = desktop_layers(catalog, "gnome").into_iter();
+    let desktop = layers.next().unwrap_or_else(|| Layer::new(LayerKind::Desktop, "GNOME", Some("gnome")));
+    let compositor = layers.next().unwrap_or_else(|| Layer::new(LayerKind::Compositor, "Mutter", None));
+    PageIntro {
+        kicker: gettext("What is a desktop?"),
+        title: gettext("What you see and touch"),
+        body: gettext("A desktop environment is the panel, app menu, settings and notifications, made to work together."),
+        mix_up: gettext("A desktop is not the compositor, but it brings one: GNOME draws its windows with Mutter, KDE Plasma with KWin. You never set it up yourself."),
+        diagram: IntroDiagram::DesktopBringsCompositor {
+            desktop,
+            compositor,
+            distro: Layer::new(LayerKind::Distro, &gettext("Any distro"), None),
+        },
+        explain_target: "desktop:1".to_owned(),
+    }
+}
+
+fn compositors_intro(catalog: &Catalog) -> PageIntro {
+    let mut inside = desktop_layers(catalog, "gnome").into_iter();
+    let desktop = inside.next().unwrap_or_else(|| Layer::new(LayerKind::Desktop, "GNOME", Some("gnome")));
+    let built_in = inside.next().unwrap_or_else(|| Layer::new(LayerKind::Compositor, "Mutter", None));
+    let alone = compositor_layer(catalog, "hyprland")
+        .unwrap_or_else(|| Layer::new(LayerKind::Compositor, "Hyprland", None));
+    PageIntro {
+        kicker: gettext("What is a compositor?"),
+        title: gettext("What draws your windows"),
+        body: gettext("A compositor puts every window on the screen and decides where it goes and how it moves. Every desktop has one built in."),
+        mix_up: gettext("Some compositors run on their own, without a desktop. Hyprland, niri and sway tile your windows and leave the bar, launcher and the rest to you."),
+        diagram: IntroDiagram::InsideOrAlone {
+            desktop,
+            built_in,
+            pieces: Layer::new(LayerKind::Pieces, &gettext("Bar, launcher…"), None),
+            alone,
+        },
+        explain_target: "compositor:2".to_owned(),
+    }
+}
+
 fn items(kind: ItemKind, ids: &[&str]) -> Vec<ItemRef> {
     ids.iter().map(|id| ItemRef::new(kind, id)).collect()
 }
@@ -342,6 +439,38 @@ mod tests {
             for example in explain(layer).examples {
                 assert!(catalog.summary(example.kind, &example.id).is_some(), "{example:?} is not in the catalog");
             }
+        }
+    }
+
+    #[test]
+    fn the_distros_intro_shows_one_distro_with_several_looks() {
+        let intro = page_intro(IntroKind::Distros, &catalog());
+        match intro.diagram {
+            IntroDiagram::OneDistroManyLooks { desktops, distro } => {
+                assert_eq!(desktops.len(), 3);
+                assert_eq!(distro.name, "Fedora Workstation");
+            }
+            other => panic!("unexpected diagram {other:?}"),
+        }
+    }
+
+    #[test]
+    fn intro_targets_open_the_layer_they_explain() {
+        let catalog = catalog();
+        let cases = [
+            (IntroKind::Distros, LayerKind::Distro),
+            (IntroKind::Desktops, LayerKind::Desktop),
+            (IntroKind::Compositors, LayerKind::Compositor),
+        ];
+        for (kind, layer_kind) in cases {
+            let target = page_intro(kind, &catalog).explain_target;
+            let (scene, index) = target.split_once(':').unwrap();
+            let scene = match SceneKind::from_id(scene).unwrap() {
+                SceneKind::FullDesktop => full_desktop_scene(&catalog),
+                SceneKind::CompositorOnly => compositor_scene(&catalog),
+                SceneKind::Yours => unreachable!(),
+            };
+            assert_eq!(scene.layers[index.parse::<usize>().unwrap()].kind, layer_kind, "{target}");
         }
     }
 

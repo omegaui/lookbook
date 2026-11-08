@@ -16,6 +16,8 @@ template $CompositorsPage: Adw.Bin {
         margin-bottom: 40;
         margin-start: 16;
         margin-end: 16;
+        // What this page's things are, and the mix-up people make about them.
+        $IntroBanner intro {}
 
         Box {
           spacing: 16;
@@ -32,16 +34,6 @@ template $CompositorsPage: Adw.Bin {
 
               label: _("Compositors");
               xalign: 0;
-            }
-
-            Label {
-              styles [
-                "dim-label",
-              ]
-
-              label: _("The compositor draws your windows and decides how they move.");
-              xalign: 0;
-              wrap: true;
             }
           }
 
@@ -114,7 +106,9 @@ template $CompositorsPage: Adw.Bin {
                   "dim-label",
                 ]
 
-                label: _("Complete setups people share: a bar, launcher, lock screen and theme that work together. Pick one, then follow its install guide.");
+                label: _(
+                  "Complete setups people share: a bar, launcher, lock screen and theme that work together. Pick one, then follow its install guide."
+                );
                 xalign: 0;
                 wrap: true;
               }

@@ -12,7 +12,7 @@ mod protocols;
 
 pub use features::{key_features, FeatureSupport};
 pub use item_ref::ItemRef;
-pub use protocols::{ProtocolInfo, ProtocolOverview};
+pub use protocols::{ProtocolCategory, ProtocolInfo, ProtocolOverview};
 pub use model::*;
 pub use online::{download_now, refresh_downloaded, RefreshOutcome};
 

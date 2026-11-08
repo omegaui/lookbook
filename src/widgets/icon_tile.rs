@@ -8,9 +8,9 @@ use gtk::{gdk, glib, graphene, gsk};
 
 use super::edge::drop_shadow;
 
-const SIZE: i32 = 96;
-const TILE_SIZE: f32 = 64.0;
-const TILE_RADIUS: f32 = 18.0;
+const SIZE: i32 = 76;
+const TILE_SIZE: f32 = 56.0;
+const TILE_RADIUS: f32 = 16.0;
 const ICON_SCALE: f32 = 0.5;
 
 mod imp {

@@ -17,7 +17,7 @@ use crate::pages::{
 };
 use crate::system::SystemInfo;
 use crate::run_check;
-use crate::widgets::{DetailContent, RunCheckDialog, TileContent, WhatIsLookbookDialog};
+use crate::widgets::{DetailContent, FitsTogetherDialog, RunCheckDialog, TileContent, WhatIsLookbookDialog};
 
 const MAIN_PAGE_TAG: &str = "main";
 /// Desktops that place windows freely. Tiling compositors size windows themselves
@@ -219,7 +219,26 @@ impl LookbookWindow {
             })
             .build();
 
-        self.add_action_entries([show_page, show_item, can_i_run, refresh_catalog, what_is_lookbook, fits_together]);
+        // Opens "How Linux Fits Together" on a setup and layer, for example
+        // "desktop:3" (counting from the top), from the page intros.
+        let explain_layers = gio::ActionEntry::builder("explain-layers")
+            .parameter_type(Some(glib::VariantTy::STRING))
+            .activate(|window: &Self, _, parameter| {
+                if let Some(target) = parameter.and_then(|value| value.get::<String>()) {
+                    window.explain_layers(&target);
+                }
+            })
+            .build();
+
+        self.add_action_entries([
+            show_page,
+            show_item,
+            can_i_run,
+            refresh_catalog,
+            what_is_lookbook,
+            fits_together,
+            explain_layers,
+        ]);
 
         if PROFILE == "Devel" {
             self.add_scroll_action();
@@ -247,25 +266,21 @@ impl LookbookWindow {
                 }
             })
             .build();
-        // Opens "How Linux Fits Together" on a setup and layer, for example "desktop:2".
-        let explain_layers = gio::ActionEntry::builder("explain-layers")
-            .parameter_type(Some(glib::VariantTy::STRING))
-            .activate(|window: &Self, _, parameter| {
-                if let Some(target) = parameter.and_then(|value| value.get::<String>()) {
-                    window.explain_layers(&target);
-                }
-            })
-            .build();
-        self.add_action_entries([scroll_to, show_spotlight, explain_layers]);
+        self.add_action_entries([scroll_to, show_spotlight]);
     }
 
+    /// Opens the dialog over the page in view, on the setup and layer named.
     fn explain_layers(&self, target: &str) {
         let (scene, layer) = target.split_once(':').unwrap_or((target, "0"));
         let (Some(scene), Ok(layer)) = (SceneKind::from_id(scene), layer.parse::<usize>()) else {
             return;
         };
-        self.show_page("system");
-        if let Some(dialog) = self.imp().system_page.explain_layers() {
+        let imp = self.imp();
+        let catalog = imp.catalog.borrow().clone();
+        let system = imp.system.borrow().clone();
+        if let (Some(catalog), Some(system)) = (catalog, system) {
+            let dialog = FitsTogetherDialog::new(&catalog, &system);
+            dialog.present(Some(self));
             dialog.show_layer(scene, layer);
         }
     }

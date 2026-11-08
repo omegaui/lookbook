@@ -10,10 +10,11 @@ use gtk::glib::clone;
 
 use crate::catalog::{Catalog, Desktop, HostedScreenshot};
 use crate::http::shared_session;
+use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
 use crate::wallpapers::fetch_texture;
 use crate::widgets::{
-    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, EdgePicture,
+    chip_label, open_details_on_activate, scene_for_desktop, screenshot_credit, EdgePicture, IntroBanner,
     DesktopScene, LogoTile, ShowcaseCard, ShowcaseContent, TileContent,
 };
 
@@ -28,6 +29,8 @@ mod imp {
     #[derive(Debug, Default, gtk::CompositeTemplate)]
     #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/desktops_page.ui")]
     pub struct DesktopsPage {
+        #[template_child]
+        pub intro: gtk::TemplateChild<IntroBanner>,
         #[template_child]
         pub featured_banner: gtk::TemplateChild<gtk::Box>,
         #[template_child]
@@ -57,6 +60,7 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
+            IntroBanner::ensure_type();
             LogoTile::ensure_type();
             DesktopScene::ensure_type();
             EdgePicture::ensure_type();
@@ -98,6 +102,7 @@ glib::wrapper! {
 
 impl DesktopsPage {
     pub fn show_catalog(&self, catalog: &Catalog, system: &SystemInfo) {
+        self.imp().intro.show(&page_intro(IntroKind::Desktops, catalog));
         self.show_featured_desktop(catalog);
         self.show_desktops(catalog, system);
     }

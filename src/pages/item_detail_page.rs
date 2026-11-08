@@ -16,9 +16,9 @@ use crate::system::SystemInfo;
 use crate::http::shared_session;
 use crate::wallpapers::{fetch_texture, new_session};
 use crate::widgets::{
-    chip_label, extension_card, fact_tile, feature_check, fill_protocol_lists,
+    chip_label, extension_card, fact_tile, feature_check,
     open_details_on_activate, screenshot_credit, CardBadge, CardContent, CatalogCard,
-    DetailContent, IdeaCard, EdgePicture, DesktopScene, LogoTile, ProtocolSummary, RiceCard,
+    DetailContent, IdeaCard, ProtocolBrowser, EdgePicture, DesktopScene, LogoTile, ProtocolSummary, RiceCard,
     ScreenshotGallery,
 };
 
@@ -96,11 +96,7 @@ mod imp {
         #[template_child]
         pub checks_box: gtk::TemplateChild<gtk::Box>,
         #[template_child]
-        pub protocol_cards_flowbox: gtk::TemplateChild<gtk::FlowBox>,
-        #[template_child]
-        pub more_protocols_expander: gtk::TemplateChild<gtk::Expander>,
-        #[template_child]
-        pub more_protocols_flowbox: gtk::TemplateChild<gtk::FlowBox>,
+        pub protocol_browser: gtk::TemplateChild<ProtocolBrowser>,
         pub website: RefCell<String>,
     }
 
@@ -115,6 +111,7 @@ mod imp {
             DesktopScene::ensure_type();
             EdgePicture::ensure_type();
             ScreenshotGallery::ensure_type();
+            ProtocolBrowser::ensure_type();
             klass.bind_template();
             klass.bind_template_callbacks();
         }
@@ -365,17 +362,7 @@ impl ItemDetailPage {
             imp.checks_box.append(&feature_check(check));
         }
 
-        fill_protocol_lists(
-            &imp.protocol_cards_flowbox,
-            &imp.more_protocols_flowbox,
-            &overview,
-            None,
-        );
-        imp.more_protocols_expander.set_label(Some(
-            &gettext("{} more protocols").replace("{}", &overview.others.len().to_string()),
-        ));
-        imp.more_protocols_expander
-            .set_visible(!overview.others.is_empty());
+        imp.protocol_browser.show(&overview, None);
         imp.protocols_section.set_visible(true);
     }
 

@@ -5,11 +5,13 @@ mod cover_picture;
 mod extension_card;
 mod fits_together_dialog;
 mod idea_card;
+mod intro_banner;
 mod edge;
 mod edge_picture;
 mod desktop_scene;
 mod icon_tile;
 mod layer_stack;
+mod protocol_browser;
 mod protocol_card;
 mod release_card;
 mod rice_card;
@@ -31,18 +33,19 @@ mod what_is_lookbook_dialog;
 pub use catalog_card::CatalogCard;
 pub use collection_card::CollectionCard;
 pub use content::{
-    scene_for_desktop, CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck,
+    icon_tile, logo_tile, scene_for_desktop, CardBadge, CardContent, CollectionContent, DetailContent, Fact, FeatureCheck,
     ProtocolSummary, ShowcaseContent, SpotlightContent,
 };
 pub use cover_picture::CoverPicture;
 pub use extension_card::extension_card;
-pub use fits_together_dialog::FitsTogetherDialog;
+pub use fits_together_dialog::{desktop_row, layer_block, FitsTogetherDialog};
 pub use idea_card::IdeaCard;
+pub use intro_banner::IntroBanner;
 pub use edge_picture::EdgePicture;
 pub use desktop_scene::{DesktopScene, SceneLayout};
 pub use icon_tile::IconTile;
 pub use layer_stack::{LayerStack, StackLayer};
-pub use protocol_card::fill_protocol_lists;
+pub use protocol_browser::ProtocolBrowser;
 pub use release_card::release_card;
 pub use rice_card::RiceCard;
 pub use run_check_dialog::RunCheckDialog;
@@ -70,10 +73,32 @@ pub fn chip_label(text: &str) -> gtk::Label {
 }
 
 /// A small card with a caption above a value, for example "Packages" and "dnf".
+/// A fact card. With a tile, the tile sits on the left of the words.
 pub fn fact_tile(fact: &Fact) -> gtk::Box {
+    let words = fact_words(fact);
+    let Some(content) = &fact.tile else {
+        words.add_css_class("card");
+        words.add_css_class("fact-tile");
+        return words;
+    };
+
+    let card = gtk::Box::new(gtk::Orientation::Horizontal, 16);
+    card.add_css_class("card");
+    card.add_css_class("fact-tile");
+    let tile = LogoTile::new(content, FACT_TILE_SIZE);
+    tile.set_valign(gtk::Align::Center);
+    card.append(&tile);
+    words.set_hexpand(true);
+    words.set_valign(gtk::Align::Center);
+    card.append(&words);
+    card
+}
+
+const FACT_TILE_SIZE: i32 = 48;
+const FACT_TEXT_CHARS: i32 = 26;
+
+fn fact_words(fact: &Fact) -> gtk::Box {
     let tile = gtk::Box::new(gtk::Orientation::Vertical, 2);
-    tile.add_css_class("card");
-    tile.add_css_class("fact-tile");
 
     let label = gtk::Label::new(Some(&fact.label));
     label.add_css_class("caption-heading");
@@ -84,6 +109,8 @@ pub fn fact_tile(fact: &Fact) -> gtk::Box {
     value.add_css_class("title-4");
     value.set_xalign(0.0);
     value.set_wrap(true);
+    // Long names like a GPU's wrap, so two cards still share a row.
+    value.set_max_width_chars(FACT_TEXT_CHARS);
 
     tile.append(&label);
     tile.append(&value);
@@ -93,6 +120,7 @@ pub fn fact_tile(fact: &Fact) -> gtk::Box {
         detail_label.add_css_class("dim-label");
         detail_label.set_xalign(0.0);
         detail_label.set_wrap(true);
+        detail_label.set_max_width_chars(FACT_TEXT_CHARS);
         tile.append(&detail_label);
     }
     tile

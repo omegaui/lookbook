@@ -213,6 +213,8 @@ pub struct Fact {
     pub label: String,
     pub value: String,
     pub detail: Option<String>,
+    /// A colored tile with a logo or icon, for the Your System facts.
+    pub tile: Option<TileContent>,
 }
 
 impl Fact {
@@ -220,6 +222,7 @@ impl Fact {
         Self {
             label,
             value: value.to_owned(),
+            tile: None,
             detail: None,
         }
     }
@@ -230,6 +233,25 @@ impl Fact {
             ..Self::new(label, value)
         }
     }
+
+    pub fn tile(self, tile: TileContent) -> Self {
+        Self { tile: Some(tile), ..self }
+    }
+}
+
+/// A tile with a symbolic icon on a fixed color, for facts with no logo.
+pub fn icon_tile(icon_name: &str, color: &str) -> TileContent {
+    TileContent {
+        short: String::new(),
+        color: color.to_owned(),
+        logo: None,
+        icon_name: Some(icon_name.to_owned()),
+    }
+}
+
+/// A tile with an item's logo on its brand color.
+pub fn logo_tile(short: &str, color: &str, logo: Option<&str>) -> TileContent {
+    tile_content(short, color, logo)
 }
 
 fn fact(label: String, value: &str) -> Fact {

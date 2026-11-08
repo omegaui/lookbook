@@ -9,8 +9,9 @@ use gtk::glib;
 use gtk::glib::clone;
 
 use crate::catalog::{Catalog, Distro, DistroFamily, ReleaseModel};
+use crate::fits_together::{page_intro, IntroKind};
 use crate::system::SystemInfo;
-use crate::widgets::{open_details_on_activate, ShowcaseCard, ShowcaseContent};
+use crate::widgets::{open_details_on_activate, IntroBanner, ShowcaseCard, ShowcaseContent};
 
 /// The toggle name that turns a filter off.
 const SHOW_ALL: &str = "all";
@@ -45,6 +46,8 @@ mod imp {
     #[template(resource = "/io/github/omegaui/Lookbook/ui/pages/distros_page.ui")]
     pub struct DistrosPage {
         #[template_child]
+        pub intro: gtk::TemplateChild<IntroBanner>,
+        #[template_child]
         pub count_label: gtk::TemplateChild<gtk::Label>,
         #[template_child]
         pub search_entry: gtk::TemplateChild<gtk::SearchEntry>,
@@ -67,6 +70,7 @@ mod imp {
         type ParentType = adw::Bin;
 
         fn class_init(klass: &mut Self::Class) {
+            IntroBanner::ensure_type();
             klass.bind_template();
         }
 
@@ -95,6 +99,7 @@ glib::wrapper! {
 
 impl DistrosPage {
     pub fn show_catalog(&self, catalog: &Catalog, system: &SystemInfo) {
+        self.imp().intro.show(&page_intro(IntroKind::Distros, catalog));
         let imp = self.imp();
 
         for distro in &catalog.distros {

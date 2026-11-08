@@ -16,6 +16,8 @@ template $DesktopsPage: Adw.Bin {
         margin-bottom: 40;
         margin-start: 16;
         margin-end: 16;
+        // What this page's things are, and the mix-up people make about them.
+        $IntroBanner intro {}
 
         Box {
           orientation: vertical;
@@ -26,18 +28,8 @@ template $DesktopsPage: Adw.Bin {
               "title-1",
             ]
 
-            label: _("Desktops");
+            label: _("Featured Desktop");
             xalign: 0;
-          }
-
-          Label {
-            styles [
-              "dim-label",
-            ]
-
-            label: _("A desktop environment bundles a compositor, a shell, settings and apps into one experience.");
-            xalign: 0;
-            wrap: true;
           }
         }
 

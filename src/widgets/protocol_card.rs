@@ -69,24 +69,3 @@ impl ProtocolCard {
         card
     }
 }
-
-/// Fills `cards` with a card per described protocol, and `others` with small
-/// chips for the rest. `visible` is what the sandbox can see; pass None to skip
-/// the "Hidden in Flatpak" marks.
-pub fn fill_protocol_lists(
-    cards: &gtk::FlowBox,
-    others: &gtk::FlowBox,
-    overview: &crate::catalog::ProtocolOverview<'_>,
-    visible: Option<&[String]>,
-) {
-    for info in &overview.described {
-        let hidden = visible.is_some_and(|visible| !visible.contains(&info.interface));
-        cards.append(&ProtocolCard::new(info, hidden));
-    }
-
-    for global in &overview.others {
-        let chip = gtk::Label::new(Some(global));
-        chip.add_css_class("protocol-chip");
-        others.append(&chip);
-    }
-}

@@ -377,25 +377,7 @@ template $ItemDetailPage: Adw.NavigationPage {
               spacing: 16;
             }
 
-            FlowBox protocol_cards_flowbox {
-              selection-mode: none;
-              homogeneous: true;
-              min-children-per-line: 1;
-              max-children-per-line: 2;
-              column-spacing: 12;
-              row-spacing: 12;
-            }
-
-            Expander more_protocols_expander {
-              child: FlowBox more_protocols_flowbox {
-                selection-mode: none;
-                min-children-per-line: 1;
-                max-children-per-line: 6;
-                column-spacing: 6;
-                row-spacing: 6;
-                margin-top: 12;
-              };
-            }
+            $ProtocolBrowser protocol_browser {}
           }
         };
       };
