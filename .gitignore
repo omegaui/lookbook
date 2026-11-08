@@ -34,3 +34,6 @@ __pycache__/
 # Icon design renders (.agentic-coding/design/icon/make_*.py)
 /.agentic-coding/design/icon/render/
 /.agentic-coding/design/icon/*/render/
+/_flatpak_build_flathub/
+/.flatpak-builder-flathub/
+/build-aux/flathub/local-test.json

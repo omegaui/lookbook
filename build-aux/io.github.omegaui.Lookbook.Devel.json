@@ -8,7 +8,6 @@
     ],
     "command": "lookbook",
     "finish-args": [
-        "--share=ipc",
         "--share=network",
         "--socket=wayland",
         "--device=dri",
@@ -57,7 +56,9 @@
                         "_flatpak_build_release",
                         ".flatpak-builder",
                         ".flatpak-builder-release",
-                        ".cargo-sdk"
+                        ".cargo-sdk",
+                        "_flatpak_build_flathub",
+                        ".flatpak-builder-flathub"
                     ]
                 }
             ]

@@ -1,0 +1,50 @@
+{
+    "id": "io.github.omegaui.Lookbook",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "51",
+    "sdk": "org.gnome.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.rust-stable"
+    ],
+    "command": "lookbook",
+    "finish-args": [
+        "--share=network",
+        "--socket=wayland",
+        "--device=dri"
+    ],
+    "build-options": {
+        "append-path": "/usr/lib/sdk/rust-stable/bin",
+        "env": {
+            "CARGO_NET_OFFLINE": "true"
+        }
+    },
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "*.la",
+        "*.a"
+    ],
+    "modules": [
+        {
+            "name": "lookbook",
+            "buildsystem": "meson",
+            "run-tests": true,
+            "config-opts": [
+                "-Dprofile=default"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/omegaui/lookbook.git",
+                    "commit": "eb1b5d761e55faccc4b5b65536e6453c9b9f37b0"
+                },
+                "cargo-sources.json"
+            ]
+        }
+    ]
+}
