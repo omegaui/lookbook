@@ -277,6 +277,14 @@ class PublishTests(unittest.TestCase):
             self.assertEqual(published["generated_at"], "2026-11-07T04:17:00Z")
             self.assertEqual(manifest["schema_version"], build.SCHEMA_VERSION)
             self.assertTrue((out / "index.html").exists())
+            self.assertTrue((out / "install.sh").exists())
+            self.assertTrue((out / "icon.png").exists())
+            self.assertTrue(list((out / "screenshots").glob("*.png")))
+
+    def test_the_app_page_names_the_version(self):
+        page = build.index_page("2026-11-08T04:17:00Z")
+        self.assertIn(f"Version {build.app_version()}", page)
+        self.assertNotIn("$", page.replace("$$", ""))
 
     def test_an_unchanged_catalog_keeps_its_date(self):
         with tempfile.TemporaryDirectory() as folder:

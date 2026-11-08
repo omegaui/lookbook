@@ -17,17 +17,20 @@ Syspedia is free software: no ads, no paywall. It runs on Wayland sessions only.
 
 ## Install
 
-Syspedia is not on Flathub. Each [release](https://github.com/omegaui/syspedia/releases) has a Flatpak bundle, `syspedia-VERSION-x86_64.flatpak`. Download it, then:
+Syspedia is not on Flathub. Its page is **<https://omegaui.github.io/syspedia>**. Install or update it with one command; it needs only Flatpak and installs for your user, with no sudo:
+
+```sh
+curl -sL https://omegaui.github.io/syspedia/install.sh | sh
+```
+
+Run the same command again to update; it does nothing when you already have the latest version. Add `-s -- --source` after `sh` to build the latest release from source instead, or `-s -- --uninstall` to remove Syspedia. The first install also fetches the GNOME runtime from Flathub (about 1 GB, shared with other GNOME apps).
+
+To install by hand, download `syspedia-x86_64.flatpak` from the [latest release](https://github.com/omegaui/syspedia/releases/latest), then:
 
 ```sh
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-flatpak install --user syspedia-0.1.0-x86_64.flatpak
-flatpak run io.github.omegaui.Syspedia
+flatpak install --user syspedia-x86_64.flatpak
 ```
-
-The first command makes sure Flatpak can fetch the GNOME runtime Syspedia runs on (about 1 GB the first time, shared with other GNOME apps). Syspedia then appears in your app launcher.
-
-To update, install the newer bundle the same way. To remove it: `flatpak uninstall --user io.github.omegaui.Syspedia`.
 
 ## Data that stays current
 

@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-08. Check `git log` for anything newer.
 
-The app was called **Linux & You** until 2026-11-07, then **Lookbook**, and since 2026-11-08 **Syspedia** (see Decisions). **Current focus: the review** in `review.md` (repo root, gitignored, local only): Flathub blockers, bugs and half-done work, worked through item by item (see Open work, item 2).
+The app was called **Linux & You** until 2026-11-07, then **Lookbook**, and since 2026-11-08 **Syspedia** (see Decisions). **Current focus: the first GitHub release (v0.1.0).** Syspedia is published on GitHub, not Flathub: a release with a `.flatpak` bundle, an app page on GitHub Pages (`catalog/site/index.html`) and an install/update script (`catalog/site/install.sh`, run as `curl -sL https://omegaui.github.io/syspedia/install.sh | sh`). The user decided this after Flathub's Generative AI policy (no AI-written manifests or PRs) made a Flathub submission unlikely.
 
 ## What the app is
 
@@ -68,6 +68,8 @@ The host has no Rust or blueprint-compiler; everything runs inside Flatpak. The 
 | Format Blueprint files | `flatpak run --filesystem=$PWD --command=blueprint-compiler org.gnome.Sdk//51 format -f $(find $PWD/data/resources/ui -name '*.blp')` | Seconds |
 | Full build, install and Meson tests | `.agentic-coding/scripts/build-flatpak.sh` | 2 to 4 minutes; run in the background |
 | Build and install the optimized release app (`io.github.omegaui.Syspedia`, next to the Devel one) | `.agentic-coding/scripts/install-release.sh` | About 5 minutes |
+| Build the release bundle for GitHub (`syspedia-x86_64.flatpak`) | `build-aux/make-bundle.sh` | About 5 minutes |
+| Refresh `docs/screenshot-credits.md` from the catalog (before a release) | `python3 catalog/write_credits.py` | Seconds |
 | Build the Flathub manifest offline, from HEAD (not installed) | `.agentic-coding/scripts/build-flathub.sh` | About 10 minutes the first time (downloads crates) |
 | Open the app on a page | `.agentic-coding/scripts/open-page.sh wallpapers` | |
 | Open a details page in the running app | `.agentic-coding/scripts/open-item.sh desktop:gnome` | |
@@ -115,6 +117,9 @@ When adding a Blueprint file, list it in `data/resources/meson.build` and as `.u
 | `9265959` | Review fixes 2.1 (Catalog workflow parses the catalog with the app's own model via `catalog/model-check`; an unreadable download waits a day), 2.4 (sessions recognised in `XDG_CURRENT_DESKTOP` order; `SystemInfo::detect_with` stores the running desktop and compositor ids, and `runs_desktop` / `runs_compositor` replace `is_running`), 2.5 (wallpaper portal Response), 2.6 (Can I Run It? never stuck on "Checking"), 2.12 (Fedora editions), 2.13 (GPU vendor kept for unknown cards); Ideas empty state |
 | `eb1b5d7` | Intro heroes on Distros, Desktops and Compositors (`IntroBanner`, content from `fits_together::page_intro`: a definition, a "Common Mix-Up" note and a drawing; the button opens How Linux Fits Together on that layer through `win.explain-layers`). Your System fact cards with logo or icon tiles (`Fact::tile`; new `lay-memory` and `lay-graphics` icons; plain-language verdicts for memory and processor, no bars, which the user found unclear). `ProtocolBrowser` (search, category chips with counts, empty state) on Your System and compositor details |
 | `9c22c8a` to `cd42813` | The rest of the review: Flathub manifest with vendored crates (`build-aux/flathub/`, `generate-cargo-sources.py`, `build-flathub.sh`), metadata (SPDX licenses, release notes, display claims, POTFILES, Education category), catalog pipeline (old versions kept, stable dates, id links, fingerprint check), HTTP disk cache and size-aware shared images (`src/images.rs`), wallpaper fixes, portal-aware ideas, safe install commands, Scan Again through the window, catalog error page, keyboard and screen reader fixes, collection cards as buttons, rice clips paused out of view, shared helpers |
+| `eb2fe4c` | The distro list says it is a hand-picked selection, with a link to suggest a distro |
+| `618ebb0`, `cc07cbd` | Renamed to Syspedia (app ID, binary, repo `omegaui/syspedia`, Pages at `omegaui.github.io/syspedia`, local folder `~/Projects/syspedia`); README install and build-from-source steps; `build-aux/make-bundle.sh`; `catalog/write_credits.py`; wallpapers kept out of the HTTP disk cache (`http::wallpaper_session`) |
+| (next) | The app page on GitHub Pages (`catalog/site/index.html`, filled and published by `build.py` with the icon, `data/screenshots/` and `install.sh`); the bundle is `syspedia-x86_64.flatpak` with no version, so the script can always fetch `releases/latest/download/syspedia-x86_64.flatpak` |
 
 On 2026-11-07 the user asked for the release build (`d5c7ca9`) to be installed and the Devel app removed. `build-flatpak.sh` installs the Devel app again; the scripts that open pages and dialogs need it.
 
@@ -151,7 +156,8 @@ Not yet confirmed by clicking (the agent cannot click; the user is testing the r
 - **Protocol support** comes from wayland-explorer (MIT) per compositor, with version and date. Inside Flatpak, compositors hide privileged globals (layer shell, capture, session lock), so ideas are judged against the catalog list for the detected compositor, not the globals the app sees. The compositor is detected by `XDG_CURRENT_DESKTOP`, then by "fingerprint" globals only it offers.
 - **Screen capture** counts when the compositor offers a capture protocol or its portal backend provides the ScreenCast portal (so GNOME and KDE show it). Each compositor lists its usual portals in the catalog.
 - **Wallpapers**: neither source has a license. The user chose to build the section now, read the sources live (never bundle or mirror), credit them, keep a takedown list (`wallpaper_blocklist`) in the catalog, and email both owners for permission. If either says no, remove its entry from the catalog. Details: `docs/research/wallpapers.md`.
-- **Hosting**: GitHub Pages from this same repo for the online catalog and a small landing page (`catalog/index.html`, the repo's homepage link); no VPS needed. The repo is public (the user asked for it on 2026-11-07).
+- **Hosting**: GitHub Pages from this same repo for the online catalog, the app page (`catalog/site/index.html`, the repo's homepage link) and the install script; no VPS needed. The repo is public (the user asked for it on 2026-11-07).
+- **Distribution** (2026-11-08): GitHub releases, not Flathub. Each release attaches `syspedia-x86_64.flatpak` (from `build-aux/make-bundle.sh`; keep the name unversioned) and the install script installs or updates from the latest release. `build-aux/flathub/` stays only as an offline-build check; Flathub forbids AI-written manifests. The screenshots in `data/screenshots/` were taken from the release app on the user's 1908px Hyprland window; retake them when the UI changes (never capture other windows; the first attempt caught VS Code and was deleted).
 - **Catalog pipeline**: a single hand-written `catalog.json` is the source; the workflow refreshes upstream data, commits it back and publishes it. See `catalog/README.md`.
 - **Screenshots** come live from Wikimedia Commons (free licenses, credited in tooltips, the About dialog and `docs/screenshot-credits.md`), never bundled. Rice previews come live from each rice's own README, credited to the author; remove an entry on request (`docs/rices.md`).
 - **Can I Run It?** asks Repology for packages (HTTP/1.1, one request a second) and judges ideas with `built_into`, so a desktop's own features are never shown as gained or given up.

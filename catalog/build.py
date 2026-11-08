@@ -26,6 +26,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import string
 import sys
 import urllib.error
@@ -36,7 +37,10 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "data/resources/catalog/catalog.json"
 SOURCES_CONFIG = ROOT / "catalog/sources.json"
 LOGO_DIR = ROOT / "data/resources/icons/scalable/apps"
-INDEX_TEMPLATE = Path(__file__).resolve().parent / "index.html"
+SITE_DIR = Path(__file__).resolve().parent / "site"
+INDEX_TEMPLATE = SITE_DIR / "index.html"
+APP_ICON = ROOT / "data/icons/hicolor/256x256/apps/io.github.omegaui.Syspedia.png"
+SCREENSHOTS = ROOT / "data/screenshots"
 
 # The app reads v1/catalog.json and ignores a catalog with another schema
 # version. Bump both, and publish under v2/, for changes old apps cannot read.
@@ -487,7 +491,19 @@ def publish(catalog, out_dir, now, live=None):
         "bytes": len(body),
     }
     (version_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    publish_app_page(out_dir, now)
+
+
+def publish_app_page(out_dir, now):
+    """The app's own page: index.html, its icon and screenshots, and the
+    install script people run with curl."""
     (out_dir / "index.html").write_text(index_page(now))
+    shutil.copy(SITE_DIR / "install.sh", out_dir / "install.sh")
+    shutil.copy(APP_ICON, out_dir / "icon.png")
+    screenshots = out_dir / "screenshots"
+    screenshots.mkdir(exist_ok=True)
+    for picture in sorted(SCREENSHOTS.glob("*.png")):
+        shutil.copy(picture, screenshots / picture.name)
 
 
 def same_content(first, second):
@@ -524,9 +540,15 @@ def keep_older_versions(out_dir, fetch=fetch_json):
 
 
 def index_page(now):
-    """Fills in the landing page template (index.html next to this script)."""
+    """Fills in the app page template (catalog/site/index.html)."""
     template = string.Template(INDEX_TEMPLATE.read_text())
-    return template.substitute(publish_dir=PUBLISH_DIR, built=now)
+    return template.substitute(publish_dir=PUBLISH_DIR, built=now[:10], version=app_version())
+
+
+def app_version():
+    """The version in meson.build, for example "0.1.0"."""
+    match = re.search(r"^\s*version: '([^']+)'", (ROOT / "meson.build").read_text(), re.M)
+    return match.group(1) if match else "unknown"
 
 
 def save_source(catalog, now):
